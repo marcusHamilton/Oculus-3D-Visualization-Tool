@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap -->
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="../css/homePages.css">
+
+  <!--Required JavaScript resources -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Deal with .csv file upload -->
+  <script src="../js/handleCSVupload.js"></script>
+  <!-- End: Deal with .csv file upload -->
+
+  <title>3D Visualization Tool</title>
+
+</head>
+
+<body>
+
+  <div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+      <div class="container">
+
+        <div class="masthead clearfix">
+          <div class="container inner">
+            <h3 class="masthead-brand">3D Visualization Tool</h3>
+            <nav>
+              <!-- The Navigation Bar -->
+              <ul class="nav masthead-nav">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="LocalLoad.html">Load Local</a></li>
+                <li class="active"><a href="UrlLoad.html">Load Remote</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="aboutUs.html">About Us</a></li>
+              </ul>
+            </nav>
+            <!-- End: The Navigation Bar -->
+          </div>
+        </div>
+
+        <div class="inner cover">
+          <p class="lead" id="localLoadLabel">Enter a URL that points directly to
+          a .csv file.</p>
+          <!--URL search bar -->
+          <p class="lead">
+          <div class="col-lg-4 col-lg-offset-4">
+            <div class="input-group" id="urlBar">
+              <input type="text" id="csvURL" class="form-control" placeholder="Search for .CSV by URL...">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" onclick="loadCSVremote()" type="button" >Load!</button>
+              </span>
+            </div>
+            </p>
+            <!-- End: URL search bar -->
+            <br />
+            <!-- Area for success message -->
+            <div id="successMessage" align="center">
+            </div>
+            <!-- End: Area for success message -->
+            <br />
+            <!-- Area to continue to virtual space if successful -->
+            <div id="continueToVirtual" align="center">
+            </div>
+            <!-- End: Area to continue to virtual space if successful -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

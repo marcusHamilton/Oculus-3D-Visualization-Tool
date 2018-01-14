@@ -1,69 +1,70 @@
 # Oculus-3D-Visualization-Tool
 A tool that allows the visualization  of data from a .csv file in a 3D virtual space.
 
-## The following is a template to fill in as we develop
-
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will show you how to get the web service up and running on your own local server.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
 ```
-Give examples
+- An internet connection
+- Modern internet browser (Chrome, Firefox)
+- Local server (see instructions below)
 ```
+To properly run this web service you will need some sort of local web server installed.
 
-### Installing
+You have many options but ones that are recommended are:
+  1) [Python](https://www.python.org/)
+  2) [Apache2](https://httpd.apache.org/) 
 
-A step by step series of examples that tell you have to get a development env running
+If you are on a UNIX system then it is most likely that you already have these installed.
 
-Say what the step will be
+Check for yourself:
 
-```
-Give the example
-```
+- Python:
+  In terminal enter:
+    ```
+    python --version
+    ```
+   If you get something like:
+    ```
+    Python 2.7.14
+    ```
+   Then you are good to go and can use python as a local server
 
-And repeat
+- Apache2:
+  In terminal enter:
+    ```
+    apache2 -v
+    ```
+   If you get something like:
+    ```
+    Server version: Apache/2.4.27 (Ubuntu)
+    Server built:   2017-09-18T15:05:48
+    ```
+   Then you are good to go and can use apache2 as a local server
 
-```
-until finished
-```
+For ease of use we will use Python to host our local server. If you wish to look into how to host with Apache2 then you can
+find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-started.html
 
-End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+### Set up your local server
 
-Explain how to run the automated tests for this system
+- Open terminal and navigate to the directory that you downloaded the repository to
+- Type:     ```
+           python -m SimpleHTTPServer 8080
+           ```
+- Leave terminal open and open your browser
+- Navigate to http://localhost:8080/
+- Done!
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
+* [Bootstrap](https://getbootstrap.com/) - Web template and front end
 * [A-Frame](https://aframe.io/) - The web framework used
 * [three.js](https://threejs.org/) - JavaScript framework
-
-## Contributing
-
 
 
 ## Versioning
@@ -90,7 +91,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+None as of yet.
 
 ## Acknowledgments
 

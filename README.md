@@ -83,7 +83,6 @@ find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-sta
 * **Nicholas Seaboyer** - *Tester/Triage* 
 * **Wynston Ramsay** - *Developer/Triage*
 * **Fahd Hussain** - *Developer*  
-* **Yu Gu** - *Tester* 
 * **Justin Neumeyer** - *Tester*   
 
 

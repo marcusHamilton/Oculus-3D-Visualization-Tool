@@ -1,24 +1,27 @@
+//Global variable for storing the csv data
+var data;
+
 //For parsing local .csv file
 function loadCSVLocal(){
   //Grab the file from the html dom system
   var file = document.getElementById('csv-file').files[0];
 
   Papa.parse(file, {
-    header: true,
+    //header: true,
     dynamicTyping: true,
     error: function(error) { //error callback
       SomethingWentWrong(error);
     },
     complete: function(results) { //success call back
-      var data = results.data;
-      success(data);
+      data = results.data;
+      success();
       }
     });
 
   //Message if there is success
-  function success(data){
-    console.log(data);
-    //Deal with data here
+  function success(){
+    //Function exists in buildWorld.js
+    buildWorld();
 
 
     //Clean up webpage and notify of success
@@ -26,7 +29,7 @@ function loadCSVLocal(){
     document.getElementById('localLoadLabel').remove();
     toRemove.remove();
     var continueButton = document.getElementById('continueToVirtual');
-    continueButton.innerHTML = '<a href="aframetest.html" class="btn btn-success" role="button">Continue</a> ';
+    continueButton.innerHTML = '<a href="virtualSpace.html" class="btn btn-success" role="button">Continue</a> ';
     var message = document.getElementById('successMessage');
     message.innerHTML = '<div class="alert alert-success"><strong>Success!</strong> ';
   }
@@ -49,21 +52,21 @@ function loadCSVremote(){
 
   Papa.parse(url, {
     download: true,
-    header: true,
+    //header: true,
     dynamicTyping: true,
     error: function(error) { //error callback
       SomethingWentWrong(error);
     },
     complete: function(results) { //success call back
-      var data = results.data;
-      success(data);
+      data = results.data;
+      success();
       }
     });
 
   //Message if there is success
-  function success(data){
-    console.log(data);
-    //Deal with data here
+  function success(){
+    //Function exists in buildWorld.js
+    buildWorld();
 
 
 
@@ -71,7 +74,7 @@ function loadCSVremote(){
     var toRemove = document.getElementById('urlBar');
     toRemove.remove();
     var continueButton = document.getElementById('continueToVirtual');
-    continueButton.innerHTML = '<a href="aframetest.html" class="btn btn-success" role="button">Continue</a> ';
+    continueButton.innerHTML = '<a href="virtualSpace.html" class="btn btn-success" role="button">Continue</a> ';
     var message = document.getElementById('successMessage');
     message.innerHTML = '<div class="alert alert-success"><strong>Success!</strong> ';
   }

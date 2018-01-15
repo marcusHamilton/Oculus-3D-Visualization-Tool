@@ -1,3 +1,6 @@
+
+//Function is used to display the name of the file uploaded in the box
+//on the LocalLoad.html page
 $(function() {
 
   // We can attach the `fileselect` event to all file inputs on the page

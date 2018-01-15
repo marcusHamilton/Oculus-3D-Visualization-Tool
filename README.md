@@ -63,31 +63,31 @@ find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-sta
 ## Built With
 
 * [Bootstrap](https://getbootstrap.com/) - Web template and front end
-* [A-Frame](https://aframe.io/) - The web framework used
-* [three.js](https://threejs.org/) - JavaScript framework
+* [A-Frame](https://aframe.io/) - Web framework built on WebVR
+* [three.js](https://threejs.org/) - JavaScript framework for 3D components
 
+### Additional Tools
 
-## Versioning
+* [A-Frame Environment](https://github.com/feiss/aframe-environment-component/) - virtual environment library
+* [Papa Parse](http://papaparse.com/) - .csv parsing library
 
-Fill in what we used
 
 ## Authors
 
-* **Hongyi Xue** - *Initial work* 
-* **Marcus Hamilton** - *Initial work* 
-* **Nicholas Seaboyer** - *Initial work* 
-* **Jeremy Fehr** - *Initial work* 
-* **Yu Gu** - *Initial work* 
-* **Justin Neumeyer** - *Initial work* 
-* **Fahd Hussain** - *Initial work* 
-* **Wynston Ramsay** - *Initial work* 
-* **Scott Laskowski** - *Initial work* 
-* **Davidson Eklund** - *Initial work* 
-* **Owen Smallwood** - *Initial work* 
-* **Geoffrey He** - *Initial work* 
+* **Jeremy Fehr** - *Project Manager* 
+* **Scott Laskowski** - *Build Master*
+* **Marcus Hamilton** - *Lead Developer*
+* **Owen Smallwood** - *Lead Tester/Dev*
+* **Hongyi Xue** - *Risk Officer* 
+* **Davidson Eklund** - *Developer/Triage* 
+* **Nicholas Seaboyer** - *Tester/Triage* 
+* **Wynston Ramsay** - *Developer/Triage*
+* **Fahd Hussain** - *Developer*  
+* **Yu Gu** - *Tester* 
+* **Justin Neumeyer** - *Tester*   
 
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/mah985/Oculus-3D-Visualization-Tool/graphs/contributors) who participated in this project.
 
 ## License
 

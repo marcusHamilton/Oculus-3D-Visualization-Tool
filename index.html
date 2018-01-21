@@ -11,6 +11,14 @@
 
   <title>3D Visualization Tool</title>
 
+  <!--Check if browser webStorage is supported -->
+  <script>
+    if (typeof(Storage) == "undefined")
+    {
+      alert("This page requires that your browser supports web storage. Please update your browser.");
+    }
+  </script>
+
 </head>
 
 <body>

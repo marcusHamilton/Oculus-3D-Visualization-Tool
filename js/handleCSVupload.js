@@ -20,8 +20,9 @@ function loadCSVLocal(){
 
   //Message if there is success
   function success(){
-    //Function exists in buildWorld.js
-    buildWorld();
+    //Data is stored in the browser storage and can be retrieved and used on
+    //other html pages
+    sessionStorage.setItem('parsedCSVData', JSON.stringify(data));
 
 
     //Clean up webpage and notify of success
@@ -65,11 +66,11 @@ function loadCSVremote(){
 
   //Message if there is success
   function success(){
-    //Function exists in buildWorld.js
-    buildWorld();
+    //Data is stored in the browser storage and can be retrieved and used on
+    //other html pages
+    sessionStorage.setItem('parsedCSVData', JSON.stringify(data));
 
-
-
+    
     //Clean up webpage and notify of success
     var toRemove = document.getElementById('urlBar');
     toRemove.remove();

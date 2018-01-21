@@ -62,13 +62,11 @@ find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-sta
 
 ## Built With
 
-* [Bootstrap](https://getbootstrap.com/) - Web template and front end
-* [A-Frame](https://aframe.io/) - Web framework built on WebVR
+* [Bootstrap](https://getbootstrap.com/) - Web styling
 * [three.js](https://threejs.org/) - JavaScript framework for 3D components
 
 ### Additional Tools
 
-* [A-Frame Environment](https://github.com/feiss/aframe-environment-component/) - virtual environment library
 * [Papa Parse](http://papaparse.com/) - .csv parsing library
 
 

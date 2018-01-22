@@ -11,6 +11,8 @@ var windowHeight; //The height of the browser window
 var listOfCubes = new LinkedList(); //Stores the objects in the world
 var parsedData;
 
+
+
 /*
 Listens and adapts the aspect ratio and size of the canvas
 This allows the scene to hold its shape when the browser is
@@ -56,6 +58,7 @@ var GameLoop = function ()
 {
   //Allows this to be called every frame
   requestAnimationFrame(GameLoop);
+
   update();
   render();
 }
@@ -71,6 +74,7 @@ function build3DSpace()
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
@@ -82,18 +86,42 @@ function build3DSpace()
   var boxGeometry;
   var material;
   var cube;
+
+
+  //console.log(parsedData);
+
+
+  var largestEntry = 0;
   for(var i = 0; i < parsedData.length; i++)
   {
-    boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: false});
+    boxGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+    material = new THREE.MeshBasicMaterial({color: (0xffffff / parsedData[i][0]), wireframe: false});
     cube = new THREE.Mesh(boxGeometry, material);
-    cube.position.z = (i*-2)
-    cube.position.x = (i*-2)
+    cube.position.x = parsedData[i][0];
+    //console.log(parsedData[i][0]);
+    cube.position.y = parsedData[i][1];
+    //console.log(parsedData[i][1]);
+    cube.position.z = parsedData[i][2];
+    //console.log(parsedData[i][2]);
+
+
+    // Find largest entry to adjust camera position
+    for(j = 0; j < 3; j++){
+    	if (parsedData[i][j] > largestEntry){
+    		largestEntry = parsedData[i][j];
+    	}
+    }
+
     scene.add(cube);
+
+
     listOfCubes.add(cube);
   }
+  console.log(largestEntry);
   //Move camera back so that you are not inside the first cube
-  camera.position.z = 3;
+  camera.position.x = largestEntry / 2.0;
+  camera.position.y = largestEntry / 2.0;
+  camera.position.z = largestEntry / 0.7; //magic number for "zoom"
 
 
   drawFPSstats();

@@ -160,10 +160,41 @@ function build3DSpace()
   // transform
 
   setCubeColors();
+  drawAxisLabels();
   drawFPSstats();
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
   GameLoop();
+}
+
+// Indicates XYZ axes as Red, Blue, and Green lines respectively
+// Drawn from the origin
+function drawAxisLabels()
+{
+  var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
+  var materialY = new THREE.LineBasicMaterial({color: 0x00ff00});
+  var materialZ = new THREE.LineBasicMaterial({color: 0x0000ff});
+
+  var geometryX = new THREE.Geometry();
+  var geometryY = new THREE.Geometry();
+  var geometryZ = new THREE.Geometry();
+
+  geometryX.vertices.push(new THREE.Vector3(0,0,0));
+  geometryX.vertices.push(new THREE.Vector3(largestX * 1.5,0,0));
+
+  geometryY.vertices.push(new THREE.Vector3(0,0,0));
+  geometryY.vertices.push(new THREE.Vector3(0,largestY * 1.5,0));
+
+  geometryZ.vertices.push(new THREE.Vector3(0,0,0));
+  geometryZ.vertices.push(new THREE.Vector3(0,0,largestZ * 1.5));
+
+  var lineX = new THREE.Line(geometryX, materialX);
+  var lineY = new THREE.Line(geometryY, materialY);
+  var lineZ = new THREE.Line(geometryZ, materialZ);
+
+  scene.add(lineX);
+  scene.add(lineY);
+  scene.add(lineZ);
 }
 
 //Loops through the cube list and sets RGB color values based on

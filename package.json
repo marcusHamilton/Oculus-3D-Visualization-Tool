@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mah985/Oculus-3D-Visualization-Tool#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2"
   },
   "devDependencies": {

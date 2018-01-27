@@ -30,7 +30,7 @@ function loadCSVLocal(){
     document.getElementById('localLoadLabel').remove();
     toRemove.remove();
     var continueButton = document.getElementById('continueToVirtual');
-    continueButton.innerHTML = '<a href="virtualSpace.html" class="btn btn-success" role="button">Continue</a> ';
+    continueButton.innerHTML = '<a href="/VR" class="btn btn-success" role="button">Continue</a> ';
     var message = document.getElementById('successMessage');
     message.innerHTML = '<div class="alert alert-success"><strong>Success!</strong> ';
   }
@@ -70,12 +70,12 @@ function loadCSVremote(){
     //other html pages
     sessionStorage.setItem('parsedCSVData', JSON.stringify(data));
 
-    
+
     //Clean up webpage and notify of success
     var toRemove = document.getElementById('urlBar');
     toRemove.remove();
     var continueButton = document.getElementById('continueToVirtual');
-    continueButton.innerHTML = '<a href="virtualSpace.html" class="btn btn-success" role="button">Continue</a> ';
+    continueButton.innerHTML = '<a href="/VR" class="btn btn-success" role="button">Continue</a> ';
     var message = document.getElementById('successMessage');
     message.innerHTML = '<div class="alert alert-success"><strong>Success!</strong> ';
   }

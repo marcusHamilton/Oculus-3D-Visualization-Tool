@@ -10,10 +10,10 @@ a:hover {
 }
 
 /* Custom default button */
-.btn-default,
-.btn-default:hover,
+.btn-default {text-shadow: none; background-color: #f1f7ed};
+.btn-default:hover {text-shadow: none; background-color: #585b57};
 .btn-default:focus {
-  color: #333;
+  color: #585b57;
   text-shadow: none; /* Prevent inheritence from `body` */
   background-color: #fff;
   border: 1px solid #fff;

@@ -3,67 +3,40 @@ A tool that allows the visualization  of data from a .csv file in a 3D virtual s
 
 ## Getting Started
 
-These instructions will show you how to get the web service up and running on your own local server.
+These instructions will show you how to get the web service up and running on your own local server using node.js.
 
 ### Prerequisites
 
 ```
 - An internet connection
 - Modern internet browser (Chrome, Firefox)
-- Local server (see instructions below)
+- Node.js
 ```
-To properly run this web service you will need some sort of local web server installed.
+To properly run this web service you will need to have Node.js installed.
 
-You have many options but ones that are recommended are:
-  1) [Python](https://www.python.org/)
-  2) [Apache2](https://httpd.apache.org/) 
+You may follow instructions on how to install via a package manager here:
+[Node.js](https://nodejs.org/en/download/package-manager/)
 
-If you are on a UNIX system then it is most likely that you already have these installed.
+- After installing node.js run the following commands:
 
-Check for yourself:
-
-- Python:
-  In terminal enter:
     ```
-    python --version
+    npm install
     ```
-   If you get something like:
+   This will install the needed dependencies.
+   Then in the root git directory run...
     ```
-    Python 2.7.14
+    node app.js
     ```
-   Then you are good to go and can use python as a local server
+   This will host the project on your local server.
 
-- Apache2:
-  In terminal enter:
-    ```
-    apache2 -v
-    ```
-   If you get something like:
-    ```
-    Server version: Apache/2.4.27 (Ubuntu)
-    Server built:   2017-09-18T15:05:48
-    ```
-   Then you are good to go and can use apache2 as a local server
-
-For ease of use we will use Python to host our local server. If you wish to look into how to host with Apache2 then you can
-find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-started.html
-
-
-### Set up your local server
-
-- Open terminal and navigate to the directory that you downloaded the repository to
-- Type:     ```
-           python -m SimpleHTTPServer 8080
-           ```
-- Leave terminal open and open your browser
-- Navigate to http://localhost:8080/
-- Done!
+Once this is done you may navigate to http://localhost:8080/ in your browser.
 
 
 ## Built With
 
 * [Bootstrap](https://getbootstrap.com/) - Web styling
 * [three.js](https://threejs.org/) - JavaScript framework for 3D components
+* [Node.js](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 
 ### Additional Tools
 
@@ -72,13 +45,13 @@ find more documentation here: https://httpd.apache.org/docs/trunk/en/getting-sta
 
 ## Authors
 
-* **Jeremy Fehr** - *Project Manager* 
+* **Jeremy Fehr** - *Project Manager*
 * **Scott Laskowski** - *Build Master*
 * **Marcus Hamilton** - *Lead Developer*
 * **Owen Smallwood** - *Lead Tester/Dev*
-* **Hongyi Xue** - *Risk Officer* 
-* **Davidson Eklund** - *Developer/Triage* 
-* **Nicholas Seaboyer** - *Tester/Triage* 
+* **Hongyi Xue** - *Risk Officer*
+* **Davidson Eklund** - *Developer/Triage*
+* **Nicholas Seaboyer** - *Tester/Triage*
 * **Wynston Ramsay** - *Developer/Triage*
 * **Fahd Hussain** - *Developer*  
 * **Justin Neumeyer** - *Tester*   

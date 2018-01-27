@@ -85,7 +85,7 @@ function build3DSpace()
   for(var i = 0; i < parsedData.length; i++)
   {
     boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: false});
+    material = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
     cube = new THREE.Mesh(boxGeometry, material);
     cube.position.z = (i*-2)
     cube.position.x = (i*-2)

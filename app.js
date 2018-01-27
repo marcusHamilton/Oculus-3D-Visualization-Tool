@@ -33,3 +33,8 @@ app.get('/VR', function(req, res){
 //End: Manage GET requests
 
 app.listen(8080, () => console.log('Serving on port 8080!'));
+
+
+module.exports = function(){
+	return 'hello';
+}

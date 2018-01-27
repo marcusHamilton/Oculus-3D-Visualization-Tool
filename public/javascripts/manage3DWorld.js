@@ -2,7 +2,7 @@
   This js file is responsible for building the 3D world
 */
 
-//Set up essential global elemets
+//Set up essential global elements
 var scene;
 var camera;
 var renderer;

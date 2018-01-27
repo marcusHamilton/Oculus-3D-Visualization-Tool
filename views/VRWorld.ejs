@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+
+    <title>3D Visualization Tool</title>
+
+    <!--CSS styling to ensure that the canvas covers the whole screen-->
+    <style>
+
+        body
+        {
+            margin: 0;
+        }
+        canvas
+        {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+    <!-- Load in required resources -->
+    <script src = "/javascripts/handleCSVupload.js"></script>
+    <script src = "/javascripts/three.js"></script>
+    <script src="/javascripts/LinkedList.js"></script>
+    <script src="/javascripts/manage3DWorld.js"></script>
+    <!-- End: Load in required resources -->
+
+</head>
+
+<body>
+
+<script>
+    build3DSpace();
+</script>
+
+</body>
+
+</html>

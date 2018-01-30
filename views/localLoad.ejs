@@ -1,94 +1,94 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap -->
-    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+  <!-- Bootstrap -->
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
 
-    <!-- CSS files -->
-    <link rel="stylesheet" href="/stylesheets/style.css">
+  <!-- CSS files -->
+  <link rel="stylesheet" href="/stylesheets/style.css">
 
-    <!--Required JavaScript resources -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--Required JavaScript resources -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <!-- Deal with .csv file upload -->
-    <script src="/javascripts/notifyOfFileName.js"></script>
-    <script src="/javascripts/handleCSVupload.js"></script>
-    <!-- End: Deal with .csv file upload -->
+  <!-- Deal with .csv file upload -->
+  <script src="/javascripts/notifyOfFileName.js"></script>
+  <script src="/javascripts/handleCSVupload.js"></script>
+  <!-- End: Deal with .csv file upload -->
 
-    <title>3D Visualization Tool</title>
+  <title>3D Visualization Tool</title>
 
 </head>
 
 <body>
 
-<div class="site-wrapper">
+  <div class="site-wrapper">
 
     <div class="site-wrapper-inner">
 
-        <div class="container">
+      <div class="container">
 
-            <div class="masthead clearfix">
-                <div class="container inner">
-                    <h3 class="masthead-brand">3D Visualization Tool</h3>
-                    <nav>
-                        <!-- The Navigation Bar -->
-                        <ul class="nav masthead-nav">
-                            <li><a href="/">Home</a></li>
-                            <li class="active"><a href="/localLoad">Load Local</a></li>
-                            <li><a href="/urlLoad">Load Remote</a></li>
-                            <li><a href="/features">Features</a></li>
-                            <li><a href="/about">About Us</a></li>
-                        </ul>
-                    </nav>
-                    <!-- End: The Navigation Bar -->
-                </div>
-            </div>
+        <div class="masthead clearfix">
+          <div class="container inner">
+            <h3 class="masthead-brand">3D Visualization Tool</h3>
+            <nav>
+              <!-- The Navigation Bar -->
+              <ul class="nav masthead-nav">
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="/localLoad">Load Local</a></li>
+                <li><a href="/urlLoad">Load Remote</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/about">About Us</a></li>
+              </ul>
+            </nav>
+            <!-- End: The Navigation Bar -->
+          </div>
+        </div>
 
-            <div class="inner cover">
-                <p class="lead" id="localLoadLabel">Select a local file to be loaded.</p>
-                <!--Load via local-->
-                <p class="lead">
-                <div class="col-lg-4 col-lg-offset-4" id="formGroup">
-                    <div class="input-group">
-                        <label class="input-group-btn">
+        <div class="inner cover">
+          <p class="lead" id="localLoadLabel">Select a local file to be loaded.</p>
+          <!--Load via local-->
+          <p class="lead">
+            <div class="col-lg-4 col-lg-offset-4" id="formGroup">
+              <div class="input-group">
+                <label class="input-group-btn">
                   <span class="btn btn-primary" >
                     Browse&hellip; <input type="file" accept=".csv" id="csv-file" style="display: none;">
                   </span>
                         </label>
-                        <input type="text" class="form-control" placeholder="No file selected" readonly>
-                    </div>
-                    <span class="help-block">
+                <input type="text" class="form-control" placeholder="No file selected" readonly>
+              </div>
+              <span class="help-block">
                 Only .csv files may be selected.
               </span>
-                    <span>
+              <span>
                 <button role="button" onclick="loadCSVLocal()" class="btn btn-primary">Load!</button>
               </span>
-                </div>
-                </p>
-                <!-- End: Load via local -->
-                <br />
-                <!-- Area for success message -->
-                <div id="successMessage" align="center">
-                </div>
-                <!-- End: Area for success message -->
-                <br />
-                <!-- Area to continue to virtual space if successful -->
-                <div id="continueToVirtual" align="center">
-                </div>
-                <!-- End: Area to continue to virtual space if successful -->
             </div>
-
+          </p>
+          <!-- End: Load via local -->
+          <br />
+          <!-- Area for success message -->
+          <div id="successMessage" align="center">
+          </div>
+          <!-- End: Area for success message -->
+          <br />
+          <!-- Area to continue to virtual space if successful -->
+          <div id="continueToVirtual" align="center">
+          </div>
+          <!-- End: Area to continue to virtual space if successful -->
         </div>
+
+      </div>
 
     </div>
 
-</div>
+  </div>
 
 </body>
 

@@ -2,51 +2,51 @@ function LinkedList() {
   var length = 0;
   var head = null;
 
-  var Node = function(element){
+  var Node = function(element) {
     this.element = element;
     this.next = null;
   };
 
-  this.size = function(){
+  this.size = function() {
     return length;
   };
 
-  this.head = function(){
+  this.head = function() {
     return head;
   };
 
-  this.add = function(element){
+  this.add = function(element) {
     var node = new Node(element);
-    if(head === null){
-        head = node;
+    if (head === null) {
+      head = node;
     } else {
-        var currentNode = head;
+      var currentNode = head;
 
-        while(currentNode.next){
-            currentNode  = currentNode.next;
-        }
+      while (currentNode.next) {
+        currentNode = currentNode.next;
+      }
 
-        currentNode.next = node;
+      currentNode.next = node;
     }
 
     length++;
   };
 
-  this.remove = function(element){
+  this.remove = function(element) {
     var currentNode = head;
     var previousNode;
-    if(currentNode.element === element){
-        head = currentNode.next;
+    if (currentNode.element === element) {
+      head = currentNode.next;
     } else {
-        while(currentNode.element !== element) {
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
+      while (currentNode.element !== element) {
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
 
-        previousNode.next = currentNode.next;
+      previousNode.next = currentNode.next;
     }
 
-    length --;
+    length--;
   };
 
   this.isEmpty = function() {
@@ -57,12 +57,12 @@ function LinkedList() {
     var currentNode = head;
     var index = -1;
 
-    while(currentNode){
-        index++;
-        if(currentNode.element === element){
-            return index;
-        }
-        currentNode = currentNode.next;
+    while (currentNode) {
+      index++;
+      if (currentNode.element === element) {
+        return index;
+      }
+      currentNode = currentNode.next;
     }
 
     return -1;
@@ -71,36 +71,36 @@ function LinkedList() {
   this.elementAt = function(index) {
     var currentNode = head;
     var count = 0;
-    while (count < index){
-        count ++;
-        currentNode = currentNode.next
+    while (count < index) {
+      count++;
+      currentNode = currentNode.next
     }
     return currentNode.element;
   };
 
 
-  this.addAt = function(index, element){
+  this.addAt = function(index, element) {
     var node = new Node(element);
 
     var currentNode = head;
     var previousNode;
     var currentIndex = 0;
 
-    if(index > length){
-        return false;
+    if (index > length) {
+      return false;
     }
 
-    if(index === 0){
-        node.next = currentNode;
-        head = node;
+    if (index === 0) {
+      node.next = currentNode;
+      head = node;
     } else {
-        while(currentIndex < index){
-            currentIndex++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        node.next = currentNode;
-        previousNode.next = node;
+      while (currentIndex < index) {
+        currentIndex++;
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
+      node.next = currentNode;
+      previousNode.next = node;
     }
     length++;
   }
@@ -109,29 +109,27 @@ function LinkedList() {
     var currentNode = head;
     var previousNode;
     var currentIndex = 0;
-    if (index < 0 || index >= length){
-        return null
+    if (index < 0 || index >= length) {
+      return null
     }
-    if(index === 0){
-        head = currentNode.next;
+    if (index === 0) {
+      head = currentNode.next;
     } else {
-        while(currentIndex < index) {
-            currentIndex ++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        previousNode.next = currentNode.next
+      while (currentIndex < index) {
+        currentIndex++;
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
+      previousNode.next = currentNode.next
     }
     length--;
     return currentNode.element;
   }
 
   //Prints the entire list to the console
-  this.toString = function()
-  {
+  this.toString = function() {
     var currentSize = this.size();
-    for(var i = 0; i < currentSize; i++)
-    {
+    for (var i = 0; i < currentSize; i++) {
       console.log(this.elementAt(i));
     }
   }

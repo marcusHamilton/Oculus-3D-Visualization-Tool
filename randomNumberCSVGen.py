@@ -21,7 +21,7 @@ file = open(fileName, "w" )
 
 for i in range(int(numRows)):
     for i in range(int(numColumns)):
-        newVal = random.randint(0, rangeMax)
+        newVal = random.uniform(0, rangeMax)
         file.write(str(newVal))
         if i != int(numColumns) -1:
             file.write(",")

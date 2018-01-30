@@ -1,6 +1,7 @@
 /*
   This js file is responsible for building the 3D world
 */
+
 //Set up essential global elemets
 var scene;
 var camera;
@@ -17,7 +18,6 @@ var largestY;
 var largestZ;
 
 var graphCenter;
-
 // Object for OrbitControls.js for orbital camera controls
 var controls;
 
@@ -121,6 +121,8 @@ function build3DSpace()
     cube.position.y = parsedData[i][1];
     cube.position.z = parsedData[i][2];
 
+      drawDataPoint(new THREE.Vector3(parsedData[i][0],parsedData[i][1],parsedData[i][2]), 1);
+
     // Find the X, Y, and Z value ceilings in the data.
     if (parsedData[i][0] > largestX){
       largestX = parsedData[i][0];
@@ -145,6 +147,9 @@ function build3DSpace()
     	}
     }
 
+    // Just for testing:
+      drawDataPoint(new THREE.Vector3(5,5,5));
+
     scene.add(cube);
     listOfCubes.add(cube);
   }
@@ -167,10 +172,39 @@ function build3DSpace()
   GameLoop();
 }
 
+// Takes a Vector3, generates a datapoint representation at those coordinates
+// and pushes it to the scene.
+function drawDataPoint(position, size)
+{
+
+    var geometry = new THREE.BufferGeometry();
+    geometry.addAttribute( 'position', new THREE.BufferAttribute( position, 1 ) );
+    geometry.addAttribute( 'customColor', new THREE.BufferAttribute( new THREE.Color( 0xffffff ), 1 ) );
+    geometry.addAttribute( 'size', new THREE.BufferAttribute( size, 1 ) );
+
+    var myTexture = new THREE.TextureLoader().load( "img/cross.png" );
+    var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
+    var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+            color:   { value: new THREE.Color( 0xffffff ) },
+            texture: { value: myTexture }
+        },
+        vertexShader: myVertexShader,
+        fragmentShader: myFragmentShader,
+        alphaTest: 0.5
+    });
+
+    var point = new THREE.Points( geometry, material );
+    //scene.add(point);
+
+}
+
 // Indicates XYZ axes as Red, Blue, and Green lines respectively
 // Drawn from the origin
 function drawAxisLabels()
 {
+
   var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
   var materialY = new THREE.LineBasicMaterial({color: 0x00ff00});
   var materialZ = new THREE.LineBasicMaterial({color: 0x0000ff});

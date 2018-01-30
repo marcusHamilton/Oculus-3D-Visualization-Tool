@@ -25,7 +25,7 @@ You may follow instructions on how to install via a package manager here:
    This will install the needed dependencies.
    Then in the root git directory run...
     ```
-    node app.js
+    npm start
     ```
    This will host the project on your local server.
 

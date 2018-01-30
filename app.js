@@ -1,36 +1,51 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
+var express = require('express');
 var path = require('path');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-//Manage GET requests
+var index = require('./routes/index');
+var localLoad = require('./routes/localLoad');
+var urlLoad = require('./routes/urlLoad');
+var features = require('./routes/features');
+var about = require('./routes/about');
+var VRWorld = require('./routes/VRWorld');
 
-app.use(express.static(path.join(__dirname, '/public')));
+var app = express();
 
-app.get('/', function(req, res){
-  res.send('index.html');
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', index);
+app.use('/localLoad', localLoad);
+app.use('/urlLoad', urlLoad);
+app.use('/features', features);
+app.use('/about', about);
+app.use('/VRWorld', VRWorld);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.get('/localLoad', function(req, res){
-  res.sendFile(path.join(__dirname+'/public/html/LocalLoad.html'));
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
-app.get('/urlLoad', function(req, res){
-  res.sendFile(path.join(__dirname+'/public/html/UrlLoad.html'));
-});
-
-app.get('/features', function(req, res){
-  res.sendFile(path.join(__dirname+'/public/html/features.html'));
-});
-
-app.get('/about', function(req, res){
-  res.sendFile(path.join(__dirname+'/public/html/aboutUs.html'));
-});
-
-app.get('/VR', function(req, res){
-  res.sendFile(path.join(__dirname+'/public/html/virtualSpace.html'));
-});
-
-//End: Manage GET requests
-
-app.listen(8080, () => console.log('Serving on port 8080!'));
+module.exports = app;

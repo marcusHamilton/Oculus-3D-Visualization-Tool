@@ -4,6 +4,7 @@
   "description": "A tool that allows the visualization of data from a .csv file in a 3D virtual space.",
   "main": "app.js",
   "scripts": {
+    "start": "node ./bin/www",
     "test": "mocha"
   },
   "repository": {
@@ -18,7 +19,11 @@
   "homepage": "https://github.com/mah985/Oculus-3D-Visualization-Tool#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

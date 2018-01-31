@@ -48,12 +48,13 @@ function retrieveCSVData()
 //Called every frame
 function update()
 {
+  /*
   for(var i = 0; i < listOfCubes.size(); i++)
   {
     listOfCubes.elementAt(i).rotation.x += 0.01;
     listOfCubes.elementAt(i).rotation.y += 0.005;
   }
-
+*/
   //requestAnimationFrame( animate );
 
   // required if controls.enableDamping or controls.autoRotate are set to true
@@ -76,7 +77,7 @@ var GameLoop = function ()
 
   update();
   render();
-}
+};
 
 /*
 This function is responsible for building the world and creates the
@@ -148,10 +149,10 @@ function build3DSpace()
     }
 
     // Just for testing:
-      drawDataPoint(new THREE.Vector3(5,5,5));
+      //drawDataPoint(new THREE.Vector3(5,5,5));
 
-    scene.add(cube);
-    listOfCubes.add(cube);
+    //scene.add(cube);
+    //listOfCubes.add(cube);
   }
 
   // Orbital camera control initialization
@@ -197,6 +198,14 @@ function drawDataPoint(position, size)
 
     var point = new THREE.Points( geometry, material );
     //scene.add(point);
+
+    var dotGeometry = new THREE.Geometry();
+    dotGeometry.vertices.push(position);
+
+    var dotMaterial = new THREE.PointsMaterial( { size: size, sizeAttenuation: false } );
+    var dot = new THREE.Points( dotGeometry, dotMaterial );
+    scene.add( dot );
+
 
 }
 

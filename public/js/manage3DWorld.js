@@ -2,13 +2,20 @@
   This js file is responsible for building the 3D world
 */
 
+module.exports = function(){
+    return 'hello';
+}
+
+//use require to import other js files
+var linkedList = require('./LinkedList');
+
 //Set up essential global elemets
 var scene;
 var camera;
 var renderer;
 var windowWidth; //The width of the browser window
 var windowHeight; //The height of the browser window
-var listOfCubes = new LinkedList(); //Stores the objects in the world
+var listOfCubes = new linkedList(); //Stores the objects in the world
 var parsedData;
 
 /*
@@ -109,3 +116,6 @@ function drawFPSstats()
 {
   (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
 }
+
+
+

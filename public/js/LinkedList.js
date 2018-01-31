@@ -1,4 +1,7 @@
-function LinkedList() {
+//Anything you want other js files to be able to access
+// needs to be included in module.exports
+module.exports = function LinkedList() {
+
   var length = 0;
   var head = null;
 

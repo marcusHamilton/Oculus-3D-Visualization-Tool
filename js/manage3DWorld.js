@@ -48,13 +48,12 @@ function retrieveCSVData()
 //Called every frame
 function update()
 {
-  /*
   for(var i = 0; i < listOfCubes.size(); i++)
   {
     listOfCubes.elementAt(i).rotation.x += 0.01;
     listOfCubes.elementAt(i).rotation.y += 0.005;
   }
-*/
+
   //requestAnimationFrame( animate );
 
   // required if controls.enableDamping or controls.autoRotate are set to true
@@ -77,7 +76,7 @@ var GameLoop = function ()
 
   update();
   render();
-};
+}
 
 /*
 This function is responsible for building the world and creates the
@@ -90,12 +89,16 @@ function build3DSpace()
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    //scene.background = new THREE.Color( 0xffffff );
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
   document.body.appendChild(renderer.domElement);
   listenForWindowResize();
+
+  var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    scene.add( light );
 
 
   //Create a shape
@@ -149,10 +152,10 @@ function build3DSpace()
     }
 
     // Just for testing:
-      //drawDataPoint(new THREE.Vector3(5,5,5));
+      drawDataPoint(new THREE.Vector3(-1,-1,-1), 1);
 
-    //scene.add(cube);
-    //listOfCubes.add(cube);
+    scene.add(cube);
+    listOfCubes.add(cube);
   }
 
   // Orbital camera control initialization
@@ -183,85 +186,200 @@ function drawDataPoint(position, size)
     geometry.addAttribute( 'customColor', new THREE.BufferAttribute( new THREE.Color( 0xffffff ), 1 ) );
     geometry.addAttribute( 'size', new THREE.BufferAttribute( size, 1 ) );
 
+
     var myTexture = new THREE.TextureLoader().load( "img/cross.png" );
     var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
     var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
     var material = new THREE.ShaderMaterial({
         uniforms: {
-            color:   { value: new THREE.Color( 0xffffff ) },
             texture: { value: myTexture }
         },
         vertexShader: myVertexShader,
-        fragmentShader: myFragmentShader,
-        alphaTest: 0.5
+        fragmentShader: myFragmentShader
+
     });
 
-    var point = new THREE.Points( geometry, material );
-    //scene.add(point);
+
+    //test point
+    /*var point = new THREE.Points( geometry, material );
 
     var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(position);
-
-    var dotMaterial = new THREE.PointsMaterial( { size: size, sizeAttenuation: false } );
-    var dot = new THREE.Points( dotGeometry, dotMaterial );
-    scene.add( dot );
+    dotGeometry.vertices.push(new THREE.Vector3( -1, -1, -1));
+    var dotMaterial = new THREE.PointsMaterial( { size: 1, sizeAttenuation: false } );
+    var dot = new THREE.Points( dotGeometry, material );
+    scene.add( dot );*/
 
 
 }
+
+/*
+ This is a second possibility for build3DSpace()
+ */
+function build3DSpaceAgain() {
+    //Recover the CSVData from the browsers webStorage
+    retrieveCSVData();
+    //Initialize camera, scene, and renderer
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    //scene.background = new THREE.Color( 0xffffff );
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    //Add the renderer to the html page
+    document.body.appendChild(renderer.domElement);
+    listenForWindowResize();
+
+    var geometry = new THREE.BufferGeometry();
+
+    var positions = [];
+    var colors = [];
+
+    largestX = 0;
+    largestY = 0;
+    largestZ = 0;
+    largestEntry = 0;
+
+    //get all positions and add them to the array
+    for (var i = 0; i < parsedData.length; i++) {
+        positions.push(parsedData[i][0]);
+        positions.push(parsedData[i][1]);
+        positions.push(parsedData[i][2]);
+
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+
+        // Find the X, Y, and Z value ceilings in the data.
+        if (parsedData[i][0] > largestX) {
+            largestX = parsedData[i][0];
+        }
+        if (parsedData[i][1] > largestY) {
+            largestY = parsedData[i][1];
+        }
+        if (parsedData[i][2] > largestZ) {
+            largestZ = parsedData[i][2];
+        }
+
+    }
+
+    // Create Vector3 object representing the graph center point for camera
+    // target
+    graphCenter = new THREE.Vector3(largestX / 2.0, largestY / 2.0, largestZ / 2.0);
+
+
+    // Find largest entry across all axes to adjust initial camera zoom
+        if(largestX > largestY){
+            largestEntry = largestX;
+        }
+        else {
+            largestEntry = largestY;
+        }
+        if(largestZ > largestEntry){
+            largestEntry = largestZ;
+        }
+
+        var positionAttribute = new THREE.Float32BufferAttribute(positions, 3);
+        var colorAttribute = new THREE.Uint8BufferAttribute(colors, 4);
+        colorAttribute.normalized = true;
+
+        geometry.addAttribute('position', positionAttribute);
+        geometry.addAttribute('color', colorAttribute);
+
+
+        var material = new THREE.RawShaderMaterial({
+            uniforms: {
+                time: {value: 1.0}
+            },
+            vertexShader: document.getElementById('vertexshader').textContent,
+            fragmentShader: document.getElementById('fragmentshader').textContent,
+            side: THREE.DoubleSide,
+            transparent: true
+        });
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+
+        // Orbital camera control initialization
+        var controls = new THREE.OrbitControls(camera);
+        camera.position.set(graphCenter.x, graphCenter.y, largestEntry / 0.6);
+        controls.target = graphCenter;
+        controls.enableDamping;
+        controls.autoRotate = true; // This isn't working for some reason.
+
+        // controls.update() must be called after any manual changes to the camera's
+        // transform
+
+        drawAxisLabels();
+        drawFPSstats();
+        //GameLoop must be called last after everything to ensure that
+        //everything is rendered
+        GameLoop();
+    }
+
 
 // Indicates XYZ axes as Red, Blue, and Green lines respectively
 // Drawn from the origin
-function drawAxisLabels()
-{
+    function drawAxisLabels() {
 
-  var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
-  var materialY = new THREE.LineBasicMaterial({color: 0x00ff00});
-  var materialZ = new THREE.LineBasicMaterial({color: 0x0000ff});
+        var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
+        var materialY = new THREE.LineBasicMaterial({color: 0x00ff00});
+        var materialZ = new THREE.LineBasicMaterial({color: 0x0000ff});
 
-  var geometryX = new THREE.Geometry();
-  var geometryY = new THREE.Geometry();
-  var geometryZ = new THREE.Geometry();
+        var geometryX = new THREE.Geometry();
+        var geometryY = new THREE.Geometry();
+        var geometryZ = new THREE.Geometry();
 
-  geometryX.vertices.push(new THREE.Vector3(0,0,0));
-  geometryX.vertices.push(new THREE.Vector3(largestX * 1.5,0,0));
+        geometryX.vertices.push(new THREE.Vector3(0, 0, 0));
+        geometryX.vertices.push(new THREE.Vector3(largestX * 1.5, 0, 0));
 
-  geometryY.vertices.push(new THREE.Vector3(0,0,0));
-  geometryY.vertices.push(new THREE.Vector3(0,largestY * 1.5,0));
+        geometryY.vertices.push(new THREE.Vector3(0, 0, 0));
+        geometryY.vertices.push(new THREE.Vector3(0, largestY * 1.5, 0));
 
-  geometryZ.vertices.push(new THREE.Vector3(0,0,0));
-  geometryZ.vertices.push(new THREE.Vector3(0,0,largestZ * 1.5));
+        geometryZ.vertices.push(new THREE.Vector3(0, 0, 0));
+        geometryZ.vertices.push(new THREE.Vector3(0, 0, largestZ * 1.5));
 
-  var lineX = new THREE.Line(geometryX, materialX);
-  var lineY = new THREE.Line(geometryY, materialY);
-  var lineZ = new THREE.Line(geometryZ, materialZ);
+        var lineX = new THREE.Line(geometryX, materialX);
+        var lineY = new THREE.Line(geometryY, materialY);
+        var lineZ = new THREE.Line(geometryZ, materialZ);
 
-  scene.add(lineX);
-  scene.add(lineY);
-  scene.add(lineZ);
-}
+        scene.add(lineX);
+        scene.add(lineY);
+        scene.add(lineZ);
+    }
 
 //Loops through the cube list and sets RGB color values based on
 //()(XYZ Magnitude)/largestEntry) * 255
-function setCubeColors()
-{
-  for(var i = 0; i < listOfCubes.size(); i++)
-  {
-    // Truncating the first and last 16 of each value avoids a querk in
-    // toString(16) where it doesn't return leading zeros.
-    var r = 16 + Math.round((listOfCubes.elementAt(i).position.x / largestX) * 239);
-    var g = 16 + Math.round((listOfCubes.elementAt(i).position.y / largestY) * 239);
-    var b = 16 + Math.round((listOfCubes.elementAt(i).position.z / largestZ) * 239);
+    function setCubeColors() {
+        for (var i = 0; i < listOfCubes.size(); i++) {
+            // Truncating the first and last 16 of each value avoids a querk in
+            // toString(16) where it doesn't return leading zeros.
+            var r = 16 + Math.round((listOfCubes.elementAt(i).position.x / largestX) * 239);
+            var g = 16 + Math.round((listOfCubes.elementAt(i).position.y / largestY) * 239);
+            var b = 16 + Math.round((listOfCubes.elementAt(i).position.z / largestZ) * 239);
 
-    var colorHex = parseInt(r.toString(16) + g.toString(16) + b.toString(16), 16);
+            var colorHex = parseInt(r.toString(16) + g.toString(16) + b.toString(16), 16);
 
-    listOfCubes.elementAt(i).material.color.setHex( colorHex );
-  }
-}
+            listOfCubes.elementAt(i).material.color.setHex(colorHex);
+        }
+    }
 
 //This draws the fps and various stats to the page.
 //Click on the widget to see other stats
 //Can be removed after development
-function drawFPSstats()
-{
-  (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
-}
+    function drawFPSstats() {
+        (function () {
+            var script = document.createElement('script');
+            script.onload = function () {
+                var stats = new Stats();
+                document.body.appendChild(stats.dom);
+                requestAnimationFrame(function loop() {
+                    stats.update();
+                    requestAnimationFrame(loop)
+                });
+            };
+            script.src = '//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';
+            document.head.appendChild(script);
+        })()
+    }
+

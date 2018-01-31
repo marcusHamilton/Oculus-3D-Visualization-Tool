@@ -269,12 +269,15 @@ function build3DSpaceAgain() {
 
 
     // Find largest entry across all axes to adjust initial camera zoom
-    // (Probably doesn't need to search entire data set all over again).
-    for (j = 0; j < 3; j++) {
-        if (parsedData[i][j] > largestEntry) {
-            largestEntry = parsedData[i][j];
+        if(largestX > largestY){
+            largestEntry = largestX;
         }
-    }
+        else {
+            largestEntry = largestY;
+        }
+        if(largestZ > largestEntry){
+            largestEntry = largestZ;
+        }
 
         var positionAttribute = new THREE.Float32BufferAttribute(positions, 3);
         var colorAttribute = new THREE.Uint8BufferAttribute(colors, 4);

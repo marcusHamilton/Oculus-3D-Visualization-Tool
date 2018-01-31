@@ -317,6 +317,123 @@ function build3DSpaceAgain() {
         GameLoop();
     }
 
+/*
+A third try for build3DSpace() with THREE.ParticleSystem
+*/
+function build3DSpaceWithParticleSystem() {
+    //Recover the CSVData from the browsers webStorage
+    retrieveCSVData();
+    //Initialize camera, scene, and renderer
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0x00001f );
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    //Add the renderer to the html page
+    document.body.appendChild(renderer.domElement);
+    listenForWindowResize();
+
+
+
+    var geometry = new THREE.BufferGeometry();
+
+    var positions = [];
+    var colors = [];
+
+    largestX = 0;
+    largestY = 0;
+    largestZ = 0;
+    largestEntry = 0;
+
+    //get all positions and add them to the array
+    for (var i = 0; i < parsedData.length; i++) {
+        positions.push(parsedData[i][0]);
+        positions.push(parsedData[i][1]);
+        positions.push(parsedData[i][2]);
+
+        // Fill colors array with random colors
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+        colors.push(Math.random() * 255);
+
+        // Find the X, Y, and Z value ceilings in the data.
+        if (parsedData[i][0] > largestX) {
+            largestX = parsedData[i][0];
+        }
+        if (parsedData[i][1] > largestY) {
+            largestY = parsedData[i][1];
+        }
+        if (parsedData[i][2] > largestZ) {
+            largestZ = parsedData[i][2];
+        }
+
+    }
+
+    // Create Vector3 object representing the graph center point for camera
+    // target
+    graphCenter = new THREE.Vector3(largestX / 2.0, largestY / 2.0, largestZ / 2.0);
+
+    // Orbital camera control initialization
+    var controls = new THREE.OrbitControls(camera);
+    camera.position.set(graphCenter.x, graphCenter.y, largestEntry / 0.6);
+    controls.target = graphCenter;
+    controls.enableDamping;
+    controls.autoRotate = true; // This isn't working for some reason.
+
+    // controls.update() must be called after any manual changes to the camera's
+    // transform
+
+    // Find largest entry across all axes to adjust initial camera zoom
+    if(largestX > largestY){
+        largestEntry = largestX;
+    }
+    else {
+        largestEntry = largestY;
+    }
+    if(largestZ > largestEntry){
+        largestEntry = largestZ;
+    }
+
+    // New ParticleSystem code:
+
+    var particles = new THREE.Geometry(),
+        pMaterial = new THREE.PointsMaterial({
+            color: 0xFFFFFF,
+            size: 0.25
+        });
+
+
+    for (var i = 0; i < parsedData.length; i++) {
+
+        // create a particle with random
+        // position values, -250 -> 250
+        var pX = parsedData[i][0],
+            pY = parsedData[i][1],
+            pZ = parsedData[i][2],
+            particle = new THREE.Vector3(pX, pY, pZ);
+
+        // add it to the geometry
+        particles.vertices.push(particle);
+    }
+
+    // create the particle system
+    var particleSystem = new THREE.Points(
+        particles,
+        pMaterial);
+
+    // add it to the scene
+    scene.add(particleSystem);
+
+    drawAxisLabels();
+    drawFPSstats();
+    //GameLoop must be called last after everything to ensure that
+    //everything is rendered
+    GameLoop();
+}
+
+
 
 // Indicates XYZ axes as Red, Blue, and Green lines respectively
 // Drawn from the origin

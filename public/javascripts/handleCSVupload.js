@@ -101,8 +101,3 @@ function loadCSVremote() {
     message.innerHTML = '<div class="alert alert-danger"><strong>Error!</strong> Wrong URL?</div> ';
   }
 }
-
-
-function thisIsATest() {
-  return data;
-}

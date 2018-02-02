@@ -21,8 +21,7 @@ var parsedData; //Parsed data obtained from handleCSVupload
 //Called every frame
 function update(timestamp) {
   //Calculate delta to allow smoother object movement
-  if(timestamp == null)
-  {
+  if (timestamp == null) {
     //Fixes small lag at begining of program where
     //timestamp is null
     timestamp = 15;
@@ -36,6 +35,9 @@ function update(timestamp) {
     listOfCubes.elementAt(i).rotation.x += delta * 0.0003;
     listOfCubes.elementAt(i).rotation.y += delta * 0.0005;
   }
+  //Ensure that we are looking for controller input
+  THREE.VRController.update();
+
 }
 
 //Draw game objects to the scene
@@ -202,6 +204,9 @@ function addEnterVrButtons() {
 
 }
 
+/*
+These are the head controls as well as the ability to move around in 2d space. They do not correspond to the hand controls.
+*/
 function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
@@ -218,3 +223,70 @@ function setUpControls() {
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
 }
+
+/*
+The following is an event listener for when a hand held controller is connected
+*/
+window.addEventListener('vr controller connected', function(event) {
+
+  var controller = event.detail
+  scene.add(controller)
+
+  //Ensure controllers appear at the right height
+  controller.standingMatrix = renderer.vr.getStandingMatrix()
+
+  controller.head = window.camera
+
+  //Add a visual for the controllers
+  var
+    meshColorOff = 0xDB3236, //  Red.
+    meshColorOn = 0xF4C20D, //  Yellow.
+    controllerMaterial = new THREE.MeshStandardMaterial({
+
+      color: meshColorOff
+    }),
+    controllerMesh = new THREE.Mesh(
+
+      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+      controllerMaterial
+    ),
+    handleMesh = new THREE.Mesh(
+
+      new THREE.BoxGeometry(0.03, 0.1, 0.03),
+      controllerMaterial
+    )
+
+  controllerMaterial.flatShading = true
+  controllerMesh.rotation.x = -Math.PI / 2
+  handleMesh.position.y = -0.05
+  controllerMesh.add(handleMesh)
+  controller.userData.mesh = controllerMesh //  So we can change the color later.
+  controller.add(controllerMesh)
+  castShadows(controller)
+  receiveShadows(controller)
+
+
+  //  Allow this controller to interact with DAT GUI.
+
+  // var guiInputHelper = dat.GUIVR.addInputObject(controller)
+  // scene.add(guiInputHelper)
+
+
+  //Button events. This is currently just using the primary button
+  controller.addEventListener('primary press began', function(event) {
+
+    event.target.userData.mesh.material.color.setHex(meshColorOn)
+    guiInputHelper.pressed(true)
+  })
+  controller.addEventListener('primary press ended', function(event) {
+
+    event.target.userData.mesh.material.color.setHex(meshColorOff)
+    guiInputHelper.pressed(false)
+  })
+
+  //On controller removal
+  controller.addEventListener('disconnected', function(event) {
+
+    controller.parent.remove(controller)
+  })
+})

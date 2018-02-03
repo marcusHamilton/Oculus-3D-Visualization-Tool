@@ -21,9 +21,9 @@ var parsedData; //Parsed data obtained from handleCSVupload
 //parsedData[i][x_AxisIndex]
 //parsedData[i][y_AxisIndex]
 //parsedData[i][z_AxisIndex]
-var x_AxisIndex; //The x-axis index of which to use for scatter plot poisitioning
-var y_AxisIndex; //The y-axis of which to use for scatter plot poisitioning
-var z_AxisIndex; //The z-axis of which to use for scatter plot poisitioning
+var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
+var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
+var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
 //Called every frame
 function update(timestamp) {

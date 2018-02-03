@@ -87,6 +87,7 @@ function drawDataset(xCol, yCol, zCol)
  * @postcondition axis labels are drawn from 0,0
  */
 function drawAxisLabels() {
+  assert(scene, "Scene must be initialized for drawAxisLabels()");
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
@@ -117,6 +118,32 @@ function drawAxisLabels() {
   scene.add(lineX);
   scene.add(lineY);
   scene.add(lineZ);
+
+  // Grid lines
+  var lineXTicks = new LinkedList();
+  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++){
+      lineXTicks.add(new THREE.Geometry());
+      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, plotInitSizeY, 0));
+      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, 0, 0));
+      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, 0, plotInitSizeZ));
+      scene.add(new THREE.Line(lineXTicks.elementAt(xUnits-1), materialX));
+  }
+  var lineYTicks = new LinkedList();
+  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++){
+      lineYTicks.add(new THREE.Geometry());
+      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY/largestY * yUnits, 0));
+      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY/largestY * yUnits, 0));
+      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY/largestY * yUnits, plotInitSizeZ));
+      scene.add(new THREE.Line(lineYTicks.elementAt(yUnits-1), materialY));
+  }
+  var lineZTicks = new LinkedList();
+  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++){
+      lineZTicks.add(new THREE.Geometry());
+      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ/largestZ * zUnits));
+      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ/largestZ * zUnits));
+      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ/largestZ * zUnits));
+      scene.add(new THREE.Line(lineZTicks.elementAt(zUnits-1), materialZ));
+  }
 }
 
 /**
@@ -128,6 +155,7 @@ function drawAxisLabels() {
  * @return {Number} integer color value from position.
  */
 function colorFromXYZcoords(vec3) {
+
   var r = 0;
   var g = 0;
   var b = 0;
@@ -138,6 +166,7 @@ function colorFromXYZcoords(vec3) {
     g = 16 + Math.round((vec3.y / largestY) * 239);
     b = 16 + Math.round((vec3.z / largestZ) * 239);
   }
+  // Assemble the RGB components in a color value.
   return parseInt(r.toString(16) + g.toString(16) + b.toString(16), 16);
 }
 

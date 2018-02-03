@@ -2,22 +2,25 @@
  * Contains everything to do with drawing the 3D data plot.
  **/
 
+// largest value in the dataset for each axis.
 var largestX = 0;
 var largestY = 0;
 var largestZ = 0;
+// largest value overall.
 var largestEntry = 0;
-var graphCenterVec3;
+// calculated center point of the plot
+var plotCenterVec3;
 
 
 /**
  * Draws a 3D point-field/scatterplot graph representation of the input
  * dataset with reasonable initial scaling.
  *
- * @precondition The CSV must be parsed so that parsedData != null
+ * @precondition The CSV must be parsed so that parsedData is defined
  *
- * @param {Integer} x CSV column index for the x-axis
- * @param {Integer} y CSV column index for the y-axis
- * @param {Integer} z CSV column index for the z-axis
+ * @param {Integer} xCol CSV column index for the x-axis
+ * @param {Integer} yCol CSV column index for the y-axis
+ * @param {Integer} zCol CSV column index for the z-axis
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
@@ -62,8 +65,8 @@ function drawDataset(xCol, yCol, zCol)
     // add it to the geometry
     pointsGeometry.vertices.push(p);
   }
-  // Vector3 representing the graph center point
-  graphCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
+  // Vector3 representing the plot center point
+  plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
 
   // create the particle shader system
   var pointsSystem = new THREE.Points(
@@ -128,8 +131,8 @@ function colorFromXYZcoords(vec3) {
   var r = 0;
   var g = 0;
   var b = 0;
-  // Truncating the first and last 16 of each value avoids a querk in
-  // toString(16) where it doesn't return leading zeros.
+  // Truncating the first and last 16 of each value because
+  // toString(16) doesn't return leading zeros.
   if (largestX > 0 && largestY > 0 && largestZ > 0) {
     r = 16 + Math.round((vec3.x / largestX) * 239);
     g = 16 + Math.round((vec3.y / largestY) * 239);
@@ -140,7 +143,7 @@ function colorFromXYZcoords(vec3) {
 
 /**
  * Temporary assertion because I don't know how to work node.js
- * @param condition {bool} assertion
+ * @param condition {Boolean} assertion
  * @param message {String} Failure message
  */
 function assert(condition, message) {

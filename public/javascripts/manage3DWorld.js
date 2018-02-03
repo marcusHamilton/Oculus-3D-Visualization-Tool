@@ -7,11 +7,12 @@ var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
 var vrControls; //Vr Controls
-var fpVrControls; //First person controls
+var trackballControls; //First person controls
 var effect; //The variable responsible for holding the vreffect
 var vrButton; //Enter vr button seen at start
 var enterVR; //Holds info of whether or not the user is in VR
 var animationDisplay = window; //Holds the HMD (By default is window)
+var delta;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
@@ -33,7 +34,7 @@ function update(timestamp) {
     //timestamp is null
     timestamp = 15;
   }
-  var delta = Math.min(timestamp - lastRender, 500);
+  delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
   //Add all updates below here
@@ -43,6 +44,7 @@ function update(timestamp) {
     listOfCubes.elementAt(i).rotation.y += delta * 0.0005;
   }
   //Ensure that we are looking for controller input
+  trackballControls.update();
   THREE.VRController.update();
 
 }
@@ -52,7 +54,6 @@ function render(timestamp) {
 
   if (enterVR.isPresenting()) {
     vrControls.update();
-    fpVrControls.update(timestamp);
     renderer.render(scene, camera);
     effect.render(scene, camera);
   } else {
@@ -228,8 +229,15 @@ function setUpControls() {
   camera.position.y = vrControls.userHeight;
 
   //Add fps controls as well
-  fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
-  fpVrControls.virticalMovement = true;
+  trackballControls = new THREE.TrackballControls(camera);
+  trackballControls.rotateSpeed = 1.0;
+  trackballControls.zoomSpeed = 10;
+  trackballControls.panSpeed = 10;
+  trackballControls.noZoom = false;
+  trackballControls.noPan = false;
+  trackballControls.staticMoving = true;
+  trackballControls.dynamicDampingFactor = 0.3;
+  trackballControls.keys = [65, 83, 68];
 
   //Apply VR stereo rendering to renderer.
   effect = new THREE.VREffect(renderer);

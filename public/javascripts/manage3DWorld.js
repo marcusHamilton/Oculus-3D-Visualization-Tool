@@ -17,6 +17,13 @@ var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
 var listOfCubes = new LinkedList(); //Stores the objects in the world
 var parsedData; //Parsed data obtained from handleCSVupload
+//The following are to be accessed like so: parsedData[i][x_AxisIndex]
+//parsedData[i][x_AxisIndex]
+//parsedData[i][y_AxisIndex]
+//parsedData[i][z_AxisIndex]
+var x_AxisIndex; //The x-axis index of which to use for scatter plot poisitioning
+var y_AxisIndex; //The y-axis of which to use for scatter plot poisitioning
+var z_AxisIndex; //The z-axis of which to use for scatter plot poisitioning
 
 //Called every frame
 function update(timestamp) {
@@ -107,7 +114,7 @@ function build3DSpace() {
       wireframe: true
     });
     cube = new THREE.Mesh(boxGeometry, material);
-    cube.position.set(i * -2, vrControls.userHeight, i * -2);
+    cube.position.set(parsedData[i][x_AxisIndex], parsedData[i][y_AxisIndex], parsedData[i][z_AxisIndex]);
     scene.add(cube);
     listOfCubes.add(cube);
   }
@@ -161,6 +168,13 @@ function onResize(e) {
 function retrieveCSVData() {
   var retrievedObject = sessionStorage.getItem('parsedCSVData');
   parsedData = JSON.parse(retrievedObject);
+
+  //get dropdown options
+  var retrievedOptions = sessionStorage.getItem('initialAxisValues');
+  retrievedOptions = JSON.parse(retrievedOptions);
+  x_AxisIndex = retrievedOptions[0];
+  y_AxisIndex = retrievedOptions[1];
+  z_AxisIndex = retrievedOptions[2];
 }
 
 /*

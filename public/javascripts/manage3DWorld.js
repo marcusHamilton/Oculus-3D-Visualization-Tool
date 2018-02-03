@@ -60,7 +60,7 @@ var GameLoop = function(timestamp) {
   render(timestamp);
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);
-}
+};
 
 /*
 This function is responsible for building the world and creates the
@@ -93,7 +93,7 @@ function build3DSpace() {
       animationDisplay = window;
     });
 
-
+  /*
   //Create a shape
   var boxGeometry;
   var material;
@@ -109,11 +109,13 @@ function build3DSpace() {
     scene.add(cube);
     listOfCubes.add(cube);
   }
+  */
   //Move camera back so that you are not inside the first cube
   camera.position.z = 3;
-
   //This can be removed after development if desired
   drawFPSstats();
+
+  drawDataset(0, 1, 2);
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered

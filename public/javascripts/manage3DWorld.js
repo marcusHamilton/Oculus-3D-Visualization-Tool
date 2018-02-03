@@ -16,7 +16,6 @@ var delta;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
-var listOfCubes = new LinkedList(); //Stores the objects in the world
 var parsedData; //Parsed data obtained from handleCSVupload
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
 //parsedData[i][x_AxisIndex]
@@ -39,10 +38,6 @@ function update(timestamp) {
 
   //Add all updates below here
 
-  for (var i = 0; i < listOfCubes.size(); i++) {
-    listOfCubes.elementAt(i).rotation.x += delta * 0.0003;
-    listOfCubes.elementAt(i).rotation.y += delta * 0.0005;
-  }
   //Ensure that we are looking for controller input
   trackballControls.update();
   THREE.VRController.update();
@@ -102,25 +97,6 @@ function build3DSpace() {
       // If there is no display available, fallback to window
       animationDisplay = window;
     });
-
-
-  //Create a shape
-  var boxGeometry;
-  var material;
-  var cube;
-  for (var i = 0; i < parsedData.length; i++) {
-    boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true
-    });
-    cube = new THREE.Mesh(boxGeometry, material);
-    cube.position.set(parsedData[i][x_AxisIndex], parsedData[i][y_AxisIndex], parsedData[i][z_AxisIndex]);
-    scene.add(cube);
-    listOfCubes.add(cube);
-  }
-  //Move camera back so that you are not inside the first cube
-  camera.position.z = 3;
 
   //This can be removed after development if desired
   drawFPSstats();

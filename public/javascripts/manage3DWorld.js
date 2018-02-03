@@ -18,6 +18,12 @@ var windowHeight = window.innerHeight; //The height of the browser window
 var listOfCubes = new LinkedList(); //Stores the objects in the world
 var parsedData; //Parsed data obtained from handleCSVupload
 
+//Global constants for config (Move these to a json config file or something)
+
+var plotInitSizeX = 10;
+var plotInitSizeY = 5;
+var plotInitSizeZ = 10;
+
 //Called every frame
 function update(timestamp) {
   //Calculate delta to allow smoother object movement

@@ -7,15 +7,15 @@ var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
 var vrControls; //Vr Controls
-var fpVrControls; //First person controls
+var trackballControls; //First person controls
 var effect; //The variable responsible for holding the vreffect
 var vrButton; //Enter vr button seen at start
 var enterVR; //Holds info of whether or not the user is in VR
 var animationDisplay = window; //Holds the HMD (By default is window)
+var delta;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
-var listOfCubes = new LinkedList(); //Stores the objects in the world
 var parsedData; //Parsed data obtained from handleCSVupload
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
 //parsedData[i][x_AxisIndex]
@@ -40,18 +40,14 @@ function update(timestamp) {
     //timestamp is null
     timestamp = 15;
   }
-  var delta = Math.min(timestamp - lastRender, 500);
+  delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
   //Add all updates below here
 
-  for (var i = 0; i < listOfCubes.size(); i++) {
-    listOfCubes.elementAt(i).rotation.x += delta * 0.0003;
-    listOfCubes.elementAt(i).rotation.y += delta * 0.0005;
-  }
   //Ensure that we are looking for controller input
+  trackballControls.update();
   THREE.VRController.update();
-
 
 }
 
@@ -60,7 +56,6 @@ function render(timestamp) {
 
   if (enterVR.isPresenting()) {
     vrControls.update();
-    fpVrControls.update(timestamp);
     renderer.render(scene, camera);
     effect.render(scene, camera);
   } else {
@@ -73,7 +68,6 @@ Manages program logic. Update, Render, Repeat
 DO NOT add anything to this.
 */
 var GameLoop = function(timestamp) {
-
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
@@ -91,7 +85,6 @@ function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
@@ -220,11 +213,18 @@ function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
-
+  camera.position.y = vrControls.userHeight;
 
   //Add fps controls as well
-  fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
-  fpVrControls.virticalMovement = true;
+  trackballControls = new THREE.TrackballControls(camera);
+  trackballControls.rotateSpeed = 1.0;
+  trackballControls.zoomSpeed = 10;
+  trackballControls.panSpeed = 10;
+  trackballControls.noZoom = false;
+  trackballControls.noPan = false;
+  trackballControls.staticMoving = true;
+  trackballControls.dynamicDampingFactor = 0.3;
+  trackballControls.keys = [65, 83, 68];
 
   //Apply VR stereo rendering to renderer.
   effect = new THREE.VREffect(renderer);
@@ -299,4 +299,3 @@ window.addEventListener('vr controller connected', function(event) {
     controller.parent.remove(controller)
   })
 })
-

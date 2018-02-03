@@ -30,6 +30,7 @@ var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 var plotInitSizeX = 10;
 var plotInitSizeY = 5;
 var plotInitSizeZ = 10;
+var plotPointSizeCoeff = 0.01;
 
 //Called every frame
 function update(timestamp) {
@@ -51,6 +52,7 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   THREE.VRController.update();
 
+
 }
 
 //Draw game objects to the scene
@@ -71,6 +73,7 @@ Manages program logic. Update, Render, Repeat
 DO NOT add anything to this.
 */
 var GameLoop = function(timestamp) {
+
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
@@ -88,6 +91,7 @@ function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
@@ -108,29 +112,13 @@ function build3DSpace() {
       animationDisplay = window;
     });
 
-  /*
-  //Create a shape
-  var boxGeometry;
-  var material;
-  var cube;
-  for (var i = 0; i < parsedData.length; i++) {
-    boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true
-    });
-    cube = new THREE.Mesh(boxGeometry, material);
-    cube.position.set(parsedData[i][x_AxisIndex], parsedData[i][y_AxisIndex], parsedData[i][z_AxisIndex]);
-    scene.add(cube);
-    listOfCubes.add(cube);
-  }
-  */
-  //Move camera back so that you are not inside the first cube
-  camera.position.z = 3;
+  //Center the camera on the data and back so that you are not inside the first
+  // cube
+  camera.position.set(plotInitSizeX/2.0, camera.position.y, plotInitSizeZ * 1.5);
   //This can be removed after development if desired
   drawFPSstats();
 
-  drawDataset(0, 1, 2);
+  drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
@@ -206,7 +194,6 @@ function addEnterVrButtons() {
     .on("exit", function() {
       console.log("exit VR");
       camera.quaternion.set(0, 0, 0, 1);
-      camera.position.set(0, vrControls.userHeight, 3);
     })
     .on("error", function(error) {
       document.getElementById("learn-more").style.display = "inline";
@@ -233,7 +220,7 @@ function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
-  camera.position.y = vrControls.userHeight;
+
 
   //Add fps controls as well
   fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
@@ -312,3 +299,4 @@ window.addEventListener('vr controller connected', function(event) {
     controller.parent.remove(controller)
   })
 })
+

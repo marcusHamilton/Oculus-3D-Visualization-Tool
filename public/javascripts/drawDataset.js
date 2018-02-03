@@ -1,3 +1,7 @@
+/**
+ * Contains everything to do with drawing the 3D data plot.
+ **/
+
 var largestX = 0;
 var largestY = 0;
 var largestZ = 0;
@@ -20,29 +24,30 @@ var graphCenterVec3;
 function drawDataset(xCol, yCol, zCol)
 {
   assert(parsedData, 'parsedData must be defined for drawDataset()');
-  assert(xCol >= 0 && Number.isInteger(xCol),
+  assert(xCol >= 0,
     'drawDataset() xCol value must be a positive integer');
-  assert(yCol >= 0 && Number.isInteger(yCol),
+  assert(yCol >= 0,
     'drawDataset() yCol value must be a positive integer');
-  assert(zCol >= 0 && Number.isInteger(zCol),
+  assert(zCol >= 0,
     'drawDataset() zCol value must be a positive integer');
 
   // points geometry contains a list of all the point vertices pushed below
   var pointsGeometry = new THREE.Geometry();
+  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
   var pointsMaterial = new THREE.PointsMaterial({
     color: 0xFFFFFF,
-    size: 0.25
+    size: pointSize
   });
 
   for (var i = 0; i < parsedData.length; i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
-    if (parsedData[i][0] > largestX) {
+    if (parsedData[i][xCol] > largestX) {
         largestX = parsedData[i][xCol];
     }
-    if (parsedData[i][1] > largestY) {
+    if (parsedData[i][yCol] > largestY) {
         largestY = parsedData[i][yCol];
     }
-    if (parsedData[i][2] > largestZ) {
+    if (parsedData[i][zCol] > largestZ) {
         largestZ = parsedData[i][zCol];
     }
     largestEntry = Math.max(largestX, largestY, largestZ);
@@ -58,7 +63,7 @@ function drawDataset(xCol, yCol, zCol)
     pointsGeometry.vertices.push(p);
   }
   // Vector3 representing the graph center point
-  graphCenterVec3 = new THREE.Vector3(largestX / 2.0, largestY / 2.0, largestZ / 2.0);
+  graphCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
 
   // create the particle shader system
   var pointsSystem = new THREE.Points(
@@ -67,6 +72,7 @@ function drawDataset(xCol, yCol, zCol)
 
   // add it to the scene
   scene.add(pointsSystem);
+  drawAxisLabels();
 }
 
 /**
@@ -91,13 +97,13 @@ function drawAxisLabels() {
 
   // Push line points into geometries, extending 1.5X beyond the largest point
   geometryX.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryX.vertices.push(new THREE.Vector3(largestX * 1.5, 0, 0));
+  geometryX.vertices.push(new THREE.Vector3(plotInitSizeX * 1.5, 0, 0));
 
   geometryY.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryY.vertices.push(new THREE.Vector3(0, largestY * 1.5, 0));
+  geometryY.vertices.push(new THREE.Vector3(0, plotInitSizeY * 1.5, 0));
 
   geometryZ.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryZ.vertices.push(new THREE.Vector3(0, 0, largestZ * 1.5));
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ * 1.5));
 
   // Create line objects
   var lineX = new THREE.Line(geometryX, materialX);
@@ -111,7 +117,7 @@ function drawAxisLabels() {
 }
 
 /**
- * Computes a color hex value based on the magnittudes of the xyz values in
+ * Computes a color hex value based on the magnitudes of the xyz values in
  * vec3 in relation to the largest value in each axis.
  *
  * @param {Vector3} vec3 a position in world space.

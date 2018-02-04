@@ -5,6 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
 
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
@@ -12,6 +13,9 @@
   <title>3D Visualization Tool -
     <%= error.status %>
   </title>
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 </head>
 
@@ -34,6 +38,7 @@
                 <li><a href="/urlLoad">Load Remote</a></li>
                 <li><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
+                <li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->

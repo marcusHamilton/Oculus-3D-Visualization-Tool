@@ -82,6 +82,7 @@ function loadCSVremote() {
     //other html pages
     getOptions();
     sessionStorage.setItem('parsedCSVData', JSON.stringify(data));
+    postWorld();
 
     //Clean up webpage and notify of success
     var toRemove = document.getElementById('urlBar');

@@ -19,10 +19,15 @@
   "homepage": "https://github.com/mah985/Oculus-3D-Visualization-Tool#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2",
+    "consolidate": "^0.15.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
+    "express": "^4.16.2",
+    "firebase": "^4.9.1",
+    "firebase-admin": "^5.8.2",
+    "firebase-functions": "^0.8.1",
+    "handlebars": "^4.0.11",
     "morgan": "~1.9.0"
   },
   "devDependencies": {

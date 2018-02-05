@@ -33,7 +33,7 @@ function writeUserData(data) {
     item: data
   });
 }
-writeUserData('farts and ass');
+writeUserData('test data');
 
 //read all data from the database and print it
 return db.ref('/').once('value').then(function(snapshot) {

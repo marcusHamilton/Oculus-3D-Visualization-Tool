@@ -5,6 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
 
   <!-- Bootstrap -->
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
@@ -21,6 +22,15 @@
   <!-- Deal with .csv file upload -->
   <script src="/javascripts/handleCSVupload.js"></script>
   <!-- End: Deal with .csv file upload -->
+
+    <!-- Firebase Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+
+    <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- Request handler -->
+  <script src="/javascripts/requests.js"></script>
 
   <title>3D Visualization Tool</title>
 
@@ -45,6 +55,7 @@
                 <li class="active"><a href="/urlLoad">Load Remote</a></li>
                 <li><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
+                <li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -104,6 +115,11 @@
     </div>
 
   </div>
+
+  <!-- Firebase Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+  <!-- Request handler -->
+  <script src="/javascripts/requests.js"></script>
 
 </body>
 

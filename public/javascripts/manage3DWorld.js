@@ -13,6 +13,7 @@ var vrButton; //Enter vr button seen at start
 var enterVR; //Holds info of whether or not the user is in VR
 var animationDisplay = window; //Holds the HMD (By default is window)
 var delta;
+var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
@@ -25,6 +26,13 @@ var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
 var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
 var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
+//Global constants for config (Move these to a json config file or something)
+
+var plotInitSizeX = 10;
+var plotInitSizeY = 5;
+var plotInitSizeZ = 10;
+var plotPointSizeCoeff = 0.01;
+
 //Called every frame
 function update(timestamp) {
   //Calculate delta to allow smoother object movement
@@ -35,6 +43,9 @@ function update(timestamp) {
   }
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
+
+  torus.rotation.y += 0.002
+  if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
 
   //Add all updates below here
 
@@ -65,7 +76,7 @@ var GameLoop = function(timestamp) {
   render(timestamp);
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);
-}
+};
 
 /*
 This function is responsible for building the world and creates the
@@ -79,9 +90,42 @@ function build3DSpace() {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.vr.enabled = true;
+  renderer.vr.standing = true;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
   document.body.appendChild(renderer.domElement);
+  //Add light and floor
+  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100)
+  light.position.set(1, 10, -0.5)
+  light.castShadow = true
+  light.shadow.mapSize.width = 2048
+  light.shadow.mapSize.height = 2048
+  light.shadow.camera.near = 1
+  light.shadow.camera.far = 12
+  scene.add(light)
+
+  scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
+
+
+  var floor = new THREE.Mesh(
+
+    new THREE.PlaneBufferGeometry(6, 6, 12, 12),
+    new THREE.MeshStandardMaterial({
+
+      roughness: 1.0,
+      metalness: 0.0,
+      color: 0xFFFFFF,
+      transparent: true,
+      opacity: 0.8
+    })
+  )
+  floor.rotation.x = Math.PI / -2
+  floor.receiveShadow = true
+  scene.add(floor)
   // Handle canvas resizing
   window.addEventListener('resize', onResize, true);
   window.addEventListener('vrdisplaypresentchange', onResize, true);
@@ -90,16 +134,23 @@ function build3DSpace() {
   //Get HMD type
   enterVR.getVRDisplay()
     .then(function(display) {
+      renderer.vr.setDevice(display);
       animationDisplay = display;
       setStageDimensions(display.stageParameters);
+      camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
     })
     .catch(function() {
       // If there is no display available, fallback to window
       animationDisplay = window;
     });
 
+  //Center the camera on the data and back so that you are not inside the first
+  // cube
+  camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
   //This can be removed after development if desired
   drawFPSstats();
+
+  drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
@@ -142,6 +193,17 @@ function onResize(e) {
   camera.updateProjectionMatrix();
 }
 
+/*
+Grabs the data that is sent from the csv file over browser sessionStorage
+@Pre:
+    Key 'parsedCSVData' exists in sessionStorage
+    Key 'initialAxisValues' exists in initialAxisValues
+@post:
+    parsedData contains the content that was stored in json
+    x_AxisIndex contains the users inputted x axis
+    y_AxisIndex contains the users inputted y axis
+    z_AxisIndex contains the users inputted z axis
+*/
 function retrieveCSVData() {
   var retrievedObject = sessionStorage.getItem('parsedCSVData');
   parsedData = JSON.parse(retrievedObject);
@@ -175,7 +237,6 @@ function addEnterVrButtons() {
     .on("exit", function() {
       console.log("exit VR");
       camera.quaternion.set(0, 0, 0, 1);
-      camera.position.set(0, vrControls.userHeight, 3);
     })
     .on("error", function(error) {
       document.getElementById("learn-more").style.display = "inline";
@@ -202,7 +263,7 @@ function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
-  camera.position.y = vrControls.userHeight;
+  camera.position.z = vrControls.userHeight;
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera);
@@ -220,6 +281,57 @@ function setUpControls() {
   effect.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
+  //Set up controls gui
+
+
+  applyDown = function(obj, key, value) {
+
+    obj[key] = value
+    if (obj.children !== undefined && obj.children.length > 0) {
+
+      obj.children.forEach(function(child) {
+
+        applyDown(child, key, value)
+      })
+    }
+  }
+  castShadows = function(obj) {
+
+    applyDown(obj, 'castShadow', true)
+  }
+  receiveShadows = function(obj) {
+
+    applyDown(obj, 'receiveShadow', true)
+  }
+
+  //Arbitrary shape for testing gui settings
+  torus = new THREE.Mesh(
+
+    new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
+    new THREE.MeshStandardMaterial({
+      roughness: 0.01,
+      metalness: 0.2
+    })
+  )
+  torus.position.set(-0.25, 1.4, -1.5)
+  torus.castShadow = true
+  torus.receiveShadow = true
+  scene.add(torus)
+
+
+  //  DAT GUI for WebVR settings.
+  //  https://github.com/dataarts/dat.guiVR
+
+  dat.GUIVR.enableMouse(camera)
+  var gui = dat.GUIVR.create('Settings')
+  gui.position.set(0.2, 0.8, -1)
+  gui.rotation.set(Math.PI / -6, 0, 0)
+  scene.add(gui)
+  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X')
+  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y')
+  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen()
+  castShadows(gui)
+
 }
 
 /*
@@ -231,7 +343,7 @@ window.addEventListener('vr controller connected', function(event) {
   scene.add(controller)
 
   //Ensure controllers appear at the right height
-  controller.standingMatrix = renderer.vr.getStandingMatrix()
+  //controller.standingMatrix = renderer.vr.getStandingMatrix()
 
   controller.head = window.camera
 
@@ -266,8 +378,8 @@ window.addEventListener('vr controller connected', function(event) {
 
   //  Allow this controller to interact with DAT GUI.
 
-  // var guiInputHelper = dat.GUIVR.addInputObject(controller)
-  // scene.add(guiInputHelper)
+  var guiInputHelper = dat.GUIVR.addInputObject(controller)
+  scene.add(guiInputHelper)
 
 
   //Button events. This is currently just using the primary button

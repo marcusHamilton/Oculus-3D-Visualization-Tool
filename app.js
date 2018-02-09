@@ -10,6 +10,7 @@ var urlLoad = require('./routes/urlLoad');
 var features = require('./routes/features');
 var about = require('./routes/about');
 var VRWorld = require('./routes/VRWorld');
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use('/urlLoad', urlLoad);
 app.use('/features', features);
 app.use('/about', about);
 app.use('/VRWorld', VRWorld);
+app.use('/dashboard', dashboard);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

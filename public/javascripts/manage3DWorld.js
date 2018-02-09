@@ -138,6 +138,7 @@ function build3DSpace() {
       animationDisplay = display;
       setStageDimensions(display.stageParameters);
       camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+      camera.rotation.y = 270 * Math.PI / 180;
     })
     .catch(function() {
       // If there is no display available, fallback to window
@@ -147,6 +148,7 @@ function build3DSpace() {
   //Center the camera on the data and back so that you are not inside the first
   // cube
   camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+  camera.rotation.y = 270 * Math.PI / 180;
   //This can be removed after development if desired
   drawFPSstats();
 

@@ -10,9 +10,7 @@
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
 
-  <title>3D Visualization Tool -
-    <%= error.status %>
-  </title>
+  <title>Dashboard</title>
 
   <!-- Google Authentification -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -38,24 +36,53 @@
                 <li><a href="/urlLoad">Load Remote</a></li>
                 <li><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
+                <li class="active"><a href="/dashboard">Dashboard</a></li>
+                <li>
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
           </div>
         </div>
+      </div>
+      <br>
 
-        <div class="inner cover">
-          <h1 class="cover-heading"><%= message %></h1>
-          <h2 class="lead"><%= error.status %></h2>
-          <pre><%= error.stack %></pre>
+      <!-- Start container that holds the 3D world content -->
+      <div class="container" id="contentBox">
+        <h3 class="masthead-brand">Hi, name</h3>
+        <nav>
+          <ul class="nav masthead-nav">
+            <a href="#" class="btn btn-info btn-lg">
+              <span class="glyphicon glyphicon-plus-sign"></span> New
+            </a>
+          </ul>
+        </nav>
+        <br />
+        <br />
+        <hr />
+
+        <div class="col">
+          <div class="col-sm-1 col-md-2">
+            <div class="thumbnail">
+              <img src="/images/webVr.png" alt="..." style="width:100px;height:100px;">
+              <div class="caption">
+                <h3>World 1</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1 col-md-2">
+          <div class="thumbnail">
+            <img src="/images/webVr.png" alt="..." style="width:100px;height:100px;">
+            <div class="caption">
+              <h3>World 2</h3>
+            </div>
+          </div>
         </div>
 
       </div>
-
+      <!-- End: container that holds the 3D world content -->
     </div>
-
   </div>
 
 </body>

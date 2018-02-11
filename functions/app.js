@@ -60,4 +60,7 @@ app.use(function(err, req, res, next) {
 });
 
 exports.app = functions.https.onRequest(app);
-//module.exports = app;
+
+exports.hello = function hello() {
+  return 'hello';
+}

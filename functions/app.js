@@ -1,8 +1,11 @@
+var functions = require('firebase-functions');
+var firebase = require('firebase-admin');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var engines = require('consolidate');
 
 var index = require('./routes/index');
 var localLoad = require('./routes/localLoad');
@@ -14,9 +17,17 @@ var dashboard = require('./routes/dashboard');
 
 var app = express();
 
+
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.engine('ejs', engines.handlebars);
+app.set('views', './views');
 app.set('view engine', 'ejs');
+
+// Firebase set-up
+var firebaseApp = firebase.initializeApp(
+  functions.config().firebase
+);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -50,4 +61,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+exports.app = functions.https.onRequest(app);
+
+exports.hello = function hello() {
+  return 'hello';
+}

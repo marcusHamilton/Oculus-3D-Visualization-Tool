@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>3D Visualization Tool</title>
+
+  <!--CSS styling to ensure that the canvas covers the whole screen-->
+  <link rel="stylesheet" href="/stylesheets/vrStyle.css">
+
+  <!-- Load in required resources -->
+  <script src="/javascripts/handleCSVupload.js"></script>
+  <script src="/javascripts/three/three.js"></script>
+  <script src="/javascripts/three/TrackballControls.js"></script>
+  <script src="/javascripts/webvr-ui.min.js"></script>
+  <script src="/javascripts/three/VRController.js"></script>
+  <script src="/javascripts/three/VRControls.js"></script>
+  <script src="/javascripts/three/VREffect.js"></script>
+  <script src="/javascripts/LinkedList.js"></script>
+  <script src="/javascripts/manage3DWorld.js"></script>
+  <script src="/javascripts/drawDataset.js"></script>
+  <script src="https://cdn.rawgit.com/dataarts/dat.guiVR/master/build/datguivr.js"></script>
+  <!-- End: Load in required resources -->
+
+</head>
+
+<body>
+  <div id="ui">
+
+    <h1>VR Visualization Tool</h1>
+
+    <div id="vr-button"></div>
+    <br />
+    <!-- If VR is not supported -->
+    <div id="help">
+      <a href="#" onclick="enterVR.requestEnterFullscreen()">Try it without a headset</a>
+      <span id="learn-more">
+        or <a href="https://webvr.info" target="_blank">get set up in VR.</a>
+      </span>
+
+    </div>
+
+  </div>
+  <a href="#" id="exit" onclick="enterVR.requestExit()">✕</a>
+
+  <script>
+    build3DSpace();
+  </script>
+
+</body>
+
+</html>

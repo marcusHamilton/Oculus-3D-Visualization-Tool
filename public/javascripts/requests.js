@@ -47,7 +47,7 @@ function getWorld(worldID) {
 		/* TODO: Uncomment this once authentification is in
 		if (snapshot.val().ownerID == sessionStorage.getItem("userID")) {
 		*/
-			console.log("Successfully retrieved world " + worldID + ".";
+			console.log("Successfully retrieved world " + worldID + ".");
 			return snapshot.val().dataPoints;
 		//}
 		/*
@@ -61,10 +61,10 @@ function getWorld(worldID) {
 // Delete a given world from firebase
 function deleteWorld(worldID) {
 	worlds.child(worldID).remove();
-}	
+}
 
 /* Generates a random UUID
-   Source: https://jsfiddle.net/briguy37/2MVFd/ 
+   Source: https://jsfiddle.net/briguy37/2MVFd/
    Author: briguy37 */
 function generateUUID() {
     var d = new Date().getTime();

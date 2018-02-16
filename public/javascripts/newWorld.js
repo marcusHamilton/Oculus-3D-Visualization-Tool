@@ -201,7 +201,7 @@ function build3DSpace() {
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //Export the built world
-  var sceneJSON = JSON.stringify(scene));
+  var sceneJSON = JSON.stringify(scene);
 }
 
 

@@ -34,27 +34,20 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get("/", function(req, res){
-  res.send('huge wet farts');
-})
-
 //CREATE a world
-app.post("/uploadWorld/:id", function (req, res){
-  worldNum = req.params.id;
-  console.log(`world num is ${worldNum}`);
-
+app.post("/uploadWorld", function (req, res){
+  var worldsRef = db.ref("/").child("worlds");
   var worldData = req.body;
-  db.ref(`/worlds/${worldNum}`).set({
-    worldInstance: worldData
-  });
-  res.send(worldData);
+  var newWorldRef = worldsRef.push(worldData);
+  var newWorldId = newWorldRef.key;
+  res.send(newWorldId);
 });
 
-//TODO
-//CREATE a user
-app.post("/createUser", function (req, res){
-  res.send('TODO');
-});
+// //TODO
+// //CREATE a user
+// app.post("/createUser", function (req, res){
+//   res.send('TODO');
+// });
 
 //GET a world
 app.get("/worlds/:id", function(req, res){
@@ -63,9 +56,6 @@ app.get("/worlds/:id", function(req, res){
     res.send(snapshot.val());
   });
 });
-
-//TODO
-//GET a user
 
 //DELETE a world
 app.delete("/worlds/:id", function(req, res){
@@ -76,10 +66,15 @@ app.delete("/worlds/:id", function(req, res){
 });
 
 //TODO
-//DELETE a user
-
 //UPDATE a world
-//TODO
+app.put("/worlds/:id", function(req, res){
+  worldId = req.params.id;
+  var worldData = req.body;
+  ref = db.ref("/worlds").child(worldId);
+  ref.update(worldData);
+  res.send({"status": 'success',
+            "worldId": worldId});
+});
 
 app.use('/', index);
 app.use('/localLoad', localLoad);

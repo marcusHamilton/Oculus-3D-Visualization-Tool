@@ -41,7 +41,6 @@ function onSignIn(googleUser) {
   			console.error(error.message);
       });
       console.log("Signed " + profile.getName() + " into Firebase.");
-      alert(currentUserToken());
     } else {
       console.log(profile.getName() + ' is already signed-in to Firebase.');
     }

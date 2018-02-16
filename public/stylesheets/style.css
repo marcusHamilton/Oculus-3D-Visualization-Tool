@@ -77,6 +77,11 @@ body {
   color: #555555;
 }
 
+#googleProfilePicture{
+  height: 3em;
+  margin-bottom: 2em;
+}
+
 .modalChoices{
   color: #000000;
   text-shadow: none;

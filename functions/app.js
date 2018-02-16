@@ -67,7 +67,15 @@ app.get("/worlds/:id", function(req, res){
   // });
 
   db.ref('/worlds/' + worldId).once('value').then(function(snapshot) {
-    res.send(snapshot.val());
+    // res.send(snapshot.val());
+    var firebaseWorld = snapshot.val();
+    var numGeom = firebaseWorld.geometries.length;
+
+    for (var i=0; i<numGeom; i++){
+      firebaseWorld.geometries[i].data["normals"] = [];
+      firebaseWorld.geometries[i].data["faces"] = [];
+    }
+    res.send(firebaseWorld);
   });
 });
 

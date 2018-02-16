@@ -163,8 +163,8 @@ function getResults() {
 
 
 /*
-*Below is everything nessesary to build a new 3d world
-*/
+ *Below is everything nessesary to build a new 3d world
+ */
 
 var scene; //The scene to which all elements are added to
 // largest value in the dataset for each axis.
@@ -174,12 +174,7 @@ var largestZ = 0;
 // largest value overall.
 var largestEntry = 0;
 // calculated center point of the plot
-var plotCenterVec3;//Global constants for config (Move these to a json config file or something)
-
-var plotInitSizeX = 10;
-var plotInitSizeY = 5;
-var plotInitSizeZ = 10;
-var plotPointSizeCoeff = 0.01;
+var plotCenterVec3;
 //Global constants for config (Move these to a json config file or something)
 
 var plotInitSizeX = 10;
@@ -222,8 +217,7 @@ function build3DSpace() {
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //Export the built world
-  // var exporter = new THREE.OBJExporter(scene);
-  // console.log(exporter);
+  var sceneJSON = JSON.stringify(scene));
 }
 
 
@@ -239,8 +233,7 @@ function build3DSpace() {
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
-function drawDataset(xCol, yCol, zCol)
-{
+function drawDataset(xCol, yCol, zCol) {
   assert(parsedData, 'parsedData must be defined for drawDataset()');
   assert(xCol >= 0,
     'drawDataset() xCol value must be a positive integer');
@@ -260,21 +253,21 @@ function drawDataset(xCol, yCol, zCol)
   for (var i = 0; i < parsedData.length; i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (parsedData[i][xCol] > largestX) {
-        largestX = parsedData[i][xCol];
+      largestX = parsedData[i][xCol];
     }
     if (parsedData[i][yCol] > largestY) {
-        largestY = parsedData[i][yCol];
+      largestY = parsedData[i][yCol];
     }
     if (parsedData[i][zCol] > largestZ) {
-        largestZ = parsedData[i][zCol];
+      largestZ = parsedData[i][zCol];
     }
     largestEntry = Math.max(largestX, largestY, largestZ);
 
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // parsedData[i][xCol]/largestX times the initial plot size.
-    var pX = (parsedData[i][xCol]/largestX)*plotInitSizeX;
-    var pY = (parsedData[i][yCol]/largestY)*plotInitSizeY;
-    var pZ = (parsedData[i][zCol]/largestZ)*plotInitSizeZ;
+    var pX = (parsedData[i][xCol] / largestX) * plotInitSizeX;
+    var pY = (parsedData[i][yCol] / largestY) * plotInitSizeY;
+    var pZ = (parsedData[i][zCol] / largestZ) * plotInitSizeZ;
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // add it to the geometry
@@ -305,9 +298,15 @@ function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
 
   // Set line colors
-  var materialX = new THREE.LineBasicMaterial({color: 0xff0000});
-  var materialY = new THREE.LineBasicMaterial({color: 0x00ff00});
-  var materialZ = new THREE.LineBasicMaterial({color: 0x0000ff});
+  var materialX = new THREE.LineBasicMaterial({
+    color: 0xff0000
+  });
+  var materialY = new THREE.LineBasicMaterial({
+    color: 0x00ff00
+  });
+  var materialZ = new THREE.LineBasicMaterial({
+    color: 0x0000ff
+  });
 
   // Create line geometries
   var geometryX = new THREE.Geometry();
@@ -336,28 +335,28 @@ function drawAxisLabels() {
 
   // Grid lines
   var lineXTicks = new LinkedList();
-  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++){
-      lineXTicks.add(new THREE.Geometry());
-      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, plotInitSizeY, 0));
-      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, 0, 0));
-      lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX/largestX * xUnits, 0, plotInitSizeZ));
-      scene.add(new THREE.Line(lineXTicks.elementAt(xUnits-1), materialX));
+  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++) {
+    lineXTicks.add(new THREE.Geometry());
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY, 0));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ));
+    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
   }
   var lineYTicks = new LinkedList();
-  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++){
-      lineYTicks.add(new THREE.Geometry());
-      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY/largestY * yUnits, 0));
-      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY/largestY * yUnits, 0));
-      lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY/largestY * yUnits, plotInitSizeZ));
-      scene.add(new THREE.Line(lineYTicks.elementAt(yUnits-1), materialY));
+  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++) {
+    lineYTicks.add(new THREE.Geometry());
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY / largestY * yUnits, 0));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ));
+    scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
   }
   var lineZTicks = new LinkedList();
-  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++){
-      lineZTicks.add(new THREE.Geometry());
-      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ/largestZ * zUnits));
-      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ/largestZ * zUnits));
-      lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ/largestZ * zUnits));
-      scene.add(new THREE.Line(lineZTicks.elementAt(zUnits-1), materialZ));
+  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++) {
+    lineZTicks.add(new THREE.Geometry());
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ / largestZ * zUnits));
+    scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
 }
 
@@ -391,7 +390,7 @@ function colorFromXYZcoords(vec3) {
  * @param message {String} Failure message
  */
 function assert(condition, message) {
-    if (!condition) {
-        throw message || "Assertion failed";
-    }
+  if (!condition) {
+    throw message || "Assertion failed";
+  }
 }

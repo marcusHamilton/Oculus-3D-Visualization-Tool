@@ -28,7 +28,6 @@
     "firebase-admin": "^5.8.2",
     "firebase-functions": "^0.8.1",
     "firebase-tools": "^3.17.4",
-    "handlebars": "^4.0.11",
     "morgan": "~1.9.0"
   },
   "devDependencies": {

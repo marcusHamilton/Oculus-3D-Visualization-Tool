@@ -198,22 +198,6 @@ function build3DSpace() {
 
   scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
 
-
-  var floor = new THREE.Mesh(
-
-    new THREE.PlaneBufferGeometry(6, 6, 12, 12),
-    new THREE.MeshStandardMaterial({
-
-      roughness: 1.0,
-      metalness: 0.0,
-      color: 0xFFFFFF,
-      transparent: true,
-      opacity: 0.8
-    })
-  )
-  floor.rotation.x = Math.PI / -2
-  floor.receiveShadow = true
-  scene.add(floor)
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //Export the built world

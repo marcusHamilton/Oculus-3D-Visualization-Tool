@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var engines = require('consolidate');
-
 var index = require('./routes/index');
 var localLoad = require('./routes/localLoad');
 var urlLoad = require('./routes/urlLoad');
@@ -17,7 +16,7 @@ var VRWorld = require('./routes/VRWorld');
 var app = express();
 
 // view engine setup
-app.engine('ejs', engines.handlebars);
+app.engine('ejs', engines.ejs);
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
@@ -32,11 +31,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.get("/", function(req, res){
-  res.send('huge wet farts');
-})
 
 //CREATE a world
 app.post("/uploadWorld/:id", function (req, res){
@@ -89,7 +83,6 @@ app.use('/about', about);
 app.use('/VRWorld', VRWorld);
 
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -108,13 +101,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+module.exports.app = functions.https.onRequest(app);
 
-
-
-
-
-exports.app = functions.https.onRequest(app);
-
-exports.hello = function hello() {
+module.exports.hello = function hello() {
   return 'hello';
 }

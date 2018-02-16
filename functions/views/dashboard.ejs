@@ -14,12 +14,14 @@
 
   <!--Javascript CDN's-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+  <!--Javascript Local Files-->
   <script src="/javascripts/notifyOfFileName.js"></script>
-  <script src="/javascripts/handleCSVupload.js"></script>
+  <script src="/javascripts/newWorld.js"></script>
 
 
   <!-- Firebase Initialization -->
@@ -35,7 +37,6 @@
 
   <!-- Google Authentication -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>
-
 </head>
 
 <body>
@@ -102,13 +103,7 @@
     </div>
 
     <!--Modal box content-->
-    <script>
-      $('#myModal').modal('handleUpdate')
-      $('#myModal').on('hidden.bs.modal', function (e) {
-        $('myModal').modal('dispose')
-      })
-    </script>
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="myModal" class="modal fade" role="document" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -255,6 +250,9 @@
         </div>
       </div>
     </div>
+    <script>
+      $.fn.modal.Constructor.prototype.enforceFocus
+    </script>
     <!--End: Modal box content-->
 
 </body>

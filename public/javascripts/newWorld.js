@@ -201,16 +201,28 @@ function build3DSpace() {
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //Export the built world
-  var sceneJSON = JSON.stringify(scene);
+  //var sceneJSON = JSON.strigify(scene);
+  var sceneJSON = this.scene.toJSON();
+
+  try {
+
+    sceneJSON = JSON.stringify(sceneJSON, parseNumber, '\t');
+    sceneJSON = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
+
+  } catch (e) {
+
+    sceneJSON = JSON.stringify(sceneJSON);
+
+  }
   console.log("About to post:" + sceneJSON);
   $.ajax({
     type: "POST",
-    contentType : "application/json",
+    contentType: "application/json",
     url: '/uploadWorld',
     data: sceneJSON,
-    success : function(response) {
+    success: function(response) {
       $('#myModal').modal('hide');
-      console.log("Post response is: " + response)
+      console.log("Post response is: " + response);
     }
   });
 }

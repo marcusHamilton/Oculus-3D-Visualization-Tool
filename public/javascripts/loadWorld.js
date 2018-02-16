@@ -69,11 +69,18 @@ function Manager() {
   //Initialize camera, scene, and renderer
   //First get the scene from the data base
   scene = new THREE.Scene();
-  var loader = new THREE.ObjectLoader();
+  $.ajax({
+    type: "GET",
+    contentType: "application/json",
+    url: '/worlds/-L5VMM0iBCK397-8fUmY',
+    success: function(response) {
+      console.log("Loading: " + JSON.stringify(response));
+      var loader = new THREE.ObjectLoader();
+      var object = loader.parse(response);
 
-  var object = loader.parseObject( '/worlds/-L5VIHfMLojo2NzeG8L_' );
-  console.log(object);
-  scene.add( object );
+      scene.add( object );
+    }
+  });
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();

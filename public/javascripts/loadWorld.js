@@ -1,5 +1,6 @@
 /*
-  This js file is responsible for building the 3D world
+*This is responsible for loading and handling the usage of a threejs world.
+*Controls, and VR detection are all to be handled here
 */
 
 //Set up essential global elements
@@ -17,21 +18,7 @@ var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
-var parsedData; //Parsed data obtained from handleCSVupload
-//The following are to be accessed like so: parsedData[i][x_AxisIndex]
-//parsedData[i][x_AxisIndex]
-//parsedData[i][y_AxisIndex]
-//parsedData[i][z_AxisIndex]
-var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
-var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
-var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
-//Global constants for config (Move these to a json config file or something)
-
-var plotInitSizeX = 10;
-var plotInitSizeY = 5;
-var plotInitSizeZ = 10;
-var plotPointSizeCoeff = 0.01;
 
 //Called every frame
 function update(timestamp) {
@@ -78,16 +65,10 @@ var GameLoop = function(timestamp) {
   animationDisplay.requestAnimationFrame(GameLoop);
 };
 
-/*
-This function is responsible for building the world and creates the
-data points passed from the csv
-Acts as the main function. From here everything else is called.
-*/
-function build3DSpace() {
-  //Recover the CSVData from the browsers webStorage
-  retrieveCSVData();
+function Manager()
+{
   //Initialize camera, scene, and renderer
-  scene = new THREE.Scene();
+  
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -98,34 +79,7 @@ function build3DSpace() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   //Add the renderer to the html page
   document.body.appendChild(renderer.domElement);
-  //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100)
-  light.position.set(1, 10, -0.5)
-  light.castShadow = true
-  light.shadow.mapSize.width = 2048
-  light.shadow.mapSize.height = 2048
-  light.shadow.camera.near = 1
-  light.shadow.camera.far = 12
-  scene.add(light)
 
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
-
-
-  var floor = new THREE.Mesh(
-
-    new THREE.PlaneBufferGeometry(6, 6, 12, 12),
-    new THREE.MeshStandardMaterial({
-
-      roughness: 1.0,
-      metalness: 0.0,
-      color: 0xFFFFFF,
-      transparent: true,
-      opacity: 0.8
-    })
-  )
-  floor.rotation.x = Math.PI / -2
-  floor.receiveShadow = true
-  scene.add(floor)
   // Handle canvas resizing
   window.addEventListener('resize', onResize, true);
   window.addEventListener('vrdisplaypresentchange', onResize, true);
@@ -151,8 +105,6 @@ function build3DSpace() {
   camera.rotation.y = 270 * Math.PI / 180;
   //This can be removed after development if desired
   drawFPSstats();
-
-  drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
@@ -193,29 +145,6 @@ function onResize(e) {
   renderer.setSize(windowWidth, windowHeight);
   camera.aspect = windowWidth / windowHeight;
   camera.updateProjectionMatrix();
-}
-
-/*
-Grabs the data that is sent from the csv file over browser sessionStorage
-@Pre:
-    Key 'parsedCSVData' exists in sessionStorage
-    Key 'initialAxisValues' exists in initialAxisValues
-@post:
-    parsedData contains the content that was stored in json
-    x_AxisIndex contains the users inputted x axis
-    y_AxisIndex contains the users inputted y axis
-    z_AxisIndex contains the users inputted z axis
-*/
-function retrieveCSVData() {
-  var retrievedObject = sessionStorage.getItem('parsedCSVData');
-  parsedData = JSON.parse(retrievedObject);
-
-  //get dropdown options
-  var retrievedOptions = sessionStorage.getItem('initialAxisValues');
-  retrievedOptions = JSON.parse(retrievedOptions);
-  x_AxisIndex = retrievedOptions[0];
-  y_AxisIndex = retrievedOptions[1];
-  z_AxisIndex = retrievedOptions[2];
 }
 
 /*

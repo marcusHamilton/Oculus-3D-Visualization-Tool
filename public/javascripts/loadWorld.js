@@ -1,7 +1,7 @@
 /*
-*This is responsible for loading and handling the usage of a threejs world.
-*Controls, and VR detection are all to be handled here
-*/
+ *This is responsible for loading and handling the usage of a threejs world.
+ *Controls, and VR detection are all to be handled here
+ */
 
 //Set up essential global elements
 var scene; //The scene to which all elements are added to
@@ -65,10 +65,22 @@ var GameLoop = function(timestamp) {
   animationDisplay.requestAnimationFrame(GameLoop);
 };
 
-function Manager()
-{
+function Manager() {
   //Initialize camera, scene, and renderer
-  
+  //First get the scene from the data base
+  scene = new THREE.Scene();
+  $.ajax({
+    type: "GET",
+    contentType: "application/json",
+    url: '/worlds/-L5RCiDGDobmZaXFIg8D',
+    success: function(response) {
+      var loader = new THREE.ObjectLoader();
+      var object = loader.parse(response);
+
+      scene.add( object );
+    }
+  });
+
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);

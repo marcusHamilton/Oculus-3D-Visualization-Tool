@@ -202,6 +202,16 @@ function build3DSpace() {
 
   //Export the built world
   var sceneJSON = JSON.stringify(scene);
+  $.ajax({
+    type: "POST",
+    contentType : "application/json",
+    url: '/uploadWorld',
+    data: sceneJSON,
+    success : function(response) {
+      $('#myModal').modal('hide');
+      console.log("Post response is: " + response)
+    }
+  });
 }
 
 

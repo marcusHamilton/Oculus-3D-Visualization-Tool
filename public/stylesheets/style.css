@@ -123,6 +123,11 @@ body {
   text-shadow: none !important;
 }
 
+#googleProfilePicture{
+  height: 3em;
+  margin-bottom: 2em;
+}
+
 /* Padding for spacing */
 
 .inner {

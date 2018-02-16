@@ -124,6 +124,7 @@ function getOptions() {
     $('.js-responsive-dropdown').select2({
       placeholder: 'Select axis',
       data: dropdownOptions,
+      dropdownParent: $('.modal')
     });
   });
 
@@ -137,17 +138,20 @@ with key 'initialAxisValues'
 */
 function getResults() {
   //Get results from the dropdown
-  var XAxis = $('#x-axis').select2('data');
-  var YAxis = $('#y-axis').select2('data');
-  var ZAxis = $('#z-axis').select2('data');
+  var XAxis = $('#x-axis :selected').val();
+  var YAxis = $('#y-axis :selected').val();
+  var ZAxis = $('#z-axis :selected').val();
+  //var XAxis = $('#x-axis').select2('data');
+  //var YAxis = $('#y-axis').select2('data');
+  //var ZAxis = $('#z-axis').select2('data');
   console.log(XAxis);
   //Remove the objects
-  XAxis = XAxis[0].id;
-  YAxis = YAxis[0].id;
-  ZAxis = ZAxis[0].id;
+  //XAxis = XAxis[0].id;
+  //YAxis = YAxis[0].id;
+  //ZAxis = ZAxis[0].id;
 
   //Pack for storage
   var AxisValues = [XAxis, YAxis, ZAxis];
-  console.log(XAxis);
+  console.log(AxisValues);
 
 }

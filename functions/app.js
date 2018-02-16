@@ -21,9 +21,16 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // Firebase set-up
-var firebaseApp = firebase.initializeApp(
-  functions.config().firebase
-);
+var serviceAccount = require("./config/oculus-3d-visualization-c5687-firebase-adminsdk-wj48z-a692b7b893.json");
+var firebaseApp = firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccount),
+  apiKey: "AIzaSyBqX2igua_Vqc3QMh9vESrIWwv3jjY9AhU",
+  authDomain: "oculus-3d-visualization-c5687.firebaseapp.com",
+  databaseURL: "https://oculus-3d-visualization-c5687.firebaseio.com",
+  projectId: "oculus-3d-visualization-c5687",
+  storageBucket: "oculus-3d-visualization-c5687.appspot.com",
+  messagingSenderId: "483800110325"
+});
 var db = firebaseApp.database();
 
 app.use(logger('dev'));
@@ -42,7 +49,7 @@ app.post("/uploadWorld", function (req, res){
 });
 
 // //TODO
-// //CREATE a user
+//CREATE a user
 // app.post("/createUser", function (req, res){
 //   res.send('TODO');
 // });
@@ -50,6 +57,14 @@ app.post("/uploadWorld", function (req, res){
 //GET a world
 app.get("/worlds/:id", function(req, res){
   worldId = req.params.id;
+
+  //Verify user token
+  // admin.auth().verifyIdToken(idToken)
+  // .then(function(decodedToken) {
+  //   var uid = decodedToken.uid;
+  // }).catch(function(error) {
+  // });
+
   db.ref('/worlds/' + worldId).once('value').then(function(snapshot) {
     res.send(snapshot.val());
   });
@@ -58,6 +73,14 @@ app.get("/worlds/:id", function(req, res){
 //DELETE a world
 app.delete("/worlds/:id", function(req, res){
   worldId = req.params.id;
+
+  //Verify user token
+  // admin.auth().verifyIdToken(idToken)
+  // .then(function(decodedToken) {
+  //   var uid = decodedToken.uid;
+  // }).catch(function(error) {
+  // });
+
   db.ref('/worlds/' + worldId).remove().then(function(){
     res.redirect("/");
   });
@@ -68,6 +91,14 @@ app.delete("/worlds/:id", function(req, res){
 app.put("/worlds/:id", function(req, res){
   worldId = req.params.id;
   var worldData = req.body;
+
+  //Verify user token
+  // admin.auth().verifyIdToken(idToken)
+  // .then(function(decodedToken) {
+  //   var uid = decodedToken.uid;
+  // }).catch(function(error) {
+  // });
+
   ref = db.ref("/worlds").child(worldId);
   ref.update(worldData);
   res.send({"status": 'success',

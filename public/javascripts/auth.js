@@ -32,15 +32,16 @@ function onSignIn(googleUser) {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
-		//Build Firebase credential with the Google ID token.
-		var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+  		//Build Firebase credential with the Google ID token.
+  		var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
 
-		// Sign in with credential from the Google user.
-		firebase.auth().signInWithCredential(credential).catch(function(error) {
-			// Handle Errors here.
-			console.error(error.message);
-      	});
-      	console.log("Signed " + profile.getName() + " into Firebase.");
+  		// Sign in with credential from the Google user.
+  		firebase.auth().signInWithCredential(credential).catch(function(error) {
+  			// Handle Errors here.
+  			console.error(error.message);
+      });
+      console.log("Signed " + profile.getName() + " into Firebase.");
+      alert(currentUserToken());
     } else {
       console.log(profile.getName() + ' is already signed-in to Firebase.');
     }
@@ -65,4 +66,3 @@ function isUserEqual(googleUser, firebaseUser) {
   }
   return false;
 }
-

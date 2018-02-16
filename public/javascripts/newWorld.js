@@ -202,6 +202,7 @@ function build3DSpace() {
 
   //Export the built world
   var sceneJSON = JSON.stringify(scene);
+  console.log("About to post:" + sceneJSON);
   $.ajax({
     type: "POST",
     contentType : "application/json",

@@ -72,12 +72,10 @@ function Manager() {
   $.ajax({
     type: "GET",
     contentType: "application/json",
-    url: '/worlds/-L5RCiDGDobmZaXFIg8D',
+    url: '/worlds/-L5V2A4XcG_PCxF-a8WT',
     success: function(response) {
-      var loader = new THREE.ObjectLoader();
-      var object = loader.parse(response);
-
-      scene.add( object );
+      console.log("Loading: " + JSON.stringify(response));
+      //scene.add( object );
     }
   });
 
@@ -113,7 +111,7 @@ function Manager() {
 
   //Center the camera on the data and back so that you are not inside the first
   // cube
-  camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+  camera.position.set(0, 0, camera.position.z);
   camera.rotation.y = 270 * Math.PI / 180;
   //This can be removed after development if desired
   drawFPSstats();

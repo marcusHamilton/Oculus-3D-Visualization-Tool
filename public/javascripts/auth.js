@@ -9,69 +9,60 @@ var config = {
 };
 firebase.initializeApp(config);
 
-//Firebase References
-var database = firebase.database();
-var app = database.app;
-var users = database.ref().child('users');
-var worlds = database.ref().child('worlds');
+var provider = new firebase.auth.GoogleAuthProvider();
 
+// //Force user to sign in
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+  } else {
+  	firebase.auth().signInWithRedirect(provider);
+  }
+});
 
 function onSignIn(googleUser) {
-	var profile = googleUser.getBasicProfile();
-	console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-	console.log('Name: ' + profile.getName());
+  console.log('Google Auth Response', googleUser);
+  var profile = googleUser.getBasicProfile();
+  //Displaying currently signed in Google User
+  document.getElementById('googleProfilePicture').src = profile.getImageUrl();
+  document.getElementById('googleProfilePicture').style.visibility = "visible";
+
+  // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+  var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
+    unsubscribe();
+    // Check if we are already signed-in Firebase with the correct user.
+    if (!isUserEqual(googleUser, firebaseUser)) {
+  		//Build Firebase credential with the Google ID token.
+  		var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+
+  		// Sign in with credential from the Google user.
+  		firebase.auth().signInWithCredential(credential).catch(function(error) {
+  			// Handle Errors here.
+  			console.error(error.message);
+      });
+      console.log("Signed " + profile.getName() + " into Firebase.");
+      alert(currentUserToken());
+    } else {
+      console.log(profile.getName() + ' is already signed-in to Firebase.');
+    }
+  });
 }
 
 function onSignInFailure(msg) {
 	console.error(msg);
 }
 
-// Uploads a new world to firebase under the currently signed-in user
-function postWorld() {
-	world = JSON.parse(sessionStorage.getItem('parsedCSVData'));
-	var worldID = generateUUID();
-
-	/* TODO: Use the following code instead once authentification is working:
-			 var userId = sessionStorage.getItem('userID')*/
-	var userID = generateUUID();
-
-	worlds.child(worldID).set({
-		ownerID: userID,
-		dataPoints: world,
-	});
+// Prevents re-authentication from occuring
+function isUserEqual(googleUser, firebaseUser) {
+  if (firebaseUser) {
+    var providerData = firebaseUser.providerData;
+    for (var i = 0; i < providerData.length; i++) {
+      if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          providerData[i].uid === googleUser.getBasicProfile().getId()) {
+        // We don't need to reauth the Firebase connection.
+        return true;
+      }
+    }
+  }
+  return false;
 }
-
-// Returns the datapoints for a world stored under worldID in
-function getWorld(worldID) {
-	worlds.child(worldID).once('value').then(function(snapshot) {
-		/* TODO: Uncomment this once authentification is in
-		if (snapshot.val().ownerID == sessionStorage.getItem("userID")) {
-		*/
-			console.log("Successfully retrieved world " + worldID + ".");
-			return snapshot.val().dataPoints;
-		//}
-		/*
-		else {
-			console.error("User does not have access to this world.");
-		} */
-
-	});
-}
-
-// Delete a given world from firebase
-function deleteWorld(worldID) {
-	worlds.child(worldID).remove();
-}
-
-/* Generates a random UUID
-   Source: https://jsfiddle.net/briguy37/2MVFd/
-   Author: briguy37 */
-function generateUUID() {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
-};

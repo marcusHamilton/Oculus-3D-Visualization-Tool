@@ -10,8 +10,16 @@
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
 
-  <!-- Google Authentification -->
+
+    <!-- Firebase Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js" async defer></script>
+
+    <!-- Google Authentification -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!-- Auth handler -->
+  <script src="/javascripts/auth.js" async defer></script>
+
 
   <title>3D Visualization Tool</title>
 
@@ -35,6 +43,8 @@
                 <li class="active"><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
+                <li><div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div></li>
+                <li><img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture"></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->

@@ -68,11 +68,16 @@ var GameLoop = function(timestamp) {
 function Manager() {
   //Initialize camera, scene, and renderer
   //First get the scene from the data base
+  var retrievedString = sessionStorage.getItem('selectedID');
+  worldID = JSON.parse(retrievedString);
+  console.log(worldID);
   scene = new THREE.Scene();
+  var worldURL = '/worlds/' + worldID;
+  console.log(worldURL);
   $.ajax({
     type: "GET",
     contentType: "application/json",
-    url: '/worlds/-L5VMM0iBCK397-8fUmY',
+    url: worldURL,
     success: function(response) {
       console.log("Loading: " + JSON.stringify(response));
       var loader = new THREE.ObjectLoader();

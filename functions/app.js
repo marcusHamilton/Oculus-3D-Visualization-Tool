@@ -32,10 +32,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 16ba1f2889ee663feb86c0152c237ae2816f56f2
 //CREATE a world
 app.post("/uploadWorld", function (req, res){
   var worldsRef = db.ref("/").child("worlds");

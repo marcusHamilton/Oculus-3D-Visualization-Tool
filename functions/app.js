@@ -7,8 +7,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var engines = require('consolidate');
 var index = require('./routes/index');
-var localLoad = require('./routes/localLoad');
-var urlLoad = require('./routes/urlLoad');
 var features = require('./routes/features');
 var about = require('./routes/about');
 var VRWorld = require('./routes/VRWorld');
@@ -107,8 +105,6 @@ app.put("/worlds/:id", function(req, res){
 });
 
 app.use('/', index);
-app.use('/localLoad', localLoad);
-app.use('/urlLoad', urlLoad);
 app.use('/features', features);
 app.use('/about', about);
 app.use('/VRWorld', VRWorld);

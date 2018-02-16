@@ -206,7 +206,11 @@ function build3DSpace() {
     type: "POST",
     contentType : "application/json",
     url: '/uploadWorld',
-    data: sceneJSON
+    data: sceneJSON,
+    success : function(response) {
+      $('#myModal').modal('hide');
+      console.log("Post response is: " + response)
+    }
   });
 }
 

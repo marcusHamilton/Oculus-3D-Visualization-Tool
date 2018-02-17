@@ -21,7 +21,7 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   <!-- Auth handler -->
-  <script src="/javascripts/auth.js" async defer></script>
+  <script src="/javascripts/auth.js"></script>
 
   <!--Check if browser webStorage is supported -->
   <script>
@@ -47,12 +47,12 @@
               <!-- The Navigation Bar -->
               <ul class="nav masthead-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li><a href="/localLoad">Load Local</a></li>
-                <li><a href="/urlLoad">Load Remote</a></li>
                 <li><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
                 <li><div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div></li>
-                <li><img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture"></li>
+                <li><img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture" style="visibility: hidden;"></li>
+
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -61,10 +61,9 @@
 
         <div class="inner cover">
           <h1 class="cover-heading">Welcome</h1>
-          <p class="lead">This tool is used to display data points from a .csv file in a virtual space. Files can be loaded either locally or remotely via a URL.</p>
+          <p class="lead">This tool is used to display data points from a .csv file in a virtual space. To get started please goto your dashboard.</p>
           <p class="lead">
-            <a href="/localLoad" class="btn btn-lg btn-default">Local</a>
-            <a href="/urlLoad" class="btn btn-lg btn-default">Remote</a>
+            <a href="/dashboard" class="btn btn-lg btn-default">Dashboard</a>
           </p>
         </div>
 

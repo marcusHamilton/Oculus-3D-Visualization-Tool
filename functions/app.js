@@ -7,11 +7,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var engines = require('consolidate');
 var index = require('./routes/index');
-var localLoad = require('./routes/localLoad');
-var urlLoad = require('./routes/urlLoad');
 var features = require('./routes/features');
 var about = require('./routes/about');
 var VRWorld = require('./routes/VRWorld');
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 
@@ -53,10 +52,21 @@ app.post("/uploadWorld", function (req, res){
 //   res.send('TODO');
 // });
 
+//GET all world ids
+app.get("/worlds", function(req, res){
+  db.ref('/worlds').once('value').then(function(snapshot) {
+    var keys = [];
+    snapshot.forEach(function(childSnapshot){
+      keys.push(childSnapshot.key)
+    });
+    res.send(keys);
+  });
+});
+
 //GET a world
 app.get("/worlds/:id", function(req, res){
   worldId = req.params.id;
-
+  var uid = null;
   //Verify user token
   // admin.auth().verifyIdToken(idToken)
   // .then(function(decodedToken) {
@@ -65,7 +75,15 @@ app.get("/worlds/:id", function(req, res){
   // });
 
   firebase.database().ref('/worlds/' + worldId).once('value').then(function(snapshot) {
-    res.send(snapshot.val());
+    // res.send(snapshot.val());
+    var firebaseWorld = snapshot.val();
+    var numGeom = firebaseWorld.geometries.length;
+
+    for (var i=0; i<numGeom; i++){
+      firebaseWorld.geometries[i].data["normals"] = [];
+      firebaseWorld.geometries[i].data["faces"] = [];
+    }
+    res.send(firebaseWorld);
   });
 });
 
@@ -105,11 +123,10 @@ app.put("/worlds/:id", function(req, res){
 });
 
 app.use('/', index);
-app.use('/localLoad', localLoad);
-app.use('/urlLoad', urlLoad);
 app.use('/features', features);
 app.use('/about', about);
 app.use('/VRWorld', VRWorld);
+app.use('/dashboard', dashboard);
 
 
 // catch 404 and forward to error handler

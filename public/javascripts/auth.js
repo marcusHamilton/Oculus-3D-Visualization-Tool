@@ -1,4 +1,5 @@
 // Initialize Firebase
+var profile;
 var config = {
 	apiKey: "AIzaSyBqX2igua_Vqc3QMh9vESrIWwv3jjY9AhU",
 	authDomain: "oculus-3d-visualization-c5687.firebaseapp.com",
@@ -22,7 +23,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function onSignIn(googleUser) {
   console.log('Google Auth Response', googleUser);
-  var profile = googleUser.getBasicProfile();
+	profile = googleUser.getBasicProfile();
   //Displaying currently signed in Google User
   document.getElementById('googleProfilePicture').src = profile.getImageUrl();
   document.getElementById('googleProfilePicture').style.visibility = "visible";
@@ -41,7 +42,6 @@ function onSignIn(googleUser) {
   			console.error(error.message);
       });
       console.log("Signed " + profile.getName() + " into Firebase.");
-      alert(currentUserToken());
     } else {
       console.log(profile.getName() + ' is already signed-in to Firebase.');
     }

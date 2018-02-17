@@ -1,4 +1,4 @@
-/*
+ /*
  *This JS file is responsible for the creation of a new 3d world.
  *It will take in a CSV file and in turn create a threejs world that contains the
  *CSV files data points. This will export a JSON file containing the scene.
@@ -327,31 +327,44 @@ function drawAxisLabels() {
   scene.add(lineY);
   scene.add(lineZ);
 
+  //Num of data entiries
+  var numOfEntries = parsedData.length;
+  var numOfTicks;
+
+  if(numOfEntries > 100){
+     numOfTicks = 100; //Need to make this adjustable in VR
+  }else{numOfTicks = 10}
+
   // Grid lines
   var lineXTicks = new LinkedList();
-  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++) {
+  var sepDistance = (plotInitSizeX*1.5)/numOfTicks;
+  for(var xUnits = 1; xUnits <= numOfTicks; xUnits++){
     lineXTicks.add(new THREE.Geometry());
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ));
-    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
+    lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(sepDistance * xUnits, 0.5, 0));
+    lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(sepDistance * xUnits, 0, 0));
+    lineXTicks.elementAt(xUnits-1).vertices.push(new THREE.Vector3(sepDistance * xUnits, 0, 0.5));
+    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits-1), materialX));
   }
-  var lineYTicks = new LinkedList();
-  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++) {
-    lineYTicks.add(new THREE.Geometry());
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ));
-    scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
-  }
-  var lineZTicks = new LinkedList();
-  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++) {
-    lineZTicks.add(new THREE.Geometry());
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ / largestZ * zUnits));
-    scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
-  }
+
+    var lineYTicks = new LinkedList();
+    sepDistance = (plotInitSizeY*1.5)/numOfTicks;
+    for (var yUnits = 1; yUnits <= numOfTicks; yUnits++){
+        lineYTicks.add(new THREE.Geometry());
+        lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0.5, sepDistance * yUnits, 0));
+        lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, sepDistance * yUnits, 0));
+        lineYTicks.elementAt(yUnits-1).vertices.push(new THREE.Vector3(0, sepDistance * yUnits, 0.5));
+        scene.add(new THREE.Line(lineYTicks.elementAt(yUnits-1), materialY));
+    }
+
+      var lineZTicks = new LinkedList();
+      sepDistance = (plotInitSizeZ*1.5)/numOfTicks;
+      for (var zUnits = 1; zUnits <= numOfTicks; zUnits++){
+          lineZTicks.add(new THREE.Geometry());
+          lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, 0.5, sepDistance * zUnits));
+          lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0, 0, sepDistance * zUnits));
+          lineZTicks.elementAt(zUnits-1).vertices.push(new THREE.Vector3(0.5, 0,sepDistance * zUnits));
+          scene.add(new THREE.Line(lineZTicks.elementAt(zUnits-1), materialZ));
+      }
 }
 
 /**

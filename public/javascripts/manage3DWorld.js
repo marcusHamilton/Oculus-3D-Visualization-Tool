@@ -76,10 +76,8 @@ var testInc = 0;
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
-  testInc++;
-  testColor = new THREE.Vector3(testInc/1000, testInc/1000, testInc/1000);
-  //setPointColor(testInc, testColor);
-  //setPointScale(testInc, testInc);
+
+  pointSelectionUpdate();
 
   // set BufferGeometry (in drawDataset.js) attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
@@ -164,7 +162,9 @@ function build3DSpace() {
   //This can be removed after development if desired
   drawFPSstats();
 
+
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
+  initializeSelectionControls()
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
@@ -351,9 +351,11 @@ function setUpControls() {
 /*
 The following is an event listener for when a hand held controller is connected
 */
+
+var controller;
 window.addEventListener('vr controller connected', function(event) {
 
-  var controller = event.detail
+  controller = event.detail
   scene.add(controller)
 
   //Ensure controllers appear at the right height
@@ -394,7 +396,6 @@ window.addEventListener('vr controller connected', function(event) {
 
   var guiInputHelper = dat.GUIVR.addInputObject(controller)
   scene.add(guiInputHelper)
-
 
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {

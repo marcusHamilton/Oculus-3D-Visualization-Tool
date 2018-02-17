@@ -13,6 +13,7 @@ var largestEntry = 0;
 // calculated center point of the plot
 var plotCenterVec3;
 var pointsGeometry;
+var pointsSystem;
 
 /**
  * Adjusts the color of a singular datapoint.
@@ -137,7 +138,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
 
   // create the particle shader system
-  var pointsSystem = new THREE.Points(
+  pointsSystem = new THREE.Points(
     pointsGeometry,
     pointsMaterial);
 

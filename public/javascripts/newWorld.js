@@ -223,6 +223,7 @@ function build3DSpace() {
     success: function(response) {
       $('#myModal').modal('hide');
       console.log("Post response is: " + response);
+      reloadWorlds();
     }
   });
 }

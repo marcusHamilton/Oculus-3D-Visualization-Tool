@@ -38,6 +38,40 @@ a, a:focus, a:hover {
   border: 1px solid #fff;
 }
 
+/*Loading circle*/
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
+  align-self: center;
+}
+
+/* Safari */
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /*
  * Base structure
  */
@@ -49,6 +83,7 @@ html, body {
 
 body {
   color: #fff;
+  height: 100%;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
@@ -72,12 +107,12 @@ body {
   margin-left: auto;
 }
 
-#myModalLabel{
+#myModalLabel {
   text-shadow: none;
   color: #555555;
 }
 
-.modalChoices{
+.modalChoices {
   color: #000000;
   text-shadow: none;
 }
@@ -123,7 +158,7 @@ body {
   text-shadow: none !important;
 }
 
-#googleProfilePicture{
+#googleProfilePicture {
   height: 3em;
   margin-bottom: 2em;
 }
@@ -196,12 +231,16 @@ body {
 }
 
 #contentBox {
+  position: relative;
+  top: 110px;
   border-radius: 25px;
   background: #0c0c0c;
   padding: 20px;
   width: 1200px;
-  height: 400px;
+  height: 100%;
   opacity: 0.75;
+  display: block;
+  align-self: center;
 }
 
 /*

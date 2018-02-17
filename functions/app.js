@@ -54,7 +54,7 @@ app.post("/uploadWorld", function (req, res){
 
 //GET all world ids
 app.get("/worlds", function(req, res){
-  db.ref('/worlds').once('value').then(function(snapshot) {
+  firebase.database().ref('/worlds').once('value').then(function(snapshot) {
     var keys = [];
     snapshot.forEach(function(childSnapshot){
       keys.push(childSnapshot.key)

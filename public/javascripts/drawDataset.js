@@ -1,6 +1,7 @@
 /**
  * 
- * Contains everything to do with drawing the 3D data plot.
+ * Contains everything to do with drawing the 3D data plot. Also provides
+ * methods for changing color/scale of individual vertices.
  **/
 
 // largest value in the dataset for each axis.
@@ -11,6 +12,35 @@ var largestZ = 0;
 var largestEntry = 0;
 // calculated center point of the plot
 var plotCenterVec3;
+var pointsGeometry;
+
+/**
+ * Adjusts the color of a singular datapoint.
+ *
+ * @precondition pointsGeometry must be initialized and
+ * pointsGeometry.getAttribute('customColor').needsUpdate == true
+ *
+ * @param {Integer} datasetIndex : index of point to change
+ * @param {Vector3} colorRGB : a Vector3 of RGB values (0-1.0)
+ */
+function setPointColor(datasetIndex, colorRGB)
+{
+  pointsGeometry.getAttribute('customColor').array[datasetIndex] = colorRGB;
+}
+
+/**
+ * Adjusts the scale of a singular datapoint.
+ *
+ * @precondition pointsGeometry must be initialized and
+ * pointsGeometry.getAttribute('size').needsUpdate == true
+ *
+ * @param {Integer} datasetIndex : index of point to change
+ * @param {Number} size : New size for  the point
+ */
+function setPointScale(datasetIndex, size)
+{
+  pointsGeometry.getAttribute('size').array[datasetIndex] = size;
+}
 
 
 /**
@@ -39,7 +69,7 @@ function drawDataset(xCol, yCol, zCol)
     'drawDataset() zCol value must be a positive integer');
 
   // points geometry contains a list of all the point vertices pushed below
-  var pointsGeometry = new THREE.BufferGeometry();
+  pointsGeometry = new THREE.BufferGeometry();
 
   var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
 

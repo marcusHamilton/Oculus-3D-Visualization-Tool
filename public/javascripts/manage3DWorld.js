@@ -71,9 +71,22 @@ function render(timestamp) {
 Manages program logic. Update, Render, Repeat
 DO NOT add anything to this.
 */
+var testColor;
+var testInc = 0;
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
+  testInc++;
+  testColor = new THREE.Vector3(testInc/1000, testInc/1000, testInc/1000);
+  //setPointColor(testInc, testColor);
+  //setPointScale(testInc, testInc);
+
+  // set BufferGeometry (in drawDataset.js) attributes to be updatable.
+  // (This must be set every time you want the buffergeometry to change.
+  pointsGeometry.getAttribute('customColor').needsUpdate = true;
+  pointsGeometry.getAttribute('position').needsUpdate = true;
+  pointsGeometry.getAttribute('size').needsUpdate = true;
+
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);
 };
@@ -87,6 +100,7 @@ function build3DSpace() {
   //Recover the CSVData from the browsers webStorage
   retrieveCSVData();
   //Initialize camera, scene, and renderer
+  firstRender = true;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();

@@ -21,7 +21,7 @@ app.set('view engine', 'ejs');
 
 // Firebase set-up
 var serviceAccount = require("./config/oculus-3d-visualization-c5687-firebase-adminsdk-wj48z-a692b7b893.json");
-var firebaseApp = firebase.initializeApp({
+firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   apiKey: "AIzaSyBqX2igua_Vqc3QMh9vESrIWwv3jjY9AhU",
   authDomain: "oculus-3d-visualization-c5687.firebaseapp.com",
@@ -30,7 +30,6 @@ var firebaseApp = firebase.initializeApp({
   storageBucket: "oculus-3d-visualization-c5687.appspot.com",
   messagingSenderId: "483800110325"
 });
-var db = firebaseApp.database();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -40,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //CREATE a world
 app.post("/uploadWorld", function (req, res){
-  var worldsRef = db.ref("/").child("worlds");
+  var worldsRef = firebase.database().ref("/").child("worlds");
   var worldData = req.body;
   var newWorldRef = worldsRef.push(worldData);
   var newWorldId = newWorldRef.key;
@@ -55,7 +54,7 @@ app.post("/uploadWorld", function (req, res){
 
 //GET all world ids
 app.get("/worlds", function(req, res){
-  db.ref('/worlds').once('value').then(function(snapshot) {
+  firebase.database().ref('/worlds').once('value').then(function(snapshot) {
     var keys = [];
     snapshot.forEach(function(childSnapshot){
       keys.push(childSnapshot.key)
@@ -75,7 +74,7 @@ app.get("/worlds/:id", function(req, res){
   // }).catch(function(error) {
   // });
 
-  db.ref('/worlds/' + worldId).once('value').then(function(snapshot) {
+  firebase.database().ref('/worlds/' + worldId).once('value').then(function(snapshot) {
     // res.send(snapshot.val());
     var firebaseWorld = snapshot.val();
     var numGeom = firebaseWorld.geometries.length;
@@ -99,7 +98,7 @@ app.delete("/worlds/:id", function(req, res){
   // }).catch(function(error) {
   // });
 
-  db.ref('/worlds/' + worldId).remove().then(function(){
+  firebase.database().ref('/worlds/' + worldId).remove().then(function(){
     res.redirect("/");
   });
 });
@@ -117,7 +116,7 @@ app.put("/worlds/:id", function(req, res){
   // }).catch(function(error) {
   // });
 
-  ref = db.ref("/worlds").child(worldId);
+  ref = firebase.database().ref("/worlds").child(worldId);
   ref.update(worldData);
   res.send({"status": 'success',
             "worldId": worldId});

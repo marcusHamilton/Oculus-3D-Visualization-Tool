@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mah985/Oculus-3D-Visualization-Tool.svg?branch=Development)](https://travis-ci.org/mah985/Oculus-3D-Visualization-Tool)
+
 # Oculus-3D-Visualization-Tool
 A tool that allows the visualization  of data from a .csv file in a 3D virtual space.
 

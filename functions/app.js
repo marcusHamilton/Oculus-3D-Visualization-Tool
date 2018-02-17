@@ -55,10 +55,21 @@ app.post("/uploadWorld", function (req, res){
 //   res.send('TODO');
 // });
 
+//GET all world ids
+app.get("/worlds", function(req, res){
+  db.ref('/worlds').once('value').then(function(snapshot) {
+    var keys = [];
+    snapshot.forEach(function(childSnapshot){
+      keys.push(childSnapshot.key)
+    });
+    res.send(keys);
+  });
+});
+
 //GET a world
 app.get("/worlds/:id", function(req, res){
   worldId = req.params.id;
-
+  var uid = null;
   //Verify user token
   // admin.auth().verifyIdToken(idToken)
   // .then(function(decodedToken) {

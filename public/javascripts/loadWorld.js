@@ -8,6 +8,7 @@ var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
 var vrControls; //Vr Controls
+var controller; //VR Controller object used in event listener
 var trackballControls; //First person controls
 var effect; //The variable responsible for holding the vreffect
 var vrButton; //Enter vr button seen at start
@@ -61,6 +62,18 @@ DO NOT add anything to this.
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
+
+  pointSelectionUpdate();
+
+  // set BufferGeometry (in newWorld.js) attributes to be updatable.
+  // (This must be set every time you want the buffergeometry to change.
+  if (pointGeometryReady == true) {
+    console.log("hey");
+    pointsGeometry.getAttribute('customColor').needsUpdate = true;
+    pointsGeometry.getAttribute('position').needsUpdate = true;
+    pointsGeometry.getAttribute('size').needsUpdate = true;
+  }
+
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);
 };
@@ -288,7 +301,7 @@ The following is an event listener for when a hand held controller is connected
 */
 window.addEventListener('vr controller connected', function(event) {
 
-  var controller = event.detail
+  controller = event.detail
   scene.add(controller)
 
   //Ensure controllers appear at the right height

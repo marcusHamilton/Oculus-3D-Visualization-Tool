@@ -3,6 +3,9 @@
 # Oculus-3D-Visualization-Tool
 A tool that allows the visualization  of data from a .csv file in a 3D virtual space.
 
+Latest Master branch can be used here:
+### [3D Visualization Tool](https://oculus-3d-visualization-c5687.firebaseapp.com/)
+
 ## Getting Started
 
 These instructions will show you how to get the web service up and running on your own local server using node.js.

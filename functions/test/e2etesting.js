@@ -95,6 +95,43 @@ describe("Inner Suite 1", function(){
         expect(button.href).toEqual(my_href);
     });
 
+    it("home page body display test", function() {
+
+        var body_1 = element.all(by.className('site-wapper'));
+        var body_2 = element.all(by.className('site-wapper-inner'));
+        var body_3 = element.all(by.className('container'));
+
+        expect(body_1.isDisplayed()).toEqual([true]);
+        expect(body_2.isDisplayed()).toEqual([true]);
+        expect(body_3.isDisplayed()).toEqual([true]);
+    })
+
+    it("home page title & nav display check", function() {
+
+        var top = element.all(by.className('container inner'));
+        var title = element.all(by.className('masthead-brand'));
+        var nav = element.all(by.className('nav masthead-nav'));
+
+        expect(top.isDisplayed()).toEqual([true]);
+        expect(title.isDisplayed()).toEqual([true]);
+        expect(nav.isDisplayed()).toEqual([true]);
+    })
+
+    it("load local page check", function() {
+
+        // a promise is returned while ‘click’ action is registered in ‘driver’ object
+        driver.findElement(webdriver.By.id(loadLocal)).click();  /** id=loadLocal have NOT been added into html yet*/
+
+        var my_classType = 'active';
+        var my_href = "/localLoad";
+
+        var button = element.all(by.className(my_classType));
+        expect(button.href).toEqual(my_href);   //oadLocal button should be in class 'active'
+        /**
+         * TODO: click load local(href = /localLoad); get load file; check data correctness
+         */
+    })
+
 
 
 });

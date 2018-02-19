@@ -6,7 +6,7 @@ describe("Inner Suite 1", function(){
     browser.get("https://3dvisualizationtool.ml");
 
     /**
-     * browser and driver set up
+     * browser set up and selenium web-driver buid
      */
     var webdriver = require('selenium-webdriver')
     var chrome = require('selenium-webdriver/chrome');
@@ -24,7 +24,6 @@ describe("Inner Suite 1", function(){
         .setChromeOptions(chromeOptions)
         .build();
 
-    var my_title = "3D Visualization Tool";
     /**
      * test suite setup
      */
@@ -32,14 +31,12 @@ describe("Inner Suite 1", function(){
 
         driver.get("https://3dvisualizationtool.ml");
 
-        // driver.findElement(webdriver.By.id(username)).sendKeys(my_username);
-
         // a promise is returned while ‘click’ action is registered in ‘driver’ object
-        return driver.findElement(webdriver.By.id(loadLocal)).click();  /** id=loadLocal have NOT been added into html yet*/
+        //return driver.findElement(webdriver.By.id(loadLocal)).click();  /** id=loadLocal have NOT been added into html yet*/
     });
 
     /**
-     * test suite teardown
+     * web-driver close after test suite finish
      */
     after(function(){
 
@@ -55,7 +52,7 @@ describe("Inner Suite 1", function(){
     });
 
     /**
-     * test suite teardown repeat
+     * test suite teardown repeat(not use yet)
      */
     afterEach(function(){
 
@@ -82,20 +79,20 @@ describe("Inner Suite 1", function(){
 
     it("Title check", function(){
 
+        var my_title = "3D Visualization Tool";
         driver.getTitle().then(function ( title ) {
             expect(title).equals( my_title );
             console.log(title)      // assertions: "3D Visualization Tool" should be printed
         });
     });
 
-    it("should search input visible", function(){
+    it("home button should be active", function(){
 
-        var searchInput = element(by.className('js-site-search-focus'));
-        var searchForm = element(by.className('js-site-search-form'));
-        expect(searchInput.isDisplayed()).toEqual(true);
-        searchInput.sendKeys('protractor');
-        searchForm.submit();
+        var my_classType = 'active';
+        var my_href = "/";
 
+        var button = element.all(by.className(my_classType));
+        expect(button.href).toEqual(my_href);
     });
 
 

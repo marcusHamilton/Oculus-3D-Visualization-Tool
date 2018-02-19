@@ -10,6 +10,16 @@ a, a:focus, a:hover {
 
 /* Custom default button */
 
+.m-progress-bar {
+  min-height: 1em;
+  background: #c12d2d;
+  width: 5%;
+}
+
+.btn-info {
+  text-shadow: none;
+}
+
 .btn-default {
   text-shadow: none;
   background-color: #f1f7ed
@@ -28,6 +38,40 @@ a, a:focus, a:hover {
   border: 1px solid #fff;
 }
 
+/*Loading circle*/
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
+  align-self: center;
+}
+
+/* Safari */
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /*
  * Base structure
  */
@@ -39,6 +83,7 @@ html, body {
 
 body {
   color: #fff;
+  height: 100%;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
@@ -62,11 +107,19 @@ body {
   margin-left: auto;
 }
 
+#myModalLabel {
+  text-shadow: none;
+  color: #555555;
+}
+
+.modalChoices {
+  color: #000000;
+  text-shadow: none;
+}
+
 /*Select2 settings*/
 
-.select2-container .select2-choices .select2-search-field input,
-.select2-container .select2-choice,
-.select2-container .select2-choices {
+.select2-container .select2-choices .select2-search-field input, .select2-container .select2-choice, .select2-container .select2-choices {
   background: none;
   padding: 0;
   border-color: #cccccc;
@@ -74,13 +127,12 @@ body {
   color: #555555;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: white;
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-.select2-container.input-lg .select2-choice,
-.input-group-lg .select2-container .select2-choice {
+.select2-container.input-lg .select2-choice, .input-group-lg .select2-container .select2-choice {
   height: 46px;
   line-height: 1.33333;
   border-radius: 6px;
@@ -102,8 +154,13 @@ body {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-.select2Chosen{
-    text-shadow: none !important;
+.select2Chosen {
+  text-shadow: none !important;
+}
+
+#googleProfilePicture {
+  height: 3em;
+  margin-bottom: 2em;
 }
 
 /* Padding for spacing */
@@ -171,6 +228,19 @@ body {
 .cover .btn-lg {
   padding: 10px 20px;
   font-weight: bold;
+}
+
+#contentBox {
+  position: relative;
+  top: 110px;
+  border-radius: 25px;
+  background: #0c0c0c;
+  padding: 20px;
+  width: 1200px;
+  height: 100%;
+  opacity: 0.75;
+  display: block;
+  align-self: center;
 }
 
 /*

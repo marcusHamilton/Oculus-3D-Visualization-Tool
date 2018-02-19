@@ -10,7 +10,9 @@
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
 
-  <title>3D Visualization Tool</title>
+  <title>3D Visualization Tool -
+    <%= error.status %>
+  </title>
 
   <!-- Google Authentification -->
   <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -32,11 +34,9 @@
               <!-- The Navigation Bar -->
               <ul class="nav masthead-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="/localLoad">Load Local</a></li>
-                <li><a href="/urlLoad">Load Remote</a></li>
                 <li><a href="/features">Features</a></li>
-                <li class="active"><a href="/about">About Us</a></li>
-                <li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -44,8 +44,9 @@
         </div>
 
         <div class="inner cover">
-          <h1 class="cover-heading">Add things about who we are</h1>
-          <p class="lead">Show how cool we are</p>
+          <h1 class="cover-heading"><%= message %></h1>
+          <h2 class="lead"><%= error.status %></h2>
+          <pre><%= error.stack %></pre>
         </div>
 
       </div>

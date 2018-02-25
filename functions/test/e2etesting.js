@@ -5,8 +5,10 @@
 //selenium web driver require for all test suite
 var webdriver = require('selenium-webdriver'),
     {describe, it, before, after} = require{'selenium-webdriver/testing'};
-    By = webdriver.By,
-        until = webdriver.until;
+
+        By = webdriver.By,
+        until = webdriver.until,
+        assert = require('assert');
 
     var driver;
 
@@ -30,8 +32,9 @@ describe("Home page test Suite", function(){
         driver = new webdriver.Builder()
             .forBrowser('chrome')
             .build();
-
         driver.get("https://3dvisualizationtool.ml");
+
+
 
     });
 
@@ -61,43 +64,53 @@ describe("Home page test Suite", function(){
     });
 
     it("Title should print", function(){
+        return driver.getTitle().then(function ( title ) {
+            console.log(title);
 
-        var my_title = "3D Visualization Tool";
-        driver.getTitle().then(function ( title ) {
-            expect(title).equals( my_title );
+            assert(title === "3D Visualization Tool");
         });
     });
 
     it("home button should be active", function(){
 
         var my_classType = 'active';
-        var my_href = "/";
+        var my_href = '/';
 
-        var button = element.all(by.className(my_classType));
+        var button = driver.findElement(By.className(my_classType));
         expect(button.href).toEqual(my_href);
     });
 
     it("home page body should display", function() {
 
-        var body_1 = element.all(by.className('site-wapper'));
-        var body_2 = element.all(by.className('site-wapper-inner'));
-        var body_3 = element.all(by.className('container'));
+        var body_1 = driver.findElement(By.className('site-wapper'));
+        var body_2 = driver.findElement(By.className('site-wapper-inner'));
+        var body_3 = driver.findElement(By.className('container'));
 
         expect(body_1.isDisplayed()).toEqual([true]);
         expect(body_2.isDisplayed()).toEqual([true]);
         expect(body_3.isDisplayed()).toEqual([true]);
-    })
+    });
 
     it("home page title & nav should display", function() {
 
-        var top = element.all(by.className('container inner'));
-        var title = element.all(by.className('masthead-brand'));
-        var nav = element.all(by.className('nav masthead-nav'));
+        var top = driver.findElement(By.className('container inner'));
+        var title = driver.findElement(By.className('masthead-brand'));
+        var nav = driver.findElement(By.className('nav masthead-nav'));
 
         expect(top.isDisplayed()).toEqual([true]);
         expect(title.isDisplayed()).toEqual([true]);
         expect(nav.isDisplayed()).toEqual([true]);
-    })
+    });
+
+    it("Click dashboard button should work", function(){
+        var dashboard = driver.findElement(By.className('btn btn-lg btn-default'));     /** Dashboard button should click*/
+        dashboard.click();
+        driver.wait(until.elementLocated(By.id('contentBox')), 5000);     //'contentBox is a id of a new element, therefore should work'
+        driver.getCurrentUrl().then(function( url ){
+            assert(url === "https://3dvisualizationtool.ml/dashboard");
+        });
+
+    });
 });
 
 describe("Dashboard page test Suite", function(){
@@ -111,10 +124,7 @@ describe("Dashboard page test Suite", function(){
             .forBrowser('chrome')
             .build();
 
-        driver.get("https://3dvisualizationtool.ml");
-        // a promise is returned while ‘click’ action is registered in ‘driver’ object
-        return driver.findElement(webdriver.By.className('btn btn-lg btn-default')).click();  /** Dashboard button should click*/
-
+        driver.get("https://3dvisualizationtool.ml/dashboard");
     });
 
     /**
@@ -129,17 +139,17 @@ describe("Dashboard page test Suite", function(){
     it("dashboard button should be active", function(){
 
         var my_classType = 'active';
-        var my_href = "/dashboard";
+        var my_href = '/dashboard';
 
-        var button = element.all(by.className(my_classType));
+        var button = driver.findElement(By.className(my_classType));
         expect(button.href).toEqual(my_href);
     });
 
     it("dashboard page body should display", function() {
 
-        var body_1 = element.all(by.className('site-wapper'));
-        var body_2 = element.all(by.className('site-wapper-inner'));
-        var body_3 = element.all(by.className('container'));
+        var body_1 = driver.findElement(By.className('site-wapper'));
+        var body_2 = driver.findElement(By.className('site-wapper-inner'));
+        var body_3 = driver.findElement(By.className('container'));
 
         expect(body_1.isDisplayed()).toEqual([true]);
         expect(body_2.isDisplayed()).toEqual([true]);
@@ -148,9 +158,9 @@ describe("Dashboard page test Suite", function(){
 
     it("dashboard page title & nav should display", function() {
 
-        var top = element.all(by.className('container inner'));
-        var title = element.all(by.className('masthead-brand'));
-        var nav = element.all(by.className('nav masthead-nav'));
+        var top = driver.findElement(By.className('container inner'));
+        var title = driver.findElement(By.className('masthead-brand'));
+        var nav = driver.findElement(By.className('nav masthead-nav'));
 
         expect(top.isDisplayed()).toEqual([true]);
         expect(title.isDisplayed()).toEqual([true]);
@@ -158,8 +168,25 @@ describe("Dashboard page test Suite", function(){
     })
 
     it("should load file", function() {
+
+        var button = driver.findElement(By.className('btn btn-info btn-lg'));
+        button.click();
+        driver.wait(until.elementLocated(By.id('myWizard')), 3000);
+
+        var button2 = driver.findElement(By.name('Local'));
+        button2.click();
+        driver.wait(until.elementLocated(By.id('step2')), 3000);
+
+        var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
+
+        driver.findElement(By.className('form-control')).sendKeys(FILE_PATH);
+        var button3 = driver.findElement(By.name('Load!'));
+        button3.click();
+
+
         /**
-         * TODO: click load local(href = /localLoad); get load file; check data correctness
+         * TODO: load file; no idea how to check correctness yet
+         *
          */
     })
 

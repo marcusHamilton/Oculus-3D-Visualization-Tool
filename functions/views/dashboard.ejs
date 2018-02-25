@@ -87,6 +87,21 @@
           function packID(id) {
             sessionStorage.setItem('selectedID', JSON.stringify(id));
           }
+          function deleteWorld(id)
+          {
+            var worldURL = '/worlds' + id;
+            $.ajax({
+              type: "DELETE",
+              url: worldURL,
+              success: function(response) {
+                reloadWorlds();
+              }
+            });
+          }
+          function addCollab(userID)
+          {
+
+          }
           //Needs to be refactored for realtime database. This is not efficient
           function reloadWorlds()
           {
@@ -103,8 +118,7 @@
                 document.getElementById('spinningLoader').style = "display:none";
                 allKeys = response;
                 for (var i = 0; i < allKeys.length; i++) {
-                  $('#worldContainer').append('<div class="col-sm-1 col-md-2"><a href="/VRWorld" onclick="packID(this.id)" id="' + allKeys[i] +
-                    '"><div class="thumbnail"><img src="/images/webVr.png" alt="..." style="width:100px;height:100px;"><div class="caption"><h3>World ' + i + '</h3></div></div></a></div>');
+                  $('#worldContainer').append('<div class="col-sm-1 col-md-2"><div class="btn-group"><a type="button" class="btn btn-primary" id="'+ allKeys[i] +'" href="/VRWorld" onClick="packID(this.id)">'+ "World" + i +'</a><button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button><div class="dropdown-menu"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>');
                 }
               }
             });

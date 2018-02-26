@@ -35,7 +35,7 @@ function reloadWorlds() {
             document.getElementById('spinningLoader').style = "display:none";
             allKeys = response;
             for (var i = 0; i < allKeys.length; i++) {
-                $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + allKeys[i] + '">' + "World" + i + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + allKeys[i] + '">Delete</a></li></ul></div>');
+                $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + allKeys[i] + '">' + "World" + i + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + allKeys[i] + '">Delete</a></li></ul></div>');
             }
         }
     });

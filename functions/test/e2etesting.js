@@ -34,8 +34,12 @@ describe("Home page test Suite", function(){
             .build();
         driver.get("https://3dvisualizationtool.ml");
 
+        driver.findElement(By.css('input')).sendKeys('oculus3dvisualizationtool@gmail.com');
+        driver.findElement(By.id('identifierNext')).click();
 
-
+        driver.wait(until.elementLocated(By.id('passwordNext')), 5000);
+        driver.findElement(By.css('input')).sendKeys('osgood371');
+        driver.findElement(By.id('passwordNext')).click();
     });
 
     /**

@@ -1,7 +1,7 @@
 /*
-*This is responsible for loading and handling the usage of a threejs world.
-*Controls, and VR detection are all to be handled here
-*/
+ *This is responsible for loading and handling the usage of a threejs world.
+ *Controls, and VR detection are all to be handled here
+ */
 
 //Set up essential global elements
 var scene; //The scene to which all elements are added to
@@ -65,10 +65,28 @@ var GameLoop = function(timestamp) {
   animationDisplay.requestAnimationFrame(GameLoop);
 };
 
-function Manager()
-{
+function Manager() {
   //Initialize camera, scene, and renderer
-  
+  //First get the scene from the data base
+  var retrievedString = sessionStorage.getItem('selectedID');
+  worldID = JSON.parse(retrievedString);
+  console.log(worldID);
+  scene = new THREE.Scene();
+  var worldURL = '/worlds/' + worldID;
+  console.log(worldURL);
+  $.ajax({
+    type: "GET",
+    contentType: "application/json",
+    url: worldURL,
+    success: function(response) {
+      console.log("Loading: " + JSON.stringify(response));
+      var loader = new THREE.ObjectLoader();
+      var object = loader.parse(response);
+
+      scene.add( object );
+    }
+  });
+
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -101,7 +119,7 @@ function Manager()
 
   //Center the camera on the data and back so that you are not inside the first
   // cube
-  camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+  camera.position.set(0, 0, camera.position.z);
   camera.rotation.y = 270 * Math.PI / 180;
   //This can be removed after development if desired
   drawFPSstats();

@@ -1,4 +1,10 @@
 language: node_js
-before_install: eslint ./public/javascripts *.js --fix >> lintOuput.txt
-install: npm install
-script: npm test
+node_js: "6.11.5"
+before_install:
+- cd ./functions
+- npm install
+install: 
+- cd ..
+script:
+- cd ./functions
+- npm test

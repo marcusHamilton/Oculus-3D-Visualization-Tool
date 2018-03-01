@@ -84,6 +84,7 @@ var GameLoop = function(timestamp) {
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
   pointsGeometry.getAttribute('position').needsUpdate = true;
   pointsGeometry.getAttribute('size').needsUpdate = true;
+  pointsGeometry.getAttribute('isSelected').needsUpdate = true;
 
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);

@@ -94,6 +94,7 @@ function drawDataset(xCol, yCol, zCol)
   var positions = new Float32Array( parsedData.length * 3 );
   var colors = new Float32Array( parsedData.length * 3 );
   var sizes = new Float32Array( parsedData.length );
+  var selected = [];
 
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
@@ -136,6 +137,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
   pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
   pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+  pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
 
   // create the particle shader system
   pointsSystem = new THREE.Points(

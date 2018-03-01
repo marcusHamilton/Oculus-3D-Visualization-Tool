@@ -20,7 +20,7 @@ function initializeSelectionControls()
   }
   // setup mouse raycaster
   document.addEventListener( 'mousemove', onMouseMove, false );
-  //document.addEventListener( 'click', setClicked, false );
+  //document.addEventListener( 'click', onClick, false );
 }
 
 
@@ -48,17 +48,26 @@ function pointSelectionUpdate()
 
 function selectPoint(pointIndex)
 {
-  //selectedPoints.push(pointsIndex);
+  pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] = true;
+  selectedPoints.push(pointIndex);
 }
 
-function deselectPoint()
+function deselectPoint(pointIndex)
 {
-
+  pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] = false;
+  selectedPoints.splice(selectedPoints.indexOf(pointIndex));
 }
 
 function clearSelection()
 {
-
+  var selected = pointsGeometry.getAttribute( 'isSelected' ).array;
+  for(var i = 0; i < selected.length; i++){
+    if(selected[i] == true){
+      selected[i] = false;
+    }
+  }
+  pointsGeometry.getAttribute( 'isSelected' ).array = selected;
+  selectedPoints = [];
 }
 
 function onMouseMove( event ) {

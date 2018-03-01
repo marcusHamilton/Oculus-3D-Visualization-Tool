@@ -83,9 +83,29 @@ function updateGeometryInDatabase(worldId, geometryId, geometry){
 }
 
 
+/*
+Query a worldInfo object by world id
+Input: the id of the world
+Returns: worldInfo json object with matching world id
+*/
+function getWorldInfo(worldId){
+	var worldInfoRef = database.ref('/worldInfo');
+	var queryRef = worldInfoRef.orderByChild("ID").equalTo(worldId);
+	var worldInfo = null;
+	queryRef.once('value').then(function(snapshot){
+		worldInfo = snapshot;
+	});
+	return worldInfo;
+}
+
+
 
 
 //******************************************************************************
+//******************************************************************************
+
+
+
 
 function onSignIn(googleUser) {
   console.log('Google Auth Response', googleUser);

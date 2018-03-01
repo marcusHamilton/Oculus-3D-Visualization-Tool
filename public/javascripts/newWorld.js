@@ -8,6 +8,7 @@
 
 //Global variable for storing the csv data
 var parsedData; //Parsed data obtained from the CSV
+var fileName; //Stored to give a meaningful name on the dashboard
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
 //parsedData[i][x_AxisIndex]
 //parsedData[i][y_AxisIndex]
@@ -26,6 +27,7 @@ var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 function loadCSVLocal() {
   //Grab the file from the html dom system
   var file = document.getElementById('csv-file').files[0];
+  fileName = file.name;
 
   Papa.parse(file, {
     //header: true,
@@ -214,7 +216,9 @@ function build3DSpace() {
     sceneJSON = JSON.stringify(sceneJSON);
 
   }
-  console.log("About to post:" + sceneJSON);
+
+  /* ------------- These POST requests are to be replaced with proper firebase api ------------ */
+
   $.ajax({
     type: "POST",
     contentType: "application/json",
@@ -222,10 +226,36 @@ function build3DSpace() {
     data: sceneJSON,
     success: function(response) {
       $('#myModal').modal('hide');
-      console.log("Post response is: " + response);
+      console.log("Post response from scene is: " + response);
+      sendWorldInfo(response);
       reloadWorlds();
     }
   });
+
+  function sendWorldInfo(worldID)
+  {
+    //Create an object with the needed data
+    var obj = { "fileName":fileName, "ID":worldID, "parsedData":parsedData };
+    try {
+
+      obj = JSON.stringify(obj, parseNumber, '\t');
+      obj = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
+  
+    } catch (e) {
+  
+      obj = JSON.stringify(obj);
+  
+    }
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      url: '/uploadWorldInfo',
+      data: obj,
+      success: function(response) {
+        console.log("Post response from sendWorldInfo is: " + response);
+      }
+    });
+  }
 }
 
 

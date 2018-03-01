@@ -89,15 +89,19 @@ Input: the id of the world
 Returns: worldInfo json object with matching world id
 */
 function getWorldInfo(worldId){
-	var worldInfoRef = database.ref('/worldInfo');
+	var worldInfoRef = database.ref('worldInfo');
 	var queryRef = worldInfoRef.orderByChild("ID").equalTo(worldId);
 	var worldInfo = null;
 	queryRef.once('value').then(function(snapshot){
-		worldInfo = snapshot;
+		worldInfo = snapshot.val();
+		console.log(worldInfo);
 	});
 	return worldInfo;
 }
 
+//test
+// var worldId = '-L6UfQx0beRgpsbWxeNt';
+// getWorldInfo(worldId);
 
 
 

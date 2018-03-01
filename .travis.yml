@@ -1,11 +1,10 @@
-language:
-	node_js
+language: node_js
+node_js: "6.11.5"
 before_install:
-	eslint ./public/javascripts *.js --fix >> lintOuput.txt
-install:
-	npm install
+- cd ./functions
+- npm install
+install: 
+- cd ..
 script:
-	npm test
-deploy:
-	skip_cleanup: true
-	firebase serve --only functions,hosting
+- cd ./functions
+- npm test

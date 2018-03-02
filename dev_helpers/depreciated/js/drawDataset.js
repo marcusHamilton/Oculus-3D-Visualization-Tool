@@ -3,7 +3,7 @@
  * Contains everything to do with drawing the 3D data plot. Also provides
  * methods for changing color/scale of individual vertices.
  **/
-
+/*
 // largest value in the dataset for each axis.
 var largestX = 0;
 var largestY = 0;
@@ -24,6 +24,7 @@ var pointsSystem;
  * @param {Integer} datasetIndex : index of point to change
  * @param {Vector3} colorRGB : a Vector3 of RGB values (0-1.0)
  */
+/*
 function setPointColor(datasetIndex, colorRGB)
 {
   pointsGeometry.getAttribute('customColor').array[datasetIndex] = colorRGB;
@@ -38,6 +39,7 @@ function setPointColor(datasetIndex, colorRGB)
  * @param {Integer} datasetIndex : index of point to change
  * @param {Number} size : New size for the point
  */
+/*
 function setPointSize(datasetIndex, size)
 {
   pointsGeometry.getAttribute('size').array[datasetIndex] = size;
@@ -59,6 +61,7 @@ function setPointSize(datasetIndex, size)
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
+/*
 function drawDataset(xCol, yCol, zCol)
 {
   assert(parsedData, 'parsedData must be defined for drawDataset()');
@@ -157,6 +160,7 @@ function drawDataset(xCol, yCol, zCol)
  *
  * @postcondition axis labels are drawn from 0,0
  */
+/*
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
 
@@ -225,6 +229,7 @@ function drawAxisLabels() {
  *
  * @return {Number} integer color value from position.
  */
+/*
 function colorFromXYZcoords(vec3) {
 
   var r = 0;
@@ -246,8 +251,10 @@ function colorFromXYZcoords(vec3) {
  * @param condition {Boolean} assertion
  * @param message {String} Failure message
  */
+/*
 function assert(condition, message) {
     if (!condition) {
         throw message || "Assertion failed";
     }
 }
+*/

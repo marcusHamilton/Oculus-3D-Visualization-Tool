@@ -1,7 +1,7 @@
 /*
   This js file is responsible for building the 3D world
 */
-
+/*
 //Set up essential global elements
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
@@ -81,6 +81,7 @@ function render(timestamp) {
 Manages program logic. Update, Render, Repeat
 DO NOT add anything to this.
 */
+/*
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
@@ -94,6 +95,7 @@ This function is responsible for building the world and creates the
 data points passed from the csv
 Acts as the main function. From here everything else is called.
 */
+/*
 function build3DSpace() {
   //Recover the CSVData from the browsers webStorage
   retrieveCSVData();
@@ -178,6 +180,7 @@ This draws the fps and various stats to the page.
 Click on the widget to see other stats.
 Can be removed after development.
 */
+/*
 function drawFPSstats() {
   (function() {
     var script = document.createElement('script');
@@ -200,6 +203,7 @@ Listens and adapts the aspect ratio and size of the canvas
 This allows the scene to hold its shape when the browser is
 resized.
 */
+/*
 function onResize(e) {
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
@@ -220,6 +224,7 @@ Grabs the data that is sent from the csv file over browser sessionStorage
     y_AxisIndex contains the users inputted y axis
     z_AxisIndex contains the users inputted z axis
 */
+/*
 function retrieveCSVData() {
   var retrievedObject = sessionStorage.getItem('parsedCSVData');
   parsedData = JSON.parse(retrievedObject);
@@ -239,6 +244,7 @@ as offers a link to the webvr page to learn more.
 On clicking enter vr the scene is loaded appropriately for the
 headset.
 */
+/*
 function addEnterVrButtons() {
   // Create WebVR UI Enter VR Button
   var options = {
@@ -275,6 +281,7 @@ function addEnterVrButtons() {
 /*
 These are the head controls as well as the ability to move around in 2d space. They do not correspond to the hand controls.
 */
+/*
 function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
@@ -353,7 +360,7 @@ function setUpControls() {
 /*
 The following is an event listener for when a hand held controller is connected
 */
-
+/*
 var controller;
 window.addEventListener('vr controller connected', function(event) {
 
@@ -417,3 +424,4 @@ window.addEventListener('vr controller connected', function(event) {
     controller.parent.remove(controller)
   })
 });;
+*/

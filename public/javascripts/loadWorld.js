@@ -18,6 +18,7 @@ var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
+var controller;
 
 var pointsSystem; //Seperate pointsSystem var to avoid coupling with newWorld. Might recouple and relink in VRWorld.ejs if this causes issues.
 
@@ -249,6 +250,9 @@ function setUpControls() {
   trackballControls.dynamicDampingFactor = 0.3;
   trackballControls.keys = [65, 83, 68];
 
+  //Add selection controls
+    initializeSelectionControls();
+
   //Apply VR stereo rendering to renderer.
   effect = new THREE.VREffect(renderer);
   effect.setSize(window.innerWidth, window.innerHeight);
@@ -312,7 +316,7 @@ The following is an event listener for when a hand held controller is connected
 */
 window.addEventListener('vr controller connected', function(event) {
 
-  var controller = event.detail
+  controller = event.detail
   scene.add(controller)
 
   //Ensure controllers appear at the right height

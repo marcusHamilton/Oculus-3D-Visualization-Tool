@@ -26,10 +26,12 @@ function initializeSelectionControls()
     // TODO Attach raycaster to VRcontroller
   }
   // setup mouse raycaster
+
+
   document.addEventListener( 'mousemove', onMouseMove, false );
   document.addEventListener( 'click', onClick, false );
 
-  pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+
 }
 
 
@@ -37,8 +39,10 @@ function pointSelectionUpdate()
 {
 
   // calculate objects intersecting the ray
+    pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
     intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
     intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
+
     if (intersects != null)
     console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++)
@@ -59,9 +63,15 @@ function selectPoint(pointIndex)
       !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
   if(pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] == false){
       selectedPoints.splice(selectedPoints.indexOf(pointIndex));
+      setPointColor(pointIndex, colorFromXYZcoords(pointsGeometry.getAttribute('position')).array[pointIndex]);
+      setPointSize(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
+          pointsGeometry.getAttribute('size').array[pointIndex] * 2/3);
   }
   else{
       selectedPoints.push(pointIndex);
+      setPointColor(pointIndex, new THREE.Color(1, 1, 1));
+      setPointSize(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
+          pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
 }
 
@@ -98,9 +108,6 @@ function onClick( event ){
           && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
           && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold)
       {
-          setPointColor(i, new THREE.Color(1, 1, 1));
-          setPointSize(i, pointsGeometry.getAttribute('size').array[i] =
-                          pointsGeometry.getAttribute('size').array[i] * 1.5);
           selectPoint(i);
       }
   }

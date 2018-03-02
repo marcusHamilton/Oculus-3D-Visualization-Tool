@@ -4,32 +4,29 @@
 
 //selenium web driver require for all test suite
 var webdriver = require('selenium-webdriver'),
-    {describe, it, before, after} = require{'selenium-webdriver/testing'};
+    { describe, it, before, after } = require('selenium-webdriver/testing');
 
         By = webdriver.By,
         until = webdriver.until,
         assert = require('assert');
 
-    var driver;
-
 /**
  * If we are using Firefox for testing, we need to set up
  * Firefox browser option because our team use Firefox developer edition, not the default Firefox
  */
-var firefox = require('selenium-webdriver/firefox');
+//var firefox = require('selenium-webdriver/firefox');
 
-var profile = new firefox.Profile( '/Users/homeyxue/Library/Application Support/Firefox/Profiles/8htp4yu0.dev-edition-default');
-var firefoxOptions = new firefoxOptions().setProfile(profile);
+//var profile = new firefox.Profile( '/Users/homeyxue/Library/Application Support/Firefox/Profiles/8htp4yu0.dev-edition-default');
+//var firefoxOptions = new firefoxOptions().setProfile(profile);
+describe('home page test Suite', function(){
 
-describe("Home page test Suite", function(){
-
-    this.timeout(50000);    //50 second time out for waiting
+    this.timeout(50000);    //50 second time out max for waiting
     /**
      * web driver for each test case
      */
     beforeEach(function(){
 
-        driver = new webdriver.Builder()
+        var driver = new webdriver.Builder()
             .forBrowser('chrome')
             .build();
         driver.get("https://3dvisualizationtool.ml");
@@ -47,7 +44,7 @@ describe("Home page test Suite", function(){
      */
     afterEach(function(){
 
-        return driver.quit(s);
+        driver.quit();
 
     });
 

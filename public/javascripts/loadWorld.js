@@ -19,6 +19,8 @@ var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
 
+var pointsSystem; //Seperate pointsSystem var to avoid coupling with newWorld. Might recouple and relink in VRWorld.ejs if this causes issues.
+
 
 //Called every frame
 function update(timestamp) {
@@ -96,6 +98,18 @@ function Manager() {
     }
   });
 
+/*
+  var newWindow = window.open("");
+  var body = newWindow.document.body;
+  var text = "innerText" in body ? "innerText" : "textContent";
+  body[text] = scene.children
+*/
+  console.log(scene.children);
+
+  var loadedScene = scene.getObjectByProperty("Scene");
+  var loadedPointsSystem = loadedScene.getObjectByName("PointsSystem");
+  console.log(loadedPointsSystem);
+
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -110,6 +124,7 @@ function Manager() {
   // Handle canvas resizing
   window.addEventListener('resize', onResize, true);
   window.addEventListener('vrdisplaypresentchange', onResize, true);
+
   setUpControls();
   addEnterVrButtons();
   //Get HMD type

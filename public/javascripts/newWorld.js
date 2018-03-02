@@ -16,6 +16,8 @@ var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
 var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
 var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
+var pointsSystem;
+
 /*
 //Function is called when the csv file is loaded in from the localLoad.
 //Here the uploaded file is grabbed from the html page and passed into a local //variable. Papa parse is then used to parse the data into an array.
@@ -185,6 +187,7 @@ var plotPointSizeCoeff = 0.01;
 function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
+  scene.name = "Scene";
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
   var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100)
@@ -279,7 +282,7 @@ function drawDataset(xCol, yCol, zCol)
     var positions = new Float32Array( parsedData.length * 3 );
     var colors = new Float32Array( parsedData.length * 3 );
     var sizes = new Float32Array( parsedData.length );
-    var selected = [];
+    var selected = new Uint8Array(parsedData.length);
 
     // Base color object to be edited on each loop iteration below.
     var color = new THREE.Color();
@@ -331,6 +334,7 @@ function drawDataset(xCol, yCol, zCol)
 
     // add it to the scene
     scene.add(pointsSystem);
+    pointsSystem.name = "PointsSystem";
     drawAxisLabels();
 }
 

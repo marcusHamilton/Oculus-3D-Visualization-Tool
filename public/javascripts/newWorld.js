@@ -332,9 +332,10 @@ function drawDataset(xCol, yCol, zCol)
         pointsGeometry,
         pointsMaterial);
 
+  pointsSystem.name = "PointsSystem";
     // add it to the scene
     scene.add(pointsSystem);
-    pointsSystem.name = "PointsSystem";
+
     drawAxisLabels();
 }
 

@@ -46,11 +46,12 @@ function update(timestamp) {
     pointSelectionUpdate();
     // set BufferGeometry (in drawDataset.js) attributes to be updatable.
     // (This must be set every time you want the buffergeometry to change.
+  /*
     pointsGeometry.getAttribute('customColor').needsUpdate = true;
     pointsGeometry.getAttribute('position').needsUpdate = true;
     pointsGeometry.getAttribute('size').needsUpdate = true;
     pointsGeometry.getAttribute('isSelected').needsUpdate = true;
-
+  */
 }
 
 //Draw game objects to the scene

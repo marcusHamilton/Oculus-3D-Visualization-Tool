@@ -21,6 +21,7 @@ var intersects;
 
 function initializeSelectionControls()
 {
+  /*
   if (controller != null)
   {
     // TODO Attach raycaster to VRcontroller
@@ -30,6 +31,7 @@ function initializeSelectionControls()
   document.addEventListener( 'click', onClick, false );
 
   pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+*/
 }
 
 
@@ -37,6 +39,7 @@ function pointSelectionUpdate()
 {
 
   // calculate objects intersecting the ray
+  /*
     intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
     intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
     if (intersects != null)
@@ -50,11 +53,12 @@ function pointSelectionUpdate()
         setPointColor(i, new THREE.Color(1, 1, 1));
       }
     }
-
+*/
 }
 
 function selectPoint(pointIndex)
 {
+  /*
   pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] =
       !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
   if(pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] == false){
@@ -63,11 +67,13 @@ function selectPoint(pointIndex)
   else{
       selectedPoints.push(pointIndex);
   }
+  */
 }
 
 
 function clearSelection()
 {
+  /*
   var selected = pointsGeometry.getAttribute( 'isSelected' ).array;
   for(var i = 0; i < selected.length; i++){
     if(selected[i] == true){
@@ -76,22 +82,23 @@ function clearSelection()
   }
   pointsGeometry.getAttribute( 'isSelected' ).array = selected;
   selectedPoints = [];
+*/
 }
 
 function onMouseMove( event ) {
 
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
-
+/*
   event.preventDefault();
 
   pointSelectionMouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
   pointSelectionMouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
+*/
 }
 
 function onClick( event ){
-
+/*
   event.preventDefault();
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
       if (Math.abs(pointsGeometry.getAttribute('position').array[i].x - intersects.point.x) < selectionThreshold
@@ -104,4 +111,5 @@ function onClick( event ){
           selectPoint(i);
       }
   }
+  */
 }

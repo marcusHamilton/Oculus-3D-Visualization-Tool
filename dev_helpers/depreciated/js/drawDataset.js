@@ -120,7 +120,7 @@ function drawDataset(xCol, yCol, zCol)
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
-    p.toArray( positions, i * 3 );;;;;
+    p.toArray( positions, i * 3 );
 
     // Set point color RGB values to magnitude of XYZ values
     color.setRGB(parsedData[i][xCol]/largestX, parsedData[i][yCol]/largestY, parsedData[i][zCol]/largestZ);

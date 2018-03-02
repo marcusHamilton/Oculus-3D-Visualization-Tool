@@ -23,7 +23,7 @@ function initializeSelectionControls()
 {
   if (controller != null)
   {
-    // Attach raycaster to VRcontroller
+    // TODO Attach raycaster to VRcontroller
   }
   // setup mouse raycaster
   document.addEventListener( 'mousemove', onMouseMove, false );

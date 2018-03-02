@@ -74,6 +74,12 @@ function Manager() {
   scene = new THREE.Scene();
   var worldURL = '/worlds/' + worldID;
   console.log(worldURL);
+
+  /*
+  FIREBASE GET
+  */
+
+
   $.ajax({
     type: "GET",
     contentType: "application/json",

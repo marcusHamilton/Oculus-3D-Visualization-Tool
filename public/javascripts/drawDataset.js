@@ -30,15 +30,15 @@ function setPointColor(datasetIndex, colorRGB)
 }
 
 /**
- * Adjusts the scale of a singular datapoint.
+ * Adjusts the size of a singular datapoint.
  *
  * @precondition pointsGeometry must be initialized and
  * pointsGeometry.getAttribute('size').needsUpdate == true
  *
  * @param {Integer} datasetIndex : index of point to change
- * @param {Number} size : New size for  the point
+ * @param {Number} size : New size for the point
  */
-function setPointScale(datasetIndex, size)
+function setPointSize(datasetIndex, size)
 {
   pointsGeometry.getAttribute('size').array[datasetIndex] = size;
 }
@@ -120,7 +120,7 @@ function drawDataset(xCol, yCol, zCol)
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
-    p.toArray( positions, i * 3 )
+    p.toArray( positions, i * 3 );;;;;
 
     // Set point color RGB values to magnitude of XYZ values
     color.setRGB(parsedData[i][xCol]/largestX, parsedData[i][yCol]/largestY, parsedData[i][zCol]/largestZ);

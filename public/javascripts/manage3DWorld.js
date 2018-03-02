@@ -44,14 +44,24 @@ function update(timestamp) {
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
-  torus.rotation.y += 0.002
-  if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
+  torus.rotation.y += 0.002;;;;;;
+  if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2);;;;;; //  Keep DAT GUI display tidy!
 
   //Add all updates below here
 
   //Ensure that we are looking for controller input
   trackballControls.update();
   THREE.VRController.update();
+
+  //Allows point selection to function
+  pointSelectionUpdate();
+  // set BufferGeometry (in drawDataset.js) attributes to be updatable.
+    // (This must be set every time you want the buffergeometry to change.
+    pointsGeometry.getAttribute('customColor').needsUpdate = true;
+    pointsGeometry.getAttribute('position').needsUpdate = true;
+    pointsGeometry.getAttribute('size').needsUpdate = true;
+    pointsGeometry.getAttribute('isSelected').needsUpdate = true;
+
 
 }
 
@@ -71,20 +81,9 @@ function render(timestamp) {
 Manages program logic. Update, Render, Repeat
 DO NOT add anything to this.
 */
-var testColor;
-var testInc = 0;
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
-
-  pointSelectionUpdate();
-
-  // set BufferGeometry (in drawDataset.js) attributes to be updatable.
-  // (This must be set every time you want the buffergeometry to change.
-  pointsGeometry.getAttribute('customColor').needsUpdate = true;
-  pointsGeometry.getAttribute('position').needsUpdate = true;
-  pointsGeometry.getAttribute('size').needsUpdate = true;
-  pointsGeometry.getAttribute('isSelected').needsUpdate = true;
 
   //Allows this to be called every frame
   animationDisplay.requestAnimationFrame(GameLoop);
@@ -112,16 +111,16 @@ function build3DSpace() {
   //Add the renderer to the html page
   document.body.appendChild(renderer.domElement);
   //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100)
-  light.position.set(1, 10, -0.5)
-  light.castShadow = true
-  light.shadow.mapSize.width = 2048
-  light.shadow.mapSize.height = 2048
-  light.shadow.camera.near = 1
-  light.shadow.camera.far = 12
-  scene.add(light)
+  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);;;;;;
+  light.position.set(1, 10, -0.5);;;;;;
+  light.castShadow = true;;;;;;
+  light.shadow.mapSize.width = 2048;;;;;;
+  light.shadow.mapSize.height = 2048;;;;;;
+  light.shadow.camera.near = 1;;;;;;
+  light.shadow.camera.far = 12;;;;;;
+  scene.add(light);;;;;;
 
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
+  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));;;;;;
 
 
   var floor = new THREE.Mesh(
@@ -135,10 +134,10 @@ function build3DSpace() {
       transparent: true,
       opacity: 0.8
     })
-  )
-  floor.rotation.x = Math.PI / -2
-  floor.receiveShadow = true
-  scene.add(floor)
+  );;;;;;
+  floor.rotation.x = Math.PI / -2;;;;;;
+  floor.receiveShadow = true;;;;;;
+  scene.add(floor);;;;;;
   // Handle canvas resizing
   window.addEventListener('resize', onResize, true);
   window.addEventListener('vrdisplaypresentchange', onResize, true);
@@ -165,7 +164,7 @@ function build3DSpace() {
 
 
   drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
-  initializeSelectionControls()
+  initializeSelectionControls();;;;;;
 
   //GameLoop must be called last after everything to ensure that
   //everything is rendered
@@ -301,7 +300,7 @@ function setUpControls() {
 
   applyDown = function(obj, key, value) {
 
-    obj[key] = value
+    obj[key] = value;;;;;;
     if (obj.children !== undefined && obj.children.length > 0) {
 
       obj.children.forEach(function(child) {
@@ -309,15 +308,15 @@ function setUpControls() {
         applyDown(child, key, value)
       })
     }
-  }
+  };;;;;;
   castShadows = function(obj) {
 
     applyDown(obj, 'castShadow', true)
-  }
+  };;;;;;
   receiveShadows = function(obj) {
 
     applyDown(obj, 'receiveShadow', true)
-  }
+  };;;;;;
 
   //Arbitrary shape for testing gui settings
   torus = new THREE.Mesh(
@@ -327,24 +326,24 @@ function setUpControls() {
       roughness: 0.01,
       metalness: 0.2
     })
-  )
-  torus.position.set(-0.25, 1.4, -1.5)
-  torus.castShadow = true
-  torus.receiveShadow = true
-  scene.add(torus)
+  );;;;;;
+  torus.position.set(-0.25, 1.4, -1.5);;;;;;
+  torus.castShadow = true;;;;;;
+  torus.receiveShadow = true;;;;;;
+  scene.add(torus);;;;;;
 
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
 
-  dat.GUIVR.enableMouse(camera)
-  var gui = dat.GUIVR.create('Settings')
-  gui.position.set(0.2, 0.8, -1)
-  gui.rotation.set(Math.PI / -6, 0, 0)
-  scene.add(gui)
-  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X')
-  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y')
-  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen()
+  dat.GUIVR.enableMouse(camera);;;;;;
+  var gui = dat.GUIVR.create('Settings');;;;;;
+  gui.position.set(0.2, 0.8, -1);;;;;;
+  gui.rotation.set(Math.PI / -6, 0, 0);;;;;;
+  scene.add(gui);;;;;;
+  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');;;;;;
+  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');;;;;;
+  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();;;;;;
   castShadows(gui)
 
 }
@@ -356,13 +355,13 @@ The following is an event listener for when a hand held controller is connected
 var controller;
 window.addEventListener('vr controller connected', function(event) {
 
-  controller = event.detail
-  scene.add(controller)
+  controller = event.detail;;;;;;
+  scene.add(controller);;;;;;
 
   //Ensure controllers appear at the right height
   //controller.standingMatrix = renderer.vr.getStandingMatrix()
 
-  controller.head = window.camera
+  controller.head = window.camera;;;;;;
 
   //Add a visual for the controllers
   var
@@ -381,38 +380,38 @@ window.addEventListener('vr controller connected', function(event) {
 
       new THREE.BoxGeometry(0.03, 0.1, 0.03),
       controllerMaterial
-    )
+    );;;;;;
 
-  controllerMaterial.flatShading = true
-  controllerMesh.rotation.x = -Math.PI / 2
-  handleMesh.position.y = -0.05
-  controllerMesh.add(handleMesh)
-  controller.userData.mesh = controllerMesh //  So we can change the color later.
-  controller.add(controllerMesh)
-  castShadows(controller)
-  receiveShadows(controller)
+  controllerMaterial.flatShading = true;;;;;;
+  controllerMesh.rotation.x = -Math.PI / 2;;;;;;
+  handleMesh.position.y = -0.05;;;;;;
+  controllerMesh.add(handleMesh);;;;;;
+  controller.userData.mesh = controllerMesh;;;;;; //  So we can change the color later.
+  controller.add(controllerMesh);;;;;;
+  castShadows(controller);;;;;;
+  receiveShadows(controller);;;;;;
 
 
   //  Allow this controller to interact with DAT GUI.
 
-  var guiInputHelper = dat.GUIVR.addInputObject(controller)
-  scene.add(guiInputHelper)
+  var guiInputHelper = dat.GUIVR.addInputObject(controller);;;;;;
+  scene.add(guiInputHelper);;;;;;
 
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {
 
-    event.target.userData.mesh.material.color.setHex(meshColorOn)
+    event.target.userData.mesh.material.color.setHex(meshColorOn);;;;;;
     guiInputHelper.pressed(true)
-  })
+  });;;;;;
   controller.addEventListener('primary press ended', function(event) {
 
-    event.target.userData.mesh.material.color.setHex(meshColorOff)
+    event.target.userData.mesh.material.color.setHex(meshColorOff);;;;;;
     guiInputHelper.pressed(false)
-  })
+  });;;;;;
 
   //On controller removal
   controller.addEventListener('disconnected', function(event) {
 
     controller.parent.remove(controller)
   })
-})
+});;;;;;

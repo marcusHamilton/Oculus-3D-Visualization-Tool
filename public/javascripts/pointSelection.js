@@ -12,7 +12,7 @@ var selectedPoints = [];  //array containing the indices of every currently
 
 var pointSelectionRaycaster = new THREE.Raycaster();
 var pointSelectionMouse = new THREE.Vector2();
-pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+
 
 var selectionThreshold = 1; //the distance the mouse has to be from a point
                             //in order for it to register as selectable
@@ -28,6 +28,8 @@ function initializeSelectionControls()
   // setup mouse raycaster
   document.addEventListener( 'mousemove', onMouseMove, false );
   document.addEventListener( 'click', onClick, false );
+
+  pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
 }
 
 

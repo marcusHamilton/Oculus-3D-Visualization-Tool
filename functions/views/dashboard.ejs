@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
+
+  <!--Stylesheets -->
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!--Javascript CDN's-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+  <!-- Firebase Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <!--Javascript Local Files-->
+  <script src="/javascripts/LinkedList.js"></script>
+  <script src="/javascripts/dashboardManager.js"></script>
+  <script src="/javascripts/three/three.js"></script>
+  <script src="/javascripts/newWorld.js"></script>
+  <script src="/javascripts/auth.js"></script>
+
+
+  <title>Dashboard</title>
+</head>
+
+<body>
+
+  <div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+      <div class="container" style="display:block">
+
+        <div class="masthead clearfix">
+          <div class="container inner">
+            <h3 class="masthead-brand">3D Visualization Tool</h3>
+            <nav>
+              <!-- The Navigation Bar -->
+              <ul class="nav masthead-nav">
+                <li>
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <a href="/features">Features</a>
+                </li>
+                <li>
+                  <a href="/about">About Us</a>
+                </li>
+                <li class="active">
+                  <a href="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                </li>
+                <li>
+                  <img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture" style="visibility: hidden;">
+                </li>
+              </ul>
+            </nav>
+            <!-- End: The Navigation Bar -->
+          </div>
+        </div>
+      </div>
+      <br>
+      <!-- Start container that holds the 3D world content -->
+      <div class="container" id="contentBox">
+        <h3 class="masthead-brand">Hi, </h3>
+        <nav>
+          <ul class="nav masthead-nav">
+            <a href=#myModal role="button" data-toggle="modal" class="btn btn-info btn-lg">
+              <span class="glyphicon glyphicon-plus-sign"></span> New
+            </a>
+          </ul>
+        </nav>
+        <br />
+        <br />
+        <hr />
+
+        <div class="loader center-block" id="spinningLoader"></div>
+
+        <div class="container" id="worldContainer">
+        </div>
+        <script>
+          reloadWorlds();
+        </script>
+        <!-- End: container that holds the 3D world content -->
+      </div>
+    </div>
+
+
+
+
+
+
+    <!--*********************Modal box content*******************-->
+
+
+
+
+
+
+    <div id="myModal" class="modal fade" role="document" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">New World</h3>
+          </div>
+          <div class="modal-body" id="myWizard">
+
+            <div class="tab-content">
+              <div class="tab-pane fade in active" id="step1">
+
+                <div class="well modalChoices">
+
+                  <p>Where is your CSV?</p>
+                  <a href="#step2" data-toggle="tab" data-step="2" class="btn btn-lg btn-default">Local</a>
+                  <a href="#step3" data-toggle="tab" data-step="3" class="btn btn-lg btn-default">URL</a>
+
+                </div>
+              </div>
+              <div class="tab-pane fade" id="step2">
+                <div class="well">
+
+                  <div class="modalChoices">
+                    <p class="lead" id="localLoadLabel">Select a local file to be loaded.</p>
+                    <!--Load via local-->
+                    <p class="lead">
+                      <div id="formGroup">
+                        <div class="input-group">
+                          <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                              Browse&hellip;
+                              <input type="file" accept=".csv" id="csv-file" style="display: none;">
+                            </span>
+                          </label>
+                          <input type="text" class="form-control" placeholder="No file selected" readonly>
+                        </div>
+                        <span class="help-block">
+                          Only .csv files may be selected.
+                        </span>
+                        <span>
+                          <button role="button" onclick="loadCSVLocal()" class="btn btn-primary">Load!</button>
+                        </span>
+                        <!-- Area for success message -->
+                        <div id="successMessage" align="center">
+                        </div>
+                        <!-- End: Area for success message -->
+                      </div>
+                    </p>
+                    <!-- End: Load via local -->
+
+                    <!--Drop down for selecting axis -->
+                    <div class="select2Chosen" style="display:none" id="dropDownForInit">
+                      <h4 class "lead">
+                        Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
+                      <hr>
+                      <label for="x-axis">
+                        X-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
+                        </select>
+                      </label>
+                      <label for="y-axis">
+                        Y-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
+                        </select>
+                      </label>
+                      <label for="z-axis">
+                        Z-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
+                        </select>
+                      </label>
+                    </div>
+                    <!-- End: Drop down for selecting axis -->
+                    <br />
+                    <!-- Area to continue to virtual space if successful -->
+                    <div id="continueToVirtual" align="center">
+                    </div>
+                    <!-- End: Area to continue to virtual space if successful -->
+                  </div>
+
+                </div>
+                <a class="btn btn-default" href="#step1" data-toggle="tab" data-step="1">Start Over</a>
+              </div>
+
+              <div class="tab-pane fade" id="step3">
+                <div class="well">
+
+                  <div class="modalChoices">
+                    <p class="lead" id="localLoadLabel">Enter a URL that points directly to a .csv file.</p>
+                    <!--URL search bar -->
+                    <p class="lead">
+                      <div id="urlBar">
+                        <div class="input-group">
+                          <input type="text" id="csvURL" class="form-control" placeholder="Search for .CSV by URL...">
+                          <span class="input-group-btn">
+                            <button class="btn btn-primary" onclick="loadCSVremote()" type="button">Load!</button>
+                          </span>
+                        </div>
+                        <!-- Area for success message -->
+                        <div id="successMessage" align="center">
+                        </div>
+                        <!-- End: Area for success message -->
+                      </div>
+                    </p>
+                    <!-- End: URL search bar -->
+
+                    <!--Drop down for selecting axis -->
+                    <div class="select2Chosen" style="display:none" id="dropDownForInit">
+                      <h4 class "lead">
+                        Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
+                      <hr>
+                      <label for="x-axis">
+                        X-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
+                        </select>
+                      </label>
+                      <label for="y-axis">
+                        Y-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
+                        </select>
+                      </label>
+                      <label for="z-axis">
+                        Z-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
+                        </select>
+                      </label>
+                    </div>
+                    <!-- End: Drop down for selecting axis -->
+                    <br />
+                    <!-- Area to continue to virtual space if successful -->
+                    <div id="continueToVirtual" align="center">
+                    </div>
+                    <!-- End: Area to continue to virtual space if successful -->
+                  </div>
+
+                </div>
+                <a class="btn btn-default" href="#step1" data-toggle="tab" data-step="1">Start Over</a>
+              </div>
+              <div class="tab-pane fade" id="step4">
+                <div class="well">
+                  <h2>Step 4</h2> You're Done!</div>
+                <a class="btn btn-success first" href="#">Start over</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End: Modal box content-->
+</body>
+
+</html>

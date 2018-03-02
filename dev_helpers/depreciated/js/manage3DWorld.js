@@ -149,7 +149,8 @@ function build3DSpace() {
       renderer.vr.setDevice(display);
       animationDisplay = display;
       setStageDimensions(display.stageParameters);
-      camera.position.set(plotInitSizeX / 2.0, camera.position.y, plotInitSizeZ * 1.5);
+      camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+      camera.rotation.y = 270 * Math.PI / 180;
     })
     .catch(function() {
       // If there is no display available, fallback to window
@@ -158,7 +159,8 @@ function build3DSpace() {
 
   //Center the camera on the data and back so that you are not inside the first
   // cube
-  camera.position.set(plotInitSizeX / 2.0, camera.position.y, plotInitSizeZ * 1.5);
+  camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+  camera.rotation.y = 270 * Math.PI / 180;
   //This can be removed after development if desired
   drawFPSstats();
 
@@ -277,7 +279,7 @@ function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
-  camera.position.y = vrControls.userHeight;
+  camera.position.z = vrControls.userHeight;
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera);

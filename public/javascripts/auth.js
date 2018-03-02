@@ -49,7 +49,7 @@ function readWorld(worldId){
 //Input: the world contents in json format
 //Returns: unique id of world in the database
 function writeWorld(jsonFile){
-  var worldRef = firebase.database().ref('/worlds').push(jsonFile);
+  var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
 	var worldRefKey = worldRef.key;
 	return worldRefKey;
 }
@@ -97,10 +97,10 @@ function getWorldInfo(worldId){
 	}).then(function() {return result});
 }
 
-//test
-var worldId = '-L6UfQx0beRgpsbWxeNt';
-var result = getWorldInfo(worldId);
-console.log(result);
+//test getWorldInfo
+// var worldId = '-L6UfQx0beRgpsbWxeNt';
+// var result = getWorldInfo(worldId);
+// console.log(result);
 
 
 

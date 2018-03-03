@@ -232,7 +232,6 @@ body {
 
 #contentBox {
   position: relative;
-  top: 110px;
   border-radius: 25px;
   background: #0c0c0c;
   padding: 20px;
@@ -241,6 +240,12 @@ body {
   opacity: 0.75;
   display: block;
   align-self: center;
+}
+
+.worldOptions{
+  text-shadow: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
 }
 
 /*

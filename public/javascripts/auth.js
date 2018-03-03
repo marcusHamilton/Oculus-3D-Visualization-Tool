@@ -137,7 +137,6 @@ function readWorld(worldId){
 	var firebaseWorld;
   return database.ref('worlds/'+worldId).once('value').then(function(snapshot){
 		firebaseWorld = snapshot.val();
-		console.log(firebaseWorld);
     var numGeom = firebaseWorld.geometries.length;
 
     for (var i=0; i<numGeom; i++){
@@ -147,8 +146,8 @@ function readWorld(worldId){
 	}).then(function () {return firebaseWorld});
 }
 
-var result = readWorld('-L6cciLgse7gqXZ62iLp');
-console.log(result);
+console.log(readWorld('-L6cciLgse7gqXZ62iLp'));
+
 
 //Write World to Database
 //Input: the world contents in json format

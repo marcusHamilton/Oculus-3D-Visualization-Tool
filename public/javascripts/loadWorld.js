@@ -97,7 +97,6 @@ function Manager() {
   */
 
 
-
   console.log("Getting Scene from Firebase...");
   $.ajax({
     type: "GET",

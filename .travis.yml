@@ -1,0 +1,10 @@
+language: node_js
+node_js: "6.11.5"
+before_install:
+- cd ./functions
+- npm install --save-dev
+install: 
+- cd ..
+script:
+- cd ./functions
+- npm test

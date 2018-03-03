@@ -1,5 +1,10 @@
+[![Build Status](https://travis-ci.org/mah985/Oculus-3D-Visualization-Tool.svg?branch=Development)](https://travis-ci.org/mah985/Oculus-3D-Visualization-Tool)
+
 # Oculus-3D-Visualization-Tool
 A tool that allows the visualization  of data from a .csv file in a 3D virtual space.
+
+Latest Master branch can be used here:
+### [3D Visualization Tool](https://oculus-3d-visualization-c5687.firebaseapp.com/)
 
 ## Getting Started
 
@@ -9,27 +14,16 @@ These instructions will show you how to get the web service up and running on yo
 
 ```
 - An internet connection
-- Modern internet browser (Chrome, Firefox)
+- FireFox v.55.0 +
 - Node.js
 ```
+
+This web app is currently under heavy development. To view the current progress, you must host the project locally.
+
 To properly run this web service you will need to have Node.js installed.
 
-You may follow instructions on how to install via a package manager here:
-[Node.js](https://nodejs.org/en/download/package-manager/)
+You may follow instructions on how to get up and running on our git wiki or by clicking [here](https://github.com/mah985/Oculus-3D-Visualization-Tool/wiki/Dev-Instructions)
 
-- After installing node.js run the following commands:
-
-    ```
-    npm install
-    ```
-   This will install the needed dependencies.
-   Then in the root git directory run...
-    ```
-    npm start
-    ```
-   This will host the project on your local server.
-
-Once this is done you may navigate to http://localhost:8080/ in your browser.
 
 
 ## Built With

@@ -1,3 +1,4 @@
+
  /*
  *This JS file is responsible for the creation of a new 3d world.
  *It will take in a CSV file and in turn create a threejs world that contains the
@@ -215,18 +216,7 @@ function build3DSpace() {
 }
 
 
-/**
- * Draws a 3D point-field/scatterplot graph representation of the input
- * dataset with reasonable initial scaling.
- *
- * @precondition The CSV must be parsed so that parsedData is defined
- *
- * @param {Integer} xCol CSV column index for the x-axis
- * @param {Integer} yCol CSV column index for the y-axis
- * @param {Integer} zCol CSV column index for the z-axis
- *
- * @return 0 on success (Might change this to the mesh object itself).
- */
+
 function drawDataset(xCol, yCol, zCol) {
   assert(parsedData, 'parsedData must be defined for drawDataset()');
   assert(xCol >= 0,

@@ -204,28 +204,32 @@ function build3DSpace() {
   //var sceneJSON = JSON.strigify(scene);
   var sceneJSON = this.scene.toJSON();
 
-  try {
+  sceneJSON = JSON.parse(JSON.stringify(sceneJSON));
+  console.log(writeWorld(sceneJSON)); //writes the world and logs the world id
 
-    sceneJSON = JSON.stringify(sceneJSON, parseNumber, '\t');
-    sceneJSON = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
 
-  } catch (e) {
+  // try {
+  //
+  //   sceneJSON = JSON.stringify(sceneJSON, parseNumber, '\t');
+  //   sceneJSON = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
+  //
+  // } catch (e) {
+  //
+  //   sceneJSON = JSON.stringify(sceneJSON);
+  //
+  // }
 
-    sceneJSON = JSON.stringify(sceneJSON);
-
-  }
-  console.log("About to post:" + sceneJSON);
-  $.ajax({
-    type: "POST",
-    contentType: "application/json",
-    url: '/uploadWorld',
-    data: sceneJSON,
-    success: function(response) {
-      $('#myModal').modal('hide');
-      console.log("Post response is: " + response);
-      reloadWorlds();
-    }
-  });
+  // $.ajax({
+  //   type: "POST",
+  //   contentType: "application/json",
+  //   url: '/uploadWorld',
+  //   data: sceneJSON,
+  //   success: function(response) {
+  //     $('#myModal').modal('hide');
+  //     console.log("Post response is: " + response);
+  //     reloadWorlds();
+  //   }
+  // });
 }
 
 

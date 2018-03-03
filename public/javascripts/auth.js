@@ -32,18 +32,21 @@ var database = firebase.database();
 //Input: the world id (string)
 //Returns: the world contents as json
 function readWorld(worldId){
-  database.ref('worlds/'+worldId).once('value').then(function(snapshot){
-		var firebaseWorld = snapshot.val();
+	var firebaseWorld;
+  return database.ref('worlds/'+worldId).once('value').then(function(snapshot){
+		firebaseWorld = snapshot.val();
+		console.log(firebaseWorld);
     var numGeom = firebaseWorld.geometries.length;
 
     for (var i=0; i<numGeom; i++){
       firebaseWorld.geometries[i].data["normals"] = [];
       firebaseWorld.geometries[i].data["faces"] = [];
     }
-    return firebaseWorld;
-	})
+	}).then(function () {return firebaseWorld});
 }
 
+var result = readWorld('-L6cciLgse7gqXZ62iLp');
+console.log(result);
 
 //Write World to Database
 //Input: the world contents in json format

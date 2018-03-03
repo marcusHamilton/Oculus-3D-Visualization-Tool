@@ -22,6 +22,10 @@ var plotCenterVec3;
 var pointsSystem; //Seperate pointsSystem var to avoid coupling with newWorld. Might recouple and relink in VRWorld.ejs if this causes issues.
 var loadedDataset; //This is a staggered array for position, color, size and selected status of the dataset vertices
 
+var plotInitSizeX = 10;
+var plotInitSizeY = 5;
+var plotInitSizeZ = 10;
+var plotPointSizeCoeff = 0.01;
 
 //Called every frame
 function update(timestamp) {
@@ -88,6 +92,7 @@ function Manager() {
   var worldURL = '/worlds/' + worldID;
   console.log(worldURL);
 
+  console.log("Getting Scene from Firebase...");
   $.ajax({
     type: "GET",
     contentType: "application/json",
@@ -100,7 +105,7 @@ function Manager() {
       loadedDataset = object.userData ;
       console.log(loadedDataset);
       console.log(object);
-      //drawLoadedDataset();
+      drawDataset(userData[0][0],userData[0][1],userData[0][2]);
     }
   });
 
@@ -394,7 +399,7 @@ var largestEntry = 0;
  * Thanks to Dorian Thiessen who laid the foundational work for using
  * BufferGeometrys with shader definitions in VRWorld.ejs
  *
- * @precondition The CSV must be parsed so that parsedData is defined
+ * @precondition The CSV must be parsed so that loadedDataset is defined
  *
  * @param {Integer} xCol CSV column index for the x-axis
  * @param {Integer} yCol CSV column index for the y-axis
@@ -402,6 +407,117 @@ var largestEntry = 0;
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
+function drawDataset(xCol, yCol, zCol)
+{
+  assert(loadedDataset, 'loadedDataset must be defined for drawDataset()');
+  assert(xCol >= 0,
+      'drawDataset() xCol value must be a positive integer');
+  assert(yCol >= 0,
+      'drawDataset() yCol value must be a positive integer');
+  assert(zCol >= 0,
+      'drawDataset() zCol value must be a positive integer');
+
+  // points geometry contains a list of all the point vertices pushed below
+  pointsGeometry = new THREE.BufferGeometry();
+
+  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
+
+  // Grab the OpenGLSL shader definitions from page html
+  var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
+  var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
+
+  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
+
+  // Configure point material shader
+  var pointsMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+          color:   { value: new THREE.Color( 0xffffff ) }//,
+          // texture: { value: texture }
+      },
+      vertexShader: myVertexShader,
+      fragmentShader: myFragmentShader,
+  });
+
+  // Arrays to hold information to be passed into BufferGeometries
+  var positions = new Float32Array( loadedDataset.length * 3 );
+  var colors = new Float32Array( loadedDataset.length * 3 );
+  var sizes = new Float32Array( loadedDataset.length );
+  var selected = new Float32Array( loadedDataset.length );
+
+  // Base color object to be edited on each loop iteration below.
+  var color = new THREE.Color();
+
+  for (var i = 1; i < loadedDataset.length; i++) {
+      // Find the largest Entry, X, Y, and Z value ceilings in the data.
+      if (loadedDataset[i][xCol] > largestX) {
+          largestX = loadedDataset[i][xCol];
+      }
+      if (loadedDataset[i][yCol] > largestY) {
+          largestY = loadedDataset[i][yCol];
+      }
+      if (loadedDataset[i][zCol] > largestZ) {
+          largestZ = loadedDataset[i][zCol];
+      }
+      largestEntry = Math.max(largestX, largestY, largestZ);
+
+      // create a point Vector3 with xyz coordinates equal to the fraction of
+      // loadedDataset[i][xCol]/largestX times the initial plot size.
+      var pX = (loadedDataset[i][xCol]/largestX)*plotInitSizeX;
+      var pY = (loadedDataset[i][yCol]/largestY)*plotInitSizeY;
+      var pZ = (loadedDataset[i][zCol]/largestZ)*plotInitSizeZ;
+      var p = new THREE.Vector3(pX, pY, pZ);
+
+      // Add Vector3 p to the positions array to be added to BufferGeometry.
+      p.toArray( positions, i * 3 );
+
+      // Set point color RGB values to magnitude of XYZ values
+      color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
+      color.toArray( colors, i * 3 );
+
+      // Set the sizes of all the points to be added to BufferGeometry
+      sizes[i] = pointSize;
+
+  }
+
+
+  // Vector3 representing the plot center point
+  plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
+
+  // Add all the point information to the BufferGeometry
+  pointsGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+  pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
+  pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+  pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
+
+  // create the particle shader system
+  pointsSystem = new THREE.Points(
+      pointsGeometry,
+      pointsMaterial);
+
+  pointsSystem.name = "PointsSystem";
+  // add it to the scene
+  //scene.add(pointsSystem);
+  drawAxisLabels();
+
+}
+
+/*
+/**
+ * Draws a 3D point-field/scatterplot graph representation of the input
+ * dataset with reasonable initial scaling.
+ *
+ * Thanks to Dorian Thiessen who laid the foundational work for using
+ * BufferGeometrys with shader definitions in VRWorld.ejs
+ *
+ * @precondition The CSV must be parsed so that loadedDataset is defined
+ *
+ * @param {Integer} xCol CSV column index for the x-axis
+ * @param {Integer} yCol CSV column index for the y-axis
+ * @param {Integer} zCol CSV column index for the z-axis
+ *
+ * @return 0 on success (Might change this to the mesh object itself).
+ */
+/*
 function drawLoadedDataset()
 {
   var plotInitSizeX = loadedDataset[4][0];
@@ -455,7 +571,7 @@ function drawLoadedDataset()
     largestEntry = Math.max(largestX, largestY, largestZ);
 
     // create a point Vector3 with xyz coordinates equal to the fraction of
-    // parsedData[i][xCol]/largestX times the initial plot size.
+    // loadedDataset[i][xCol]/largestX times the initial plot size.
     var pX = (loadedDataset[0][i]/largestX)*plotInitSizeX;
     var pY = (loadedDataset[0][i+1]/largestY)*plotInitSizeY;
     var pZ = (loadedDataset[0][i+2]/largestZ)*plotInitSizeZ;
@@ -492,3 +608,77 @@ function drawLoadedDataset()
   scene.add(pointsSystem);
 }
 
+*/
+/**
+ * Indicates XYZ axes as Red, Blue, and Green lines respectively.
+ * Drawn from the origin
+ *
+ * @precondition scene must be initialized
+ *
+ * @postcondition axis labels are drawn from 0,0
+ */
+function drawAxisLabels() {
+  assert(scene, "Scene must be initialized for drawAxisLabels()");
+
+  // Set line colors
+  var materialX = new THREE.LineBasicMaterial({
+    color: 0xff0000
+  });
+  var materialY = new THREE.LineBasicMaterial({
+    color: 0x00ff00
+  });
+  var materialZ = new THREE.LineBasicMaterial({
+    color: 0x0000ff
+  });
+
+  // Create line geometries
+  var geometryX = new THREE.Geometry();
+  var geometryY = new THREE.Geometry();
+  var geometryZ = new THREE.Geometry();
+
+  // Push line points into geometries, extending 1.5X beyond the largest point
+  geometryX.vertices.push(new THREE.Vector3(0, 0, 0));
+  geometryX.vertices.push(new THREE.Vector3(plotInitSizeX * 1.5, 0, 0));
+
+  geometryY.vertices.push(new THREE.Vector3(0, 0, 0));
+  geometryY.vertices.push(new THREE.Vector3(0, plotInitSizeY * 1.5, 0));
+
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, 0));
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ * 1.5));
+
+  // Create line objects
+  var lineX = new THREE.Line(geometryX, materialX);
+  var lineY = new THREE.Line(geometryY, materialY);
+  var lineZ = new THREE.Line(geometryZ, materialZ);
+
+  // Add them to the scene
+  scene.add(lineX);
+  scene.add(lineY);
+  scene.add(lineZ);
+
+  // Grid lines
+  var lineXTicks = new LinkedList();
+  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++) {
+    lineXTicks.add(new THREE.Geometry());
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY, 0));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ));
+    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
+  }
+  var lineYTicks = new LinkedList();
+  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++) {
+    lineYTicks.add(new THREE.Geometry());
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY / largestY * yUnits, 0));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ));
+    scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
+  }
+  var lineZTicks = new LinkedList();
+  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++) {
+    lineZTicks.add(new THREE.Geometry());
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ / largestZ * zUnits));
+    scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
+  }
+}

@@ -201,7 +201,7 @@ function build3DSpace() {
 
   scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
 
-  drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
+  addParsedDataToScene();
 
   //Export the built world
   //var sceneJSON = JSON.strigify(scene);
@@ -233,9 +233,10 @@ function build3DSpace() {
 
 function addParsedDataToScene()
 {
-  console.log("Adding parsedData to scene");
-  scene.userData = parsedData;
-  console.log("Added parced data to scene")
+
+  scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+  //scene.userData. = parsedData;
+
 }
 
 /**
@@ -255,7 +256,6 @@ function addParsedDataToScene()
  */
 function drawDataset(xCol, yCol, zCol)
 {
-  addParsedDataToScene();
 /*
     assert(parsedData, 'parsedData must be defined for drawDataset()');
     assert(xCol >= 0,
@@ -357,10 +357,10 @@ function drawDataset(xCol, yCol, zCol)
     // add it to the scene
     //scene.add(pointsSystem);
 */
-    drawAxisLabels();
+    //drawAxisLabels();
 
 }
-
+/*
 /**
  * Indicates XYZ axes as Red, Blue, and Green lines respectively.
  * Drawn from the origin
@@ -368,7 +368,7 @@ function drawDataset(xCol, yCol, zCol)
  * @precondition scene must be initialized
  *
  * @postcondition axis labels are drawn from 0,0
- */
+ *//*
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
 
@@ -434,6 +434,7 @@ function drawAxisLabels() {
     scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
 }
+*/
 
 /**
  * Computes a color hex value based on the magnitudes of the xyz values in

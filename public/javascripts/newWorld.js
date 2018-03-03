@@ -231,6 +231,12 @@ function build3DSpace() {
   });
 }
 
+function addParsedDataToScene()
+{
+  console.log("Adding parsedData to scene");
+  scene.userData = parsedData;
+  console.log("Added parced data to scene")
+}
 
 /**
  * Draws a 3D point-field/scatterplot graph representation of the input
@@ -249,6 +255,8 @@ function build3DSpace() {
  */
 function drawDataset(xCol, yCol, zCol)
 {
+  addParsedDataToScene();
+/*
     assert(parsedData, 'parsedData must be defined for drawDataset()');
     assert(xCol >= 0,
         'drawDataset() xCol value must be a positive integer');
@@ -282,7 +290,7 @@ function drawDataset(xCol, yCol, zCol)
     var positions = new Float32Array( parsedData.length * 3 );
     var colors = new Float32Array( parsedData.length * 3 );
     var sizes = new Float32Array( parsedData.length );
-    var selected = new Uint8Array(parsedData.length);
+    var selected = new Float32Array( parsedData.length );
 
     // Base color object to be edited on each loop iteration below.
     var color = new THREE.Color();
@@ -317,7 +325,20 @@ function drawDataset(xCol, yCol, zCol)
         // Set the sizes of all the points to be added to BufferGeometry
         sizes[i] = pointSize;
 
-    }
+    }*/
+/*
+    var geometryAttributes = [];
+    geometryAttributes.push(positions);
+    geometryAttributes.push(colors);
+    geometryAttributes.push(sizes);
+    geometryAttributes.push(selected);
+    var plotInitSize = [plotInitSizeX, plotInitSizeY, plotInitSizeZ, plotPointSizeCoeff];
+    geometryAttributes.push(plotInitSize);
+    scene.userData = geometryAttributes;
+
+*/
+
+/*
     // Vector3 representing the plot center point
     plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
 
@@ -332,11 +353,12 @@ function drawDataset(xCol, yCol, zCol)
         pointsGeometry,
         pointsMaterial);
 
-  pointsSystem.name = "PointsSystem";
+    pointsSystem.name = "PointsSystem";
     // add it to the scene
-    scene.add(pointsSystem);
-
+    //scene.add(pointsSystem);
+*/
     drawAxisLabels();
+
 }
 
 /**

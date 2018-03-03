@@ -18,8 +18,9 @@ var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
-
+var plotCenterVec3;
 var pointsSystem; //Seperate pointsSystem var to avoid coupling with newWorld. Might recouple and relink in VRWorld.ejs if this causes issues.
+var loadedDataset; //This is a staggered array for position, color, size and selected status of the dataset vertices
 
 
 //Called every frame
@@ -86,6 +87,7 @@ function Manager() {
   scene = new THREE.Scene();
   var worldURL = '/worlds/' + worldID;
   console.log(worldURL);
+
   $.ajax({
     type: "GET",
     contentType: "application/json",
@@ -94,8 +96,11 @@ function Manager() {
       console.log("Loading: " + JSON.stringify(response));
       var loader = new THREE.ObjectLoader();
       var object = loader.parse(response);
-
       scene.add( object );
+      loadedDataset = object.userData ;
+      console.log(loadedDataset);
+      console.log(object);
+      //drawLoadedDataset();
     }
   });
 
@@ -103,13 +108,15 @@ function Manager() {
   var newWindow = window.open("");
   var body = newWindow.document.body;
   var text = "innerText" in body ? "innerText" : "textContent";
-  body[text] = scene.children
-*/
-  console.log(scene.children);
+  body[text] =
+    */
 
-  var loadedScene = scene.getObjectByProperty("Scene");
-  var loadedPointsSystem = loadedScene.getObjectByName("PointsSystem");
-  console.log(loadedPointsSystem);
+  //console.log(scene.children);
+  //console.log(loadedDataset);
+  //console.log(scene.getObjectByProperty("Scene").children);
+  //var loadedScene = scene.getObjectByProperty("Scene");
+  //var loadedPointsSystem = loadedScene.getObjectByName("PointsSystem");
+  //console.log(loadedPointsSystem);
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   renderer = new THREE.WebGLRenderer();
@@ -374,3 +381,114 @@ window.addEventListener('vr controller connected', function(event) {
     controller.parent.remove(controller)
   })
 })
+
+
+var largestX = 0;
+var largestY = 0;
+var largestZ = 0;
+var largestEntry = 0;
+/**
+ * Draws a 3D point-field/scatterplot graph representation of the input
+ * dataset with reasonable initial scaling.
+ *
+ * Thanks to Dorian Thiessen who laid the foundational work for using
+ * BufferGeometrys with shader definitions in VRWorld.ejs
+ *
+ * @precondition The CSV must be parsed so that parsedData is defined
+ *
+ * @param {Integer} xCol CSV column index for the x-axis
+ * @param {Integer} yCol CSV column index for the y-axis
+ * @param {Integer} zCol CSV column index for the z-axis
+ *
+ * @return 0 on success (Might change this to the mesh object itself).
+ */
+function drawLoadedDataset()
+{
+  var plotInitSizeX = loadedDataset[4][0];
+  var plotInitSizeY = loadedDataset[4][1];
+  var plotInitSizeZ = loadedDataset[4][2];
+  var plotPointSizeCoeff = loadedDataset[4][3];
+
+  // points geometry contains a list of all the point vertices pushed below
+  pointsGeometry = new THREE.BufferGeometry();
+
+  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
+
+  // Grab the OpenGLSL shader definitions from page html
+  var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
+  var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
+
+  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
+
+  // Configure point material shader
+  var pointsMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      color:   { value: new THREE.Color( 0xffffff ) }//,
+      // texture: { value: texture }
+    },
+    vertexShader: myVertexShader,
+    fragmentShader: myFragmentShader,
+  });
+
+  // Arrays to hold information to be passed into BufferGeometries
+  var positions = new Float32Array( loadedDataset[0].length * 3 );
+  var colors = new Float32Array( loadedDataset[1].length * 3 );
+  var sizes = new Float32Array( loadedDataset[2].length );
+  var selected = new Float32Array( loadedDataset[3].length );
+
+  // Base color object to be edited on each loop iteration below.
+  var color = new THREE.Color();
+
+  var numberOfPoints = loadedDataset[2].length;
+
+  for (var i = 0; i < numberOfPoints * 3; i=i+3) {
+    // Find the largest Entry, X, Y, and Z value ceilings in the positions data.
+    if (loadedDataset[0][i] > largestX) {
+      largestX = loadedDataset[0][i];
+    }
+    if (loadedDataset[0][i+1] > largestY) {
+      largestY = loadedDataset[0][i+1];
+    }
+    if (loadedDataset[0][i+2] > largestZ) {
+      largestZ = loadedDataset[0][i+2];
+    }
+    largestEntry = Math.max(largestX, largestY, largestZ);
+
+    // create a point Vector3 with xyz coordinates equal to the fraction of
+    // parsedData[i][xCol]/largestX times the initial plot size.
+    var pX = (loadedDataset[0][i]/largestX)*plotInitSizeX;
+    var pY = (loadedDataset[0][i+1]/largestY)*plotInitSizeY;
+    var pZ = (loadedDataset[0][i+2]/largestZ)*plotInitSizeZ;
+    var p = new THREE.Vector3(pX, pY, pZ);
+
+    // Add Vector3 p to the positions array to be added to BufferGeometry.
+    p.toArray( positions, i );
+
+    // Set point color RGB values to magnitude of XYZ values
+    color.setRGB(loadedDataset[0][i]/largestX, loadedDataset[0][i+1]/largestY, loadedDataset[0][i+2]/largestZ);
+    color.toArray( colors, i );
+  }
+  for (var j = 0; j < numberOfPoints; j++){
+    sizes[j] = loadedDataset[2][j];
+    selected[j] = loadedDataset[3][j];
+  }
+
+  // Vector3 representing the plot center point
+  plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
+
+  // Add all the point information to the BufferGeometry
+  pointsGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+  pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
+  pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+  pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
+
+  // create the particle shader system
+  pointsSystem = new THREE.Points(
+    pointsGeometry,
+    pointsMaterial);
+
+  pointsSystem.name = "PointsSystem";
+  // add it to the scene
+  scene.add(pointsSystem);
+}
+

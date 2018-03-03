@@ -3,31 +3,28 @@
  */
 
 //selenium web driver require for all test suite
-var webdriver = require('selenium-webdriver'),
-    { describe, it, before, after } = require('selenium-webdriver/testing');
+var webdriver = require('selenium-webdriver');
+  //  { describe, it, before, after } = require('selenium-webdriver/testing');
 
         By = webdriver.By,
         until = webdriver.until,
         assert = require('assert');
-
 /**
- * If we are using Firefox for testing, we need to set up
- * Firefox browser option because our team use Firefox developer edition, not the default Firefox
+ * Using Firefox for testing, we need to install geckodriver
+ * Using chrom for testing, we need to install chromedriver
  */
 //var firefox = require('selenium-webdriver/firefox');
 
 //var profile = new firefox.Profile( '/Users/homeyxue/Library/Application Support/Firefox/Profiles/8htp4yu0.dev-edition-default');
 //var firefoxOptions = new firefoxOptions().setProfile(profile);
-describe('home page test Suite', function(){
-
-    this.timeout(50000);    //50 second time out max for waiting
+describe('home page test Suite', function(done){
+  this.timeout(50000);
     /**
-     * web driver for each test case
+     * web driver for test case
      */
-    beforeEach(function(){
-
-        var driver = new webdriver.Builder()
-            .forBrowser('chrome')
+    before(() =>{
+        driver = new webdriver.Builder()
+            .forBrowser('firefox')
             .build();
         driver.get("https://3dvisualizationtool.ml");
 
@@ -40,136 +37,151 @@ describe('home page test Suite', function(){
     });
 
     /**
-     * close web driver after each test case
+     * close web driver after test case
      */
-    afterEach(function(){
-
+    after(() =>{
         driver.quit();
-
     });
 
-    it("Timeout", function(){
+    it("title should print", () =>{
 
-        var promise;
-        promise = new Promise(function(resolve, reject){
-            setTimeout(function(){
-
-                console.log("Timeout");
-                resolve();
-
-            }, 50000);  //50 seconds time out
-
-        });
-        // mocha will wait for the promise to be resolved before exiting
-        return promise;
-    });
-
-    it("Title should print", function(){
-        return driver.getTitle().then(function ( title ) {
+        driver.getTitle().then(function ( title ) {
             console.log(title);
 
             assert(title === "3D Visualization Tool");
         });
     });
 
-    it("home button should be active", function(){
+    it("home should be active", () => {
 
-        var my_classType = 'active';
-        var my_href = '/';
+      var home = driver.findElement(By.name('Home'));
+      home.getAttribute('className').then(function(field){
+        assert(field === 'active');
+      });
+    })
 
-        var button = driver.findElement(By.className(my_classType));
-        expect(button.href).toEqual(my_href);
+    it("click Home should work", () =>{
+
+      var home = driver.findElement(By.name('Home'));
+      home.click();
+      driver.wait(until.elementLocated(By.className('masthead-brand')), 5000);     //should stay in the same page
+      driver.getCurrentUrl().then(function( url ){
+          assert(url === "https://3dvisualizationtool.ml");
+      });
     });
 
-    it("home page body should display", function() {
+    it("click Features should work", () =>{
 
-        var body_1 = driver.findElement(By.className('site-wapper'));
-        var body_2 = driver.findElement(By.className('site-wapper-inner'));
-        var body_3 = driver.findElement(By.className('container'));
-
-        expect(body_1.isDisplayed()).toEqual([true]);
-        expect(body_2.isDisplayed()).toEqual([true]);
-        expect(body_3.isDisplayed()).toEqual([true]);
+      var feature = driver.findElement(By.name('Features'));     /** Dashboard button should click*/
+      feature.click();
+      driver.wait(until.elementLocated(By.className('inner cover')), 5000);     //'inner cover' is a id of a new element, therefore should work'
+      driver.getCurrentUrl().then(function( url ){
+          assert(url === "https://3dvisualizationtool.ml/features");
+      });
     });
 
-    it("home page title & nav should display", function() {
+    it("click About Us should work", () =>{
 
-        var top = driver.findElement(By.className('container inner'));
-        var title = driver.findElement(By.className('masthead-brand'));
-        var nav = driver.findElement(By.className('nav masthead-nav'));
-
-        expect(top.isDisplayed()).toEqual([true]);
-        expect(title.isDisplayed()).toEqual([true]);
-        expect(nav.isDisplayed()).toEqual([true]);
+      var about = driver.findElement(By.name('About Us'));     /** Dashboard button should click*/
+      about.click();
+      driver.wait(until.elementLocated(By.className('inner cover')), 5000);     //'inner cover' is a id of a new element, therefore should work'
+      driver.getCurrentUrl().then(function( url ){
+          assert(url === "https://3dvisualizationtool.ml/about");
+      });
     });
 
-    it("Click dashboard button should work", function(){
+    it("click Dashboard(nav bar) should work", () =>{
+
+      var about = driver.findElement(By.name('Dashboard'));     /** Dashboard button should click*/
+      about.click();
+      driver.wait(until.elementLocated(By.id('contentBox')), 5000);     //'contentBox' is a id of a new element, therefore should work'
+      driver.getCurrentUrl().then(function( url ){
+          assert(url === "https://3dvisualizationtool.ml/dashboard");
+      });
+    });
+
+    it("click dashboard button should work", () =>{
+
         var dashboard = driver.findElement(By.className('btn btn-lg btn-default'));     /** Dashboard button should click*/
         dashboard.click();
-        driver.wait(until.elementLocated(By.id('contentBox')), 5000);     //'contentBox is a id of a new element, therefore should work'
+        driver.wait(until.elementLocated(By.id('contentBox')), 5000);     //'contentBox' is a id of a new element, therefore should work'
         driver.getCurrentUrl().then(function( url ){
             assert(url === "https://3dvisualizationtool.ml/dashboard");
         });
-
     });
 });
 
-describe("Dashboard page test Suite", function(){
-    this.timeout(50000);    //50 second time out for waiting
+describe("Dashboard page test Suite", function(done){
+  this.timeout(50000);
     /**
-     * web driver for each test case
+     * web driver for test case
      */
-    beforeEach(function(){
-
+    before(function(){
         driver = new webdriver.Builder()
-            .forBrowser('chrome')
+            .forBrowser('firefox')
             .build();
-
         driver.get("https://3dvisualizationtool.ml/dashboard");
     });
 
     /**
-     * close web driver after each test case
+     * close web driver after test case
      */
-    afterEach(function(){
-
-        return driver.quit(s);
-
+    after(function(){
+        driver.quit();
     });
 
-    it("dashboard button should be active", function(){
+/**
+ * Command out for now
+ * because google switch account is not working yet
+ */
 
-        var my_classType = 'active';
-        var my_href = '/dashboard';
+/**
+    it("click google button should work", () =>{
 
-        var button = driver.findElement(By.className(my_classType));
-        expect(button.href).toEqual(my_href);
+        var google = driver.findElement(By.id('connecteddq7u6owam3f3'));
+        google.click();
+        //TODO: test switch account function
     });
+    */
 
-    it("dashboard page body should display", function() {
+    it("dashboard should be active", () => {
 
-        var body_1 = driver.findElement(By.className('site-wapper'));
-        var body_2 = driver.findElement(By.className('site-wapper-inner'));
-        var body_3 = driver.findElement(By.className('container'));
-
-        expect(body_1.isDisplayed()).toEqual([true]);
-        expect(body_2.isDisplayed()).toEqual([true]);
-        expect(body_3.isDisplayed()).toEqual([true]);
+      var dash = driver.findElement(By.name('Dashboard'));
+      dash.getAttribute('className').then(function(field){
+        assert(field === 'active');
+      });
     })
 
-    it("dashboard page title & nav should display", function() {
+    it("click VRworld should work", () => {
 
-        var top = driver.findElement(By.className('container inner'));
-        var title = driver.findElement(By.className('masthead-brand'));
-        var nav = driver.findElement(By.className('nav masthead-nav'));
+        var VRw0 = driver.findElement(By.id('-L6UcY0EKaTU24sRbEq3'));
+        var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
+        var VRw2 = driver.findElement(By.id('-L6Ud_fayHJ9kHcmOwRf'));
 
-        expect(top.isDisplayed()).toEqual([true]);
-        expect(title.isDisplayed()).toEqual([true]);
-        expect(nav.isDisplayed()).toEqual([true]);
+        VRw0.click();
+        driver.wait(until.elementLocated(By.name('VR Visualization Tool')), 5000);     //'VR Visualization Tool' is a new element, therefore should work'
+        driver.getCurrentUrl().then(function( url ){
+            assert(url === "https://3dvisualizationtool.ml/VRWorld");
+        });
     })
 
+    it("VRworld should work without VR", () => {
 
-    it("should load file", function() {
+        var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
+        VRw1.click();
+        driver.wait(until.elementLocated(By.name('VR Visualization Tool')), 5000);     //'VR Visualization Tool' is a new element, therefore should work'
+
+        var noVR = driver.findElement(By.name('Try it without a headset'));
+        noVR.click();
+        driver.wait(until.elementLocated(By.name('EXIT VR')), 5000);
+
+        var display = driver.findElement(By.id('ui'));
+        display.getAttribute('style').then(function(field){
+          assert(field === 'display: none;');
+        });
+    })
+
+    it("should load local file", function() {
 
         var button = driver.findElement(By.className('btn btn-info btn-lg'));
         button.click();
@@ -185,12 +197,6 @@ describe("Dashboard page test Suite", function(){
         var button3 = driver.findElement(By.name('Load!'));
         button3.click();
 
-        /**
-         * TODO: load file; no idea how to check correctness yet
-         *
-         */
     })
-
-
 
 });

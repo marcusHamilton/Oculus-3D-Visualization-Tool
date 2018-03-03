@@ -13,10 +13,10 @@ var webdriver = require('selenium-webdriver');
  * Using Firefox for testing, we need to install geckodriver
  * Using chrom for testing, we need to install chromedriver
  */
-//var firefox = require('selenium-webdriver/firefox');
+var firefox = require('selenium-webdriver/firefox');
 
-//var profile = new firefox.Profile( '/Users/homeyxue/Library/Application Support/Firefox/Profiles/8htp4yu0.dev-edition-default');
-//var firefoxOptions = new firefoxOptions().setProfile(profile);
+var profile = new firefox.Profile( '/Users/homeyxue/Library/Application Support/Firefox/Profiles/8htp4yu0.dev-edition-default');
+var firefoxOptions = new firefoxOptions().setProfile(profile);
 describe('home page test Suite', function(done){
   this.timeout(50000);
     /**

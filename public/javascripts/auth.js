@@ -12,14 +12,103 @@ firebase.initializeApp(config);
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
-// //Force user to sign in
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // User is signed in.
-  } else {
-  	firebase.auth().signInWithRedirect(provider);
-  }
-});
+// // //Force user to sign in
+// firebase.auth().onAuthStateChanged(function(user) {
+//   if (user) {
+//     // User is signed in.
+//   } else {
+//   	firebase.auth().signInWithRedirect(provider);
+//   }
+// });
+
+//******************************************************************************
+//                          DATABASE functions
+//******************************************************************************
+
+var database = firebase.database();
+
+
+//Read World
+//Input: the world id (string)
+//Returns: the world contents as json
+function readWorld(worldId){
+  database.ref('worlds/'+worldId).once('value').then(function(snapshot){
+		var firebaseWorld = snapshot.val();
+    var numGeom = firebaseWorld.geometries.length;
+
+    for (var i=0; i<numGeom; i++){
+      firebaseWorld.geometries[i].data["normals"] = [];
+      firebaseWorld.geometries[i].data["faces"] = [];
+    }
+    return firebaseWorld;
+	})
+}
+
+
+//Write World to Database
+//Input: the world contents in json format
+//Returns: unique id of world in the database
+function writeWorld(jsonFile){
+  var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
+	var worldRefKey = worldRef.key;
+	return worldRefKey;
+}
+
+
+//You only need to call this function once and it will listen for changes.
+//+	Whenever a geometry in the world changes, the contents of this function
+//+	will be run.
+//Input: current world id
+//Returns: geometry object (json) that has changed in the database
+function onGeometryDatabaseChange(worldId){
+	var worldRef = firebase.database().ref('worlds/'+worldId+'/geometries');
+	worldRef.on('child_changed', function(snapshot) {
+	  console.log(snapshot.val());
+		// UPDATE THE GEOMETRY IN THE SCENE
+	  });
+}
+
+
+/*
+When a geometry changes on the client side, this function needs to be called
+in order to update the geometry in the database.
+Input: worldId -> id of the world
+			 geometryId -> id of the geometry
+			 geometry -> the geometry in json format
+Returns: geometry will be updated in the database
+*/
+function updateGeometryInDatabase(worldId, geometryId, geometry){
+	var geometryRef = database.ref('worlds/'+worldId+'/'+geometryId);
+	geometryRef.update(geometry);
+}
+
+
+/*
+Query a worldInfo object by world id
+Input: the id of the world
+Returns: worldInfo json object with matching world id
+*/
+function getWorldInfo(worldId){
+	var result;
+	var worldInfoRef = database.ref('worldInfo');
+	var queryRef = worldInfoRef.orderByChild("ID").equalTo(worldId);
+	return queryRef.once('value').then(function(snapshot){
+		result = snapshot.val();
+	}).then(function() {return result});
+}
+
+//test getWorldInfo
+// var worldId = '-L6UfQx0beRgpsbWxeNt';
+// var result = getWorldInfo(worldId);
+// console.log(result);
+
+
+
+//******************************************************************************
+//******************************************************************************
+
+
+
 
 function onSignIn(googleUser) {
   console.log('Google Auth Response', googleUser);

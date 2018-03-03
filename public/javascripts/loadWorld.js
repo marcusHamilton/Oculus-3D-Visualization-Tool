@@ -92,6 +92,12 @@ function Manager() {
   var worldURL = '/worlds/' + worldID;
   console.log(worldURL);
 
+  /*
+  FIREBASE GET
+  */
+
+
+
   console.log("Getting Scene from Firebase...");
   $.ajax({
     type: "GET",

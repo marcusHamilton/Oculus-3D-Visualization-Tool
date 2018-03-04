@@ -39,21 +39,20 @@ function pointSelectionUpdate()
 {
 
   // calculate objects intersecting the ray
-    pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
-    intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
-    intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
+  pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+  intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
+  intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
 
-    if (intersects != null)
-    console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
-    for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++)
-    {
+  if (intersects != null) {
+    //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
+    for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
       if (Math.abs(pointsGeometry.getAttribute('position').array[i].x - intersects.point.x) < selectionThreshold
         && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
-        && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold)
-      {
+        && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold) {
         setPointColor(i, new THREE.Color(1, 1, 1));
       }
     }
+  }
 
 }
 
@@ -103,12 +102,13 @@ function onMouseMove( event ) {
 function onClick( event ){
 
   event.preventDefault();
-  for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
+  if (intersects != null) {
+    for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
       if (Math.abs(pointsGeometry.getAttribute('position').array[i].x - intersects.point.x) < selectionThreshold
-          && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
-          && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold)
-      {
-          selectPoint(i);
+        && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
+        && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold) {
+        selectPoint(i);
       }
+    }
   }
 }

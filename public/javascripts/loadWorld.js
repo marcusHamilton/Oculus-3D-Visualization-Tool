@@ -1,9 +1,7 @@
-/*
- *This is responsible for loading and handling the usage of a threejs world.
- *Controls, and VR detection are all to be handled here
+/**
+ * Contains all major functions called on the VRWorld.ejs page for loading an
+ * existing world from the database and drawing the data visualization.
  */
-
-//Set up essential global elements
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
@@ -18,17 +16,24 @@ var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
-var controller;
+var controller; //VR Controller object
 
-var pointsSystem;
-var pointsGeometry;
-var loadedDataset;
-var plotInitSizeX = 10;
-var plotInitSizeY = 5;
-var plotInitSizeZ = 10;
-var plotPointSizeCoeff = 0.01;
+var pointsSystem; //THREE.js Points system for shader based visualization
+var pointsGeometry; //THREE.js BufferGeometry contains vertices for datapoints
+var loadedDataset; //Parsed dataset array
+var plotInitSizeX = 10; //Initial X dimension of dataset visualization
+var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
+var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
+var plotPointSizeCoeff = 0.01; //Default datapoint size
+var largestX = 0; //Largest X value in the dataset for selected columns
+var largestY = 0; //Largest Y value in the dataset for selected columns
+var largestZ = 0; //Largest Z value in the dataset for selected columns
+var largestEntry = 0; //Largest value in the dataset for selected columns
+var plotCenterVec3; //Centerpoint of visualization in world space
 
-//Called every frame
+/**
+ * Called every frame
+ */
 function update(timestamp) {
   //Calculate delta to allow smoother object movement
   if (timestamp == null) {
@@ -48,18 +53,19 @@ function update(timestamp) {
   trackballControls.update();
   THREE.VRController.update();
 
-    //Allows point selection to function
-    pointSelectionUpdate();
-    // set BufferGeometry (in drawDataset.js) attributes to be updatable.
-    // (This must be set every time you want the buffergeometry to change.
-    pointsGeometry.getAttribute('customColor').needsUpdate = true;
-    pointsGeometry.getAttribute('position').needsUpdate = true;
-    pointsGeometry.getAttribute('size').needsUpdate = true;
-    pointsGeometry.getAttribute('isSelected').needsUpdate = true;
-
+  //Allows point selection to function
+  pointSelectionUpdate();
+  // set BufferGeometry object attributes to be updatable.
+  // (This must be set every time you want the buffergeometry to change.
+  pointsGeometry.getAttribute('customColor').needsUpdate = true;
+  pointsGeometry.getAttribute('position').needsUpdate = true;
+  pointsGeometry.getAttribute('size').needsUpdate = true;
+  pointsGeometry.getAttribute('isSelected').needsUpdate = true;
 }
 
-//Draw game objects to the scene
+/**
+ * Draw game objects to the scene
+ */
 function render(timestamp) {
 
   if (enterVR.isPresenting()) {
@@ -71,10 +77,10 @@ function render(timestamp) {
   }
 }
 
-/*
-Manages program logic. Update, Render, Repeat
-DO NOT add anything to this.
-*/
+/**
+ * Manages program logic. Update, Render, Repeat
+ * DO NOT add anything to this.
+ */
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
@@ -82,6 +88,10 @@ var GameLoop = function(timestamp) {
   animationDisplay.requestAnimationFrame(GameLoop);
 };
 
+/**
+ * Manages retrieval of existing worlds from the database and initializes the
+ * current scene.
+ */
 function Manager() {
   //Initialize camera, scene, and renderer
   //First get the scene from the data base
@@ -90,22 +100,22 @@ function Manager() {
   console.log('worldID is: '+worldID);
   scene = new THREE.Scene();
   var worldURL = '/worlds/' + worldID;
-  // console.log(worldURL);
 
-  /*
-  FIREBASE GET
+  /**
+   * FIREBASE GET
   */
   function loadScene(response){
-    //console.log("Loading: " + JSON.stringify(response));
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
     scene.add(object);
     loadedDataset = object.userData;
     console.log("Loaded Dataset:");
+    console.log(" - Index 0 = Selected axes");
+    console.log(" - Index 1 = Column labels");
+    console.log(" - Index >1 = Entire dataset");
     console.log(loadedDataset);
     console.log("Retrived Scene Object:");
     console.log(object);
-
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     renderer = new THREE.WebGLRenderer();
@@ -136,7 +146,6 @@ function Manager() {
         // If there is no display available, fallback to window
         animationDisplay = window;
       });
-S
 
     //This can be removed after development if desired
     drawFPSstats();
@@ -151,19 +160,17 @@ S
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
-
   }
 
   console.log("Getting Scene from Firebase... (May take a few moments for large datasets).");
   readWorld(worldID, loadScene);
-
 }
 
-/*
-This draws the fps and various stats to the page.
-Click on the widget to see other stats.
-Can be removed after development.
-*/
+/**
+ * This draws the fps and various stats to the page.
+ * Click on the widget to see other stats.
+ * Can be removed after development.
+ */
 function drawFPSstats() {
   (function() {
     var script = document.createElement('script');
@@ -181,11 +188,11 @@ function drawFPSstats() {
 }
 
 
-/*
-Listens and adapts the aspect ratio and size of the canvas
-This allows the scene to hold its shape when the browser is
-resized.
-*/
+/**
+ * Listens and adapts the aspect ratio and size of the canvas
+ * This allows the scene to hold its shape when the browser is
+ * resized.
+ */
 function onResize(e) {
   windowWidth = window.innerWidth;
   windowHeight = window.innerHeight;
@@ -195,12 +202,12 @@ function onResize(e) {
   camera.updateProjectionMatrix();
 }
 
-/*
-Determines whether or not a VR headset is available.
-If not it allows the user to try without a headset as well
-as offers a link to the webvr page to learn more.
-On clicking enter vr the scene is loaded appropriately for the
-headset.
+/**
+ * Determines whether or not a VR headset is available.
+ * If not it allows the user to try without a headset as well
+ * as offers a link to the webvr page to learn more.
+ * On clicking enter vr the scene is loaded appropriately for the
+ * headset.
 */
 function addEnterVrButtons() {
   // Create WebVR UI Enter VR Button
@@ -232,12 +239,11 @@ function addEnterVrButtons() {
     });
   // Add button to the #button element
   document.getElementById("vr-button").appendChild(enterVR.domElement);
-
 }
 
-/*
-These are the head controls as well as the ability to move around in 2d space. They do not correspond to the hand controls.
-*/
+/**
+ * These are the head controls as well as the ability to move around in 2d space. They do not correspond to the hand controls.
+ */
 function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
@@ -256,7 +262,7 @@ function setUpControls() {
   trackballControls.keys = [65, 83, 68];
 
   //Add selection controls
-    initializeSelectionControls();
+  initializeSelectionControls();
 
   //Apply VR stereo rendering to renderer.
   effect = new THREE.VREffect(renderer);
@@ -264,11 +270,8 @@ function setUpControls() {
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
   //Set up controls gui
-
-
   applyDown = function(obj, key, value) {
-
-    obj[key] = value
+    obj[key] = value;
     if (obj.children !== undefined && obj.children.length > 0) {
 
       obj.children.forEach(function(child) {
@@ -276,117 +279,102 @@ function setUpControls() {
         applyDown(child, key, value)
       })
     }
-  }
+  };
   castShadows = function(obj) {
-
     applyDown(obj, 'castShadow', true)
-  }
+  };
   receiveShadows = function(obj) {
-
     applyDown(obj, 'receiveShadow', true)
-  }
+  };
 
   //Arbitrary shape for testing gui settings
   torus = new THREE.Mesh(
-
     new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
     new THREE.MeshStandardMaterial({
       roughness: 0.01,
       metalness: 0.2
     })
-  )
-  torus.position.set(-0.25, 1.4, -1.5)
-  torus.castShadow = true
-  torus.receiveShadow = true
-  scene.add(torus)
-
+  );
+  torus.position.set(-0.25, 1.4, -1.5);
+  torus.castShadow = true;
+  torus.receiveShadow = true;
+  scene.add(torus);
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-
-  dat.GUIVR.enableMouse(camera)
-  var gui = dat.GUIVR.create('Settings')
-  gui.position.set(0.2, 0.8, -1)
-  gui.rotation.set(Math.PI / -6, 0, 0)
-  scene.add(gui)
-  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X')
-  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y')
-  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen()
-  castShadows(gui)
-
+  dat.GUIVR.enableMouse(camera);
+  var gui = dat.GUIVR.create('Settings');
+  gui.position.set(0.2, 0.8, -1);
+  gui.rotation.set(Math.PI / -6, 0, 0);
+  scene.add(gui);
+  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
+  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
+  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
+  castShadows(gui);
 }
 
-/*
-The following is an event listener for when a hand held controller is connected
-*/
+/**
+ * The following is an event listener for when a hand held controller is connected
+ */
 window.addEventListener('vr controller connected', function(event) {
 
-  controller = event.detail
-  scene.add(controller)
+  controller = event.detail;
+  scene.add(controller);
 
   //Ensure controllers appear at the right height
-  //controller.standingMatrix = renderer.vr.getStandingMatrix()
-
-  controller.head = window.camera
+  //controller.standingMatrix = renderer.vr.getStandingMatrix();
+  controller.head = window.camera;
 
   //Add a visual for the controllers
   var
     meshColorOff = 0xDB3236, //  Red.
     meshColorOn = 0xF4C20D, //  Yellow.
     controllerMaterial = new THREE.MeshStandardMaterial({
-
       color: meshColorOff
     }),
     controllerMesh = new THREE.Mesh(
-
       new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
       controllerMaterial
     ),
     handleMesh = new THREE.Mesh(
-
       new THREE.BoxGeometry(0.03, 0.1, 0.03),
       controllerMaterial
-    )
+    );
 
-  controllerMaterial.flatShading = true
-  controllerMesh.rotation.x = -Math.PI / 2
-  handleMesh.position.y = -0.05
-  controllerMesh.add(handleMesh)
-  controller.userData.mesh = controllerMesh //  So we can change the color later.
-  controller.add(controllerMesh)
-  castShadows(controller)
-  receiveShadows(controller)
+  controllerMaterial.flatShading = true;
+  controllerMesh.rotation.x = -Math.PI / 2;
+  handleMesh.position.y = -0.05;
+  controllerMesh.add(handleMesh);
+  controller.userData.mesh = controllerMesh;//  So we can change the color later.
+  controller.add(controllerMesh);
+  castShadows(controller);
+  receiveShadows(controller);
 
 
   //  Allow this controller to interact with DAT GUI.
-
-  var guiInputHelper = dat.GUIVR.addInputObject(controller)
-  scene.add(guiInputHelper)
-
+  var guiInputHelper = dat.GUIVR.addInputObject(controller);
+  scene.add(guiInputHelper);
 
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {
 
-    event.target.userData.mesh.material.color.setHex(meshColorOn)
+    event.target.userData.mesh.material.color.setHex(meshColorOn);
     guiInputHelper.pressed(true)
-  })
+  });
   controller.addEventListener('primary press ended', function(event) {
 
-    event.target.userData.mesh.material.color.setHex(meshColorOff)
+    event.target.userData.mesh.material.color.setHex(meshColorOff);
     guiInputHelper.pressed(false)
-  })
+  });
 
   //On controller removal
   controller.addEventListener('disconnected', function(event) {
 
     controller.parent.remove(controller)
   })
-})
+});
 
-var largestX = 0;
-var largestY = 0;
-var largestZ = 0;
-var largestEntry = 0;
+
 /**
  * Draws a 3D point-field/scatterplot graph representation of the input
  * dataset with reasonable initial scaling.
@@ -471,9 +459,7 @@ function drawDataset(xCol, yCol, zCol)
 
     // Set the sizes of all the points to be added to BufferGeometry
     sizes[i] = pointSize;
-
   }
-
 
   // Vector3 representing the plot center point
   plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
@@ -493,123 +479,13 @@ function drawDataset(xCol, yCol, zCol)
   // add it to the scene
   scene.add(pointsSystem);
   drawAxisLabels();
-
 }
 
-/*
-/**
- * Draws a 3D point-field/scatterplot graph representation of the input
- * dataset with reasonable initial scaling.
- *
- * Thanks to Dorian Thiessen who laid the foundational work for using
- * BufferGeometrys with shader definitions in VRWorld.ejs
- *
- * @precondition The CSV must be parsed so that loadedDataset is defined
- *
- * @param {Integer} xCol CSV column index for the x-axis
- * @param {Integer} yCol CSV column index for the y-axis
- * @param {Integer} zCol CSV column index for the z-axis
- *
- * @return 0 on success (Might change this to the mesh object itself).
- */
-/*
-function drawLoadedDataset()
-{
-  var plotInitSizeX = loadedDataset[4][0];
-  var plotInitSizeY = loadedDataset[4][1];
-  var plotInitSizeZ = loadedDataset[4][2];
-  var plotPointSizeCoeff = loadedDataset[4][3];
-
-  // points geometry contains a list of all the point vertices pushed below
-  pointsGeometry = new THREE.BufferGeometry();
-
-  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
-
-  // Grab the OpenGLSL shader definitions from page html
-  var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
-  var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
-
-  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
-
-  // Configure point material shader
-  var pointsMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      color:   { value: new THREE.Color( 0xffffff ) }//,
-      // texture: { value: texture }
-    },
-    vertexShader: myVertexShader,
-    fragmentShader: myFragmentShader,
-  });
-
-  // Arrays to hold information to be passed into BufferGeometries
-  var positions = new Float32Array( loadedDataset[0].length * 3 );
-  var colors = new Float32Array( loadedDataset[1].length * 3 );
-  var sizes = new Float32Array( loadedDataset[2].length );
-  var selected = new Float32Array( loadedDataset[3].length );
-
-  // Base color object to be edited on each loop iteration below.
-  var color = new THREE.Color();
-
-  var numberOfPoints = loadedDataset[2].length;
-
-  for (var i = 0; i < numberOfPoints * 3; i=i+3) {
-    // Find the largest Entry, X, Y, and Z value ceilings in the positions data.
-    if (loadedDataset[0][i] > largestX) {
-      largestX = loadedDataset[0][i];
-    }
-    if (loadedDataset[0][i+1] > largestY) {
-      largestY = loadedDataset[0][i+1];
-    }
-    if (loadedDataset[0][i+2] > largestZ) {
-      largestZ = loadedDataset[0][i+2];
-    }
-    largestEntry = Math.max(largestX, largestY, largestZ);
-
-    // create a point Vector3 with xyz coordinates equal to the fraction of
-    // loadedDataset[i][xCol]/largestX times the initial plot size.
-    var pX = (loadedDataset[0][i]/largestX)*plotInitSizeX;
-    var pY = (loadedDataset[0][i+1]/largestY)*plotInitSizeY;
-    var pZ = (loadedDataset[0][i+2]/largestZ)*plotInitSizeZ;
-    var p = new THREE.Vector3(pX, pY, pZ);
-
-    // Add Vector3 p to the positions array to be added to BufferGeometry.
-    p.toArray( positions, i );
-
-    // Set point color RGB values to magnitude of XYZ values
-    color.setRGB(loadedDataset[0][i]/largestX, loadedDataset[0][i+1]/largestY, loadedDataset[0][i+2]/largestZ);
-    color.toArray( colors, i );
-  }
-  for (var j = 0; j < numberOfPoints; j++){
-    sizes[j] = loadedDataset[2][j];
-    selected[j] = loadedDataset[3][j];
-  }
-
-  // Vector3 representing the plot center point
-  plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
-
-  // Add all the point information to the BufferGeometry
-  pointsGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-  pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
-  pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
-  pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
-
-  // create the particle shader system
-  pointsSystem = new THREE.Points(
-    pointsGeometry,
-    pointsMaterial);
-
-  pointsSystem.name = "PointsSystem";
-  // add it to the scene
-  scene.add(pointsSystem);
-}
-
-*/
 /**
  * Indicates XYZ axes as Red, Blue, and Green lines respectively.
  * Drawn from the origin
  *
  * @precondition scene must be initialized
- *
  * @postcondition axis labels are drawn from 0,0
  */
 function drawAxisLabels() {

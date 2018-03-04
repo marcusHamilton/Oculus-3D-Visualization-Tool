@@ -20,6 +20,7 @@ var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
 
 var pointsSystem;
+var pointsGeometry;
 var loadedDataset;
 var plotInitSizeX = 10;
 var plotInitSizeY = 5;
@@ -100,8 +101,7 @@ function Manager() {
     loadedDataset = object.userData;
     console.log(loadedDataset);
     console.log(object);
-    // The [0] index of loadedDataset contains the 3 selected axis column indices
-    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     renderer = new THREE.WebGLRenderer();
@@ -140,6 +140,15 @@ function Manager() {
     //This can be removed after development if desired
     drawFPSstats();
 
+    // The [0] index of loadedDataset contains the 3 selected axis column indices
+    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+
+    /*
+    var newWindow = window.open("");
+    var body = newWindow.document.body;
+    var text = "innerText" in body ? "innerText" : "textContent";
+    body[text] = JSON.stringify(scene);
+    */
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -419,7 +428,7 @@ function drawDataset(xCol, yCol, zCol)
       // texture: { value: texture }
     },
     vertexShader: myVertexShader,
-    fragmentShader: myFragmentShader,
+    fragmentShader: myFragmentShader
   });
 
   // Arrays to hold information to be passed into BufferGeometries
@@ -480,7 +489,7 @@ function drawDataset(xCol, yCol, zCol)
 
   pointsSystem.name = "PointsSystem";
   // add it to the scene
-  //scene.add(pointsSystem);
+  scene.add(pointsSystem);
   drawAxisLabels();
 
 }

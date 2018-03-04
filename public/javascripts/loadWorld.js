@@ -94,12 +94,14 @@ function Manager() {
   FIREBASE GET
   */
   function loadScene(response){
-    console.log("Loading: " + JSON.stringify(response));
+    //console.log("Loading: " + JSON.stringify(response));
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
     scene.add(object);
     loadedDataset = object.userData;
+    console.log("Loaded Dataset:");
     console.log(loadedDataset);
+    console.log("Retrived Scene Object:");
     console.log(object);
 
 
@@ -132,16 +134,17 @@ function Manager() {
         // If there is no display available, fallback to window
         animationDisplay = window;
       });
+S
 
-    //Center the camera on the data and back so that you are not inside the first
-    // cube
-    camera.position.set(0, 0, camera.position.z);
-    camera.rotation.y = 270 * Math.PI / 180;
     //This can be removed after development if desired
     drawFPSstats();
 
     // The [0] index of loadedDataset contains the 3 selected axis column indices
     drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+
+    //Center the camera on the data and back a bit
+    camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
+    camera.rotation.y = 270 * Math.PI / 180;
 
     /*
     var newWindow = window.open("");
@@ -155,7 +158,7 @@ function Manager() {
 
   }
 
-  console.log("Getting Scene from Firebase...");
+  console.log("Getting Scene from Firebase... (May take a few moments for large datasets).");
   readWorld(worldID, loadScene);
 
 }

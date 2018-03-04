@@ -208,7 +208,10 @@ function build3DSpace() {
   var sceneJSON = this.scene.toJSON();
 
   sceneJSON = JSON.parse(JSON.stringify(sceneJSON));
-  console.log(writeWorld(sceneJSON)); //writes the world and logs the world id
+  writeWorld(sceneJSON); //writes the world and logs the world id
+  $('#myModal').modal('hide');
+  console.log('world written');
+  reloadWorlds();
 
 
   // try {

@@ -70,69 +70,72 @@ function Manager() {
   //First get the scene from the data base
   var retrievedString = sessionStorage.getItem('selectedID');
   worldID = JSON.parse(retrievedString);
-  console.log(worldID);
+  console.log('worldID is: '+worldID);
   scene = new THREE.Scene();
   var worldURL = '/worlds/' + worldID;
-  console.log(worldURL);
+  // console.log(worldURL);
 
   /*
   FIREBASE GET
   */
+  function loadScene(response){
+    console.log("Loading: " + JSON.stringify(response));
+    var loader = new THREE.ObjectLoader();
+    var object = loader.parse(response);
+    scene.add(object);
+    loadedDataset = object.userData;
+    console.log(loadedDataset);
+    console.log(object);
+    // drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.vr.enabled = true;
+    renderer.vr.standing = true;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    //Add the renderer to the html page
+    document.body.appendChild(renderer.domElement);
+
+    // Handle canvas resizing
+    window.addEventListener('resize', onResize, true);
+    window.addEventListener('vrdisplaypresentchange', onResize, true);
+    setUpControls();
+    addEnterVrButtons();
+    //Get HMD type
+    enterVR.getVRDisplay()
+      .then(function(display) {
+        renderer.vr.setDevice(display);
+        animationDisplay = display;
+        setStageDimensions(display.stageParameters);
+        camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
+        camera.rotation.y = 270 * Math.PI / 180;
+      })
+      .catch(function() {
+        // If there is no display available, fallback to window
+        animationDisplay = window;
+      });
+
+    //Center the camera on the data and back so that you are not inside the first
+    // cube
+    camera.position.set(0, 0, camera.position.z);
+    camera.rotation.y = 270 * Math.PI / 180;
+    //This can be removed after development if desired
+    drawFPSstats();
+
+    //GameLoop must be called last after everything to ensure that
+    //everything is rendered
+    GameLoop();
+
+  }
+
+  console.log("Getting Scene from Firebase...");
+  readWorld(worldID, loadScene);
 
 
-  $.ajax({
-    type: "GET",
-    contentType: "application/json",
-    url: worldURL,
-    success: function(response) {
-      console.log("Loading: " + JSON.stringify(response));
-      var loader = new THREE.ObjectLoader();
-      var object = loader.parse(response);
 
-      scene.add( object );
-    }
-  });
-
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-  renderer = new THREE.WebGLRenderer();
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.vr.enabled = true;
-  renderer.vr.standing = true;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  //Add the renderer to the html page
-  document.body.appendChild(renderer.domElement);
-
-  // Handle canvas resizing
-  window.addEventListener('resize', onResize, true);
-  window.addEventListener('vrdisplaypresentchange', onResize, true);
-  setUpControls();
-  addEnterVrButtons();
-  //Get HMD type
-  enterVR.getVRDisplay()
-    .then(function(display) {
-      renderer.vr.setDevice(display);
-      animationDisplay = display;
-      setStageDimensions(display.stageParameters);
-      camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
-      camera.rotation.y = 270 * Math.PI / 180;
-    })
-    .catch(function() {
-      // If there is no display available, fallback to window
-      animationDisplay = window;
-    });
-
-  //Center the camera on the data and back so that you are not inside the first
-  // cube
-  camera.position.set(0, 0, camera.position.z);
-  camera.rotation.y = 270 * Math.PI / 180;
-  //This can be removed after development if desired
-  drawFPSstats();
-
-  //GameLoop must be called last after everything to ensure that
-  //everything is rendered
-  GameLoop();
 }
 
 /*

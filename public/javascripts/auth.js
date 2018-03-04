@@ -17,8 +17,8 @@ var profile;
 
 //Checks Auth state and adds the authenticated user to the database if they aren't already
 firebase.auth().onAuthStateChanged( user => {
-  if (user){ 
-    this.userId = user.uid; 
+  if (user){
+    this.userId = user.uid;
     userExistsDB(user.uid);
   }
 });
@@ -131,20 +131,22 @@ function createUserDB(firebaseUID){
 //******************************************************************************
 
 //Read World
-//Input: the world id (string)
+//Input: the world id (string), callback function that handles the result
 //Returns: the world contents as json
-function readWorld(worldId){
-  database.ref('worlds/'+worldId).once('value').then(function(snapshot){
-		var firebaseWorld = snapshot.val();
-    var numGeom = firebaseWorld.geometries.length;
-
-    for (var i=0; i<numGeom; i++){
-      firebaseWorld.geometries[i].data["normals"] = [];
-      firebaseWorld.geometries[i].data["faces"] = [];
-    }
-    return firebaseWorld;
-	})
+function readWorld(worldId, callback){
+	var firebaseWorld;
+  return database.ref('worlds/'+worldId).once('value').then(function(snapshot){
+		firebaseWorld = snapshot.val();
+    // var numGeom = firebaseWorld.geometries.length;
+    //
+    // for (var i=0; i<numGeom; i++){
+    //   firebaseWorld.geometries[i].data["normals"] = [];
+    //   firebaseWorld.geometries[i].data["faces"] = [];
+    // }
+		callback(firebaseWorld);
+	});
 }
+
 
 //Write World to Database
 //Input: the world contents in json format
@@ -152,7 +154,7 @@ function readWorld(worldId){
 function writeWorld(jsonFile){
   var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
 	var worldRefKey = worldRef.key;
-	return worldRefKey;
+	console.log('world key is: '+worldRefKey);
 }
 
 
@@ -202,6 +204,7 @@ function getWorldInfo(worldId){
 // var worldId = '-L6UfQx0beRgpsbWxeNt';
 // var result = getWorldInfo(worldId);
 // console.log(result);
+
 
 //******************************************************************************
 //******************************************************************************

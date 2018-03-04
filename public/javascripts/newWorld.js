@@ -185,6 +185,7 @@ var plotPointSizeCoeff = 0.01;
 function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
+  scene.name = "Scene";
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
   var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100)
@@ -195,20 +196,21 @@ function build3DSpace() {
   light.shadow.camera.near = 1
   light.shadow.camera.far = 12
   scene.add(light)
-
   scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
-
-  drawDataset(x_AxisIndex, y_AxisIndex, z_AxisIndex);
+  addParsedDataToScene();
 
   //Export the built world
   //var sceneJSON = JSON.strigify(scene);
   var sceneJSON = this.scene.toJSON();
-
+  console.log(JSON.stringify(sceneJSON));
   sceneJSON = JSON.parse(JSON.stringify(sceneJSON));
-  console.log(writeWorld(sceneJSON)); //writes the world and logs the world id
-
+  writeWorld(sceneJSON); //writes the world and logs the world id
+  $('#myModal').modal('hide');
+  console.log('world written');
+  reloadWorlds();
 
   // try {
+
   //
   //   sceneJSON = JSON.stringify(sceneJSON, parseNumber, '\t');
   //   sceneJSON = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');

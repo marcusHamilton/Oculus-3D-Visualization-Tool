@@ -527,29 +527,29 @@ function drawAxisLabels() {
   scene.add(lineY);
   scene.add(lineZ);
 
-  // Grid lines
+  // Axis line ticks - Just draws 10 ticks on each axis
   var lineXTicks = new LinkedList();
-  for (var xUnits = 1; xUnits <= Math.ceil(largestX); xUnits++) {
+  for (var xUnits = 1; xUnits <= 10; xUnits++) {
     lineXTicks.add(new THREE.Geometry());
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY, 0));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
     scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
   }
   var lineYTicks = new LinkedList();
-  for (var yUnits = 1; yUnits <= Math.ceil(largestY); yUnits++) {
+  for (var yUnits = 1; yUnits <= 10; yUnits++) {
     lineYTicks.add(new THREE.Geometry());
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX, plotInitSizeY / largestY * yUnits, 0));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX * 0.1, plotInitSizeY / largestY * yUnits, 0));
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ));
+    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ * 0.1));
     scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
   }
   var lineZTicks = new LinkedList();
-  for (var zUnits = 1; zUnits <= Math.ceil(largestZ); zUnits++) {
+  for (var zUnits = 1; zUnits <= 10; zUnits++) {
     lineZTicks.add(new THREE.Geometry());
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
     scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
 }

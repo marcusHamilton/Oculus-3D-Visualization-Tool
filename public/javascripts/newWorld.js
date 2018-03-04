@@ -197,7 +197,7 @@ function build3DSpace() {
   light.shadow.camera.far = 12
   scene.add(light)
   scene.add(new THREE.HemisphereLight(0x909090, 0x404040))
-  addParsedDataToScene();
+  //addParsedDataToScene();
 
   //Export the built world
   //var sceneJSON = JSON.strigify(scene);

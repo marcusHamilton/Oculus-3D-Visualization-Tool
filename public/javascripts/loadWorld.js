@@ -50,7 +50,10 @@ function update(timestamp) {
   //Add all updates below here
 
   //Ensure that we are looking for controller input
-  trackballControls.update();
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
   //Allows point selection to function
@@ -152,7 +155,10 @@ function Manager() {
 
     // The [0] index of loadedDataset contains the 3 selected axis column indices
     drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
-
+    
+    //Handle Keyboard Input
+    document.addEventListener('keydown', onAKeyPress, false);
+    
     //Center the camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
@@ -373,6 +379,67 @@ window.addEventListener('vr controller connected', function(event) {
     controller.parent.remove(controller)
   })
 });
+
+//Keyboard Controls
+function onAKeyPress(event){
+    var keyCode = event.which;
+    var translationSpeed = 0.1;
+    var rotationSpeed = 0.1;
+    var cameraDirection = new THREE.Vector3();
+    var theta // Angle between x and z
+    var inverseTheta
+    var gamma // Angle between x and y
+    //A == 65 Left
+    if(keyCode == 65){
+      camera.position.z -= translationSpeed;
+    }
+    //D == 68 Right
+    else if (keyCode == 68){
+      camera.position.z += translationSpeed;
+    }
+    //W == 87 Forward
+    else if (keyCode == 87){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x += (translationSpeed*Math.sin(theta));
+      camera.position.z += (translationSpeed*Math.cos(theta));
+    }
+    //S == 83 Backward
+    else if(keyCode == 83){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x -= (translationSpeed*Math.sin(theta));
+      camera.position.z -= (translationSpeed*Math.cos(theta));
+    }
+    //space == 32 Up
+    else if(keyCode == 32){
+      camera.position.y += translationSpeed;
+    }
+    //ctrl == 17  Down
+    else if(keyCode == 17){
+      camera.position.y -= translationSpeed;
+    }
+    //Q == 81 Look left
+    else if(keyCode == 81){
+      camera.rotation.y += rotationSpeed;
+    }
+    //E == 69 Look right
+    else if(keyCode == 69){
+      camera.rotation.y -= rotationSpeed;
+    }
+    //Look up and look down might be unnecasary when this is converted to occulus controller
+    //Doesnt work anyway tho 
+
+    //R == 82 Look Up
+    //else if(keyCode == 82){
+      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      //inverseTheta = Math.PI /2 - theta;
+      //gamma = Math.PI - (inverseTheta + Math.PI /2);
+      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
+      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
+      //camera.rotation.x += rotationSpeed;
+   // }
+  }
 
 
 /**

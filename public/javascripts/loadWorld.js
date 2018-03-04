@@ -99,8 +99,8 @@ function Manager() {
     console.log("Loading: " + JSON.stringify(response));
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
-    scene.add( object );
-    loadedDataset = object.userData ;
+    scene.add(object);
+    loadedDataset = object.userData;
     console.log(loadedDataset);
     console.log(object);
     drawDataset(userData[0][0],userData[0][1],userData[0][2]);

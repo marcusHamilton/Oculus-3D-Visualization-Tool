@@ -137,12 +137,12 @@ function readWorld(worldId, callback){
 	var firebaseWorld;
   return database.ref('worlds/'+worldId).once('value').then(function(snapshot){
 		firebaseWorld = snapshot.val();
-    var numGeom = firebaseWorld.geometries.length;
-
-    for (var i=0; i<numGeom; i++){
-      firebaseWorld.geometries[i].data["normals"] = [];
-      firebaseWorld.geometries[i].data["faces"] = [];
-    }
+    // var numGeom = firebaseWorld.geometries.length;
+    //
+    // for (var i=0; i<numGeom; i++){
+    //   firebaseWorld.geometries[i].data["normals"] = [];
+    //   firebaseWorld.geometries[i].data["faces"] = [];
+    // }
 		callback(firebaseWorld);
 	});
 }

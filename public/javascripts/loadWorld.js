@@ -103,7 +103,7 @@ function Manager() {
     loadedDataset = object.userData;
     console.log(loadedDataset);
     console.log(object);
-    drawDataset(userData[0][0],userData[0][1],userData[0][2]);
+    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
   }
 
   console.log("Getting Scene from Firebase...");
@@ -426,13 +426,13 @@ var largestEntry = 0;
  */
 function drawDataset(xCol, yCol, zCol)
 {
-  assert(loadedDataset, 'loadedDataset must be defined for drawDataset()');
-  assert(xCol >= 0,
-      'drawDataset() xCol value must be a positive integer');
-  assert(yCol >= 0,
-      'drawDataset() yCol value must be a positive integer');
-  assert(zCol >= 0,
-      'drawDataset() zCol value must be a positive integer');
+  // assert(loadedDataset, 'loadedDataset must be defined for drawDataset()');
+  // assert(xCol >= 0,
+  //     'drawDataset() xCol value must be a positive integer');
+  // assert(yCol >= 0,
+  //     'drawDataset() yCol value must be a positive integer');
+  // assert(zCol >= 0,
+  //     'drawDataset() zCol value must be a positive integer');
 
   // points geometry contains a list of all the point vertices pushed below
   pointsGeometry = new THREE.BufferGeometry();
@@ -635,7 +635,7 @@ function drawLoadedDataset()
  * @postcondition axis labels are drawn from 0,0
  */
 function drawAxisLabels() {
-  assert(scene, "Scene must be initialized for drawAxisLabels()");
+  // assert(scene, "Scene must be initialized for drawAxisLabels()");
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({

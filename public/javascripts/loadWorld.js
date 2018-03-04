@@ -18,6 +18,7 @@ var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
+var controller;
 
 var pointsSystem;
 var pointsGeometry;
@@ -47,13 +48,14 @@ function update(timestamp) {
   trackballControls.update();
   THREE.VRController.update();
 
-  // TODO
-  // pointSelectionUpdate();
-
-  pointsGeometry.getAttribute('customColor').needsUpdate = true;
-  pointsGeometry.getAttribute('position').needsUpdate = true;
-  pointsGeometry.getAttribute('size').needsUpdate = true;
-  pointsGeometry.getAttribute('isSelected').needsUpdate = true;
+    //Allows point selection to function
+    pointSelectionUpdate();
+    // set BufferGeometry (in drawDataset.js) attributes to be updatable.
+    // (This must be set every time you want the buffergeometry to change.
+    pointsGeometry.getAttribute('customColor').needsUpdate = true;
+    pointsGeometry.getAttribute('position').needsUpdate = true;
+    pointsGeometry.getAttribute('size').needsUpdate = true;
+    pointsGeometry.getAttribute('isSelected').needsUpdate = true;
 
 }
 
@@ -146,12 +148,6 @@ S
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
 
-    /*
-    var newWindow = window.open("");
-    var body = newWindow.document.body;
-    var text = "innerText" in body ? "innerText" : "textContent";
-    body[text] = JSON.stringify(scene);
-    */
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -259,6 +255,9 @@ function setUpControls() {
   trackballControls.dynamicDampingFactor = 0.3;
   trackballControls.keys = [65, 83, 68];
 
+  //Add selection controls
+    initializeSelectionControls();
+
   //Apply VR stereo rendering to renderer.
   effect = new THREE.VREffect(renderer);
   effect.setSize(window.innerWidth, window.innerHeight);
@@ -322,7 +321,7 @@ The following is an event listener for when a hand held controller is connected
 */
 window.addEventListener('vr controller connected', function(event) {
 
-  var controller = event.detail
+  controller = event.detail
   scene.add(controller)
 
   //Ensure controllers appear at the right height

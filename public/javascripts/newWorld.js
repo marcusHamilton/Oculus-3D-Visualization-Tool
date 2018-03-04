@@ -16,6 +16,8 @@ var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
 var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
 var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
+var pointsSystem;
+
 /*
 //Function is called when the csv file is loaded in from the localLoad.
 //Here the uploaded file is grabbed from the html page and passed into a local //variable. Papa parse is then used to parse the data into an array.

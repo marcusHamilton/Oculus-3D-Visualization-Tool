@@ -114,7 +114,7 @@ function Manager() {
     console.log(" - Index 1 = Column labels");
     console.log(" - Index >1 = Entire dataset");
     console.log(loadedDataset);
-    console.log("Retrived Scene Object:");
+    console.log("Retrieved Scene Object:");
     console.log(object);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);

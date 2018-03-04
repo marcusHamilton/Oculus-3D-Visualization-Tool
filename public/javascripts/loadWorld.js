@@ -86,7 +86,7 @@ function Manager() {
     loadedDataset = object.userData;
     console.log(loadedDataset);
     console.log(object);
-    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+    // drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     renderer = new THREE.WebGLRenderer();

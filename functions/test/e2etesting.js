@@ -14,6 +14,7 @@ var webdriver = require('selenium-webdriver');
  * Using chrom for testing, we need to install chromedriver
  */
 
+
 describe('home page test Suite', function(done){
   this.timeout(50000);
     /**
@@ -25,20 +26,20 @@ describe('home page test Suite', function(done){
             .build();
         driver.get("https://3dvisualizationtool.ml");
 
-        driver.wait(until.elementLocated(By.id('identifierId')), 50000);
+        driver.wait(until.elementLocated(By.id("identifierId")), 50000);
         driver.getCurrentUrl().then(function( url ){
           console.log(url);
             //assert(url === "https://accounts.google.com/signin/oauth/identifier?client_id=483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com&as=lME8KI5lhapLxK0Kwfo2Eg&destination=https%3A%2F%2Foculus-3d-visualization-c5687.firebaseapp.com&approval_state=!ChQ3MW5TcWF1MjF3MkNmLTMwY3BvdRIfWXdaTVdONGQ4R1VVNEpEYnJUUGdXM0JjOUxIV0hoWQ%E2%88%99ACThZt4AAAAAWpxONDNM9zl4shEwa2Fu0vyaaziEtMyJ&xsrfsig=AHgIfE-U6vvxzqUjBvRXDlGwq0dJrAOwQA&flowName=GeneralOAuthFlow");
         });
 
-        driver.findElement(By.id('identifierId')).sendKeys('oculus3dvisualizationtool@gmail.com');
-        driver.findElement(By.id('identifierNext')).click();
+        driver.findElement(By.id("identifierId")).sendKeys('oculus3dvisualizationtool@gmail.com');
+        driver.findElement(By.id("identifierNext")).click();
 
-        driver.wait(until.elementLocated(By.id('passwordNext')), 50000);
-        driver.findElement(By.className('whsOnd zHQkBf')).sendKeys('osgood371');
-        driver.findElement(By.id('passwordNext')).click();
+        driver.wait(until.elementLocated(By.id("passwordNext")), 50000);
+        driver.findElement(By.className("whsOnd zHQkBf")).sendKeys('osgood371');
+        driver.findElement(By.id("passwordNext")).click();
 
-        driver.wait(until.elementLocated(By.className('btn btn-lg btn-default')), 50000);
+        driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[2]/p[2]/a")), 50000);
         driver.getCurrentUrl().then(function( url ){
           console.log(url);
             //assert(url === "https://3dvisualizationtool.ml");
@@ -59,11 +60,12 @@ describe('home page test Suite', function(done){
 
             assert(title === "3D Visualization Tool");
         });
+
     });
 
     it("home should be active", () => {
 
-      var home = driver.findElement(By.name('Home'));
+      var home = driver.findElement(By.xpath('/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a'));
       home.getAttribute('className').then(function(field){
         assert(field === 'active');
       });
@@ -71,9 +73,9 @@ describe('home page test Suite', function(done){
 
     it("click Home should work", () =>{
 
-        var home = driver.findElement(By.name('Home'));
+        var home = driver.findElement(By.xpath('/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a'));
         home.click();
-        driver.wait(until.elementLocated(By.className('masthead-brand')), 50000);     //should stay in the same page
+        driver.wait(until.elementLocated(By.xpath('/html/body/div/div/div/div[1]/div/h3')), 50000);     //should stay in the same page
         driver.getCurrentUrl().then(function( url ){
             assert(url === "https://3dvisualizationtool.ml");
         });
@@ -154,7 +156,7 @@ describe('home page test Suite', function(done){
 
     it("dashboard should be active", () => {
 
-    var dash = driver.findElement(By.name('Dashboard'));
+    var dash = driver.findElement(By.xpath('/html/body/div/div[1]/div[1]/div/div/nav/ul/li[4]'));
     dash.getAttribute('className').then(function(field){
     assert(field === 'active');
     });
@@ -162,9 +164,11 @@ describe('home page test Suite', function(done){
 
     it("click VRworld should work", () => {
 
-    var VRw0 = driver.findElement(By.id('-L6UcY0EKaTU24sRbEq3'));
-    var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
-    var VRw2 = driver.findElement(By.id('-L6Ud_fayHJ9kHcmOwRf'));
+    //var VRw0 = driver.findElement(By.id('-L6UcY0EKaTU24sRbEq3'));
+    //var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
+    //var VRw2 = driver.findElement(By.id('-L6Ud_fayHJ9kHcmOwRf'));
+
+    var VRw0 = driver.findElement(By.xpath('//*[@id="-L6jxtdVNqdx0fAXfGIn"]'));
 
     VRw0.click();
     driver.wait(until.elementLocated(By.name('VR Visualization Tool')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
@@ -175,17 +179,17 @@ describe('home page test Suite', function(done){
 
     it("VRworld should work without VR", () => {
 
-    var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
+    var VRw1 = driver.findElement(By.xpath('//*[@id="-L6k6NyPXhiusET2fp5c"]'));
     VRw1.click();
-    driver.wait(until.elementLocated(By.name('VR Visualization Tool')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
+    driver.wait(until.elementLocated(By.xpath('//*[@id="ui"]')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
 
-    var noVR = driver.findElement(By.name('Try it without a headset'));
+    var noVR = driver.findElement(By.xpath('/html/body/div[1]/div[2]/a'));
     noVR.click();
-    driver.wait(until.elementLocated(By.name('EXIT VR')), 50000);
+    driver.wait(until.elementLocated(By.xpath('//*[@id="exit"]')), 50000);
 
-    var display = driver.findElement(By.id('ui'));
+    var display = driver.findElement(By.xpath('//*[@id="exit"]'));
     display.getAttribute('style').then(function(field){
-    assert(field === 'display: none;');
+    assert(field === 'display: initial;');
     });
     })
 

@@ -203,13 +203,23 @@ function build3DSpace() {
 
   addParsedDataToScene();
 
+  function hideModalAndReloadWorlds(){
+    $('#myModal').modal('hide');
+    console.log('world written');
+    reloadWorlds();
+  }
+
   //Export the built world
   //var sceneJSON = JSON.strigify(scene);
   var sceneJSON = this.scene.toJSON();
 
-  sceneJSON = JSON.parse(JSON.stringify(sceneJSON));
-  console.log(writeWorld(sceneJSON)); //writes the world and logs the world id
+  console.log(JSON.stringify(sceneJSON));
 
+  sceneJSON = JSON.parse(JSON.stringify(sceneJSON));
+  writeWorld(sceneJSON); //writes the world and logs the world id
+  $('#myModal').modal('hide');
+  console.log('world written');
+  reloadWorlds();
 
   // try {
   //

@@ -147,12 +147,6 @@ function readWorld(worldId, callback){
 	});
 }
 
-// function handleWorld(world){
-// 	console.log('world is '+world);
-// }
-//
-// readWorld('-L6cciLgse7gqXZ62iLp', handleWorld);
-
 
 //Write World to Database
 //Input: the world contents in json format
@@ -160,7 +154,7 @@ function readWorld(worldId, callback){
 function writeWorld(jsonFile){
   var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
 	var worldRefKey = worldRef.key;
-	return worldRefKey;
+	console.log('world key is: '+worldRefKey);
 }
 
 

@@ -250,9 +250,6 @@ var webdriver = require('selenium-webdriver');
 });
 
 
-
-
-
  // describe('test selenium', function(done){
  //   this.timeout(50000);
  //     /**

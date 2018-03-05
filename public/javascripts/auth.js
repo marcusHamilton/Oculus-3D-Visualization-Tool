@@ -17,9 +17,12 @@ var profile;
 
 //Checks Auth state and adds the authenticated user to the database if they aren't already
 firebase.auth().onAuthStateChanged( user => {
-  if (user){
-    this.userId = user.uid;
-    userExistsDB(user.uid);
+  if (user){ 
+    if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+      profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+      this.userId = user.uid; 
+      userExistsDB(user.uid);
+    }
   }
 });
 

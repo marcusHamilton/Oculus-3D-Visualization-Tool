@@ -6,20 +6,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
+  <meta name="google-signin-cookiepolicy" content="single_host_origin">
+  <meta name="google-signin-scope" content="profile email">
 
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
 
   <title>3D Visualization Tool</title>
-
-  <!-- Firebase Initialization -->
-  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
-
-  <!-- Google Authentification -->
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-  <!-- Auth handler -->
-  <script src="/javascripts/auth.js"></script>
 
 </head>
 
@@ -41,8 +34,8 @@
                 <li><a href="/features">Features</a></li>
                 <li class="active"><a href="/about">About Us</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div></li>
-                <li><img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture" style="visibility: hidden;"></li>
+                <li><div id="gSignIn"></div></li>
+                <li><div class="userContent"></div></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -59,6 +52,16 @@
     </div>
 
   </div>
+
+  <!--Javascript CDN's-->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--Javascript Local Files-->
+  <script src="/javascripts/auth.js"></script>
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton"></script>
 
 </body>
 

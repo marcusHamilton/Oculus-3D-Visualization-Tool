@@ -41,7 +41,7 @@ var webdriver = require('selenium-webdriver');
  driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a")), 50000);
  driver.getCurrentUrl().then(function( url ){
  console.log(url);
- //assert(url === "https://3dvisualizationtool.ml");
+ assert(url === "https://3dvisualizationtool.ml");
  });
  });
 
@@ -211,7 +211,43 @@ var webdriver = require('selenium-webdriver');
 
  })
 
- });
+ it("should url file", function() {
+
+ var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+ load.click();
+ driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+
+ var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
+ local.click();
+ driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+
+ var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
+
+ driver.findElement(By.xpath('//*[@id="formGroup"]/div[1]/input')).sendKeys(FILE_PATH);
+ var submit = driver.findElement(By.xpath('//*[@id="formGroup"]/span[2]/button'));
+ submit.click();
+
+ })
+
+ it("click start over should work", function(){
+   var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+   load.click();
+   driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+
+   var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
+   local.click();
+   driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+
+   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/a'))
+   back.click();
+
+   driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]')), 50000);
+   var pane = driver.findElement(By.xpath('//*[@id="step1"]'));
+   pane.getAttribute('class').then(function(field){
+   assert(field === 'tab-pane fade active in');
+    })
+  });
+});
 
 
 

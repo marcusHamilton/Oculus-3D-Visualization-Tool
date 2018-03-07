@@ -6,33 +6,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
+  <meta name="google-signin-cookiepolicy" content="single_host_origin">
+  <meta name="google-signin-scope" content="profile email">
 
   <!--Stylesheets -->
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/stylesheets/style.css">
-
-  <!--Javascript CDN's-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-
-  <!-- Firebase Initialization -->
-  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
-
-  <!-- Google Authentification -->
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-  <!--Javascript Local Files-->
-  <script src="/javascripts/LinkedList.js"></script>
-  <script src="/javascripts/notifyOfFileName.js"></script>
-  <script src="/javascripts/three/three.js"></script>
-  <script src="/javascripts/newWorld.js"></script>
-  <script src="/javascripts/auth.js"></script>
-
-
+  
   <title>Dashboard</title>
 </head>
 
@@ -54,10 +35,8 @@
                 <li><a href="/features">Features</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li class="active"><a href="/dashboard">Dashboard</a></li>
-                <li>
-                  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-                </li>
-                <li><img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture" style="visibility: hidden;"></li>
+                <li><div id="gSignIn"></div></li>
+                <li><div class="userContent"></div></li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -84,31 +63,6 @@
         <div class="container" id="worldContainer">
         </div>
         <script>
-          function packID(id) {
-            sessionStorage.setItem('selectedID', JSON.stringify(id));
-          }
-          //Needs to be refactored for realtime database. This is not efficient
-          function reloadWorlds()
-          {
-            var myNode = document.getElementById("worldContainer");
-            while (myNode.firstChild) {
-              myNode.removeChild(myNode.firstChild);
-            }
-            document.getElementById('spinningLoader').style = "display:block";
-            var allKeys;
-            $.ajax({
-              type: "GET",
-              url: '/worlds',
-              success: function(response) {
-                document.getElementById('spinningLoader').style = "display:none";
-                allKeys = response;
-                for (var i = 0; i < allKeys.length; i++) {
-                  $('#worldContainer').append('<div class="col-sm-1 col-md-2"><a href="/VRWorld" onclick="packID(this.id)" id="' + allKeys[i] +
-                    '"><div class="thumbnail"><img src="/images/webVr.png" alt="..." style="width:100px;height:100px;"><div class="caption"><h3>World ' + i + '</h3></div></div></a></div>');
-                }
-              }
-            });
-          }
           reloadWorlds();
         </script>
         <!-- End: container that holds the 3D world content -->
@@ -157,10 +111,11 @@
                       <div id="formGroup">
                         <div class="input-group">
                           <label class="input-group-btn">
-                            <span class="btn btn-primary" >
-                              Browse&hellip; <input type="file" accept=".csv" id="csv-file" style="display: none;">
+                            <span class="btn btn-primary">
+                              Browse&hellip;
+                              <input type="file" accept=".csv" id="csv-file" style="display: none;">
                             </span>
-                                  </label>
+                          </label>
                           <input type="text" class="form-control" placeholder="No file selected" readonly>
                         </div>
                         <span class="help-block">
@@ -183,20 +138,23 @@
                         Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
                       <hr>
                       <label for="x-axis">
-                      X-Axis<br>
-                      <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
-                      </select>
-                    </label>
+                        X-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
+                        </select>
+                      </label>
                       <label for="y-axis">
-                      Y-Axis<br>
-                      <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
-                      </select>
-                    </label>
+                        Y-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
+                        </select>
+                      </label>
                       <label for="z-axis">
-                      Z-Axis<br>
-                      <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
-                      </select>
-                    </label>
+                        Z-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
+                        </select>
+                      </label>
                     </div>
                     <!-- End: Drop down for selecting axis -->
                     <br />
@@ -221,8 +179,8 @@
                         <div class="input-group">
                           <input type="text" id="csvURL" class="form-control" placeholder="Search for .CSV by URL...">
                           <span class="input-group-btn">
-                          <button class="btn btn-primary" onclick="loadCSVremote()" type="button" >Load!</button>
-                        </span>
+                            <button class="btn btn-primary" onclick="loadCSVremote()" type="button">Load!</button>
+                          </span>
                         </div>
                         <!-- Area for success message -->
                         <div id="successMessage" align="center">
@@ -238,20 +196,23 @@
                         Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
                       <hr>
                       <label for="x-axis">
-                      X-Axis<br>
-                      <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
-                      </select>
-                    </label>
+                        X-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="x-axis" id="x-axis">
+                        </select>
+                      </label>
                       <label for="y-axis">
-                      Y-Axis<br>
-                      <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
-                      </select>
-                    </label>
+                        Y-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="y-axis" id="y-axis">
+                        </select>
+                      </label>
                       <label for="z-axis">
-                      Z-Axis<br>
-                      <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
-                      </select>
-                    </label>
+                        Z-Axis
+                        <br>
+                        <select class="js-responsive-dropdown" name="z-axis" id="z-axis">
+                        </select>
+                      </label>
                     </div>
                     <!-- End: Drop down for selecting axis -->
                     <br />
@@ -275,6 +236,25 @@
       </div>
     </div>
     <!--End: Modal box content-->
+  </div>
+
+  <!--Javascript CDN's-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+
+  <!--Javascript Local Files-->
+  <script src="/javascripts/LinkedList.js"></script>
+  <script src="/javascripts/notifyOfFileName.js"></script>
+  <script src="/javascripts/three/three.js"></script>
+  <script src="/javascripts/newWorld.js"></script>
+  <script src="/javascripts/auth.js"></script>
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton"></script>
 </body>
 
 </html>

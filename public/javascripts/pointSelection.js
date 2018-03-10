@@ -67,10 +67,11 @@ function pointSelectionUpdate()
   }
 }
 
+
 /**
  * Selects a point by setting its associated isSelected attribute
  * @param pointIndex : The array index of point you want to select in the
- *                     BufferGeometry that you want to select.
+ *                     BufferGeometry.
  */
 function selectPoint(pointIndex)
 {
@@ -121,15 +122,40 @@ function clearSelection()
 }
 
 /**
+ * inverts the current selection. All selected points are deselected and
+ * all unselected pointsare selected
+ */
+function invertSelection(){
+  for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      selectPoint(i);
+  }
+}
+
+/**
+ * selects all points in the world
+ */
+function selectAll(){
+    for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      if(!pointsGeometry.getAttribute('isSelected').array[i])
+        selectPoint(i);
+    }
+}
+
+/**
  * calculate mouse position in normalized device coordinates
  * (-1 to +1) for both components
  * @param event
  */
 function onMouseMove( event ) {
 
+  // calculate mouse position in normalized device coordinates
+  // (-1 to +1) for both components
+
   event.preventDefault();
+
   pointSelectionMouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
   pointSelectionMouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 }
 
 /**
@@ -147,7 +173,7 @@ function onClick( event ){
     clearSelection();
   }
   if (selectedPoints.length > 0){
-    console.log(selectedPoints);
+    console.log(getSelectedPointPositions());
   }
 
 }
@@ -168,6 +194,12 @@ function setPointColor(datasetIndex, colorRGB)
   pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 2] = colorRGB.b;
 }
 
+/**
+ * Gets the color of a singular datapoint.
+ *
+ * @param {Number} datasetIndex : index of point to get the color of
+ * @returns {THREE.Color} a Vector3 of RGB values (0-1.0)
+ */
 function getPointColor(datasetIndex)
 {
   return new THREE.Color(
@@ -204,6 +236,71 @@ function colorFromXYZcoords(vec3) {
   var newColor = new THREE.Color();
   newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
 
-  // Assemble the RGB components in a color value.
+
   return newColor;
 }
+
+/**
+ * Gets an array of the xyz values of all currently selected points
+ *
+ * @return {Vector3[]} array of Vector3 objects containing positions
+ */
+function getSelectedPointPositions() {
+
+  var selectedPointPositions = [];
+
+  for(var i = 0; i < selectedPoints.length; i++){
+    var tempX, tempY, tempZ;
+    tempX = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3];
+    tempY = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 1];
+    tempZ = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 2];
+
+    selectedPointPositions.push(new THREE.Vector3(tempX, tempY, tempZ));
+  }
+
+  return selectedPointPositions;
+}
+
+
+/**
+ * Gets an array containing all values of the specified axis
+ *
+ * @param {String} axis : the axis desired. Must be x, y, or z
+ * @returns {float[]} the array containing the values of the desired axis
+ */
+function getSelectedAxisValues(axis){
+
+  var vals = [];
+  var selectedPositions = getSelectedPointPositions();
+    for( var i = 0; i < selectedPositions.length; i++) {
+       if (     axis.valueOf() === 'x') {
+           vals.push(selectedPositions[i].x)
+       }
+       else if (axis.valueOf() === 'y') {
+            vals.push(selectedPositions[i].y)
+       }
+       else if (axis.valueOf() === 'z') {
+           vals.push(selectedPositions[i].z)
+        }
+       else {
+            console.log("Can only get values for the x, y, or z axis.");
+            break;
+        }
+
+  }
+    return vals;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -122,6 +122,26 @@ function clearSelection()
 }
 
 /**
+ * inverts the current selection. All selected points are deselected and
+ * all unselected pointsare selected
+ */
+function invertSelection(){
+  for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      selectPoint(i);
+  }
+}
+
+/**
+ * selects all points in the world
+ */
+function selectAll(){
+    for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      if(!pointsGeometry.getAttribute('isSelected').array[i])
+        selectPoint(i);
+    }
+}
+
+/**
  * calculate mouse position in normalized device coordinates
  * (-1 to +1) for both components
  * @param event
@@ -153,9 +173,7 @@ function onClick( event ){
     clearSelection();
   }
   if (selectedPoints.length > 0){
-    //console.log(selectedPoints);
     console.log(getSelectedPointPositions());
-    console.log(getSelectedAxisValues('x'));
   }
 
 }
@@ -255,22 +273,23 @@ function getSelectedAxisValues(axis){
 
   var vals = [];
   var selectedPositions = getSelectedPointPositions();
+    for( var i = 0; i < selectedPositions.length; i++) {
+       if (     axis.valueOf() === 'x') {
+           vals.push(selectedPositions[i].x)
+       }
+       else if (axis.valueOf() === 'y') {
+            vals.push(selectedPositions[i].y)
+       }
+       else if (axis.valueOf() === 'z') {
+           vals.push(selectedPositions[i].z)
+        }
+       else {
+            console.log("Can only get values for the x, y, or z axis.");
+            break;
+        }
 
-  for( var i = 0; i < selectedPositions.length; i++){
-    if(     'x'.equals(axis) === true ){
-        vals.push(selectedPositions[i].x)
-    }
-    else if('y'.equals(axis) === true ){
-        vals.push(selectedPositions[i].y)
-    }
-    else if('z'.equals(axis) === true ){
-        vals.push(selectedPositions[i].z)
-    }
-    else{
-        console.log("Can only get values for the x, y, or z axis.");
-    }
-     return vals;
   }
+    return vals;
 }
 
 

@@ -155,6 +155,7 @@ function onClick( event ){
   if (selectedPoints.length > 0){
     //console.log(selectedPoints);
     console.log(getSelectedPointPositions());
+    console.log(getSelectedAxisValues('x'));
   }
 
 }
@@ -175,6 +176,12 @@ function setPointColor(datasetIndex, colorRGB)
   pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 2] = colorRGB.b;
 }
 
+/**
+ * Gets the color of a singular datapoint.
+ *
+ * @param {Number} datasetIndex : index of point to get the color of
+ * @returns {THREE.Color} a Vector3 of RGB values (0-1.0)
+ */
 function getPointColor(datasetIndex)
 {
   return new THREE.Color(
@@ -203,16 +210,16 @@ function setPointScale(datasetIndex, size)
  * vec3 in relation to the largest value in each axis.
  *
  * @param {Vector3} vec3 a position in world space.
- *
  * @return {Number} integer color value from position.
  */
 function colorFromXYZcoords(vec3) {
 
   // Set point color RGB values to magnitude of XYZ values
   var newColor = new THREE.Color();
-  newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
 
   // Assemble the RGB components in a color value.
+  newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
+
   return newColor;
 }
 
@@ -226,10 +233,44 @@ function getSelectedPointPositions() {
   var selectedPointPositions = [];
 
   for(var i = 0; i < selectedPoints.length; i++){
-    selectedPointPositions.push(pointsGeometry.getAttribute('position').array[selectedPoints[i]]);
+    var tempX, tempY, tempZ;
+    tempX = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3];
+    tempY = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 1];
+    tempZ = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 2];
+
+    selectedPointPositions.push(new THREE.Vector3(tempX, tempY, tempZ));
   }
 
   return selectedPointPositions;
+}
+
+
+/**
+ * Gets an array containing all values of the specified axis
+ *
+ * @param {String} axis : the axis desired. Must be x, y, or z
+ * @returns {float[]} the array containing the values of the desired axis
+ */
+function getSelectedAxisValues(axis){
+
+  var vals = [];
+  var selectedPositions = getSelectedPointPositions();
+
+  for( var i = 0; i < selectedPositions.length; i++){
+    if(     'x'.equals(axis) === true ){
+        vals.push(selectedPositions[i].x)
+    }
+    else if('y'.equals(axis) === true ){
+        vals.push(selectedPositions[i].y)
+    }
+    else if('z'.equals(axis) === true ){
+        vals.push(selectedPositions[i].z)
+    }
+    else{
+        console.log("Can only get values for the x, y, or z axis.");
+    }
+     return vals;
+  }
 }
 
 

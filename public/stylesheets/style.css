@@ -158,9 +158,9 @@ body {
   text-shadow: none !important;
 }
 
-#googleProfilePicture {
+#profilePicture {
   height: 3em;
-  margin-bottom: 2em;
+  margin-right: 1vw;
 }
 
 /* Padding for spacing */

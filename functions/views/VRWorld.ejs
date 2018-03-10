@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/stylesheets/vrStyle.css">
 
   <!-- Load in required resources -->
-
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="/javascripts/three/three.js"></script>
   <script src="/javascripts/three/TrackballControls.js"></script>
@@ -19,13 +19,12 @@
   <script src="/javascripts/three/VRControls.js"></script>
   <script src="/javascripts/three/VREffect.js"></script>
   <script src="/javascripts/LinkedList.js"></script>
-
   <script src="/javascripts/loadWorld.js"></script>
+  <script src="/javascripts/auth.js"></script>
+  <script src="/javascripts/newWorld.js"></script>
   <script src="/javascripts/pointSelection.js"></script>
   <script src="https://cdn.rawgit.com/dataarts/dat.guiVR/master/build/datguivr.js"></script>
-  <!-- End: Load in required resources -->
 
-  <!-- Shader definitions provided by Dorian Thiessen -->
   <script type="x-shader/x-vertex" id="vertexshader">
         attribute float size;
         attribute vec3 customColor;
@@ -47,6 +46,8 @@
             gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
         }
     </script>
+  <!-- End: Load in required resources -->
+
 </head>
 
 <body>

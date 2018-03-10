@@ -70,6 +70,7 @@ function pointSelectionUpdate()
   }
 }
 
+
 /**
  * Selects a point by setting its associated isSelected attribute
  * @param pointIndex : The array index of point you want to select in the
@@ -170,7 +171,7 @@ function onClick( event ){
     clearSelection();
   }
   if (selectedPoints.length > 0){
-    console.log(selectedPoints);
+    console.log(getSelectedPointPositions());
   }
 
 }

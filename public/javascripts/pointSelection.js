@@ -31,6 +31,8 @@ function initializeSelectionControls()
 
   document.addEventListener( 'mousemove', onMouseMove, false );
   document.addEventListener( 'click', onClick, false );
+
+
 }
 
 /**
@@ -40,6 +42,7 @@ function initializeSelectionControls()
 var mousedOverPoint;
 function pointSelectionUpdate()
 {
+
   // calculate objects intersecting the ray
   pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
   intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
@@ -91,7 +94,6 @@ function selectPoint(pointIndex)
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
       pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
-
 }
 
 /**
@@ -207,3 +209,33 @@ function colorFromXYZcoords(vec3) {
   // Assemble the RGB components in a color value.
   return newColor;
 }
+
+/**
+ * Gets an array of the xyz values of all currently selected points
+ *
+ * @return {Vector3[]} array of Vector3 objects containing positions
+ */
+function getSelectedPointPositions() {
+
+  var selectedPointPositions = [];
+
+  for(var i = 0; i < selectedPoints.length; i++){
+    selectedPointPositions.push(pointsGeometry.getAttribute('position').array[selectedPoints[i]]);
+  }
+
+  return selectedPointPositions;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -283,7 +283,7 @@ function setUpControls() {
       obj.children.forEach(function(child) {
 
         applyDown(child, key, value)
-      })
+      }) 
     }
   };
   castShadows = function(obj) {
@@ -360,6 +360,13 @@ window.addEventListener('vr controller connected', function(event) {
   //  Allow this controller to interact with DAT GUI.
   var guiInputHelper = dat.GUIVR.addInputObject(controller);
   scene.add(guiInputHelper);
+  //Variables for movement
+  var translationSpeed = 0.1;
+  var rotationSpeed = 0.1;
+  var cameraDirection = new THREE.Vector3();
+  var theta // Angle between x and z
+  var inverseTheta
+  var gamma // Angle between x and y
 
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {
@@ -373,6 +380,52 @@ window.addEventListener('vr controller connected', function(event) {
     guiInputHelper.pressed(false)
   });
 
+  //Thumbstick Movement
+  controller.addEventListener('thumbstick press began', function(event) {
+    //Foreward
+    if(controller.getAxis[0] == -1){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x += (translationSpeed*Math.sin(theta));
+      camera.position.z += (translationSpeed*Math.cos(theta));
+    //Backward
+    }else if(controller.getAxis[0] == 1){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x -= (translationSpeed*Math.sin(theta));
+      camera.position.z -= (translationSpeed*Math.cos(theta));
+    //Strafe Left
+    }else if(controller.getAxis[1] == -1){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      gamma = Math.PI - (Math.PI/2) - theta;
+      camera.position.x += (translationSpeed*Math.sin(gamma));
+      camera.position.z += (translationSpeed*Math.cos(gamma));
+    //Strafe Right
+    }else if(controller.getAxis[1] == 1){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      gamma = Math.PI - (Math.PI/2) - theta;
+      camera.position.x -= (translationSpeed*Math.sin(gamma));
+      camera.position.z -= (translationSpeed*Math.cos(gamma));
+    }
+    
+  });
+
+  //Up
+  controller.addEventListener('A press began', function(event){
+    camera.position.y += translationSpeed;
+  });
+  controller.addEventListener('X press began', function(event){
+    camera.position.y += translationSpeed;
+  });
+  //Down
+  controller.addEventListener('B press began', function(event){
+    camera.position.y -= translationSpeed;
+  });
+  controller.addEventListener('Y press began', function(event){
+    camera.position.y -= translationSpeed;
+  });
   //On controller removal
   controller.addEventListener('disconnected', function(event) {
 

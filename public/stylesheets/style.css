@@ -163,6 +163,13 @@ body {
   margin-right: 1vw;
 }
 
+#logo {
+  position: absolute; 
+  top: 1%; 
+  left: 1%; 
+  width: 4vw;
+}
+
 /* Padding for spacing */
 
 .inner {

@@ -26,7 +26,9 @@ firebase.auth().onAuthStateChanged( user => {
   }
 });
 
+//When the DOM loads the sign in state is rendered
 function renderButton() {
+  gapi.load('auth2', function() {});
   gapi.signin2.render('gSignIn', {
       'scope': 'profile email',
       'width': 100,

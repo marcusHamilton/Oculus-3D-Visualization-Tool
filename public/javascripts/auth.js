@@ -122,9 +122,9 @@ function userExistsDB(firebaseUID){
 //Add the newly authenticated user to the database
 function createUserDB(firebaseUID){
   database.ref('users/' + firebaseUID).set({
-    fullName: profile.getName(),
-    givenName: profile.getGivenName(),
-    familyName: profile.getFamilyName(),
+    full_name: profile.getName(),
+    give_name: profile.getGivenName(),
+    family_name: profile.getFamilyName(),
     email: profile.getEmail(),
     profile_picture : profile.getImageUrl()
   });

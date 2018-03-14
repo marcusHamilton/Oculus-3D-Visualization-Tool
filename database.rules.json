@@ -1,0 +1,39 @@
+{
+  "rules": {
+    ".read": "auth != null",
+  	"users": {
+      "$user_id": {
+				".write": "$user_id === auth.uid",
+    		".read": "$user_id === auth.uid",
+        "worlds": {
+          ".validate": "newData.child('active').isBoolean()",
+        	"$world_id": {
+          }
+        },
+        "collaborations":{
+          ".validate": "newData.child('active').isBoolean()",
+          "$world_id": {
+          }
+        }
+      }
+    },
+    "worlds": {
+			"$world_id": {
+        ".write": "data.child('owner').child('$user_id').val() === auth.id",
+    		".read": "data.child('collaborators/' +auth.uid).exists() || data.child('owner').child('$user_id').val() === auth.id",
+      	"owner": {
+        	"$user_id": {
+          }
+        },
+        "collaborators": {
+        	"$user_id": {
+          	".write": "$user_id === auth.uid"
+          }
+        },
+        "data": {
+        	".write": "root.child('worlds').child('$world_id').child('collaborators/' +auth.uid).exists() || root.child('worlds').child('$world_id').child('owner').child('$user_id').val() === auth.id"
+        }
+      }
+    }
+  }
+}

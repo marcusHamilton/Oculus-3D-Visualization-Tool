@@ -205,6 +205,7 @@ function addParsedDataToScene()
   assert(y_AxisIndex >= 0,"");
   assert(z_AxisIndex >= 0,"");
   scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+  scene.name = fileName;
 }
 
 /**

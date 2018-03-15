@@ -46,14 +46,6 @@ app.post("/uploadWorld", function (req, res){
   res.send(newWorldId);
 });
 
-//CREATE world info
-app.post("/uploadWorldInfo", function (req, res){
-  var worldsRef = firebase.database().ref("/").child("worldInfo");
-  var worldData = req.body;
-  var newWorldRef = worldsRef.push(worldData);
-  var newWorldId = newWorldRef.key;
-  res.send(newWorldId);
-});
 
 // //TODO
 //CREATE a user

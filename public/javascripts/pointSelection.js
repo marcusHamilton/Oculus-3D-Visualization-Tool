@@ -175,6 +175,12 @@ function onClick( event ){
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
   }
+  else {
+    clearSelection();
+  }
+  if (selectedPoints.length > 0){
+    console.log(getSelectedPointPositions());
+  }
 
 }
 
@@ -222,20 +228,21 @@ function setPointScale(datasetIndex, size)
   pointsGeometry.getAttribute('size').array[datasetIndex] = size;
 }
 
+
 /**
  * Computes a color hex value based on the magnitudes of the xyz values in
  * vec3 in relation to the largest value in each axis.
  *
  * @param {Vector3} vec3 a position in world space.
- *
  * @return {Number} integer color value from position.
  */
 function colorFromXYZcoords(vec3) {
 
   // Set point color RGB values to magnitude of XYZ values
   var newColor = new THREE.Color();
-  newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
 
+  // Assemble the RGB components in a color value.
+  newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
 
   return newColor;
 }

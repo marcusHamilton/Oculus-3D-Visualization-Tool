@@ -444,11 +444,19 @@ function onAKeyPress(event){
     var gamma // Angle between x and y
     //A == 65 Left
     if(keyCode == 65){
-      camera.position.z -= translationSpeed;
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      gamma = Math.PI - (Math.PI/2) - theta;
+      camera.position.x += (translationSpeed*Math.sin(gamma));
+      camera.position.z += (translationSpeed*Math.cos(gamma));
     }
     //D == 68 Right
     else if (keyCode == 68){
-      camera.position.z += translationSpeed;
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      gamma = Math.PI - (Math.PI/2) - theta;
+      camera.position.x -= (translationSpeed*Math.sin(gamma));
+      camera.position.z -= (translationSpeed*Math.cos(gamma));
     }
     //W == 87 Forward
     else if (keyCode == 87){

@@ -1,10 +1,11 @@
 language: node_js
 node_js: "6.11.5"
+cache:
+  directories:
+    - ./functions/node_modules
 before_install:
 - cd ./functions
-- npm install --save-dev
 install: 
-- cd ..
+- npm install --save-dev
 script:
-- cd ./functions
 - npm test

@@ -31,8 +31,6 @@ function initializeSelectionControls()
 
   document.addEventListener( 'mousemove', onMouseMove, false );
   document.addEventListener( 'click', onClick, false );
-
-
 }
 
 /**
@@ -42,7 +40,6 @@ function initializeSelectionControls()
 var mousedOverPoint;
 function pointSelectionUpdate()
 {
-
   // calculate objects intersecting the ray
   pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
   intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
@@ -70,7 +67,6 @@ function pointSelectionUpdate()
   }
 }
 
-
 /**
  * Selects a point by setting its associated isSelected attribute
  * @param pointIndex : The array index of point you want to select in the
@@ -95,7 +91,6 @@ function selectPoint(pointIndex)
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
       pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
-
 }
 
 /**
@@ -173,7 +168,6 @@ function onClick( event ){
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
   }
-
 }
 
 /**

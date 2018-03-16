@@ -26,6 +26,9 @@ function initializeSelectionControls()
   if (controller != null)
   {
     // TODO Attach raycaster to VRcontroller
+    console.log("VR Controller detected for point selection.");
+    console.log(controller);
+
   }
   // setup mouse raycaster here
 
@@ -41,7 +44,14 @@ var mousedOverPoint;
 function pointSelectionUpdate()
 {
   // calculate objects intersecting the ray
-  pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+  if (controller != null)
+  {
+    //controller.position
+    //pointsSelectionRaycaster
+  }
+  else {
+    pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+  }
   intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
   intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
   setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));

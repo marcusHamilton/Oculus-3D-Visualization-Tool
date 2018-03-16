@@ -165,7 +165,6 @@ function Manager() {
 
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
-    console.log(controller);
     GameLoop();
   }
 

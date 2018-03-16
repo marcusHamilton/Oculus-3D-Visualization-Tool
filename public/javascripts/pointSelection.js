@@ -28,6 +28,7 @@ function initializeSelectionControls()
     // TODO Attach raycaster to VRcontroller
     console.log("VR Controller detected for point selection.");
     console.log(controller);
+    pointSelectionRaycaster.set(controller.position, controller.rotation);
 
   }
   // setup mouse raycaster here
@@ -46,8 +47,7 @@ function pointSelectionUpdate()
   // calculate objects intersecting the ray
   if (controller != null)
   {
-    //controller.position
-    //pointsSelectionRaycaster
+    pointSelectionRaycaster.set(controller.position, controller.rotation);
   }
   else {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);

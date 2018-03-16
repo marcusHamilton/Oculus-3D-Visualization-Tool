@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="/stylesheets/vrStyle.css">
 
   <!-- Load in required resources -->
-  <script src="/javascripts/handleCSVupload.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="/javascripts/three/three.js"></script>
   <script src="/javascripts/three/TrackballControls.js"></script>
   <script src="/javascripts/webvr-ui.min.js"></script>
@@ -18,9 +19,34 @@
   <script src="/javascripts/three/VRControls.js"></script>
   <script src="/javascripts/three/VREffect.js"></script>
   <script src="/javascripts/LinkedList.js"></script>
-  <script src="/javascripts/manage3DWorld.js"></script>
-  <script src="/javascripts/drawDataset.js"></script>
+  <script src="/javascripts/loadWorld.js"></script>
+  <script src="/javascripts/auth.js"></script>
+  <script src="/javascripts/newWorld.js"></script>
+  <script src="/javascripts/pointSelection.js"></script>
+  <script src="/javascripts/pointStatistics.js"></script>
   <script src="https://cdn.rawgit.com/dataarts/dat.guiVR/master/build/datguivr.js"></script>
+
+  <script type="x-shader/x-vertex" id="vertexshader">
+        attribute float size;
+        attribute vec3 customColor;
+        varying vec3 vColor;
+        void main() {
+            vColor = customColor;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_PointSize = size * ( 300.0 / - mvPosition.z );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshader">
+        uniform vec3 color;
+        uniform sampler2D texture;
+        varying vec3 vColor;
+        void main() {
+            gl_FragColor = vec4( color * vColor, 1.0 );
+            gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+        }
+    </script>
   <!-- End: Load in required resources -->
 
 </head>
@@ -45,7 +71,7 @@
   <a href="#" id="exit" onclick="enterVR.requestExit()">✕</a>
 
   <script>
-    build3DSpace();
+    Manager();
   </script>
 
 </body>

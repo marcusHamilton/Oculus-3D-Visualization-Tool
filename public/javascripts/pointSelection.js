@@ -63,6 +63,10 @@ function pointSelectionUpdate()
     raycasterLine.position.set(controller.position);
     raycasterLine.rotation.set(controller.rotation);
 
+    console.log(controller.position);
+    console.log(controller.rotation);
+    console.log(pointSelectionRaycaster);
+
   }
   else {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);

@@ -28,20 +28,25 @@ firebase.auth().onAuthStateChanged( user => {
 
 //When the DOM loads the sign in state is rendered
 function renderButton() {
-  gapi.load('auth2', function() {});
-  gapi.signin2.render('gSignIn', {
+  gapi.load('auth2', function(){
+    gapi.signin2.render('gSignIn', {
       'scope': 'profile email',
       'width': 100,
       'height': 30,
       'theme': 'dark',
       'onsuccess': signInSuccess,
       'onfailure': signInFailure
+    });
   });
 }
 
+//User successfully signs in with Google oAuth, proceed to Firebase authentication
 function signInSuccess(googleUser) {
+  //Collect user's google information then disconnect from google sign-in
   console.log('Google Auth Response', googleUser);
 	profile = googleUser.getBasicProfile();
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.disconnect();
 
   var profileHTML = '<img class="img-circle" id="profilePicture" src="' + profile.getImageUrl() +'"><button class="btn btn-primary btn-sm" onclick="signOut();"><span class="glyphicon glyphicon-log-out"></span> Sign out</button>';
   $('#gSignIn').hide();
@@ -158,9 +163,20 @@ function readWorld(worldId, callback){
 //Input: the world contents in json format
 //Returns: unique id of world in the database
 function writeWorld(jsonFile){
-  var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
-	var worldRefKey = worldRef.key;
-	console.log('world key is: '+worldRefKey);
+  var user = firebase.auth().currentUser;
+
+  //only signed-in users can create worlds
+  if(user){
+    var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
+    var worldRefKey = worldRef.key;
+    console.log('world key is: '+worldRefKey);
+
+    //associate the world with the signed-in user
+    var userRef = firebase.database().ref('/').child("users");
+  } 
+  else{   
+    alert("Please sign in to create VR worlds.");
+  }
 }
 
 

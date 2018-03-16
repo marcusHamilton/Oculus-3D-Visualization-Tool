@@ -361,6 +361,9 @@ window.addEventListener('vr controller connected', function(event) {
   var guiInputHelper = dat.GUIVR.addInputObject(controller);
   scene.add(guiInputHelper);
 
+  //Add selection controls
+  initializeSelectionControls();
+
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {
 

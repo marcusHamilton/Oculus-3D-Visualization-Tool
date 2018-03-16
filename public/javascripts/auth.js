@@ -34,8 +34,6 @@ function signInSuccess(googleUser) {
   //Collect user's google information then disconnect from google sign-in
   console.log('Google Auth Response', googleUser);
 	profile = googleUser.getBasicProfile();
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.disconnect();
 
   var profileHTML = '<img class="img-circle" id="profilePicture" src="' + profile.getImageUrl() +'"><button class="btn btn-primary btn-sm" onclick="signOut();"><span class="glyphicon glyphicon-log-out"></span> Sign out</button>';
   $('#gSignIn').hide();
@@ -44,21 +42,35 @@ function signInSuccess(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
   var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
     unsubscribe();
+
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
-  		//Build Firebase credential with the Google ID token.
-  		var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+      //Build Firebase credential with the Google ID token.
+      var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
 
-  		// Sign in with credential from the Google user.
-  		firebase.auth().signInWithCredential(credential).then(function(result) {
+      // Sign in with credential from the Google user.
+      firebase.auth().signInWithCredential(credential).then(function(snapshot) {
+        console.log("Signed " + profile.getName() + " into Firebase.");
+        postLogin();
       });
-      console.log("Signed " + profile.getName() + " into Firebase.");
-      userExistsDB(firebaseUser.uid);
-    } else {
+    } 
+    else{
       console.log(profile.getName() + ' is already signed-in to Firebase.');
-      userExistsDB(firebaseUser.uid);
+      postLogin();
     }
   });
+}
+
+//Program flow after the user successfully signs in or is already signed-in
+function postLogin(){
+  userExistsDB(getUID());
+  //reloadWorlds if currently on the dashboard
+  if(document.URL.indexOf("dashboard") !== -1){
+    reloadWorlds();
+  }
+  else{
+    //do nothing extra since we are not on the dashboard
+  }
 }
 
 //Sign in failure
@@ -72,6 +84,7 @@ function signOut(){
     //Firebase Sign-out successful.
 
     var auth2 = gapi.auth2.getAuthInstance();
+    auth2.disconnect();
     auth2.signOut().then(function () {
       $('.userContent').html('');
       $('#gSignIn').fadeIn('slow');
@@ -131,9 +144,8 @@ function createUserDB(firebaseUID){
 //                          DATABASE functions
 //******************************************************************************
 
-//Helper function to grab the authenticated firebase user
-function getFirebaseUser(){
-  return firebase.auth().currentUser;
+function getUID(){
+  return firebase.auth().currentUser.uid;
 }
 
 //Read World
@@ -254,25 +266,36 @@ function getWorldInfo(worldId){
 
 //Needs to be refactored for realtime database. This is not efficient
 function reloadWorlds() {
-    var myNode = document.getElementById("worldContainer");
-    while (myNode.firstChild) {
-        myNode.removeChild(myNode.firstChild);
+  var myNode = document.getElementById("worldContainer");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
+  document.getElementById('spinningLoader').style = "display:block";
+
+  //Fetch all the worlds that a user owns
+  //TODO: Fetch worlds they collaborate with as well
+  return database.ref('users/' + getUID()).child("worlds").once('value').then(function(snapshot){
+    var worlds = snapshot.val();
+
+    //load in each world
+    for(var key in worlds){
+      //Key must evaluate to true in order for user to have access to the world
+      if(worlds[key]){
+        reloadHelper(key);
+      }
     }
-    document.getElementById('spinningLoader').style = "display:block";
-    var allKeys;
-    $.ajax({
-        type: "GET",
-        url: '/worlds',
-        success: function (response) {
-            document.getElementById('spinningLoader').style = "display:none";
-            allKeys = response;
-            for (var i = 0; i < allKeys.length; i++) {
-                $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + allKeys[i] + '">' + "World" + i + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + allKeys[i] + '">Delete</a></li></ul></div>');
-            }
-        }
-    });
+    document.getElementById('spinningLoader').style = "display:none";
+  });
 }
 
+//Helper function to help load in a world for a user
+function reloadHelper(key){
+  return database.ref("worlds/" +key).once('value').then(function(snapshot){
+    var world = snapshot.val()
+    var name = world.object.name;
+    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
+  });
+}
 
 //******************************************************************************
 //******************************************************************************

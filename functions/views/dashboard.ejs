@@ -17,7 +17,8 @@
   <!--Javascript CDN's-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -30,28 +31,17 @@
   <script src="/javascripts/auth.js"></script>
   <script src="/javascripts/dashboardManager.js"></script>
 
-   <!-- Shader definitions provided by Dorian Thiessen -->
-   <script type="x-shader/x-vertex" id="vertexshader">
-         attribute float size;
-         attribute vec3 customColor;
-         varying vec3 vColor;
-         void main() {
-             vColor = customColor;
-             vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-             gl_PointSize = size * ( 300.0 / - mvPosition.z );
-             gl_Position = projectionMatrix * mvPosition;
-         }
-    </script>
+  <!-- Shader definitions provided by Dorian Thiessen -->
+  <script type="x-shader/x-vertex" id="vertexshader">
+    attribute float size; attribute vec3 customColor; varying vec3 vColor; void main() { vColor = customColor; vec4 mvPosition
+    = modelViewMatrix * vec4( position, 1.0 ); gl_PointSize = size * ( 300.0 / - mvPosition.z ); gl_Position = projectionMatrix
+    * mvPosition; }
+  </script>
 
-    <script type="x-shader/x-fragment" id="fragmentshader">
-          uniform vec3 color;
-          uniform sampler2D texture;
-          varying vec3 vColor;
-          void main() {
-              gl_FragColor = vec4( color * vColor, 1.0 );
-              gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
-          }
-      </script>
+  <script type="x-shader/x-fragment" id="fragmentshader">
+    uniform vec3 color; uniform sampler2D texture; varying vec3 vColor; void main() { gl_FragColor = vec4( color * vColor, 1.0
+    ); gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord ); }
+  </script>
 
 
   <!-- Google Authentification -->
@@ -74,12 +64,24 @@
             <nav>
               <!-- The Navigation Bar -->
               <ul class="nav masthead-nav">
-                <li><a href="/">Home</a></li>
-                <li><a href="/features">Features</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li class="active"><a href="/dashboard">Dashboard</a></li>
-                <li><div id="gSignIn"></div></li>
-                <li><div class="userContent"></div></li>
+                <li>
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <a href="/features">Features</a>
+                </li>
+                <li>
+                  <a href="/about">About Us</a>
+                </li>
+                <li class="active">
+                  <a href="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                  <div id="gSignIn"></div>
+                </li>
+                <li>
+                  <div class="userContent"></div>
+                </li>
               </ul>
             </nav>
             <!-- End: The Navigation Bar -->
@@ -117,7 +119,7 @@
 
 
 
-    <!--*********************Modal box content*******************-->
+    <!--*********************Add World Modal box content*******************-->
 
 
 
@@ -279,7 +281,40 @@
       </div>
     </div>
     <!--End: Modal box content-->
-  </div>
+
+
+    <!--*********************Add User Modal box content*******************-->
+    <div class="modal fade" id="addUser-modal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add a collaborator</h4>
+          </div>
+          <div class="modal-body">
+            <div style="display:none" id="noEmailMessage" class="alert alert-danger">
+              You must enter an email.
+            </div>
+            <form>
+                <label for="email">Email:</label>
+                <input type="text" class="form-control" id="addEmail" placeholder="joe.blank@gmail.com">
+                <input type="text" class="form-control" id="worldIDInputBox" style="display:none">
+            </form>
+            <br>
+            <button class="btn btn-info btn-lg" onClick="addUser()">
+                <span class="glyphicon glyphicon-plus"></span> Add User 
+            </button>
+          </div>
+          <div class="modal-footer">
+            <small>This box currently only logs the email and world id to the console. Dev in progress</small>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
 
 
 </body>

@@ -169,16 +169,16 @@ function writeWorld(jsonFile){
   if(user){
     var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
     var worldRefKey = worldRef.key;
+    firebase.database().ref('/worlds/' + worldRefKey + '/').push({"owner_id": user.uid});
     console.log('world key is: '+worldRefKey);
 
     //associate the world with the signed-in user
-    var userRef = firebase.database().ref('/').child("users");
+    var userWorldsRef = firebase.database().ref('/users/' + user.uid + '/worlds').push({"world_id": worldRefKey});
   } 
   else{   
     alert("Please sign in to create VR worlds.");
   }
 }
-
 
 //You only need to call this function once and it will listen for changes.
 //+	Whenever a geometry in the world changes, the contents of this function

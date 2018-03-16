@@ -7,10 +7,8 @@
 			".write": "$user_id === auth.uid",
     		".read": "$user_id === auth.uid",
        		"worlds": {
-	            ".validate": "newData.child('active').isBoolean()"
        		},
        		"collaborations": {
-       			".validate": "newData.child('active').isBoolean()"
        		}
     	}
     },
@@ -19,10 +17,8 @@
 	        ".write": "data.child('owner').child('$user_id').val() === auth.id",
 	    	".read": "data.child('collaborators/' +auth.uid).exists() || data.child('owner').child('$user_id').val() === auth.id",
 	      	"owner": {
-	       		".validate": "newData.child('active').isBoolean()"
 	        },
 	        "collaborators": {
-	          	".validate": "newData.child('active').isBoolean()"
 	        },
 			"geometries": {},
 			"materials": {},

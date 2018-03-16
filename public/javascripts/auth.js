@@ -15,17 +15,6 @@ var database = firebase.database();
 //Google Users profile
 var profile;
 
-//Checks Auth state and adds the authenticated user to the database if they aren't already
-firebase.auth().onAuthStateChanged( user => {
-  if (user){ 
-    if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-      profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-      this.userId = user.uid; 
-      userExistsDB(user.uid);
-    }
-  }
-});
-
 //When the DOM loads the sign in state is rendered
 function renderButton() {
   gapi.load('auth2', function(){
@@ -62,11 +51,12 @@ function signInSuccess(googleUser) {
 
   		// Sign in with credential from the Google user.
   		firebase.auth().signInWithCredential(credential).then(function(result) {
-        // userExistsDB(firebaseUser.uid);
       });
       console.log("Signed " + profile.getName() + " into Firebase.");
+      userExistsDB(firebaseUser.uid);
     } else {
       console.log(profile.getName() + ' is already signed-in to Firebase.');
+      userExistsDB(firebaseUser.uid);
     }
   });
 }
@@ -141,6 +131,11 @@ function createUserDB(firebaseUID){
 //                          DATABASE functions
 //******************************************************************************
 
+//Helper function to grab the authenticated firebase user
+function getFirebaseUser(){
+  return firebase.auth().currentUser;
+}
+
 //Read World
 //Input: the world id (string), callback function that handles the result
 //Returns: the world contents as json
@@ -163,13 +158,13 @@ function readWorld(worldId, callback){
 //Input: the world contents in json format
 //Returns: unique id of world in the database
 function writeWorld(jsonFile){
-  var user = firebase.auth().currentUser;
+  var user = getFirebaseUser();
 
   //only signed-in users can create worlds
   if(user){
     var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
     var worldRefKey = worldRef.key;
-    firebase.database().ref('/worlds/' + worldRefKey + '/').push({"owner_id": user.uid});
+    firebase.database().ref('/worlds/' + worldRefKey).update({"owner_id": user.uid});
     console.log('world key is: '+worldRefKey);
 
     //associate the world with the signed-in user
@@ -178,6 +173,34 @@ function writeWorld(jsonFile){
   else{   
     alert("Please sign in to create VR worlds.");
   }
+}
+
+/* Deletes a world from user/user_id/worlds/
+ * If the user is the owner of the world: fully remove the world
+ * If the user is a collaborator on the world: remove user from the collaboration
+*/
+function deleteWorld(id){
+  var user = getFirebaseUser();
+
+  //check if user owns the world
+  return database.ref('worlds/' + id).once('value').then(function(snapshot){
+    world = snapshot.val();
+    console.log(world.owner_id);
+
+    //owns the world, remove it from the database
+    if(world.owner_id == getFirebaseUser().uid){
+      database.ref('users/' + user.uid + '/worlds/' + id).remove();
+      database.ref('worlds/' + id).remove();
+      console.log("Deleted the user's world" + id + ".");
+      //TODO: Remove from collaborators list as well
+    }
+    //TODO: Check if the user is a collaborator
+    else{
+      console.log("User cannot delete a world they do not own.");
+    }
+
+    reloadWorlds();
+  });
 }
 
 //You only need to call this function once and it will listen for changes.

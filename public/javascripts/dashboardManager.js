@@ -7,14 +7,15 @@ function packID(id) {
     sessionStorage.setItem('selectedID', JSON.stringify(id));
 }
 
-function deleteWorld(id) {
-    var worldURL = '/worlds/' + id;
-    $.ajax({
-        type: "DELETE",
-        url: worldURL,
-    });
-    reloadWorlds();
-}
+//Moved to auth.js
+// function deleteWorld(id) {
+//     var worldURL = '/worlds/' + id;
+//     $.ajax({
+//         type: "DELETE",
+//         url: worldURL,
+//     });
+//     reloadWorlds();
+// }
 
 function addCollab(userID) {
 

@@ -170,7 +170,7 @@ function readWorld(worldId, callback){
 //Input: the world contents in json format
 //Returns: unique id of world in the database
 function writeWorld(jsonFile){
-  var user = getFirebaseUser();
+  var user = firebase.auth().currentUser;
 
   //only signed-in users can create worlds
   if(user){
@@ -194,7 +194,6 @@ function writeWorld(jsonFile){
  * If the user is a collaborator on the world: remove user from the collaboration
 */
 function deleteWorld(id){
-  var user = getFirebaseUser();
 
   //check if user owns the world
   return database.ref('worlds/' + id).once('value').then(function(snapshot){
@@ -202,7 +201,7 @@ function deleteWorld(id){
     console.log(world.owner_id);
 
     //owns the world, remove it from the database
-    if(world.owner_id == getFirebaseUser().uid){
+    if(world.owner_id == getUID()){
       database.ref('users/' + user.uid + '/worlds/' + id).remove();
       database.ref('worlds/' + id).remove();
       console.log("Deleted the user's world" + id + ".");
@@ -293,7 +292,7 @@ function reloadHelper(key){
   return database.ref("worlds/" +key).once('value').then(function(snapshot){
     var world = snapshot.val()
     var name = world.object.name;
-    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
+    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#" id="' + key + '" data-toggle="modal" data-target="#addUser-modal" onClick="addUserHelper(this.id)">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
   });
 }
 

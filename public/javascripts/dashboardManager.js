@@ -48,9 +48,15 @@ function addUserHelper(WorldID)
 
 function addUser()
 {
+    //regex to check that the email is a gmail account
+    var reg = new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$");
     if(document.getElementById('addEmail').value == "")
     {
         document.getElementById('noEmailMessage').style="display:block";
+    }
+    else if(!reg.test(document.getElementById('addEmail').value))
+    {
+        document.getElementById('badEmailMessage').style="display:block";
     }
     else
     {
@@ -60,7 +66,8 @@ function addUser()
 
         //Reset the modal box for more use
         $('#addUser-modal').modal('hide');
-        document.getElementById('noEmailMessage').style="display:none"
+        document.getElementById('noEmailMessage').style="display:none";
+        document.getElementById('badEmailMessage').style="display:none";
         document.getElementById('addEmail').value = "";
         document.getElementById('worldIDInputBox').value = "";
     }

@@ -8,10 +8,10 @@
 
 var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
-var pointSelectionRaycaster = new THREE.Raycaster();
+var pointSelectionRaycaster;
 var pointSelectionMouse = new THREE.Vector2();
-var selectionThreshold = 1; //the distance the mouse has to be from a point
-                            //in order for it to register as selectable
+var selectionThreshold = 0.1; //the distance the mouse has to be from a point
+//in order for it to register as selectable
 var intersects;
 
 /**
@@ -19,6 +19,10 @@ var intersects;
  */
 function initializeSelectionControls()
 {
+  console.log("Point Selection Threshold: " + selectionThreshold);
+  pointSelectionRaycaster = new THREE.Raycaster();
+  pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
+
   if (controller != null)
   {
     // TODO Attach raycaster to VRcontroller
@@ -33,45 +37,59 @@ function initializeSelectionControls()
  * Call this in GameLoop or Update to detect raycaster intersections on every
  * frame.
  */
+var mousedOverPoint;
 function pointSelectionUpdate()
 {
   // calculate objects intersecting the ray
   pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
   intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
   intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
-
+  setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  //pointsGeometry.boundingBox = null;
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
-    for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
-      if (Math.abs(pointsGeometry.getAttribute('position').array[i].x - intersects.point.x) < selectionThreshold
-        && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
-        && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold) {
-        setPointColor(i, new THREE.Color(1, 1, 1));
-      }
-    }
+    //console.log(intersects);
+    setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+
+    mousedOverPoint = intersects.index;
+    //var curColor = getPointColor(intersects.index);
+    //pointsGeometry.getAttribute('customColor').array[intersects.index * 3] = 1;
+    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 1] = 1;
+    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 2] = 1;
+    //console.log(getPointColor(intersects.index));
+    //setPointColor(intersects.index, new THREE.Color(255,255,255));
+    //setPointColor(intersects.index, curColor.setHSL(curColor.getHSL.h, curColor.getHSL.s, curColor.getHSL.l * 1.5 ));
+
+  }
+  else {
+
+    setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 }
 
 /**
  * Selects a point by setting its associated isSelected attribute
  * @param pointIndex : The array index of point you want to select in the
- *                     BufferGeometry that you want to select.
+ *                     BufferGeometry.
  */
 function selectPoint(pointIndex)
 {
   pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] =
-      !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
+    !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
   if(pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] == false){
-      selectedPoints.splice(selectedPoints.indexOf(pointIndex));
-      setPointColor(pointIndex, colorFromXYZcoords(pointsGeometry.getAttribute('position')).array[pointIndex]);
-      setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
-          pointsGeometry.getAttribute('size').array[pointIndex] * 2/3);
+    selectedPoints.splice(selectedPoints.indexOf(pointIndex),1);
+    setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+      pointsGeometry.getAttribute('position').array[(pointIndex*3)],
+      pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
+      pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
+    setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
+      plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
   else{
-      selectedPoints.push(pointIndex);
-      setPointColor(pointIndex, new THREE.Color(1, 1, 1));
-      setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
-          pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
+    selectedPoints.push(pointIndex);
+    setPointColor(pointIndex, new THREE.Color(1, 1, 1));
+    setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
+      pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
 }
 
@@ -80,14 +98,45 @@ function selectPoint(pointIndex)
  */
 function clearSelection()
 {
+  var printArrayAfter = false;
+  if (selectedPoints.length > 0){
+    printArrayAfter = true;
+  }
   var selected = pointsGeometry.getAttribute( 'isSelected' ).array;
   for(var i = 0; i < selected.length; i++){
     if(selected[i] == true){
       selected[i] = false;
+      setPointColor(i, colorFromXYZcoords(new THREE.Vector3(
+        pointsGeometry.getAttribute('position').array[(i*3)],
+        pointsGeometry.getAttribute('position').array[(i*3)+1],
+        pointsGeometry.getAttribute('position').array[(i*3)+2])));
     }
   }
   pointsGeometry.getAttribute( 'isSelected' ).array = selected;
   selectedPoints = [];
+  if (printArrayAfter){
+    console.log(selectedPoints);
+  }
+}
+
+/**
+ * inverts the current selection. All selected points are deselected and
+ * all unselected pointsare selected
+ */
+function invertSelection(){
+  for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      selectPoint(i);
+  }
+}
+
+/**
+ * selects all points in the world
+ */
+function selectAll(){
+    for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+      if(!pointsGeometry.getAttribute('isSelected').array[i])
+        selectPoint(i);
+    }
 }
 
 /**
@@ -111,13 +160,13 @@ function onClick( event ){
 
   event.preventDefault();
   if (intersects != null) {
-    for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i++) {
-      if (Math.abs(pointsGeometry.getAttribute('position').array[i].x - intersects.point.x) < selectionThreshold
-        && Math.abs(pointsGeometry.getAttribute('position').array[i].y - intersects.point.y) < selectionThreshold
-        && Math.abs(pointsGeometry.getAttribute('position').array[i].z - intersects.point.z) < selectionThreshold) {
-        selectPoint(i);
-      }
-    }
+    selectPoint(intersects.index);
+  }
+  else {
+    clearSelection();
+  }
+  if (selectedPoints.length > 0){
+    console.log(getSelectedPointPositions());
   }
 }
 
@@ -127,12 +176,28 @@ function onClick( event ){
  * @precondition pointsGeometry must be initialized and
  * pointsGeometry.getAttribute('customColor').needsUpdate == true
  *
- * @param {Integer} datasetIndex : index of point to change
- * @param {Vector3} colorRGB : a Vector3 of RGB values (0-1.0)
+ * param {Number} datasetIndex : index of point to change
+ * @param {THREE.Color} colorRGB : a Vector3 of RGB values (0-1.0)
  */
 function setPointColor(datasetIndex, colorRGB)
 {
-  pointsGeometry.getAttribute('customColor').array[datasetIndex] = colorRGB;
+  pointsGeometry.getAttribute('customColor').array[datasetIndex * 3] = colorRGB.r;
+  pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 1] = colorRGB.g;
+  pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 2] = colorRGB.b;
+}
+
+/**
+ * Gets the color of a singular datapoint.
+ *
+ * @param {Number} datasetIndex : index of point to get the color of
+ * @returns {THREE.Color} a Vector3 of RGB values (0-1.0)
+ */
+function getPointColor(datasetIndex)
+{
+  return new THREE.Color(
+    pointsGeometry.getAttribute('customColor').array[datasetIndex * 3],
+    pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 1],
+    pointsGeometry.getAttribute('customColor').array[(datasetIndex * 3) + 2]);
 }
 
 /**
@@ -141,8 +206,8 @@ function setPointColor(datasetIndex, colorRGB)
  * @precondition pointsGeometry must be initialized and
  * pointsGeometry.getAttribute('size').needsUpdate == true
  *
- * @param {Integer} datasetIndex : index of point to change
- * @param {Number} size : New size for  the point
+ * param {Number} datasetIndex : index of point to change
+ * param {Number} size : New size for  the point
  */
 function setPointScale(datasetIndex, size)
 {
@@ -159,16 +224,76 @@ function setPointScale(datasetIndex, size)
  */
 function colorFromXYZcoords(vec3) {
 
-  var r = 0;
-  var g = 0;
-  var b = 0;
-  // Truncating the first and last 16 of each value because
-  // toString(16) doesn't return leading zeros.
-  if (largestX > 0 && largestY > 0 && largestZ > 0) {
-    r = 16 + Math.round((vec3.x / largestX) * 239);
-    g = 16 + Math.round((vec3.y / largestY) * 239);
-    b = 16 + Math.round((vec3.z / largestZ) * 239);
-  }
+  // Set point color RGB values to magnitude of XYZ values
+  var newColor = new THREE.Color();
+
   // Assemble the RGB components in a color value.
-  return parseInt(r.toString(16) + g.toString(16) + b.toString(16), 16);
+  newColor.setRGB(vec3.x/largestX, vec3.y/largestY, vec3.z/largestZ);
+
+  return newColor;
 }
+
+/**
+ * Gets an array of the xyz values of all currently selected points
+ *
+ * @return {Vector3[]} array of Vector3 objects containing positions
+ */
+function getSelectedPointPositions() {
+
+  var selectedPointPositions = [];
+
+  for(var i = 0; i < selectedPoints.length; i++){
+    var tempX, tempY, tempZ;
+    tempX = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3];
+    tempY = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 1];
+    tempZ = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 2];
+
+    selectedPointPositions.push(new THREE.Vector3(tempX, tempY, tempZ));
+  }
+
+  return selectedPointPositions;
+}
+
+
+/**
+ * Gets an array containing all values of the specified axis
+ *
+ * @param {String} axis : the axis desired. Must be x, y, or z
+ * @returns {float[]} the array containing the values of the desired axis
+ */
+function getSelectedAxisValues(axis){
+
+  var vals = [];
+  var selectedPositions = getSelectedPointPositions();
+    for( var i = 0; i < selectedPositions.length; i++) {
+       if (     axis.valueOf() === 'x') {
+           vals.push(selectedPositions[i].x)
+       }
+       else if (axis.valueOf() === 'y') {
+            vals.push(selectedPositions[i].y)
+       }
+       else if (axis.valueOf() === 'z') {
+           vals.push(selectedPositions[i].z)
+        }
+       else {
+            console.log("Can only get values for the x, y, or z axis.");
+            break;
+        }
+
+  }
+    return vals;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

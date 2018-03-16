@@ -5,6 +5,7 @@
  */
 
 var parsedData; //Parsed data obtained from the CSV
+var fileName; //Stored to give a meaningful name on the dashboard
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
 //parsedData[i][x_AxisIndex]
 //parsedData[i][y_AxisIndex]
@@ -23,6 +24,7 @@ var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 function loadCSVLocal() {
   //Grab the file from the html dom system
   var file = document.getElementById('csv-file').files[0];
+  fileName = file.name;
 
   Papa.parse(file, {
     //header: true,
@@ -203,6 +205,7 @@ function addParsedDataToScene()
   assert(y_AxisIndex >= 0,"");
   assert(z_AxisIndex >= 0,"");
   scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+  scene.name = fileName;
 }
 
 /**

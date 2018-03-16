@@ -10,6 +10,42 @@ function addCollab(userID) {
 
 }
 
+function addUserHelper(WorldID)
+{
+    document.getElementById('worldIDInputBox').value=WorldID;
+}
+
+function addUser()
+{
+    //regex to check that the email is a gmail account
+    var reg = new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$");
+    if(document.getElementById('addEmail').value == "")
+    {
+        document.getElementById('badEmailMessage').style="display:none";
+        document.getElementById('noEmailMessage').style="display:block";
+    }
+    else if(!reg.test(document.getElementById('addEmail').value))
+    {
+        document.getElementById('noEmailMessage').style="display:none";
+        document.getElementById('badEmailMessage').style="display:block";
+    }
+    else
+    {
+        var email = document.getElementById('addEmail').value;
+        var worldID = document.getElementById('worldIDInputBox').value;
+        console.log("Adding email: " + email + " to world: " + worldID);
+
+        //Do stuff with email and worldID here
+
+        //Reset the modal box for more use
+        $('#addUser-modal').modal('hide');
+        document.getElementById('noEmailMessage').style="display:none";
+        document.getElementById('badEmailMessage').style="display:none";
+        document.getElementById('addEmail').value = "";
+        document.getElementById('worldIDInputBox').value = "";
+    }
+}
+
 //Function is used to display the name of the file uploaded in the box
 //on the modal box that helps the user load in a local file
 $(function () {

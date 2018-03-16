@@ -14,6 +14,9 @@ var selectionThreshold = 0.1; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 
+var raycasterLineMaterial;
+var raycasterLineGeometry;
+var raycasterLine;
 /**
  * Initializes the event listeners for point selection
  */
@@ -29,6 +32,15 @@ function initializeSelectionControls()
     console.log("VR Controller detected for point selection.");
     console.log(controller);
     pointSelectionRaycaster.set(controller.position, controller.rotation);
+
+    raycasterLineMaterial = new THREE.LineBasicMaterial({
+      color: 0xff0000
+    });
+    raycasterLineGeometry = new THREE.Geometry();
+    raycasterLineGeometry.vertices.push(controller.position);
+    raycasterLineGeometry.vertices.push(controller.position + (controller.rotation * 10));
+    raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
+    scene.add(raycasterLine);
 
   }
   // setup mouse raycaster here
@@ -48,6 +60,9 @@ function pointSelectionUpdate()
   if (controller != null)
   {
     pointSelectionRaycaster.set(controller.position, controller.rotation);
+    raycasterLine.position.set(controller.position);
+    raycasterLine.rotation.set(controller.rotation);
+
   }
   else {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);

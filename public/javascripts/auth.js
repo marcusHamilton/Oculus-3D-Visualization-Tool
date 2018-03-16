@@ -293,7 +293,6 @@ function reloadHelper(key){
   return database.ref("worlds/" +key).once('value').then(function(snapshot){
     var world = snapshot.val()
     var name = world.object.name;
-    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
   });
 }
 

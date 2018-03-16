@@ -117,12 +117,12 @@ function userExistsDB(firebaseUID){
 //Add the newly authenticated user to the database
 function createUserDB(firebaseUID){
   database.ref('users/' + firebaseUID).set({
-    name: {
-      give_name: profile.getGivenName(),
-      family_name: profile.getFamilyName()
+    "name": {
+      "give_name": profile.getGivenName(),
+      "family_name": profile.getFamilyName()
     },
-    email: profile.getEmail(),
-    profile_picture : profile.getImageUrl()
+    "email": profile.getEmail(),
+    "profile_picture": profile.getImageUrl()
   });
   console.log("Success: Added " + profile.getName() + " as an authenticated user to the database.");
 }
@@ -168,7 +168,9 @@ function writeWorld(jsonFile){
     console.log('world key is: '+worldRefKey);
 
     //associate the world with the signed-in user
-    var userWorldsRef = firebase.database().ref('/users/' + user.uid + '/worlds').push({"world_id": worldRefKey});
+    var userWorldObj = {};
+    userWorldObj[worldRefKey] = 'true';
+    firebase.database().ref('/users/' + user.uid).child("worlds").update(userWorldObj);
   } 
   else{   
     alert("Please sign in to create VR worlds.");
@@ -249,6 +251,27 @@ function getWorldInfo(worldId){
 // var worldId = '-L6UfQx0beRgpsbWxeNt';
 // var result = getWorldInfo(worldId);
 // console.log(result);
+
+//Needs to be refactored for realtime database. This is not efficient
+function reloadWorlds() {
+    var myNode = document.getElementById("worldContainer");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    document.getElementById('spinningLoader').style = "display:block";
+    var allKeys;
+    $.ajax({
+        type: "GET",
+        url: '/worlds',
+        success: function (response) {
+            document.getElementById('spinningLoader').style = "display:none";
+            allKeys = response;
+            for (var i = 0; i < allKeys.length; i++) {
+                $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + allKeys[i] + '">' + "World" + i + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + allKeys[i] + '">Delete</a></li></ul></div>');
+            }
+        }
+    });
+}
 
 
 //******************************************************************************

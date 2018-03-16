@@ -202,7 +202,7 @@ function deleteWorld(id){
 
     //owns the world, remove it from the database
     if(world.owner_id == getUID()){
-      database.ref('users/' + user.uid + '/worlds/' + id).remove();
+      database.ref('users/' + getUID() + '/worlds/' + id).remove();
       database.ref('worlds/' + id).remove();
       console.log("Deleted the user's world" + id + ".");
       //TODO: Remove from collaborators list as well

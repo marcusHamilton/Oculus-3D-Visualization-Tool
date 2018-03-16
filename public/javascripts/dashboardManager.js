@@ -16,10 +16,6 @@ function deleteWorld(id) {
     reloadWorlds();
 }
 
-function addCollab(userID) {
-
-}
-
 //Needs to be refactored for realtime database. This is not efficient
 function reloadWorlds() {
     var myNode = document.getElementById("worldContainer");

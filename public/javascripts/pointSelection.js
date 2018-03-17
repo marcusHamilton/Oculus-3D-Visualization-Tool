@@ -28,19 +28,22 @@ function initializeSelectionControls()
 
   if (controller != null)
   {
-    // TODO Attach raycaster to VRcontroller
-    console.log("VR Controller detected for point selection.");
-    console.log(controller);
-    pointSelectionRaycaster.set(controller.position, controller.rotation);
+    for (controller in scene.controllers)
+    {
+      // TODO Attach raycaster to VRcontroller
+      console.log("VR Controller detected for point selection.");
+      console.log(controller);
+      pointSelectionRaycaster.set(controller.position, controller.rotation);
 
-    raycasterLineMaterial = new THREE.LineBasicMaterial({
-      color: 0xff0000
-    });
-    raycasterLineGeometry = new THREE.Geometry();
-    raycasterLineGeometry.vertices.push(controller.position);
-    raycasterLineGeometry.vertices.push(controller.position + (controller.rotation * 10));
-    raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
-    scene.add(raycasterLine);
+      raycasterLineMaterial = new THREE.LineBasicMaterial({
+        color: 0xff0000
+      });
+      raycasterLineGeometry = new THREE.Geometry();
+      raycasterLineGeometry.vertices.push(controller.position);
+      raycasterLineGeometry.vertices.push(controller.position + (controller.rotation * 10));
+      raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
+      scene.add(raycasterLine);
+    }
 
   }
   // setup mouse raycaster here
@@ -59,15 +62,17 @@ function pointSelectionUpdate()
   // calculate objects intersecting the ray
   if (controller != null)
   {
-    pointSelectionRaycaster.set(controller.position, controller.rotation);
-    raycasterLine.position.set(controller.position);
-    raycasterLine.rotation.set(controller.rotation);
+    for (controller in scene.controllers) {
+      pointSelectionRaycaster.set(controller.position, controller.rotation);
+      raycasterLine.position.set(controller.position);
+      raycasterLine.rotation.set(controller.rotation);
 
-    console.log("----------------------------------");
-    console.log(controller);
-    console.log(controller.position);
-    console.log(controller.rotation);
-    console.log(pointSelectionRaycaster);
+      console.log("----------------------------------");
+      console.log(controller);
+      console.log(controller.position);
+      console.log(controller.rotation);
+      console.log(pointSelectionRaycaster);
+    }
 
   }
   else {

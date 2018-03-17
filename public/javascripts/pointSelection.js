@@ -52,13 +52,7 @@ function pointSelectionUpdate()
     setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
     mousedOverPoint = intersects.index;
-    //var curColor = getPointColor(intersects.index);
-    //pointsGeometry.getAttribute('customColor').array[intersects.index * 3] = 1;
-    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 1] = 1;
-    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 2] = 1;
-    //console.log(getPointColor(intersects.index));
-    //setPointColor(intersects.index, new THREE.Color(255,255,255));
-    //setPointColor(intersects.index, curColor.setHSL(curColor.getHSL.h, curColor.getHSL.s, curColor.getHSL.l * 1.5 ));
+
 
   }
   else {

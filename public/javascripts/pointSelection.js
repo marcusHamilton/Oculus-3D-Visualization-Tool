@@ -120,7 +120,7 @@ function pointSelectionUpdate() {
 
   scene.remove ( raycasterLine );
 
-  if (pointSelectionRaycasterR) {
+  if (pointSelectionRaycasterR.direction) {
     raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff
     });

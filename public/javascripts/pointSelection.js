@@ -85,6 +85,7 @@ function pointSelectionUpdate() {
 
     var direction = new THREE.Vector3( 0, 0, 1 );
     matrix.multiplyVector3( direction );
+    direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
   }
@@ -138,7 +139,7 @@ function pointSelectionUpdate() {
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
 
     scene.add(raycasterLine);*/
-    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, 100, 0xff00ff );
+    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, 1000000, 0xff00ff );
     scene.add(raycasterLine);
   }
 

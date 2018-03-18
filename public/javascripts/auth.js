@@ -15,29 +15,23 @@ var database = firebase.database();
 //Google Users profile
 var profile;
 
-//Checks Auth state and adds the authenticated user to the database if they aren't already
-firebase.auth().onAuthStateChanged( user => {
-  if (user){ 
-    if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-      profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-      this.userId = user.uid; 
-      userExistsDB(user.uid);
-    }
-  }
-});
-
+//When the DOM loads the sign in state is rendered
 function renderButton() {
-  gapi.signin2.render('gSignIn', {
+  gapi.load('auth2', function(){
+    gapi.signin2.render('gSignIn', {
       'scope': 'profile email',
       'width': 100,
       'height': 30,
       'theme': 'dark',
       'onsuccess': signInSuccess,
       'onfailure': signInFailure
+    });
   });
 }
 
+//User successfully signs in with Google oAuth, proceed to Firebase authentication
 function signInSuccess(googleUser) {
+  //Collect user's google information then disconnect from google sign-in
   console.log('Google Auth Response', googleUser);
 	profile = googleUser.getBasicProfile();
 
@@ -48,20 +42,35 @@ function signInSuccess(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
   var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
     unsubscribe();
+
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
-  		//Build Firebase credential with the Google ID token.
-  		var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+      //Build Firebase credential with the Google ID token.
+      var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
 
-  		// Sign in with credential from the Google user.
-  		firebase.auth().signInWithCredential(credential).then(function(result) {
-        // userExistsDB(firebaseUser.uid);
+      // Sign in with credential from the Google user.
+      firebase.auth().signInWithCredential(credential).then(function(snapshot) {
+        console.log("Signed " + profile.getName() + " into Firebase.");
+        postLogin();
       });
-      console.log("Signed " + profile.getName() + " into Firebase.");
-    } else {
+    } 
+    else{
       console.log(profile.getName() + ' is already signed-in to Firebase.');
+      postLogin();
     }
   });
+}
+
+//Program flow after the user successfully signs in or is already signed-in
+function postLogin(){
+  userExistsDB(getUID());
+  //reloadWorlds if currently on the dashboard
+  if(document.URL.indexOf("dashboard") !== -1){
+    reloadWorlds();
+  }
+  else{
+    //do nothing extra since we are not on the dashboard
+  }
 }
 
 //Sign in failure
@@ -75,6 +84,7 @@ function signOut(){
     //Firebase Sign-out successful.
 
     var auth2 = gapi.auth2.getAuthInstance();
+    auth2.disconnect();
     auth2.signOut().then(function () {
       $('.userContent').html('');
       $('#gSignIn').fadeIn('slow');
@@ -120,11 +130,12 @@ function userExistsDB(firebaseUID){
 //Add the newly authenticated user to the database
 function createUserDB(firebaseUID){
   database.ref('users/' + firebaseUID).set({
-    fullName: profile.getName(),
-    givenName: profile.getGivenName(),
-    familyName: profile.getFamilyName(),
-    email: profile.getEmail(),
-    profile_picture : profile.getImageUrl()
+    "name": {
+      "give_name": profile.getGivenName(),
+      "family_name": profile.getFamilyName()
+    },
+    "email": profile.getEmail(),
+    "profile_picture": profile.getImageUrl()
   });
   console.log("Success: Added " + profile.getName() + " as an authenticated user to the database.");
 }
@@ -132,6 +143,10 @@ function createUserDB(firebaseUID){
 //******************************************************************************
 //                          DATABASE functions
 //******************************************************************************
+
+function getUID(){
+  return firebase.auth().currentUser.uid;
+}
 
 //Read World
 //Input: the world id (string), callback function that handles the result
@@ -155,11 +170,51 @@ function readWorld(worldId, callback){
 //Input: the world contents in json format
 //Returns: unique id of world in the database
 function writeWorld(jsonFile){
-  var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
-	var worldRefKey = worldRef.key;
-	console.log('world key is: '+worldRefKey);
+  var user = firebase.auth().currentUser;
+
+  //only signed-in users can create worlds
+  if(user){
+    var worldRef = firebase.database().ref('/').child("worlds").push(jsonFile);
+    var worldRefKey = worldRef.key;
+    firebase.database().ref('/worlds/' + worldRefKey).update({"owner_id": user.uid});
+    console.log('world key is: '+worldRefKey);
+
+    //associate the world with the signed-in user
+    var userWorldObj = {};
+    userWorldObj[worldRefKey] = 'true';
+    firebase.database().ref('/users/' + user.uid).child("worlds").update(userWorldObj);
+  } 
+  else{   
+    alert("Please sign in to create VR worlds.");
+  }
 }
 
+/* Deletes a world from user/user_id/worlds/
+ * If the user is the owner of the world: fully remove the world
+ * If the user is a collaborator on the world: remove user from the collaboration
+*/
+function deleteWorld(id){
+
+  //check if user owns the world
+  return database.ref('worlds/' + id).once('value').then(function(snapshot){
+    world = snapshot.val();
+    console.log(world.owner_id);
+
+    //owns the world, remove it from the database
+    if(world.owner_id == getUID()){
+      database.ref('users/' + getUID() + '/worlds/' + id).remove();
+      database.ref('worlds/' + id).remove();
+      console.log("Deleted the user's world" + id + ".");
+      //TODO: Remove from collaborators list as well
+    }
+    //TODO: Check if the user is a collaborator
+    else{
+      console.log("User cannot delete a world they do not own.");
+    }
+
+    reloadWorlds();
+  });
+}
 
 //You only need to call this function once and it will listen for changes.
 //+	Whenever a geometry in the world changes, the contents of this function
@@ -208,6 +263,38 @@ function getWorldInfo(worldId){
 // var result = getWorldInfo(worldId);
 // console.log(result);
 
+//Needs to be refactored for realtime database. This is not efficient
+function reloadWorlds() {
+  var myNode = document.getElementById("worldContainer");
+  while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+  }
+  document.getElementById('spinningLoader').style = "display:block";
+
+  //Fetch all the worlds that a user owns
+  //TODO: Fetch worlds they collaborate with as well
+  return database.ref('users/' + getUID()).child("worlds").once('value').then(function(snapshot){
+    var worlds = snapshot.val();
+
+    //load in each world
+    for(var key in worlds){
+      //Key must evaluate to true in order for user to have access to the world
+      if(worlds[key]){
+        reloadHelper(key);
+      }
+    }
+    document.getElementById('spinningLoader').style = "display:none";
+  });
+}
+
+//Helper function to help load in a world for a user
+function reloadHelper(key){
+  return database.ref("worlds/" +key).once('value').then(function(snapshot){
+    var world = snapshot.val()
+    var name = world.object.name;
+    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#" id="' + key + '" data-toggle="modal" data-target="#addUser-modal" onClick="addUserHelper(this.id)">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
+  });
+}
 
 //******************************************************************************
 //******************************************************************************

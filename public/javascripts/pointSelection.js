@@ -119,6 +119,7 @@ function pointSelectionUpdate() {
   }
 
   //scene.remove ( raycasterLine );
+  /*
   if (pointSelectionRaycasterR) {
     raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff
@@ -129,6 +130,7 @@ function pointSelectionUpdate() {
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
     scene.add(raycasterLine);
   }
+  */
 }
 
 /**

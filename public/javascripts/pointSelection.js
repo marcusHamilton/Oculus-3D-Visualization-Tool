@@ -118,7 +118,7 @@ function pointSelectionUpdate() {
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
-  scene.remove ( raycasterLine );
+  //scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR) {
     raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff

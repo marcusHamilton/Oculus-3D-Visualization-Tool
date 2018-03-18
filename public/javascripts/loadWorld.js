@@ -369,6 +369,7 @@ window.addEventListener('vr controller connected', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
     console.log(pointSelectionRaycasterR);
+    console.log(selectionControllerR);
     guiInputHelper.pressed(true)
   });
   controller.addEventListener('primary press ended', function(event) {

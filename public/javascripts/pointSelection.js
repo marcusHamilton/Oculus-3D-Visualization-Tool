@@ -10,7 +10,7 @@ var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
 
 var pointSelectionMouse = new THREE.Vector2();
-var selectionThreshold = 0.01; //the distance the mouse has to be from a point
+var selectionThreshold = 0.05; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 

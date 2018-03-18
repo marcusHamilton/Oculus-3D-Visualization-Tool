@@ -1,3 +1,37 @@
+// //helping Owen with e2e test
+// var webdriver = require('selenium-webdriver');
+// By = webdriver.By,
+// until = webdriver.until,
+// assert = require('assert');
+//
+// //var driver;
+//
+// describe('e2e tests', function(){
+//   before(() => {
+//     driver = new webdriver.Builder().forBrowser('firefox').build();
+//     driver.get("https://3dvisualizationtool.ml");
+//     driver.getCurrentUrl().then(function( url ){
+//     console.log(url);
+//   });
+//     //driver.navigate().to('https://3dvisualizationtool.ml');
+//   });
+//
+//   it("title should print", () =>{
+//     driver.getCurrentUrl().then(function( url ){
+//     console.log(url);
+//   });
+//    driver.getTitle().then(function ( title ) {
+//      console.log(title);
+//    });
+//  });
+//
+//  after(() =>{
+//   //driver.quit();
+//   //driver.close();
+//  });
+//
+// });
+
 /**
  * Created by homeyxue on 2018-02-03.
  */
@@ -13,8 +47,8 @@ var webdriver = require('selenium-webdriver');
  * Using Firefox for testing, we need to install geckodriver
  * Using chrom for testing, we need to install chromedriver
  */
- describe('home page test Suite', function(done){
- this.timeout(50000);
+ describe('home page test Suite', function(){
+ //this.timeout(50000);
  /**
   * web driver for test case
   */
@@ -24,8 +58,7 @@ var webdriver = require('selenium-webdriver');
  .build();
 
  driver.get("https://3dvisualizationtool.ml");
-
- // driver.wait(until.elementLocated(By.id("identifierId")), 50000);
+ driver.wait(until.elementLocated(By.xpath('/html/body/div/div/div/div[2]/p[2]/a')), 50000);
  // driver.getCurrentUrl().then(function( url ){
  // console.log(url);
  // //assert(url === "https://accounts.google.com/signin/oauth/identifier?client_id=483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com&as=lME8KI5lhapLxK0Kwfo2Eg&destination=https%3A%2F%2Foculus-3d-visualization-c5687.firebaseapp.com&approval_state=!ChQ3MW5TcWF1MjF3MkNmLTMwY3BvdRIfWXdaTVdONGQ4R1VVNEpEYnJUUGdXM0JjOUxIV0hoWQ%E2%88%99ACThZt4AAAAAWpxONDNM9zl4shEwa2Fu0vyaaziEtMyJ&xsrfsig=AHgIfE-U6vvxzqUjBvRXDlGwq0dJrAOwQA&flowName=GeneralOAuthFlow");
@@ -38,7 +71,7 @@ var webdriver = require('selenium-webdriver');
  // driver.findElement(By.className("whsOnd zHQkBf")).sendKeys('osgood371');
  // driver.findElement(By.id("passwordNext")).click();
 
- driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a")), 50000);
+ // driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a")), 50000);
  driver.getCurrentUrl().then(function( url ){
  console.log(url);
  assert(url === "https://3dvisualizationtool.ml");
@@ -49,8 +82,8 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(() =>{
-   driver.quit();
-   driver.close();
+   //driver.quit();
+   //driver.close();
  });
 
  it("title should print", () =>{
@@ -138,7 +171,8 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(function(){
- driver.quit();
+ //driver.quit();
+ //driver.close();
  });
 
  /**
@@ -164,11 +198,7 @@ var webdriver = require('selenium-webdriver');
 
  it("click VRworld should work", () => {
 
- //var VRw0 = driver.findElement(By.id('-L6UcY0EKaTU24sRbEq3'));
- //var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
- //var VRw2 = driver.findElement(By.id('-L6Ud_fayHJ9kHcmOwRf'));
-
- var VRw0 = driver.findElement(By.xpath('//*[@id="-L6kqw1Ilu2xuK_UJ9ny"]'));
+ var VRw0 = driver.findElement(By.xpath('//*[@id="-L7kOzwNoZd8uIy9pn_K"]'));
 
  VRw0.click();
  driver.wait(until.elementLocated(By.xpath('//*[@id="ui"]')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
@@ -177,9 +207,9 @@ var webdriver = require('selenium-webdriver');
  });
  })
 
- it("VRworld should work without VR", () => {
+ it("click work without VR should work", () => {
 
- var VRw0 = driver.findElement(By.xpath('//*[@id="-L6kqw1Ilu2xuK_UJ9ny"]'));
+ var VRw0 = driver.findElement(By.xpath('//*[@id="-L7kOzwNoZd8uIy9pn_K"]'));
  VRw0.click();
  driver.wait(until.elementLocated(By.xpath('//*[@id="ui"]')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
 
@@ -193,52 +223,52 @@ var webdriver = require('selenium-webdriver');
  });
  })
 
- it("should load local file", function() {
+ it("click load local file should work", function() {
 
- var load = driver.findElement(By.xpath('//*[@id="contentBox"]/nav/ul/a'));
- load.click();
- driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+ var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+ loadNew.click();
+ driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
 
- var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
+ var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
  local.click();
- driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+ driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')), 50000);
 
  var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
 
- driver.findElement(By.xpath('//*[@id="formGroup"]/div[1]/input')).sendKeys(FILE_PATH);
- var submit = driver.findElement(By.xpath('//*[@id="formGroup"]/span[2]/button'));
+ driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')).sendKeys(FILE_PATH);
+ var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button'));
  submit.click();
 
  })
 
- it("should url file", function() {
+ it.skip("click url file should work", function() {
 
- var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
- load.click();
- driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+ var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+ loadNew.click();
+ driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]')), 50000);
 
- var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
- local.click();
- driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+ var url = driver.findElement(By.name('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+ url.click();
+ driver.wait(until.elementLocated(By.id('//*[@id="csvURL"]')), 50000);
 
  var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
 
- driver.findElement(By.xpath('//*[@id="formGroup"]/div[1]/input')).sendKeys(FILE_PATH);
- var submit = driver.findElement(By.xpath('//*[@id="formGroup"]/span[2]/button'));
+ driver.findElement(By.xpath('//*[@id="csvURL"]')).sendKeys(FILE_PATH);
+ var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/div/div/div[1]/div[1]/span/button'));
  submit.click();
 
  })
 
  it("click start over should work", function(){
-   var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+   var load = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
    load.click();
-   driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+   driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
 
-   var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
+   var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
    local.click();
-   driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+   driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a')), 50000);
 
-   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/a'))
+   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'))
    back.click();
 
    driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]')), 50000);
@@ -248,9 +278,6 @@ var webdriver = require('selenium-webdriver');
     })
   });
 });
-
-
-
 
 
  // describe('test selenium', function(done){
@@ -286,5 +313,6 @@ var webdriver = require('selenium-webdriver');
  //             driver.getCurrentUrl().then(function( url ){
  //               console.log(url);
  //                 //assert(url === "about:blank");
+ //             });
  //             });
  //             });

@@ -81,7 +81,7 @@ function pointSelectionUpdate() {
   }*/
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
-    matrix.extractRotation( selectionControllerR.children[0] );
+    matrix.extractRotation( selectionControllerR.children.elementAt(0) );
 
     var direction = new THREE.Vector3( 0, 0, 1 );
     matrix.multiplyVector3( direction );

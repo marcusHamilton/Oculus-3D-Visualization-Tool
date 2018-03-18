@@ -26,15 +26,19 @@ var raycasterLine;
 /**
  * Initializes the event listeners for point selection
  */
+
+var clock;
 function initializeSelectionControls()
 {
+
+  clock = Clock();
   console.log(controller);
   console.log("Initializing Selection Controls ... Point Selection Threshold: " + selectionThreshold);
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
 
-  selectionControllerL = scene.getObjectByName("Oculus Touch (Right)");
-  selectionControllerR = scene.getObjectByName("Oculus Touch (Left)");
+  selectionControllerL = scene.getObjectByName("Oculus Touch (Left)");
+  selectionControllerR = scene.getObjectByName("Oculus Touch (Right)");
 
   if (selectionControllerL){
     console.log("Left VR Controller detected for point selection.");
@@ -113,6 +117,11 @@ function pointSelectionUpdate() {
   else {
 
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  }
+
+  if (clock.elapsedTime > 5){
+    console.log(pointSelectionRaycasterR);
+    clock.start();
   }
 }
 

@@ -8,12 +8,18 @@
 
 var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
-var pointSelectionRaycaster;
+
 var pointSelectionMouse = new THREE.Vector2();
 var selectionThreshold = 0.1; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 
+
+var selectionControllerL;
+var selectionControllerR;
+
+var pointSelectionRaycasterL;
+var pointSelectionRaycasterR;
 var raycasterLineMaterial;
 var raycasterLineGeometry;
 var raycasterLine;
@@ -22,29 +28,37 @@ var raycasterLine;
  */
 function initializeSelectionControls()
 {
-  console.log("Point Selection Threshold: " + selectionThreshold);
+  console.log("Initializing Selection Controls ... Point Selection Threshold: " + selectionThreshold);
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
 
-  if (controller != null)
-  {
-    for (controller in scene.controllers)
-    {
-      // TODO Attach raycaster to VRcontroller
-      console.log("VR Controller detected for point selection.");
-      console.log(controller);
-      pointSelectionRaycaster.set(controller.position, controller.rotation);
+  selectionControllerL = scene.getObjectByName("LeftController");
+  selectionControllerR = scene.getObjectByName("RightController");
 
-      raycasterLineMaterial = new THREE.LineBasicMaterial({
-        color: 0xff0000
-      });
-      raycasterLineGeometry = new THREE.Geometry();
-      raycasterLineGeometry.vertices.push(controller.position);
-      raycasterLineGeometry.vertices.push(controller.position + (controller.rotation * 10));
-      raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
-      scene.add(raycasterLine);
-    }
+  if (selectionControllerL){
+    console.log("Left VR Controller detected for point selection.");
+    console.log(selectionControllerL);
+    pointSelectionRaycasterL = new THREE.Raycaster();
+    pointSelectionRaycasterL.params.Points.threshold = selectionThreshold;
+  }
 
+  if (selectionControllerR){
+    console.log("Right VR Controller detected for point selection.");
+    console.log(selectionControllerR);
+    pointSelectionRaycasterR = new THREE.Raycaster();
+    pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
+  }
+
+    /*
+    raycasterLineMaterial = new THREE.LineBasicMaterial({
+      color: 0xff0000
+    });
+    raycasterLineGeometry = new THREE.Geometry();
+    raycasterLineGeometry.vertices.push(controller.position);
+    raycasterLineGeometry.vertices.push(controller.position + (controller.rotation * 10));
+    raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
+    scene.add(raycasterLine);
+    */
   }
   // setup mouse raycaster here
 
@@ -60,25 +74,22 @@ var mousedOverPoint;
 function pointSelectionUpdate()
 {
   // calculate objects intersecting the ray
-  if (controller != null)
-  {
-    for (controller in scene.controllers) {
-      pointSelectionRaycaster.set(controller.position, controller.rotation);
-      raycasterLine.position.set(controller.position);
-      raycasterLine.rotation.set(controller.rotation);
 
-      console.log("----------------------------------");
-      console.log(controller);
-      console.log(controller.position);
-      console.log(controller.rotation);
-      console.log(pointSelectionRaycaster);
-    }
-
+  /*if (selectionControllerL){
+    pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
+  }*/
+  if (selectionControllerR){
+    pointSelectionRaycasterR.set(selectionControllerR.position, selectionControllerR.rotation);
   }
-  else {
+
+  // If no controllers are present, revert to mouse/camera selection.
+  if (selectionControllerL == null && selectionControllerR == null) {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
+    intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
   }
-  intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
+
+
+
   intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
   setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;

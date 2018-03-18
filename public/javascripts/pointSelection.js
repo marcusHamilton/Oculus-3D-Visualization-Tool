@@ -117,10 +117,11 @@ function pointSelectionUpdate() {
 
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
-
-  if (clock !== null && clock.elapsedTime > 5){
-    console.log(pointSelectionRaycasterR);
-    clock.start();
+  if(clock){
+    if (clock.elapsedTime > 5){
+      console.log(pointSelectionRaycasterR);
+      clock.start();
+    }
   }
 }
 

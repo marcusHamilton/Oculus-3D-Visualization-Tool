@@ -33,8 +33,8 @@ function initializeSelectionControls()
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
 
-  selectionControllerL = scene.getObjectByName("LeftController");
-  selectionControllerR = scene.getObjectByName("RightController");
+  selectionControllerL = scene.getObjectByName("Oculus Touch (Right)");
+  selectionControllerR = scene.getObjectByName("Oculus Touch (Left)");
 
   if (selectionControllerL){
     console.log("Left VR Controller detected for point selection.");

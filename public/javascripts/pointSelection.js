@@ -126,7 +126,7 @@ function pointSelectionUpdate() {
     });
     raycasterLineGeometry = new THREE.Geometry();
     raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin);
-    raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin.add(pointSelectionRaycasterR.direction).addScalar(10));
+    raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin.add(pointSelectionRaycasterR.direction));
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
     scene.add(raycasterLine);
   }

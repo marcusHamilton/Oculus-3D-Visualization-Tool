@@ -47,7 +47,7 @@ function initializeSelectionControls()
     console.log("Right VR Controller detected for point selection.");
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
-    pointSelectionRaycasterR.params.Points.threshold = 5;
+    pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
   }
 
     /*

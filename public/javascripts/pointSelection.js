@@ -118,19 +118,19 @@ function pointSelectionUpdate() {
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
-  //scene.remove ( raycasterLine );
-  /*
+  scene.remove ( raycasterLine );
+
   if (pointSelectionRaycasterR) {
     raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff
     });
     raycasterLineGeometry = new THREE.Geometry();
     raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin);
-    raycasterLineGeometry.vertices.push((pointSelectionRaycasterR.origin + pointSelectionRaycasterR.direction) * 10);
+    raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin.add(pointSelectionRaycasterR.direction).addScalar(10));
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
     scene.add(raycasterLine);
   }
-  */
+
 }
 
 /**

@@ -118,7 +118,7 @@ function pointSelectionUpdate() {
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
-  //scene.remove ( raycasterLine );
+  scene.remove ( raycasterLine );
 
   if (pointSelectionRaycasterR) {
     raycasterLineMaterial = new THREE.LineBasicMaterial({
@@ -126,9 +126,9 @@ function pointSelectionUpdate() {
     });
     raycasterLineGeometry = new THREE.Geometry();
     raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin);
-    var lineEndPoint = new THREE.Vector3(pointSelectionRaycasterR);
+    var lineEndPoint = new THREE.Vector3(pointSelectionRaycasterR.origin);
     lineEndPoint.add(pointSelectionRaycasterR.direction);
-    lineEndPoint.addScalar(10);
+    //lineEndPoint.addScalar(10);
     raycasterLineGeometry.vertices.push(lineEndPoint);
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
     scene.add(raycasterLine);

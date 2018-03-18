@@ -32,6 +32,7 @@
 //
 // });
 
+
 /**
  * Created by homeyxue on 2018-02-03.
  */
@@ -47,8 +48,8 @@ var webdriver = require('selenium-webdriver');
  * Using Firefox for testing, we need to install geckodriver
  * Using chrom for testing, we need to install chromedriver
  */
- describe('home page test Suite', function(){
- //this.timeout(50000);
+ describe('home page test Suite', function(done){
+ this.timeout(50000);
  /**
   * web driver for test case
   */
@@ -58,7 +59,8 @@ var webdriver = require('selenium-webdriver');
  .build();
 
  driver.get("https://3dvisualizationtool.ml");
- driver.wait(until.elementLocated(By.xpath('/html/body/div/div/div/div[2]/p[2]/a')), 50000);
+
+ // driver.wait(until.elementLocated(By.id("identifierId")), 50000);
  // driver.getCurrentUrl().then(function( url ){
  // console.log(url);
  // //assert(url === "https://accounts.google.com/signin/oauth/identifier?client_id=483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com&as=lME8KI5lhapLxK0Kwfo2Eg&destination=https%3A%2F%2Foculus-3d-visualization-c5687.firebaseapp.com&approval_state=!ChQ3MW5TcWF1MjF3MkNmLTMwY3BvdRIfWXdaTVdONGQ4R1VVNEpEYnJUUGdXM0JjOUxIV0hoWQ%E2%88%99ACThZt4AAAAAWpxONDNM9zl4shEwa2Fu0vyaaziEtMyJ&xsrfsig=AHgIfE-U6vvxzqUjBvRXDlGwq0dJrAOwQA&flowName=GeneralOAuthFlow");
@@ -71,7 +73,7 @@ var webdriver = require('selenium-webdriver');
  // driver.findElement(By.className("whsOnd zHQkBf")).sendKeys('osgood371');
  // driver.findElement(By.id("passwordNext")).click();
 
- // driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a")), 50000);
+ driver.wait(until.elementLocated(By.xpath("/html/body/div/div/div/div[1]/div/nav/ul/li[1]/a")), 50000);
  driver.getCurrentUrl().then(function( url ){
  console.log(url);
  assert(url === "https://3dvisualizationtool.ml");
@@ -82,8 +84,8 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(() =>{
-   //driver.quit();
-   //driver.close();
+   driver.quit();
+   driver.close();
  });
 
  it("title should print", () =>{
@@ -171,8 +173,7 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(function(){
- //driver.quit();
- //driver.close();
+ driver.quit();
  });
 
  /**
@@ -225,11 +226,11 @@ var webdriver = require('selenium-webdriver');
 
  it("click load local file should work", function() {
 
- var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
- loadNew.click();
- driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
+   var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+  loadNew.click();
+  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
 
- var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
+  var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
  local.click();
  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')), 50000);
 
@@ -237,17 +238,18 @@ var webdriver = require('selenium-webdriver');
 
  driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')).sendKeys(FILE_PATH);
  var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button'));
+
  submit.click();
 
  })
 
  it.skip("click url file should work", function() {
 
- var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
- loadNew.click();
- driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]')), 50000);
+   var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+  loadNew.click();
+  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]')), 50000);
 
- var url = driver.findElement(By.name('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+  var url = driver.findElement(By.name('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
  url.click();
  driver.wait(until.elementLocated(By.id('//*[@id="csvURL"]')), 50000);
 
@@ -268,7 +270,7 @@ var webdriver = require('selenium-webdriver');
    local.click();
    driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a')), 50000);
 
-   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'))
+   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'))；
    back.click();
 
    driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]')), 50000);
@@ -313,6 +315,5 @@ var webdriver = require('selenium-webdriver');
  //             driver.getCurrentUrl().then(function( url ){
  //               console.log(url);
  //                 //assert(url === "about:blank");
- //             });
  //             });
  //             });

@@ -117,6 +117,11 @@ body {
   text-shadow: none;
 }
 
+#addUser-modal{
+  color: #000000;
+  text-shadow: none;
+}
+
 /*Select2 settings*/
 
 .select2-container .select2-choices .select2-search-field input, .select2-container .select2-choice, .select2-container .select2-choices {
@@ -158,9 +163,16 @@ body {
   text-shadow: none !important;
 }
 
-#googleProfilePicture {
+#profilePicture {
   height: 3em;
-  margin-bottom: 2em;
+  margin-right: 1vw;
+}
+
+#logo {
+  position: absolute; 
+  top: 1%; 
+  left: 1%; 
+  width: 4vw;
 }
 
 /* Padding for spacing */

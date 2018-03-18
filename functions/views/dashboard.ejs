@@ -6,6 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
+  <meta name="google-signin-cookiepolicy" content="single_host_origin">
+  <meta name="google-signin-scope" content="profile email">
 
   <!--Stylesheets -->
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
@@ -13,26 +15,37 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 
   <!--Javascript CDN's-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-
-  <!-- Firebase Initialization -->
   <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
-
-  <!-- Google Authentification -->
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   <!--Javascript Local Files-->
   <script src="/javascripts/LinkedList.js"></script>
-  <script src="/javascripts/dashboardManager.js"></script>
+  <script src="/javascripts/notifyOfFileName.js"></script>
   <script src="/javascripts/three/three.js"></script>
   <script src="/javascripts/newWorld.js"></script>
   <script src="/javascripts/auth.js"></script>
+  <script src="/javascripts/dashboardManager.js"></script>
 
+  <!-- Shader definitions provided by Dorian Thiessen -->
+  <script type="x-shader/x-vertex" id="vertexshader">
+    attribute float size; attribute vec3 customColor; varying vec3 vColor; void main() { vColor = customColor; vec4 mvPosition
+    = modelViewMatrix * vec4( position, 1.0 ); gl_PointSize = size * ( 300.0 / - mvPosition.z ); gl_Position = projectionMatrix
+    * mvPosition; }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshader">
+    uniform vec3 color; uniform sampler2D texture; varying vec3 vColor; void main() { gl_FragColor = vec4( color * vColor, 1.0
+    ); gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord ); }
+  </script>
+
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton"></script>
 
   <title>Dashboard</title>
 </head>
@@ -40,6 +53,7 @@
 <body>
 
   <div class="site-wrapper">
+    <a href="/"><img id="logo" class="img img-rounded" src="/images/logo.png" alt="3D Data Visualization Logo"></a>
 
     <div class="site-wrapper-inner">
 
@@ -64,10 +78,10 @@
                   <a href="/dashboard">Dashboard</a>
                 </li>
                 <li>
-                  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                  <div id="gSignIn"></div>
                 </li>
                 <li>
-                  <img src="" id="googleProfilePicture" class="img-circle" alt="Google Profile Picture" style="visibility: hidden;">
+                  <div class="userContent"></div>
                 </li>
               </ul>
             </nav>
@@ -94,9 +108,6 @@
 
         <div class="container" id="worldContainer">
         </div>
-        <script>
-          reloadWorlds();
-        </script>
         <!-- End: container that holds the 3D world content -->
       </div>
     </div>
@@ -106,7 +117,7 @@
 
 
 
-    <!--*********************Modal box content*******************-->
+    <!--*********************Add World Modal box content*******************-->
 
 
 
@@ -166,7 +177,7 @@
 
                     <!--Drop down for selecting axis -->
                     <div class="select2Chosen" style="display:none" id="dropDownForInit">
-                      <h4 class "lead">
+                      <h4 class="lead">
                         Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
                       <hr>
                       <label for="x-axis">
@@ -224,7 +235,7 @@
 
                     <!--Drop down for selecting axis -->
                     <div class="select2Chosen" style="display:none" id="dropDownForInit">
-                      <h4 class "lead">
+                      <h4 class="lead">
                         Select your initial X-Y-Z axis. This can all later be changed in VR. </h4>
                       <hr>
                       <label for="x-axis">
@@ -268,6 +279,45 @@
       </div>
     </div>
     <!--End: Modal box content-->
+
+
+    <!--*********************Add User Modal box content*******************-->
+    <div class="modal fade" id="addUser-modal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add a collaborator</h4>
+          </div>
+          <div class="modal-body">
+            <div style="display:none" id="noEmailMessage" class="alert alert-danger">
+              You must enter an email.
+            </div>
+            <div style="display:none" id="badEmailMessage" class="alert alert-danger">
+              The email account must be a valid gmail.
+            </div>
+            <form>
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="addEmail" placeholder="joe.blank@gmail.com">
+                <input type="text" class="form-control" id="worldIDInputBox" style="display:none">
+            </form>
+            <br>
+            <button class="btn btn-info btn-lg" onClick="addUser()">
+                <span class="glyphicon glyphicon-plus"></span> Add User 
+            </button>
+          </div>
+          <div class="modal-footer">
+            <small>This box currently only logs the email and world id to the console. Dev in progress</small>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+
 </body>
 
 </html>

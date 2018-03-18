@@ -120,7 +120,7 @@ function pointSelectionUpdate() {
 
   //scene.remove ( arrow );
   if (pointSelectionRaycasterR) {
-    arrow = new THREE.ArrowHelper(pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff);
+    arrow = new THREE.ArrowHelper(pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff, 0.1, 0.1);
   }
   scene.add( arrow );
 }

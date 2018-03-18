@@ -60,7 +60,7 @@ function initializeSelectionControls()
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
     scene.add(raycasterLine);
     */
-  }
+
   // setup mouse raycaster here
 
   document.addEventListener( 'mousemove', onMouseMove, false );

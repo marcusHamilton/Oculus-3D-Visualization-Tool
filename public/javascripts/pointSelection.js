@@ -120,7 +120,7 @@ function pointSelectionUpdate() {
 
   scene.remove ( raycasterLine );
 
-  if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.origin) {
+  if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     /*raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff
     });
@@ -133,7 +133,7 @@ function pointSelectionUpdate() {
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
 
     scene.add(raycasterLine);*/
-    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff );
+    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.direction, pointSelectionRaycasterR.ray.origin, 100, 0xff00ff );
     scene.add(raycasterLine);
   }
 

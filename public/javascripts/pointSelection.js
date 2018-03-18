@@ -133,7 +133,7 @@ function pointSelectionUpdate() {
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
 
     scene.add(raycasterLine);*/
-    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, Math.random() * 0xffffff );
+    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff );
     scene.add(raycasterLine);
   }
 

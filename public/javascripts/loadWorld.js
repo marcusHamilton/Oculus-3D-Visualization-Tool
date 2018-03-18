@@ -375,6 +375,8 @@ window.addEventListener('vr controller connected', function(event) {
     console.log(intersects);
     console.log("Controller:");
     console.log(selectionControllerR);
+    console.log("Raycaster Line:");
+    console.log(raycasterLine);
 
     guiInputHelper.pressed(true)
   });

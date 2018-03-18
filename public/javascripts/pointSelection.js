@@ -72,6 +72,7 @@ function initializeSelectionControls()
  * frame.
  */
 var mousedOverPoint;
+var arrow;
 function pointSelectionUpdate() {
   // calculate objects intersecting the ray
 
@@ -116,6 +117,9 @@ function pointSelectionUpdate() {
 
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
+  scene.remove ( arrow );
+  arrow = new THREE.ArrowHelper( pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff );
+  scene.add( arrow );
 }
 
 /**

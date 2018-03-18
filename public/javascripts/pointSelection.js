@@ -72,26 +72,27 @@ function initializeSelectionControls()
  * frame.
  */
 var mousedOverPoint;
-function pointSelectionUpdate()
-{
+function pointSelectionUpdate() {
   // calculate objects intersecting the ray
 
   /*if (selectionControllerL){
     pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
   }*/
-  if (selectionControllerR){
+  if (selectionControllerR) {
     pointSelectionRaycasterR.set(selectionControllerR.position, selectionControllerR.rotation);
+    intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
   }
 
   // If no controllers are present, revert to mouse/camera selection.
   if (selectionControllerL == null && selectionControllerR == null) {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
-    intersects = pointSelectionRaycaster.intersectObject( pointsSystem );
+    intersects = pointSelectionRaycaster.intersectObject(pointsSystem);
   }
 
 
-
-  intersects = ( intersects.length ) > 0 ? intersects[ 0 ] : null;
+  if (intersects != null) {
+    intersects = (intersects.length) > 0 ? intersects[0] : null;
+  }
   setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {

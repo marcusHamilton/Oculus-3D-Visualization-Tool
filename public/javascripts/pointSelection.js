@@ -117,7 +117,8 @@ function pointSelectionUpdate() {
 
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
-  scene.remove ( arrow );
+
+  //scene.remove ( arrow );
   if (pointSelectionRaycasterR) {
     arrow = new THREE.ArrowHelper(pointSelectionRaycasterR.direction, pointSelectionRaycasterR.origin, 100, 0xff00ff);
   }

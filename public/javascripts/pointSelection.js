@@ -27,12 +27,8 @@ var raycasterLine;
  * Initializes the event listeners for point selection
  */
 
-var clock;
 function initializeSelectionControls()
 {
-
-  clock = THREE.Clock();
-  clock.start();
   console.log("Initializing Selection Controls ... Point Selection Threshold: " + selectionThreshold);
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
@@ -117,12 +113,6 @@ function pointSelectionUpdate() {
   else {
 
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
-  }
-  if(clock){
-    if (clock.elapsedTime > 5){
-      console.log(pointSelectionRaycasterR);
-      clock.start();
-    }
   }
 }
 

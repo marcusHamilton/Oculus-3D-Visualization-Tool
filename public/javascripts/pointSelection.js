@@ -93,6 +93,8 @@ function pointSelectionUpdate() {
   if (intersects != null) {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
+
+  // Reset point size when not moused over
   setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {

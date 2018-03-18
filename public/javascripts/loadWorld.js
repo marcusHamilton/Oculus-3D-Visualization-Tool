@@ -368,8 +368,14 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('primary press began', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
+    console.log("Right controller trigger press detected:");
+    console.log("Raycaster:");
     console.log(pointSelectionRaycasterR);
+    console.log("Intersects:");
+    console.log(intersects);
+    console.log("Controller:");
     console.log(selectionControllerR);
+
     guiInputHelper.pressed(true)
   });
   controller.addEventListener('primary press ended', function(event) {

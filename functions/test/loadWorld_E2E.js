@@ -5,15 +5,18 @@ assert = require('assert');
 
 
 describe('e2e tests', function(){
+  this.timeout(50000);
+
   before(() => {
     driver = new webdriver.Builder().forBrowser('firefox').build();
-    driver.get("https://3dvisualizationtool.ml");
-    driver.navigate().to('https://3dvisualizationtool.ml');
+    console.log("beforeeeee");
+    driver.get("https://www.google.ca");
   });
 
   after(() =>{
-   driver.quit();
-   driver.close();
+    console.log("all done");
+   // driver.quit();
+   // driver.close();
   });
 
   it("title should print", () =>{

@@ -32,6 +32,7 @@ function initializeSelectionControls()
 {
 
   clock = THREE.Clock();
+  clock.start();
   console.log("Initializing Selection Controls ... Point Selection Threshold: " + selectionThreshold);
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;

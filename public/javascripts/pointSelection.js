@@ -10,7 +10,7 @@ var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
 
 var pointSelectionMouse = new THREE.Vector2();
-var selectionThreshold = 0; //the distance the mouse has to be from a point
+var selectionThreshold = 0.1; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 
@@ -80,7 +80,12 @@ function pointSelectionUpdate() {
     pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
   }*/
   if (selectionControllerR) {
-    pointSelectionRaycasterR.set(selectionControllerR.position, selectionControllerR.rotation);
+    var matrix = new THREE.Matrix4();
+    matrix.extractRotation( selectionControllerR.children.getObjectByName("") );
+
+    var direction = new THREE.Vector3( 0, 0, 1 );
+    matrix.multiplyVector3( direction );
+    pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
   }
 

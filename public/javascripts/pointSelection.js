@@ -127,6 +127,8 @@ function pointSelectionUpdate() {
   // Press 'A' and 'X' is select/deselect all points.
 
   if (XisPressed && AisPressed){
+    XisPressed = false;
+    AisPressed = false;
     if (selectedPoints.length > 0){
       clearSelection();
     }

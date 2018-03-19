@@ -236,7 +236,7 @@ function addEnterVrButtons() {
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
     .on("enter", function() {
       console.log("enter VR")
-      dolly.position.set(plotInitSizeX * 1.2, 2, plotInitSizeZ * 1.2);
+      //dolly.position.set(plotInitSizeX * 1.2, 2, plotInitSizeZ * 1.2);
 
     })
     .on("exit", function() {

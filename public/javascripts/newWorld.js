@@ -3,7 +3,7 @@
  * It will take in a CSV file and in turn create a threejs world that contains the
  * CSV files data points. This will export a JSON file containing the scene.
  */
-var THREE = require('three');
+var THREE = require('../../public/javascripts/three/three.js');
 
 var scene; //The scene to which all elements are added to
 

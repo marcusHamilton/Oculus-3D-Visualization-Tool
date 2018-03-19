@@ -30,6 +30,7 @@ var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
+var datasetAndAxisLabelGroup;
 
 /**
  * Called every frame
@@ -455,6 +456,9 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('thumbstick press ended', function(event) {
 
   });
+  THREE.VRController.verbosity = 1;
+  var controllerL = scene.getObjectByName("Oculus Touch (Left)");
+  //controllerL.
 
 
 });
@@ -633,6 +637,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
   scene.add(pointsSystem);
+  datasetAndAxisLabelGroup.add(pointsSystem);
   drawAxisLabels();
 }
 
@@ -710,5 +715,6 @@ function drawAxisLabels() {
   }
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
+  datasetAndAxisLabelGroup.add(axisLabelGroup);
   scene.add(axisLabelGroup);
 }

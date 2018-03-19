@@ -49,10 +49,7 @@ function update(timestamp) {
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
-  if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.00001;
-    datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.00001;
-  }
+
 
   torus.rotation.y += 0.002
   if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
@@ -66,6 +63,10 @@ function update(timestamp) {
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
+  if (datasetAndAxisLabelGroup && controllerL) {
+    datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.00001;
+    datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.00001;
+  }
   //Allows point selection to function
   pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.

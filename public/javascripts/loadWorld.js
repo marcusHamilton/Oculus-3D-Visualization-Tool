@@ -123,6 +123,7 @@ function Manager() {
     console.log(object);
 
     dolly = new THREE.Group();
+    scene.add(dolly);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     dolly.add(camera);

@@ -62,11 +62,12 @@ function update(timestamp) {
   //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
-
+/*
   if (datasetAndAxisLabelGroup && controllerL) {
     datasetAndAxisLabelGroup.position.x += 0.001;//(controllerL_Stick_XAxis * 0.00001);
     datasetAndAxisLabelGroup.position.z += 0.001;//(controllerL_Stick_YAxis * 0.00001);
   }
+  */
   //Allows point selection to function
   pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
@@ -471,7 +472,7 @@ window.addEventListener('vr controller connected', function(event) {
   controllerL  = scene.getObjectByName("Oculus Touch (Left)");
   if (controllerL) {
     controllerL.addEventListener('thumbstick axis changed', function (event) {
-      controllerL_Stick_XAxis = controllerL.getAxis(0);
+      controllerL_Stick_XAxis = controllerL.thumbstick[1]
       console.log(controllerL_Stick_XAxis);
       controllerL_Stick_YAxis = controllerL.getAxis(1);
       console.log(controllerL_Stick_YAxis);

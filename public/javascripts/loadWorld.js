@@ -394,9 +394,10 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Press 'A' (select/deselect a point)
   controller.addEventListener('A press began', function(event) {
-    if (intersects) {
+    onClick(event);
+    /*if (intersects) {
       selectPoint(intersects.index);
-    }
+    }*/
   });
   controller.addEventListener('A press ended', function(event) {
 

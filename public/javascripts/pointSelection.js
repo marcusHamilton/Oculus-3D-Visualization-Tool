@@ -23,12 +23,14 @@ var pointSelectionRaycasterR;
 var raycasterLineMaterial;
 var raycasterLineGeometry;
 var raycasterLine;
+var isRaycasterLineActive;
 /**
  * Initializes the event listeners for point selection
  */
 
 function initializeSelectionControls()
 {
+  isRaycasterLineActive = false;
   console.log("Initializing Selection Controls ... Point Selection Threshold: " + selectionThreshold);
   pointSelectionRaycaster = new THREE.Raycaster();
   pointSelectionRaycaster.params.Points.threshold = selectionThreshold;
@@ -48,6 +50,12 @@ function initializeSelectionControls()
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
+    selectionControllerR.addEventListener('A touch began', function(event) {
+      isRaycasterLineActive = true;
+    });
+    selectionControllerR.addEventListener('A touch ended', function(event) {
+      isRaycasterLineActive = false;
+    });
   }
 
     /*
@@ -139,18 +147,6 @@ function pointSelectionUpdate() {
 
   scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
-    /*raycasterLineMaterial = new THREE.LineBasicMaterial({
-      color: 0xff00ff
-    });
-    raycasterLineGeometry = new THREE.Geometry();
-    raycasterLineGeometry.vertices.push(pointSelectionRaycasterR.origin);
-    var lineEndPoint = new THREE.Vector3(pointSelectionRaycasterR.origin);
-    lineEndPoint.add(pointSelectionRaycasterR.direction);
-    //lineEndPoint.addScalar(10);
-    raycasterLineGeometry.vertices.push(lineEndPoint);
-    raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
-
-    scene.add(raycasterLine);*/
     var lineLength;
     if (intersects){
       lineLength = intersects.distance;
@@ -158,8 +154,10 @@ function pointSelectionUpdate() {
     else {
       lineLength = 1000000;
     }
-    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff, 0, 0);
-    scene.add(raycasterLine);
+    if (isRaycasterLineActive) {
+      raycasterLine = new THREE.ArrowHelper(pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff, 0, 0);
+      scene.add(raycasterLine);
+    }
   }
 
 }

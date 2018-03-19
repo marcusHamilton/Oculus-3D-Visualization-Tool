@@ -324,6 +324,7 @@ function setUpControls() {
  */
 var AisPressed;
 var XisPressed;
+
 window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
@@ -434,7 +435,13 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('Y press ended', function(event) {
 
   });
-  //'Grip' turns on raycaster line
+
+  controller.addEventListener('Grip press began', function(event) {
+
+  });
+  controller.addEventListener('Grip press ended', function(event) {
+
+  });
 
   //'Click right thumbstick' to invert selection.
   controller.addEventListener('thumbstick press began', function(event) {

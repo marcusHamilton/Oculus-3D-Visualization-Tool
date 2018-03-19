@@ -32,6 +32,9 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+var controllerL_Stick_XAxis;
+var controllerL_Stick_YAxis;
+
 /**
  * Called every frame
  */
@@ -44,6 +47,9 @@ function update(timestamp) {
   }
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
+
+  datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.01;
+  datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.01;
 
   torus.rotation.y += 0.002
   if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
@@ -456,8 +462,14 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('thumbstick press ended', function(event) {
 
   });
-  THREE.VRController.verbosity = 1;
+
+  //Left thumbstick for movement.
   var controllerL = scene.getObjectByName("Oculus Touch (Left)");
+  controllerL.addEventListener('thumbstick axis changed', function(event) {
+    controllerL_Stick_XAxis = controllerL.getAxis(0);
+    controllerL_Stick_YAxis = controllerL.getAxis(1);
+  });
+  //THREE.VRController.verbosity = 1;
   //controllerL.
 
 

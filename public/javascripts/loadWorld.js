@@ -51,8 +51,8 @@ function update(timestamp) {
 
 
 
-  torus.rotation.y += 0.002
-  if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
+  //torus.rotation.y += 0.002
+  //if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
 
   //Add all updates below here
 
@@ -307,6 +307,7 @@ function setUpControls() {
     applyDown(obj, 'receiveShadow', true)
   };
 
+  /*
   //Arbitrary shape for testing gui settings
   torus = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
@@ -331,6 +332,7 @@ function setUpControls() {
   gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
   gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
   castShadows(gui);
+  */
 }
 
 /**

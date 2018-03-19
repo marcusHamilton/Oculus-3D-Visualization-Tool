@@ -365,7 +365,7 @@ window.addEventListener('vr controller connected', function(event) {
   initializeSelectionControls();
 
   //Button events. This is currently just using the primary button
-  controller.addEventListener('primary press began', function(event) {
+  controller.addEventListener('A press began', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
     console.log("Right controller trigger press detected:");
@@ -380,7 +380,7 @@ window.addEventListener('vr controller connected', function(event) {
 
     guiInputHelper.pressed(true)
   });
-  controller.addEventListener('primary press ended', function(event) {
+  controller.addEventListener('A press ended', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOff);
     guiInputHelper.pressed(false)

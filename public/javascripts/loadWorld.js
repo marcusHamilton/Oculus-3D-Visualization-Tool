@@ -472,7 +472,9 @@ window.addEventListener('vr controller connected', function(event) {
   if (controllerL) {
     controllerL.addEventListener('thumbstick axis changed', function (event) {
       controllerL_Stick_XAxis = controllerL.getAxis(0);
+      console.log(controllerL_Stick_XAxis);
       controllerL_Stick_YAxis = controllerL.getAxis(1);
+      console.log(controllerL_Stick_YAxis);
     });
   }
   //THREE.VRController.verbosity = 1;

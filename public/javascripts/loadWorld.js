@@ -32,6 +32,7 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+// Experimental control setup. Doesn't work yet.
 var controllerL;
 var controllerL_Stick_XAxis;
 var controllerL_Stick_YAxis;
@@ -59,7 +60,7 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 /*
@@ -307,7 +308,9 @@ function setUpControls() {
     applyDown(obj, 'receiveShadow', true)
   };
 
-  /*
+  //Soooo...... The torus is critical to functionality apparently.
+  //Removing it messes up the lighting in the scene and turns the whole
+  //rendered dataset black.
   //Arbitrary shape for testing gui settings
   torus = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
@@ -325,14 +328,14 @@ function setUpControls() {
   //  https://github.com/dataarts/dat.guiVR
   dat.GUIVR.enableMouse(camera);
   var gui = dat.GUIVR.create('Settings');
-  gui.position.set(0.2, 0.8, -1);
+  gui.position.set(100 , 100, 100);
   gui.rotation.set(Math.PI / -6, 0, 0);
   scene.add(gui);
   gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
   gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
   gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
   castShadows(gui);
-  */
+
 }
 
 /**
@@ -344,6 +347,7 @@ function setUpControls() {
 var AisPressed;
 var XisPressed;
 
+//TODO: Refactor this into its own file and split up the L/R controller events.
 window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
@@ -385,6 +389,7 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Add selection controls
   initializeSelectionControls();
+  // temporary booleans
   AisPressed = false;
   XisPressed = false;
 
@@ -392,7 +397,7 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('primary press began', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
-    console.log("Right controller trigger press detected:");
+    console.log("Right controller trigger press detected, Printing pointSelect debug info:");
     console.log("Raycaster:");
     console.log(pointSelectionRaycasterR);
     console.log("Intersects:");
@@ -471,6 +476,7 @@ window.addEventListener('vr controller connected', function(event) {
   });
 
   //Left thumbstick for movement.
+  //TODO: Thumbstick event listener doesn't work yet. How do we get the axis values?
   controllerL  = scene.getObjectByName("Oculus Touch (Left)");
   if (controllerL) {
     controllerL.addEventListener('thumbstick axis changed', function (event) {
@@ -659,14 +665,12 @@ function drawDataset(xCol, yCol, zCol)
   //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
+
+  //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
   drawAxisLabels();
-  //scene.add(pointsSystem);
-
   scene.add(datasetAndAxisLabelGroup);
-  //datasetAndAxisLabelGroup.add(pointsSystem);
-  //drawAxisLabels();
 }
 
 /**
@@ -676,6 +680,8 @@ function drawDataset(xCol, yCol, zCol)
  * @precondition scene must be initialized
  * @postcondition axis labels are drawn from 0,0
  */
+
+//TODO: Rewrite to allow for negative values.
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
   var axisLabelGroup = new THREE.Group();

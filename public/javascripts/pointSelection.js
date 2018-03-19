@@ -20,8 +20,6 @@ var selectionControllerR;
 
 var pointSelectionRaycasterL;
 var pointSelectionRaycasterR;
-var raycasterLineMaterial;
-var raycasterLineGeometry;
 var raycasterLine;
 var isRaycasterLineActive;
 /**
@@ -38,6 +36,9 @@ function initializeSelectionControls()
   selectionControllerL = scene.getObjectByName("Oculus Touch (Left)");
   selectionControllerR = scene.getObjectByName("Oculus Touch (Right)");
 
+  // We were originally going to allow selection with the left controller,
+  // But I think we'll probably limit it to the right control, and have tools
+  // on this one.
   if (selectionControllerL){
     console.log("Left VR Controller detected for point selection.");
     console.log(selectionControllerL);

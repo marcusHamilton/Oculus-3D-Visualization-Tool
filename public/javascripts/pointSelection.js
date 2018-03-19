@@ -254,12 +254,12 @@ function onClick( event ){
 
   event.preventDefault();
   if (intersects != null) {
-    selectPoint(intersects.index);
-      // hidePoint(intersects.index);
+    //selectPoint(intersects.index);
+    hidePoint(intersects.index);
   }
   else {
-    clearSelection();
-    //unhideRecent();
+    //clearSelection();
+    unhideRecent();
   }
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
@@ -409,6 +409,12 @@ function unhideRecent(){
     var recentIndex = (hiddenPoints.indexOf(hiddenPoints.length -1, 1));
     unhide(recentIndex);
 
+}
+
+function unhideAll(){
+    for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+        unhide(i);
+    }
 }
 
 

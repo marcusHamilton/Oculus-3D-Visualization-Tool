@@ -497,6 +497,7 @@ function drawDataset(xCol, yCol, zCol)
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
 
+  // Find largest XYZ values, and largest overall entry.
   for (var i = 1; i < loadedDataset.length; i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
@@ -509,7 +510,9 @@ function drawDataset(xCol, yCol, zCol)
       largestZ = loadedDataset[i][zCol];
     }
     largestEntry = Math.max(largestX, largestY, largestZ);
+  }
 
+  for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
     var pX = (loadedDataset[i][xCol]/largestX)*plotInitSizeX;

@@ -9,6 +9,7 @@ var scene; //The scene to which all elements are added to
 
 
 var parsedData; //Parsed data obtained from the CSV
+var fileName; //Stored to give a meaningful name on the dashboard
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
 //parsedData[i][x_AxisIndex]
 //parsedData[i][y_AxisIndex]
@@ -65,6 +66,7 @@ function getScene() {
 function loadCSVLocal() {
   //Grab the file from the html dom system
   var file = document.getElementById('csv-file').files[0];
+  fileName = file.name;
 
   Papa.parse(file, {
     //header: true,
@@ -245,8 +247,12 @@ function addParsedDataToScene()
   assert(x_AxisIndex >= 0,"");
   assert(y_AxisIndex >= 0,"");
   assert(z_AxisIndex >= 0,"");
+
   // scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
   scene.userData = [x_AxisIndex,y_AxisIndex,z_AxisIndex].concat(parsedData);
+
+  scene.name = fileName;
+
 }
 
 /**

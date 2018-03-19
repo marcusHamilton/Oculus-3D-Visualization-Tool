@@ -173,7 +173,7 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(function(){
- //driver.quit();
+ driver.quit();
  });
 
  /**
@@ -247,7 +247,7 @@ var webdriver = require('selenium-webdriver');
 driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button')).click();
  })
 
- it.skip("click url file should work", function() {
+ it("click url file should work", function() {
 
    var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
   loadNew.click();
@@ -274,7 +274,7 @@ driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/
    local.click();
    driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a')), 50000);
 
-   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'))；
+   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'));
    back.click();
 
    driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]')), 50000);

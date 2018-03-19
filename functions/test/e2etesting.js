@@ -1,3 +1,38 @@
+// //helping Owen with e2e test
+// var webdriver = require('selenium-webdriver');
+// By = webdriver.By,
+// until = webdriver.until,
+// assert = require('assert');
+//
+// //var driver;
+//
+// describe('e2e tests', function(){
+//   before(() => {
+//     driver = new webdriver.Builder().forBrowser('firefox').build();
+//     driver.get("https://3dvisualizationtool.ml");
+//     driver.getCurrentUrl().then(function( url ){
+//     console.log(url);
+//   });
+//     //driver.navigate().to('https://3dvisualizationtool.ml');
+//   });
+//
+//   it("title should print", () =>{
+//     driver.getCurrentUrl().then(function( url ){
+//     console.log(url);
+//   });
+//    driver.getTitle().then(function ( title ) {
+//      console.log(title);
+//    });
+//  });
+//
+//  after(() =>{
+//   //driver.quit();
+//   //driver.close();
+//  });
+//
+// });
+
+
 /**
  * Created by homeyxue on 2018-02-03.
  */
@@ -164,11 +199,7 @@ var webdriver = require('selenium-webdriver');
 
  it("click VRworld should work", () => {
 
- //var VRw0 = driver.findElement(By.id('-L6UcY0EKaTU24sRbEq3'));
- //var VRw1 = driver.findElement(By.id('-L6UdSwZZBWXNHBhp9cf'));
- //var VRw2 = driver.findElement(By.id('-L6Ud_fayHJ9kHcmOwRf'));
-
- var VRw0 = driver.findElement(By.xpath('//*[@id="-L6kqw1Ilu2xuK_UJ9ny"]'));
+ var VRw0 = driver.findElement(By.xpath('//*[@id="-L7kOzwNoZd8uIy9pn_K"]'));
 
  VRw0.click();
  driver.wait(until.elementLocated(By.xpath('//*[@id="ui"]')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
@@ -177,9 +208,9 @@ var webdriver = require('selenium-webdriver');
  });
  })
 
- it("VRworld should work without VR", () => {
+ it("click work without VR should work", () => {
 
- var VRw0 = driver.findElement(By.xpath('//*[@id="-L6kqw1Ilu2xuK_UJ9ny"]'));
+ var VRw0 = driver.findElement(By.xpath('//*[@id="-L7kOzwNoZd8uIy9pn_K"]'));
  VRw0.click();
  driver.wait(until.elementLocated(By.xpath('//*[@id="ui"]')), 50000);     //'VR Visualization Tool' is a new element, therefore should work'
 
@@ -193,52 +224,57 @@ var webdriver = require('selenium-webdriver');
  });
  })
 
- it("should load local file", function() {
+ it("click load local file should work", function() {
 
- var load = driver.findElement(By.xpath('//*[@id="contentBox"]/nav/ul/a'));
- load.click();
- driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+  // var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+  //loadNew.click();
 
- var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
- local.click();
- driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+  driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a')).click();
+  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
+
+ //  var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
+ // local.click();
+ driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')).click();
+ driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')), 50000);
 
  var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
 
- driver.findElement(By.xpath('//*[@id="formGroup"]/div[1]/input')).sendKeys(FILE_PATH);
- var submit = driver.findElement(By.xpath('//*[@id="formGroup"]/span[2]/button'));
- submit.click();
+ driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')).sendKeys(FILE_PATH);
+ // var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button'));
+ //
+ // submit.click();
 
+driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button')).click();
  })
 
- it("should url file", function() {
+ it("click url file should work", function() {
 
- var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
- load.click();
- driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+   var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+  loadNew.click();
+  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]')), 50000);
 
- var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
- local.click();
- driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+  var url = driver.findElement(By.name('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+ url.click();
+ driver.wait(until.elementLocated(By.id('//*[@id="csvURL"]')), 50000);
 
  var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
 
- driver.findElement(By.xpath('//*[@id="formGroup"]/div[1]/input')).sendKeys(FILE_PATH);
- var submit = driver.findElement(By.xpath('//*[@id="formGroup"]/span[2]/button'));
+ driver.findElement(By.xpath('//*[@id="csvURL"]')).sendKeys(FILE_PATH);
+ var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/div/div/div[1]/div[1]/span/button'));
  submit.click();
 
  })
 
  it("click start over should work", function(){
-   var load = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[2]'));
+   var load = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
    load.click();
-   driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]/div/a[1]')), 50000);
+   driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
 
-   var local = driver.findElement(By.name('//*[@id="step1"]/div/a[1]'));
+   var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
    local.click();
-   driver.wait(until.elementLocated(By.id('//*[@id="formGroup"]/div[1]/input')), 50000);
+   driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a')), 50000);
 
-   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/a'))
+   var back = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[3]/a'));
    back.click();
 
    driver.wait(until.elementLocated(By.xpath('//*[@id="step1"]')), 50000);

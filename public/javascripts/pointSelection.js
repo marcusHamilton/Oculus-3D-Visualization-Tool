@@ -207,6 +207,8 @@ function clearSelection()
         pointsGeometry.getAttribute('position').array[(i*3)],
         pointsGeometry.getAttribute('position').array[(i*3)+1],
         pointsGeometry.getAttribute('position').array[(i*3)+2])));
+      setPointScale(i, pointsGeometry.getAttribute('size').array[i] =
+        plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
     }
   }
   pointsGeometry.getAttribute( 'isSelected' ).array = selected;

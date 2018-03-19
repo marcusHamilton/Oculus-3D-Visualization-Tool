@@ -628,6 +628,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsSystem.name = "PointsSystem";
   // add it to the scene
   pointsSystem.position.set(plotInitSizeX / -2.0, -2.0, plotInitSizeZ * -1.2);
+  pointsSystem.rotation.set(0,-0.785398,0);
   scene.add(pointsSystem);
   drawAxisLabels();
 }

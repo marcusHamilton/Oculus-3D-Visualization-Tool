@@ -236,7 +236,6 @@ function addEnterVrButtons() {
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
     .on("enter", function() {
       console.log("enter VR")
-      //dolly.position.set(plotInitSizeX * 1.2, 2, plotInitSizeZ * 1.2);
 
     })
     .on("exit", function() {
@@ -372,6 +371,7 @@ window.addEventListener('vr controller connected', function(event) {
   controllerMesh.add(handleMesh);
   controller.userData.mesh = controllerMesh;//  So we can change the color later.
   controller.add(controllerMesh);
+  dolly.add(controller);
   castShadows(controller);
   receiveShadows(controller);
 

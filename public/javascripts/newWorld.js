@@ -3,6 +3,10 @@
  * It will take in a CSV file and in turn create a threejs world that contains the
  * CSV files data points. This will export a JSON file containing the scene.
  */
+var THREE = require('three');
+
+var scene; //The scene to which all elements are added to
+
 
 var parsedData; //Parsed data obtained from the CSV
 //The following are to be accessed like so: parsedData[i][x_AxisIndex]
@@ -12,6 +16,44 @@ var parsedData; //Parsed data obtained from the CSV
 var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
 var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
 var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
+
+function setParsedData(data){
+  parsedData = data;
+}
+
+function setXAxisIndex(data){
+  x_AxisIndex = data;
+}
+
+function setYAxisIndex(data){
+  y_AxisIndex = data;
+}
+
+function setZAxisIndex(data){
+  z_AxisIndex = data;
+}
+
+function setSceneForTesting(){
+  //Initialize camera, scene, and renderer
+  scene = new THREE.Scene();
+  scene.name = "Scene";
+  // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+  //Add light and floor
+  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
+  light.position.set(1, 10, -0.5);
+  light.castShadow = true;
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+  light.shadow.camera.near = 1;
+  light.shadow.camera.far = 12;
+  scene.add(light);
+  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));
+}
+
+function getScene() {
+  return scene;
+}
+
 
 /**
  * Function is called when the csv file is loaded in from the localLoad.
@@ -158,7 +200,8 @@ function getResults() {
 /**
  * Below is everything necessary to build a new 3d world
  */
-var scene; //The scene to which all elements are added to
+
+
 
 function build3DSpace() {
   //Initialize camera, scene, and renderer
@@ -202,7 +245,8 @@ function addParsedDataToScene()
   assert(x_AxisIndex >= 0,"");
   assert(y_AxisIndex >= 0,"");
   assert(z_AxisIndex >= 0,"");
-  scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+  // scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+  scene.userData = [x_AxisIndex,y_AxisIndex,z_AxisIndex].concat(parsedData);
 }
 
 /**
@@ -215,3 +259,11 @@ function assert(condition, message) {
     throw message || "Assertion failed";
   }
 }
+
+module.exports.setParsedData = setParsedData;
+module.exports.setXAxisIndex = setXAxisIndex;
+module.exports.setYAxisIndex = setYAxisIndex;
+module.exports.setZAxisIndex = setZAxisIndex;
+module.exports.setSceneForTesting = setSceneForTesting;
+module.exports.addParsedDataToScene = addParsedDataToScene;
+module.exports.getScene = getScene;

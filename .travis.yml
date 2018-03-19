@@ -6,6 +6,6 @@ cache:
 before_install:
 - cd ./functions
 install: 
-- npm install --save-dev
+- npm install -g
 script:
 - npm test

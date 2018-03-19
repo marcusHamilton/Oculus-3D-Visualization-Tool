@@ -64,8 +64,8 @@ function update(timestamp) {
   THREE.VRController.update();
 
   if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += (controllerL_Stick_XAxis * 0.00001);
-    datasetAndAxisLabelGroup.position.z += (controllerL_Stick_YAxis * 0.00001);
+    datasetAndAxisLabelGroup.position.x += 0.001;//(controllerL_Stick_XAxis * 0.00001);
+    datasetAndAxisLabelGroup.position.z += 0.001;//(controllerL_Stick_YAxis * 0.00001);
   }
   //Allows point selection to function
   pointSelectionUpdate();

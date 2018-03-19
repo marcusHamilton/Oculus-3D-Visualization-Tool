@@ -637,6 +637,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
   scene.add(pointsSystem);
+  datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
   drawAxisLabels();
 }

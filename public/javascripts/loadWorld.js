@@ -322,6 +322,8 @@ function setUpControls() {
 /**
  * The following is an event listener for when a hand held controller is connected
  */
+var AisPressed;
+var XisPressed;
 window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
@@ -363,6 +365,8 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Add selection controls
   initializeSelectionControls();
+  AisPressed = false;
+  XisPressed = false;
 
   //Button events. This is currently just using the primary button
   controller.addEventListener('primary press began', function(event) {
@@ -394,6 +398,7 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Press 'A' (select/deselect a point)
   controller.addEventListener('A press began', function(event) {
+    AisPressed = true;
     if (intersects) {
       selectPoint(intersects.index);
     }
@@ -402,6 +407,7 @@ window.addEventListener('vr controller connected', function(event) {
     }
   });
   controller.addEventListener('A press ended', function(event) {
+    AisPressed = false;
 
   });
   //Press 'B' to hide a point
@@ -413,12 +419,12 @@ window.addEventListener('vr controller connected', function(event) {
 
   });
 
-  //Hold 'A' and 'X' to select/deselect all
+  //Press 'A' and 'X' to select/deselect all
   controller.addEventListener('X press began', function(event) {
-
+    XisPressed = true;
   });
   controller.addEventListener('X press ended', function(event) {
-
+    XisPressed = false;
   });
 
   //Hold 'B' and 'Y' hide/unhide all

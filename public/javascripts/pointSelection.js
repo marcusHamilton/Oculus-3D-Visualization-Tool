@@ -124,8 +124,18 @@ function pointSelectionUpdate() {
     setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
-  scene.remove ( raycasterLine );
+  // Press 'A' and 'X' is select/deselect all points.
 
+  if (XisPressed && AisPressed){
+    if (selectedPoints.length > 0){
+      clearSelection();
+    }
+    else{
+      selectAll();
+    }
+  }
+
+  scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     /*raycasterLineMaterial = new THREE.LineBasicMaterial({
       color: 0xff00ff

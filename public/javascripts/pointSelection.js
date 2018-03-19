@@ -8,6 +8,7 @@
 
 var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
+var hiddenPoints = [];
 
 var pointSelectionMouse = new THREE.Vector2();
 var selectionThreshold = 0.04; //the distance the mouse has to be from a point
@@ -254,13 +255,16 @@ function onClick( event ){
   event.preventDefault();
   if (intersects != null) {
     selectPoint(intersects.index);
+      // hidePoint(intersects.index);
   }
   else {
     clearSelection();
+    //unhideRecent();
   }
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
   }
+  console.log(hiddenPoints);
 }
 
 /**
@@ -331,6 +335,8 @@ function colorFromXYZcoords(vec3) {
  *
  * @return {Vector3[]} array of Vector3 objects containing positions
  */
+
+//must be fixed. Based on world position not value of points
 function getSelectedPointPositions() {
 
   var selectedPointPositions = [];
@@ -378,10 +384,32 @@ function getSelectedAxisValues(axis){
 }
 
 
+/////////////////////////////////////////////////////////////////////////
+///////////////////           POINT HIDING            ///////////////////
+/////////////////////////////////////////////////////////////////////////
 
 
+//if presses hide button away from a point, un-hides the most recently hidden point?
 
+function hidePoint(pointIndex){
 
+    pointsGeometry.getAttribute('isHidden').array[pointIndex] = true;
+    hiddenPoints.push(pointIndex);
+    //do the thing that hides it
+
+}
+
+function unhide(pointIndex){
+    hiddenPoints.splice(hiddenPoints.indexOf(pointIndex),1);
+    pointsGeometry.getAttribute('isHidden').array[pointIndex] = false;
+    //undo the thing that hides it
+}
+
+function unhideRecent(){
+    var recentIndex = (hiddenPoints.indexOf(hiddenPoints.length -1, 1));
+    unhide(recentIndex);
+
+}
 
 
 

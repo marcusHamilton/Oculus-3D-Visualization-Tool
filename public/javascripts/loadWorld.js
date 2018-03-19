@@ -636,10 +636,14 @@ function drawDataset(xCol, yCol, zCol)
   //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
-  scene.add(pointsSystem);
   datasetAndAxisLabelGroup = new THREE.Group();
-  //datasetAndAxisLabelGroup.add(pointsSystem);
+  datasetAndAxisLabelGroup.add(pointsSystem);
   drawAxisLabels();
+  //scene.add(pointsSystem);
+
+  scene.add(datasetAndAxisLabelGroup);
+  //datasetAndAxisLabelGroup.add(pointsSystem);
+  //drawAxisLabels();
 }
 
 /**
@@ -717,5 +721,5 @@ function drawAxisLabels() {
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
-  scene.add(axisLabelGroup);
+  //scene.add(axisLabelGroup);
 }

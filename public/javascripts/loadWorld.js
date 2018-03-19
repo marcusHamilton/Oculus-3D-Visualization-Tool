@@ -627,6 +627,9 @@ function drawDataset(xCol, yCol, zCol)
 
   pointsSystem.name = "PointsSystem";
   // add it to the scene
+
+  //Position the dataset in a reasonable spot. This will probably change when
+  //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
   scene.add(pointsSystem);
@@ -642,6 +645,7 @@ function drawDataset(xCol, yCol, zCol)
  */
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
+  var axisLabelGroup = new THREE.Group();
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({
@@ -675,9 +679,9 @@ function drawAxisLabels() {
   var lineZ = new THREE.Line(geometryZ, materialZ);
 
   // Add them to the scene
-  scene.add(lineX);
-  scene.add(lineY);
-  scene.add(lineZ);
+  axisLabelGroup.add(lineX);
+  axisLabelGroup.add(lineY);
+  axisLabelGroup.add(lineZ);
 
   // Axis line ticks - Just draws 10 ticks on each axis
   var lineXTicks = new LinkedList();
@@ -686,7 +690,7 @@ function drawAxisLabels() {
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
-    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
+    axisLabelGroup.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
   }
   var lineYTicks = new LinkedList();
   for (var yUnits = 1; yUnits <= 10; yUnits++) {
@@ -694,7 +698,7 @@ function drawAxisLabels() {
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX * 0.1, plotInitSizeY / largestY * yUnits, 0));
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ * 0.1));
-    scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
+    axisLabelGroup.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
   }
   var lineZTicks = new LinkedList();
   for (var zUnits = 1; zUnits <= 10; zUnits++) {
@@ -702,6 +706,9 @@ function drawAxisLabels() {
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
-    scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
+    axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
+  axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
+  axisLabelGroup.rotation.set(0,-0.785398,0);
+  scene.add(axisLabelGroup);
 }

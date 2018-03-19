@@ -17,6 +17,8 @@ var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
 var controller; //VR Controller object
+var dolly; //A group containing the camera, used for movement
+var isVRSystemDetected
 
 var pointsSystem; //THREE.js Points system for shader based visualization
 var pointsGeometry; //THREE.js BufferGeometry contains vertices for datapoints
@@ -144,6 +146,7 @@ function Manager() {
         setStageDimensions(display.stageParameters);
         camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
         camera.rotation.y = 270 * Math.PI / 180;
+        isVRSystemDetected = true;
       })
       .catch(function() {
         // If there is no display available, fallback to window
@@ -159,10 +162,18 @@ function Manager() {
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
-    //Center the camera on the data and back a bit
+    //Center the non-VR camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
 
+    // Put the camera in a group and use that to adjust its position for VR
+    if (isVRSystemDetected) {
+      dolly = new THREE.Group();
+      dolly.position.set(0, 0, 0);
+      scene.add(dolly);
+      dolly.add(camera);
+      dolly.position.set(plotInitSizeX * 1.2, camera.position.z, plotInitSizeZ * 1.2);
+    }
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -334,7 +345,7 @@ window.addEventListener('vr controller connected', function(event) {
   scene.add(controller);
 
   //Ensure controllers appear at the right height
-  controller.standingMatrix = renderer.vr.getStandingMatrix();
+  //controller.standingMatrix = renderer.vr.getStandingMatrix();
   controller.head = window.camera;
 
   //Add a visual for the controllers

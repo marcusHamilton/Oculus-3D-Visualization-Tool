@@ -365,7 +365,7 @@ window.addEventListener('vr controller connected', function(event) {
   initializeSelectionControls();
 
   //Button events. This is currently just using the primary button
-  controller.addEventListener('A press began', function(event) {
+  controller.addEventListener('primary press began', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
     console.log("Right controller trigger press detected:");
@@ -380,7 +380,7 @@ window.addEventListener('vr controller connected', function(event) {
 
     guiInputHelper.pressed(true)
   });
-  controller.addEventListener('A press ended', function(event) {
+  controller.addEventListener('primary press ended', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOff);
     guiInputHelper.pressed(false)
@@ -390,7 +390,47 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('disconnected', function(event) {
 
     controller.parent.remove(controller)
-  })
+  });
+
+  //Press 'A' (select/deselect a point)
+  controller.addEventListener('A press began', function(event) {
+
+    selectPoint(intersects.index);
+  });
+  controller.addEventListener('A press ended', function(event) {
+
+  });
+  //Press 'B' to hide a point
+  controller.addEventListener('B press began', function(event) {
+
+    //TODO: Point hiding.
+  });
+  controller.addEventListener('B press ended', function(event) {
+
+  });
+
+  //Hold 'A' and 'X' to select/deselect all
+  controller.addEventListener('X press began', function(event) {
+
+  });
+  controller.addEventListener('X press ended', function(event) {
+
+  });
+
+  //Hold 'B' and 'Y' hide/unhide all
+  controller.addEventListener('Y press began', function(event) {
+
+  });
+  controller.addEventListener('Y press ended', function(event) {
+
+  });
+  //'Grip' turns on raycaster line
+  controller.addEventListener('Grip press began', function(event) {
+
+  });
+  controller.addEventListener('Grip press ended', function(event) {
+
+  });
 });
 
 //Keyboard Controls

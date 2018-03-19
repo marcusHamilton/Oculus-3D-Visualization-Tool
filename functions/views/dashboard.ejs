@@ -95,7 +95,7 @@
         <h3 class="masthead-brand">Hi, </h3>
         <nav>
           <ul class="nav masthead-nav">
-            <a href=#myModal role="button" data-toggle="modal" class="btn btn-info btn-lg">
+            <a href=#myModal id="newWorldButton" role="button" data-toggle="modal" class="btn btn-info btn-lg">
               <span class="glyphicon glyphicon-plus-sign"></span> New
             </a>
           </ul>
@@ -139,7 +139,7 @@
                 <div class="well modalChoices">
 
                   <p>Where is your CSV?</p>
-                  <a href="#step2" data-toggle="tab" data-step="2" class="btn btn-lg btn-default">Local</a>
+                  <a id="loadLocalButton" href="#step2" data-toggle="tab" data-step="2" class="btn btn-lg btn-default">Local</a>
                   <a href="#step3" data-toggle="tab" data-step="3" class="btn btn-lg btn-default">URL</a>
 
                 </div>
@@ -165,7 +165,7 @@
                           Only .csv files may be selected.
                         </span>
                         <span>
-                          <button role="button" onclick="loadCSVLocal()" class="btn btn-primary">Load!</button>
+                          <button id="loadCsvButton" role="button" onclick="loadCSVLocal()" class="btn btn-primary">Load!</button>
                         </span>
                         <!-- Area for success message -->
                         <div id="successMessage" align="center">

@@ -92,7 +92,7 @@ function pointSelectionUpdate() {
     matrix.extractRotation( selectionControllerR.matrix );
 
     var direction = new THREE.Vector3( 0, 0, 1 );
-    matrix.multiplyVector3( direction );
+    matrix.applyMatrix4( direction );
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)

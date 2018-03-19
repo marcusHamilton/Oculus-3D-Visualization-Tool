@@ -139,7 +139,14 @@ function pointSelectionUpdate() {
     raycasterLine = new THREE.Line(raycasterLineGeometry, raycasterLineMaterial);
 
     scene.add(raycasterLine);*/
-    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, 1000000, 0xff00ff );
+    var lineLength;
+    if (intersects){
+      lineLength = intersects.distance;
+    }
+    else {
+      lineLength = 1000000;
+    }
+    raycasterLine = new THREE.ArrowHelper( pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff );
     scene.add(raycasterLine);
   }
 

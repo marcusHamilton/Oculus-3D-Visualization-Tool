@@ -435,12 +435,16 @@ window.addEventListener('vr controller connected', function(event) {
 
   });
   //'Grip' turns on raycaster line
-  controller.addEventListener('Grip press began', function(event) {
+
+  //'Click right thumbstick' to invert selection.
+  controller.addEventListener('thumbstick press began', function(event) {
+    invertSelection();
+  });
+  controller.addEventListener('thumbstick press ended', function(event) {
 
   });
-  controller.addEventListener('Grip press ended', function(event) {
 
-  });
+
 });
 
 //Keyboard Controls

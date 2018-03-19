@@ -173,7 +173,7 @@ var webdriver = require('selenium-webdriver');
   * close web driver after test case
   */
  after(function(){
- driver.quit();
+ //driver.quit();
  });
 
  /**
@@ -226,21 +226,25 @@ var webdriver = require('selenium-webdriver');
 
  it("click load local file should work", function() {
 
-   var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
-  loadNew.click();
+  // var loadNew = driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a'));
+  //loadNew.click();
+
+  driver.findElement(By.xpath('/html/body/div/div[1]/div[2]/nav/ul/a')).click();
   driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')), 50000);
 
-  var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
- local.click();
+ //  var local = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]'));
+ // local.click();
+ driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[1]/div/a[1]')).click();
  driver.wait(until.elementLocated(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')), 50000);
 
  var FILE_PATH = '/Users/homeyxue/Oculus-3D-Visualization-Tool/dev_helpers/cities.csv';
 
  driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/div[1]/input')).sendKeys(FILE_PATH);
- var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button'));
+ // var submit = driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button'));
+ //
+ // submit.click();
 
- submit.click();
-
+driver.findElement(By.xpath('/html/body/div[1]/div[2]/div/div/div[2]/div/div[2]/div/div/div[1]/span[2]/button')).click();
  })
 
  it.skip("click url file should work", function() {

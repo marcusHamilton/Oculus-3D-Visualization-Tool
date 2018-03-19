@@ -322,6 +322,9 @@ function setUpControls() {
 /**
  * The following is an event listener for when a hand held controller is connected
  */
+
+//This is gross, We'll probably put the listeners in pointSelection instead of
+//having global booleans.
 var AisPressed;
 var XisPressed;
 
@@ -331,7 +334,7 @@ window.addEventListener('vr controller connected', function(event) {
   scene.add(controller);
 
   //Ensure controllers appear at the right height
-  //controller.standingMatrix = renderer.vr.getStandingMatrix();
+  controller.standingMatrix = renderer.vr.getStandingMatrix();
   controller.head = window.camera;
 
   //Add a visual for the controllers

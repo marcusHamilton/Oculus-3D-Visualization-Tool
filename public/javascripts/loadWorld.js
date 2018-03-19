@@ -50,8 +50,8 @@ function update(timestamp) {
   lastRender = timestamp;
 
   if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.01;
-    datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.01;
+    datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.00001;
+    datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.00001;
   }
 
   torus.rotation.y += 0.002

@@ -598,7 +598,8 @@ function drawDataset(xCol, yCol, zCol)
     p.toArray( positions, i * 3 );
 
     // Set point color RGB values to magnitude of XYZ values
-    color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
+    color = colorFromXYZcoords(p);
+    //color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
     color.toArray( colors, i * 3 );
 
     // Set the sizes of all the points to be added to BufferGeometry

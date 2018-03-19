@@ -456,7 +456,7 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('thumbstick press ended', function(event) {
 
   });
-  //THREE.VRController.verbosity = 1;
+  THREE.VRController.verbosity = 1;
   var controllerL = scene.getObjectByName("Oculus Touch (Left)");
   //controllerL.
 

@@ -92,7 +92,7 @@ function pointSelectionUpdate() {
     matrix.extractRotation( selectionControllerR.matrix );
 
     var direction = new THREE.Vector3( 0, 0, 1 );
-    direction.applyMatrix(matrix);
+    direction.applyMatrix4(matrix);
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);

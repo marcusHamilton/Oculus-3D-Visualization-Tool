@@ -47,12 +47,12 @@ function update(timestamp) {
   }
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
-
+/*
   if (datasetAndAxisLabelGroup) {
     datasetAndAxisLabelGroup.position.x += controllerL_Stick_XAxis * 0.01;
     datasetAndAxisLabelGroup.position.z += controllerL_Stick_YAxis * 0.01;
   }
-
+*/
   torus.rotation.y += 0.002
   if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
 

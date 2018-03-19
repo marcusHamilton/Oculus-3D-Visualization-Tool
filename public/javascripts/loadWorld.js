@@ -167,13 +167,13 @@ function Manager() {
     camera.rotation.y = 270 * Math.PI / 180;
 
     // Put the camera in a group and use that to adjust its position for VR
-    if (isVRSystemDetected) {
+    //if (isVRSystemDetected) {
       dolly = new THREE.Group();
       dolly.position.set(0, 0, 0);
       scene.add(dolly);
       dolly.add(camera);
       dolly.position.set(plotInitSizeX * 1.2, camera.position.z, plotInitSizeZ * 1.2);
-    }
+    //}
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

@@ -172,7 +172,7 @@ function Manager() {
       dolly.position.set(0, 0, 0);
       scene.add(dolly);
       dolly.add(camera);
-      dolly.position.set(plotInitSizeX * 1.2, camera.position.z, plotInitSizeZ * 1.2);
+      dolly.position.set(plotInitSizeX * 1.2, 2, plotInitSizeZ * 1.2);
     //}
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
@@ -236,6 +236,8 @@ function addEnterVrButtons() {
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
     .on("enter", function() {
       console.log("enter VR")
+      dolly.position.set(plotInitSizeX * 1.2, 2, plotInitSizeZ * 1.2);
+
     })
     .on("exit", function() {
       console.log("exit VR");

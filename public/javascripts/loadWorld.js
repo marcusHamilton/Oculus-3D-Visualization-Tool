@@ -95,7 +95,7 @@ var GameLoop = function(timestamp) {
  * Manages retrieval of existing worlds from the database and initializes the
  * current scene.
  */
-var dolly;
+
 function Manager() {
   //Initialize camera, scene, and renderer
   //First get the scene from the data base
@@ -122,11 +122,7 @@ function Manager() {
     console.log("Retrieved Scene Object:");
     console.log(object);
 
-    dolly = new THREE.Group();
-    scene.add(dolly);
-
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-    dolly.add(camera);
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.vr.enabled = true;
@@ -168,8 +164,6 @@ function Manager() {
     //Center the non-VR camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
-
-    dolly.position.set(plotInitSizeX * 1.2, 2,  plotInitSizeZ * 1.2);
 
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
@@ -261,8 +255,6 @@ function addEnterVrButtons() {
 function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
-  dolly.add(vrControls);
-  dolly.add(renderer);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
 
@@ -342,7 +334,6 @@ window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
   scene.add(controller);
-  dolly.add(controller);
 
   //Ensure controllers appear at the right height
   //controller.standingMatrix = renderer.vr.getStandingMatrix();

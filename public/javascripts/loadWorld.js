@@ -627,6 +627,7 @@ function drawDataset(xCol, yCol, zCol)
 
   pointsSystem.name = "PointsSystem";
   // add it to the scene
+  pointsSystem.position.set(plotInitSizeX / -2.0, -2.0, plotInitSizeZ * -1.2);
   scene.add(pointsSystem);
   drawAxisLabels();
 }

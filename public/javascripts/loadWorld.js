@@ -32,6 +32,7 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+var controllerL;
 var controllerL_Stick_XAxis;
 var controllerL_Stick_YAxis;
 
@@ -466,7 +467,7 @@ window.addEventListener('vr controller connected', function(event) {
   });
 
   //Left thumbstick for movement.
-  var controllerL = scene.getObjectByName("Oculus Touch (Left)");
+  controllerL  = scene.getObjectByName("Oculus Touch (Left)");
   if (controllerL) {
     controllerL.addEventListener('thumbstick axis changed', function (event) {
       controllerL_Stick_XAxis = controllerL.getAxis(0);

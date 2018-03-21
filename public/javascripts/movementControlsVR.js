@@ -1,6 +1,6 @@
 var movementControllerL; //Object representing the left Oculus controlls.
 var movementControllerR; //Object representing the right Oculus controlls.
-var movementSpeedCoeff = 0.01;
+var movementSpeedCoeff = 0.3;
 
 
 function initializeMovementControls(){
@@ -18,8 +18,8 @@ function initializeMovementControls(){
 function updateMovementControls(){
   if (movementControllerL){
     if (datasetAndAxisLabelGroup){
-      datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff;
-      datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff;
+      datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff * -1;
+      datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff * -1;
     }
   }
   if (movementControllerR){

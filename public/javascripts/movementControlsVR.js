@@ -28,7 +28,7 @@ function updateMovementControls(){
     if (datasetAndAxisLabelGroup) {
       //datasetAndAxisLabelGroup.rotateY(movementControllerR.getAxis(0) * movementSpeedCoeff * -1);
 
-      rotateAboutPoint(datasetAndAxisLabelGroup, new THREE.Vector3(5,0,5), new THREE.Vector3(0,1,0), movementControllerR.getAxis(0) * movementSpeedCoeff * -1, false);
+      rotateAboutPoint(datasetAndAxisLabelGroup, new THREE.Vector3(5,0,5), new THREE.Vector3(0,1,0), movementControllerR.getAxis(0) * movementSpeedCoeff * -1, true);
     }
   }
 }

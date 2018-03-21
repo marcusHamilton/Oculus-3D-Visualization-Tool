@@ -182,8 +182,11 @@ function Manager() {
     drawFPSstats();
     axiiMenu = new axisMenuObj();
     axisMenu();
+
+
+
     // The [0] index of loadedDataset contains the 3 selected axis column indices
-    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+    drawDataset(axiiMenu.xAxis,axiiMenu.yAxis,axiiMenu.zAxis);
     
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
@@ -286,7 +289,7 @@ function setUpControls() {
   camera.position.z = vrControls.userHeight;
 
   //Add fps controls as well
-  trackballControls = new THREE.TrackballControls(camera);
+  trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
   trackballControls.rotateSpeed = 1.0;
   trackballControls.zoomSpeed = 10;
   trackballControls.panSpeed = 10;
@@ -326,23 +329,23 @@ function setUpControls() {
   //Removing it messes up the lighting in the scene and turns the whole
   //rendered dataset black.
   //Arbitrary shape for testing gui settings
-  // torus = new THREE.Mesh(
-  //   new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
-  //   new THREE.MeshStandardMaterial({
-  //     roughness: 0.01,
-  //     metalness: 0.2
-  //   })
-  // );
-  // torus.position.set(-0.25, 1.4, -1.5);
-  // torus.castShadow = true;
-  // torus.receiveShadow = true;
-  // torus.visible = true;
-  // scene.add(torus);
+  torus = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
+    new THREE.MeshStandardMaterial({
+      roughness: 0.01,
+      metalness: 0.2
+    })
+  );
+  torus.position.set(-0.25, 1.4, -1.5);
+  torus.castShadow = true;
+  torus.receiveShadow = true;
+  torus.visible = true;
+  scene.add(torus);
 
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  dat.GUIVR.enableMouse(camera);
+  dat.GUIVR.enableMouse(camera,renderer);
   var gui = dat.GUIVR.create('Settings');
   gui.position.set(100 , 100, 100);
   gui.rotation.set(Math.PI / -6, 0, 0);
@@ -681,6 +684,7 @@ function drawDataset(xCol, yCol, zCol)
   //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
+  pointsSystem.receiveShadow = true;
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
@@ -797,7 +801,11 @@ function axisMenu() {
       folder.add(axiiMenu, 'yAxis', axiiMenu.axiiOptions);
       folder.add(axiiMenu, 'zAxis', axiiMenu.axiiOptions);
       folder.add(redraw,'redraw');
-    };
+      folder.__controllers[0].__onChange = redraw.redraw;
+      folder.__controllers[1].__select.selectedIndex = axiiMenu.xAxis;
+      folder.__controllers[2].__select.selectedIndex = axiiMenu.yAxis;
+      folder.__controllers[3].__select.selectedIndex = axiiMenu.zAxis;
+      };
     script2.src = '//rawgit.com/dataarts/dat.gui/master/build/dat.gui.js';
     document.head.appendChild(script2);
   })();
@@ -806,7 +814,7 @@ function axisMenu() {
 //clears and redraws data set
 function redrawDataSet(VR){
   if(VR == 0){
-    axiiMenu.xAxis = folder.__controllers[1].__select.selectedIndex
+    axiiMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
     axiiMenu.yAxis = folder.__controllers[2].__select.selectedIndex;
     axiiMenu.zAxis = folder.__controllers[3].__select.selectedIndex;
   }

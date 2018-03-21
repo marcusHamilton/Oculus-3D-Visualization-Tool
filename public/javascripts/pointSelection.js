@@ -98,6 +98,8 @@ function pointSelectionUpdate() {
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
+
+    console.log(selectionControllerR.getAxis(0));
   }
 
   // If no controllers are present, revert to mouse/camera selection.

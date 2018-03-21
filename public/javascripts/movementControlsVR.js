@@ -13,6 +13,15 @@ var movementSpeedCoeff = 0.3;
 function initializeMovementControls(){
   movementControllerL = scene.getObjectByName("Oculus Touch (Left)");
   movementControllerR = scene.getObjectByName("Oculus Touch (Right)");
+  // Example event listener for button press/touch/near-touch
+  // Look at VRController.js:956 for how to define other events
+  // by passing strings to .addEventListener()
+  if (movementControllerL) {
+    movementControllerL.addEventListener('X press began', function (event) {
+      console.log("X Button Pressed!");
+      // Function calls go here...
+    });
+  }
 }
 
 /**
@@ -28,14 +37,6 @@ function updateMovementControls(){
       datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff * -1;
       datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff * -1;
     }
-
-    // Example event listener for button press/touch/near-touch
-    // Look at VRController.js:956 for how to define other events
-    // by passing strings to .addEventListener()
-    movementControllerL.addEventListener('X press began', function(event) {
-      console.log("X Button Pressed!");
-      // Function calls go here...
-    });
   }
 
   // Check that the right controller is initialized

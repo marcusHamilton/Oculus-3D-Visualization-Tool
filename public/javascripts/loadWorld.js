@@ -24,7 +24,7 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var plotPointSizeCoeff = 0.01; //Default datapoint size
+var pointVars={plotPointSizeCoeff:0.05}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
@@ -160,7 +160,8 @@ function Manager() {
 
     //This can be removed after development if desired
     drawFPSstats();
-
+    axiiMenu = new axisMenuObj();
+    axisMenu();
     // The [0] index of loadedDataset contains the 3 selected axis column indices
     drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
     
@@ -305,17 +306,19 @@ function setUpControls() {
   //Removing it messes up the lighting in the scene and turns the whole
   //rendered dataset black.
   //Arbitrary shape for testing gui settings
-  torus = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
-    new THREE.MeshStandardMaterial({
-      roughness: 0.01,
-      metalness: 0.2
-    })
-  );
-  torus.position.set(-0.25, 1.4, -1.5);
-  torus.castShadow = true;
-  torus.receiveShadow = true;
-  scene.add(torus);
+  // torus = new THREE.Mesh(
+  //   new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
+  //   new THREE.MeshStandardMaterial({
+  //     roughness: 0.01,
+  //     metalness: 0.2
+  //   })
+  // );
+  // torus.position.set(-0.25, 1.4, -1.5);
+  // torus.castShadow = true;
+  // torus.receiveShadow = true;
+  // torus.visible = true;
+  // scene.add(torus);
+
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
@@ -324,9 +327,9 @@ function setUpControls() {
   gui.position.set(100 , 100, 100);
   gui.rotation.set(Math.PI / -6, 0, 0);
   scene.add(gui);
-  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
-  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
-  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
+  // gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
+  // gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
+  // gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
   castShadows(gui);
 
 }
@@ -361,7 +364,7 @@ function drawDataset(xCol, yCol, zCol)
   // points geometry contains a list of all the point vertices pushed below
   pointsGeometry = new THREE.BufferGeometry();
 
-  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
+  var pointSize = pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
 
   // Grab the OpenGLSL shader definitions from page html
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
@@ -450,6 +453,7 @@ function drawDataset(xCol, yCol, zCol)
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
+  datasetAndAxisLabelGroup.receiveShadows = true;
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }
@@ -532,4 +536,62 @@ function drawAxisLabels() {
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
+}
+
+
+/**
+Constructor for an object that holds the currently selected axis values as well
+as the array of labels to be displayed by the dropdowns
+**/
+function axisMenuObj(){
+  this.xAxis = loadedDataset[0][0]; //holds current x axis
+  this.yAxis = loadedDataset[0][1]; //holds current y axis
+  this.zAxis = loadedDataset[0][2]; //holds current z axis
+  this.axiiOptions = loadedDataset[1]; //hold the row of data containing axis labels
+}
+
+/**
+  This populates the axis menu on browsers
+  **/
+function axisMenu() {
+  (function() {
+    var script2 = document.createElement('script');
+    script2.onload = function() {
+      menu = new dat.GUI();
+      menu.autoPlace = false;
+      folder = menu.addFolder("axis")
+      folder.add(pointVars, 'plotPointSizeCoeff', 0.05, 0.1, 0.01);
+      folder.add(axiiMenu, 'xAxis', axiiMenu.axiiOptions);
+      folder.add(axiiMenu, 'yAxis', axiiMenu.axiiOptions);
+      folder.add(axiiMenu, 'zAxis', axiiMenu.axiiOptions);
+      folder.add(redraw,'redraw');
+    };
+    script2.src = '//rawgit.com/dataarts/dat.gui/master/build/dat.gui.js';
+    document.head.appendChild(script2);
+  })();
+}
+
+//clears and redraws data set
+function redrawDataSet(VR){
+  if(VR == 0){
+    axiiMenu.xAxis = folder.__controllers[1].__select.selectedIndex
+    axiiMenu.yAxis = folder.__controllers[2].__select.selectedIndex;
+    axiiMenu.zAxis = folder.__controllers[3].__select.selectedIndex;
+  }
+  else{
+    axiiMenu.xAxis = menu.__controllers[1].__select.selectedIndex;
+    axiiMenu.yAxis = menu.__controllers[2].__select.selectedIndex;
+    axiiMenu.zAxis = menu.__controllers[3].__select.selectedIndex;
+  }
+  loadedDataset[0][0] = axiiMenu.xAxis;
+  loadedDataset[0][1] = axiiMenu.yAxis;
+  loadedDataset[0][2] = axiiMenu.zAxis;
+    while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+}
+    console.log("Removed children")
+    drawDataset(axiiMenu.xAxis,axiiMenu.yAxis,axiiMenu.zAxis);
+    console.log("Redrew Data");
+    VRGUI();
+    drawAxisLabels();
 }

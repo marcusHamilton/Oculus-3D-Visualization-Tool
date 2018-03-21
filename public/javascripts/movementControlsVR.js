@@ -26,7 +26,7 @@ function updateMovementControls(){
   }
   if (movementControllerR){
     if (datasetAndAxisLabelGroup) {
-      datasetAndAxisLabelGroup.direction.y += movementControllerR.getAxis(0) * movementSpeedCoeff * -1;
+      datasetAndAxisLabelGroup.rotateY(movementControllerR.getAxis(0) * movementSpeedCoeff * -1);
     }
   }
 }

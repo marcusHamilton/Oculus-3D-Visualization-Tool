@@ -58,10 +58,12 @@ function update(timestamp) {
   //Add all updates below here
 
   //Ensure that we are looking for controller input
-  
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
   THREE.VRController.update();
 /*
   if (datasetAndAxisLabelGroup && controllerL) {
@@ -77,6 +79,7 @@ function update(timestamp) {
   pointsGeometry.getAttribute('position').needsUpdate = true;
   pointsGeometry.getAttribute('size').needsUpdate = true;
   pointsGeometry.getAttribute('isSelected').needsUpdate = true;
+  pointsGeometry.getAttribute('isHidden').needsUpdate = true;
 }
 
 /**
@@ -436,10 +439,15 @@ window.addEventListener('vr controller connected', function(event) {
 
   });
   //Press 'B' to hide a point
-  controller.addEventListener('B press began', function(event) {
+    controller.addEventListener('B press began', function(event) {
 
-    //TODO: Point hiding.
-  });
+        if (intersects) {
+            hidePoint(intersects.index);
+        }
+        else{
+          unhideRecent();
+        }
+    });
   controller.addEventListener('B press ended', function(event) {
 
   });

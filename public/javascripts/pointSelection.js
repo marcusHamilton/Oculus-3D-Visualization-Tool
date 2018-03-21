@@ -118,9 +118,13 @@ function pointSelectionUpdate() {
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
-    setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+      if(pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
+          setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
-    mousedOverPoint = intersects.index;
+      }
+      mousedOverPoint = intersects.index;
+
+
 
 
   }
@@ -254,17 +258,17 @@ function onClick( event ){
 
   event.preventDefault();
   if (intersects != null) {
-    //selectPoint(intersects.index);
-    hidePoint(intersects.index);
+    selectPoint(intersects.index);
+    //hidePoint(intersects.index);
   }
   else {
-    //clearSelection();
-    unhideRecent();
+    clearSelection();
+    //unhideRecent();
   }
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
   }
-  console.log(hiddenPoints);
+  //console.log(hiddenPoints);
 }
 
 /**
@@ -396,6 +400,8 @@ function hidePoint(pointIndex){
     pointsGeometry.getAttribute('isHidden').array[pointIndex] = true;
     hiddenPoints.push(pointIndex);
     //do the thing that hides it
+    //hiding by changing the colour to black is a very poor solution. Ideally color would include an alpha channel.
+    setPointColor(pointIndex, new THREE.Vector3(0,0,0));
 
 }
 
@@ -403,10 +409,14 @@ function unhide(pointIndex){
     hiddenPoints.splice(hiddenPoints.indexOf(pointIndex),1);
     pointsGeometry.getAttribute('isHidden').array[pointIndex] = false;
     //undo the thing that hides it
+    setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)],
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
 }
 
 function unhideRecent(){
-    var recentIndex = (hiddenPoints.indexOf(hiddenPoints.length -1, 1));
+    var recentIndex = (hiddenPoints[hiddenPoints.length -1]);
     unhide(recentIndex);
 
 }

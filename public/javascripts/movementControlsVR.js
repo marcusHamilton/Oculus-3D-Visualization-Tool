@@ -26,9 +26,9 @@ function updateMovementControls(){
   }
   if (movementControllerR){
     if (datasetAndAxisLabelGroup) {
-      datasetAndAxisLabelGroup.position = new THREE.Vector3(-5,0,-5);
+      datasetAndAxisLabelGroup.position = new THREE.Vector3(0, plotInitSizeY / 2.0, plotInitSizeZ * 1.5);
       datasetAndAxisLabelGroup.rotateY(movementControllerR.getAxis(0) * movementSpeedCoeff * -1);
-      datasetAndAxisLabelGroup.position = new THREE.Vector3(5,0,5);
+      datasetAndAxisLabelGroup.position = new THREE.Vector3(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
     }
   }
 }

@@ -456,6 +456,7 @@ window.addEventListener('vr controller connected', function(event) {
   //Press 'A' and 'X' to select/deselect all
   controller.addEventListener('X press began', function(event) {
     XisPressed = true;
+    invertHidden();//TEMP
   });
   controller.addEventListener('X press ended', function(event) {
     XisPressed = false;
@@ -463,7 +464,7 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Hold 'B' and 'Y' hide/unhide all
   controller.addEventListener('Y press began', function(event) {
-
+      viewHidden();//TEMP
   });
   controller.addEventListener('Y press ended', function(event) {
 

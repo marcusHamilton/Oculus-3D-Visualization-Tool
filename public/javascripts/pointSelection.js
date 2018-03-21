@@ -146,6 +146,8 @@ function pointSelectionUpdate() {
     }
   }
 
+
+
   scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;
@@ -424,6 +426,31 @@ function unhideRecent(){
 function unhideAll(){
     for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
         unhide(i);
+    }
+}
+
+function invertHidden(){
+  for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+    if(pointsGeometry.getAttribute('isHidden').array[i] === true){
+      unhide(i);
+    }
+    else {
+      hidePoint(i);
+    }
+  }
+}
+
+function viewHidden(){
+    for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+        if(pointsGeometry.getAttribute('isHidden').array[i] === true){
+            setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+                pointsGeometry.getAttribute('position').array[(pointIndex*3)],
+                pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
+                pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
+        }
+        else {
+            setPointColor(pointIndex, new THREE.Vector3(0,0,0));
+        }
     }
 }
 

@@ -265,6 +265,7 @@ function addEnterVrButtons() {
 function setUpControls() {
   //Initialize vrcontrols and match camera height to the user.
   vrControls = new THREE.VRControls(camera);
+  console.log(vrControls);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
 

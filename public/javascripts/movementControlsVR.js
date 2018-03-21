@@ -1,5 +1,6 @@
 var movementControllerL; //Object representing the left Oculus controlls.
 var movementControllerR; //Object representing the right Oculus controlls.
+var movementHMD;
 var movementSpeedCoeff = 0.3;
 
 
@@ -18,6 +19,7 @@ function initializeMovementControls(){
 function updateMovementControls(){
   if (movementControllerL){
     if (datasetAndAxisLabelGroup){
+      console.log(camera.getWorldDirection());
       datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff * -1;
       datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff * -1;
     }

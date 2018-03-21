@@ -443,13 +443,13 @@ function invertHidden(){
 function viewHidden(){
     for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
         if(pointsGeometry.getAttribute('isHidden').array[i] === true){
-            setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+            setPointColor(i, colorFromXYZcoords(new THREE.Vector3(
                 pointsGeometry.getAttribute('position').array[(pointIndex*3)],
                 pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
                 pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
         }
         else {
-            setPointColor(pointIndex, new THREE.Vector3(0,0,0));
+            setPointColor(i, new THREE.Vector3(0,0,0));
         }
     }
 }

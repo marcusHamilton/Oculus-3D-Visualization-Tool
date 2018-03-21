@@ -24,7 +24,7 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var pointVars={plotPointSizeCoeff:0.05}; //Default datapoint size
+var pointVars={plotPointSizeCoeff:0.00}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
@@ -55,7 +55,7 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  // trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
@@ -150,8 +150,8 @@ function Manager() {
         renderer.vr.setDevice(display);
         animationDisplay = display;
         setStageDimensions(display.stageParameters);
-        camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
-        camera.rotation.y = 270 * Math.PI / 180;
+        camera.position.set(0, 0, 0);
+        // camera.rotation.y = 180;
       })
       .catch(function() {
         // If there is no display available, fallback to window
@@ -172,8 +172,8 @@ function Manager() {
     document.addEventListener('keydown', onAKeyPress, false);
     
     //Center the non-VR camera on the data and back a bit
-    camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
-    camera.rotation.y = 270 * Math.PI / 180;
+    camera.position.set(0, 0,  0);
+    camera.rotation.y = 0 * Math.PI / 180;
 
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
@@ -452,12 +452,10 @@ function drawDataset(xCol, yCol, zCol)
   //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   pointsSystem.rotation.set(0,-0.785398,0);
-  pointsSystem.receiveShadow = true;
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
-  datasetAndAxisLabelGroup.receiveShadows = true;
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }
@@ -564,7 +562,7 @@ function axisMenu() {
       menu = new dat.GUI();
       menu.autoPlace = false;
       folder = menu.addFolder("axis")
-      folder.add(pointVars, 'plotPointSizeCoeff', 0.05, 0.1, 0.01);
+      folder.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.1, 0.001);
       folder.add(axiiMenu, 'xAxis', axiiMenu.axiiOptions);
       folder.add(axiiMenu, 'yAxis', axiiMenu.axiiOptions);
       folder.add(axiiMenu, 'zAxis', axiiMenu.axiiOptions);

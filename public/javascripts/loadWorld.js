@@ -476,22 +476,6 @@ window.addEventListener('vr controller connected', function(event) {
   controller.addEventListener('thumbstick press ended', function(event) {
 
   });
-
-  //Left thumbstick for movement.
-  //TODO: Thumbstick event listener doesn't work yet. How do we get the axis values?
-  controllerL  = scene.getObjectByName("Oculus Touch (Left)");
-  if (controllerL) {
-    controllerL.addEventListener('thumbstick axis changed', function (event) {
-      controllerL_Stick_XAxis = controllerL.thumbstick[1]
-      console.log(controllerL_Stick_XAxis);
-      controllerL_Stick_YAxis = controllerL.getAxis(1);
-      console.log(controllerL_Stick_YAxis);
-    });
-  }
-  //THREE.VRController.verbosity = 1;
-  //controllerL.
-
-
 });
 
 //Keyboard Controls

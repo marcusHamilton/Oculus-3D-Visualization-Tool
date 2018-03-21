@@ -83,6 +83,7 @@ function render(timestamp) {
 
   if (enterVR.isPresenting()) {
     vrControls.update();
+    fpVrControls.update(timestamp);
     renderer.render(scene, camera);
     effect.render(scene, camera);
   } else {
@@ -268,6 +269,10 @@ function setUpControls() {
   console.log(vrControls);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+
+  var fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
+  // Optionally enable vertical movement.
+  fpVrControls.verticalMovement = true;
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera);

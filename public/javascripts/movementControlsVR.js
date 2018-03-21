@@ -19,7 +19,7 @@ function initializeMovementControls(){
 function updateMovementControls(){
   if (movementControllerL){
     if (datasetAndAxisLabelGroup){
-      console.log(camera.getWorldDirection());
+      console.log(camera.rotation);
       datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff * -1;
       datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff * -1;
     }

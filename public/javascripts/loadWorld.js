@@ -63,14 +63,11 @@ function update(timestamp) {
   trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
-/*
-  if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += 0.001;//(controllerL_Stick_XAxis * 0.00001);
-    datasetAndAxisLabelGroup.position.z += 0.001;//(controllerL_Stick_YAxis * 0.00001);
-  }
-  */
+
   //Allows point selection to function
   pointSelectionUpdate();
+
+  updateMovementControls();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -389,6 +386,10 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Add selection controls
   initializeSelectionControls();
+
+  //Add movement controls
+  initializeMovementControls();
+
   // temporary booleans
   AisPressed = false;
   XisPressed = false;

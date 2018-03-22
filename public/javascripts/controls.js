@@ -14,6 +14,8 @@ var XisPressed;
 /**
  * The following is an event listener for when a hand held controller is connected
  */
+var meshColorOff = 0xDB3236; //  Red.
+var meshColorOn = 0xF4C20D; //  Yellow.
 window.addEventListener('vr controller connected', function(event) {
 
   handControlL = scene.getObjectByName("Oculus Touch (Left)");
@@ -28,8 +30,7 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Add a visual for the controllers
   var
-    meshColorOff = 0xDB3236, //  Red.
-    meshColorOn = 0xF4C20D, //  Yellow.
+
     controllerMaterial = new THREE.MeshStandardMaterial({
       color: meshColorOff
     }),

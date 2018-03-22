@@ -407,18 +407,19 @@ function hidePoint(pointIndex){
     hiddenPoints.push(pointIndex);
     //do the thing that hides it
     //hiding by changing the colour to black is a very poor solution. Ideally color would include an alpha channel.
-    setPointColor(pointIndex, new THREE.Vector3(0,0,0));
-
+    //setPointColor(pointIndex, new THREE.Vector3(0,0,0));
+    pointsGeometry.getAttribute('visible').array[pointIndex] = false;
 }
 
 function unhide(pointIndex){
     hiddenPoints.splice(hiddenPoints.indexOf(pointIndex),1);
     pointsGeometry.getAttribute('isHidden').array[pointIndex] = false;
     //undo the thing that hides it
-    setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+    /*setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
         pointsGeometry.getAttribute('position').array[(pointIndex*3)],
         pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
-        pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));*/
+    pointsGeometry.getAttribute('visible').array[pointIndex] = true;
 }
 
 function unhideRecent(){

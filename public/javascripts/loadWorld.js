@@ -94,7 +94,18 @@ var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  animationDisplay.requestAnimationFrame(GameLoop);
+  var vrControls = new THREE.VRControls(camera);
+  var fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
+  // Optionally enable vertical movement.
+  fpVrControls.verticalMovement = true;
+
+  function animate (timestamp) {
+  
+    // Update FirstPersonControls after VRControls.
+    // FirstPersonControls requires a timestamp.
+    vrControls.update();
+    fpVrControls.update(timestamp);
+    animationDisplay.requestAnimationFrame(GameLoop);
 };
 
 /**
@@ -532,4 +543,5 @@ function drawAxisLabels() {
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
+}
 }

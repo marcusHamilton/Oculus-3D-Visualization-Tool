@@ -145,7 +145,7 @@ function setListeners(){
     handControlR.addEventListener('primary press began', function (event) {
 
       event.target.userData.mesh.material.color.setHex(meshColorOn);
-      console.log("Left controller trigger press detected, Printing Controller Object");
+      console.log("Right controller trigger press detected, Printing Controller Object");
       guiInputHelper.pressed(true)
     });
     handControlR.addEventListener('primary press ended', function (event) {

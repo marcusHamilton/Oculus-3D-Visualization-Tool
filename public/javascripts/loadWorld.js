@@ -107,7 +107,7 @@ var GameLoop = function(timestamp) {
     fpVrControls.update(timestamp);
     animationDisplay.requestAnimationFrame(GameLoop);
 };
-
+}
 /**
  * Manages retrieval of existing worlds from the database and initializes the
  * current scene.
@@ -543,5 +543,4 @@ function drawAxisLabels() {
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
-}
 }

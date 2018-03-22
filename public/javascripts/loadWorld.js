@@ -31,7 +31,9 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-
+//First Person VR Controls
+var fpVrControls = new THREE.FirstPersonVRControls(camera,scene)
+fpVrControls.verticalMovement = true;
 
 
 /**
@@ -174,9 +176,7 @@ function Manager() {
     //Center the non-VR camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
-      //First Person VR Controls
-    var fpVrControls = new THREE.FirstPersonVRControls(camera,scene)
-    fpVrControls.verticalMovement = true;
+   
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

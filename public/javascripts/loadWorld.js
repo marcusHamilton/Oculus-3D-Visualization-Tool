@@ -447,7 +447,7 @@ window.addEventListener('vr controller connected', function(event) {
         else{
           unhideRecent();
         }
-        console.log(hiddenPoints);
+
     });
   controller.addEventListener('B press ended', function(event) {
 

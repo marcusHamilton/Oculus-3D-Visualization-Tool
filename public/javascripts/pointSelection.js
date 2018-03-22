@@ -442,11 +442,12 @@ function invertHidden(){
       hidePoint(i);
     }
   }
+    console.log(hiddenPoints);
 }
 
 function viewHidden(){
     for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
-        if(pointsGeometry.getAttribute('isHidden').array[i] === true){
+        if(pointsGeometry.getAttribute('isHidden').array[i] === true || getPointColor(i) === new THREE.Color(0,0,0)){
             setPointColor(i, colorFromXYZcoords(new THREE.Vector3(
                 pointsGeometry.getAttribute('position').array[(i*3)],
                 pointsGeometry.getAttribute('position').array[(i*3)+1],
@@ -456,6 +457,7 @@ function viewHidden(){
             setPointColor(i, new THREE.Vector3(0,0,0));
         }
     }
+    console.log(hiddenPoints);
 }
 
 

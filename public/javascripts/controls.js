@@ -188,8 +188,12 @@ function setListeners(){
   //Press 'B' (Right Controller) to hide a point
   if (handControlR) {
     handControlR.addEventListener('B press began', function (event) {
-
-      //TODO: Point hiding.
+      if (intersects) {
+        hidePoint(intersects.index);
+      }
+      else{
+        unhideRecent();
+      }
     });
     handControlR.addEventListener('B press ended', function (event) {
 

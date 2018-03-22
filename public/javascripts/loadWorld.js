@@ -464,7 +464,7 @@ window.addEventListener('vr controller connected', function(event) {
 
   //Hold 'B' and 'Y' hide/unhide all
   controller.addEventListener('Y press began', function(event) {
-      viewHidden();//TEMP
+
   });
   controller.addEventListener('Y press ended', function(event) {
 

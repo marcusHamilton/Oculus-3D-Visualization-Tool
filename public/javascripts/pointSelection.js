@@ -445,6 +445,7 @@ function invertHidden(){
     console.log(hiddenPoints);
 }
 
+//totally broken
 function viewHidden(){
     for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
         if(pointsGeometry.getAttribute('isHidden').array[i] === true || getPointColor(i) === new THREE.Color(0,0,0)){

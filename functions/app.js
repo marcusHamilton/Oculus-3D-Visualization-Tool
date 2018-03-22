@@ -11,7 +11,7 @@ var features = require('./routes/features');
 var about = require('./routes/about');
 var VRWorld = require('./routes/VRWorld');
 var dashboard = require('./routes/dashboard');
-
+var stats = require('stats-lite');
 var app = express();
 
 // view engine setup

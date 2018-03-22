@@ -32,6 +32,8 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+
+
 /**
  * Called every frame
  */
@@ -79,6 +81,7 @@ function render(timestamp) {
 
   if (enterVR.isPresenting()) {
     vrControls.update();
+    fpVrControls.update(timestamp);
     renderer.render(scene, camera);
     effect.render(scene, camera);
   } else {
@@ -93,22 +96,11 @@ function render(timestamp) {
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
-  animate(timestamp);
   //Allows this to be called every frame
-  var vrControls = new THREE.VRControls(camera);
-  var fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
-  // Optionally enable vertical movement.
-  fpVrControls.verticalMovement = true;
-
   
-};
-function animate (timestamp) {
-  // Update FirstPersonControls after VRControls.
-  // FirstPersonControls requires a timestamp.
-  vrControls.update();
-  fpVrControls.update(timestamp);
   animationDisplay.requestAnimationFrame(GameLoop);
-}
+};
+
 /**
  * Manages retrieval of existing worlds from the database and initializes the
  * current scene.
@@ -182,7 +174,9 @@ function Manager() {
     //Center the non-VR camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
-
+      //First Person VR Controls
+    var fpVrControls = new THREE.FirstPersonVRControls(camera,scene)
+    fpVrControls.verticalMovement = true;
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

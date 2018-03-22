@@ -32,11 +32,6 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
-// Experimental control setup. Doesn't work yet.
-var controllerL;
-var controllerL_Stick_XAxis;
-var controllerL_Stick_YAxis;
-
 /**
  * Called every frame
  */

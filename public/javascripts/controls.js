@@ -69,32 +69,31 @@ window.addEventListener('vr controller connected', function(event) {
   XisPressed = false;
 
 });
-/*
 
-*/
 // ~~~~~~~~~~~~~~~ MOVEMENT CONTROLS ~~~~~~~~~~~~~~~~~~~
-
-var movementControllerL; //Object representing the left Oculus controlls.
-var movementControllerR; //Object representing the right Oculus controlls.
-var movementSpeedCoeff = 0.3;
-
 /**
  * This gets called when a controller wakes up or is plugged in, providing
  * a reference to the left and right controller objects.
  */
+var movementSpeedCoeff = 0.3;
 function initializeMovementControls(){
-  movementControllerL = scene.getObjectByName("Oculus Touch (Left)");
-  movementControllerR = scene.getObjectByName("Oculus Touch (Right)");
-
   // Example event listener for button press/touch/near-touch
   // Look at VRController.js:956 for how to define other events
   // by passing strings to .addEventListener()
-  if (movementControllerL) {
-    movementControllerL.addEventListener('X press began', function (event) {
+  /*
+  if (handControlL) {
+    handControlL.addEventListener('X press began', function (event) {
       //console.log("X Button Pressed!");
       // Function calls go here...
     });
   }
+  if (handControlL) {
+    handControlL.addEventListener('A press began', function (event) {
+      //console.log("A Button Pressed!");
+      // Function calls go here...
+    });
+  }
+  */
 }
 
 /**
@@ -102,23 +101,25 @@ function initializeMovementControls(){
  */
 function updateMovementControls(){
   // Check that the left controller is initialized
-  if (movementControllerL){
+  if (handControlL){
     // Check that the dataset has been drawn
     if (datasetAndAxisLabelGroup){
       // TODO: Left hand controls go here:
       // Just a quick test
-      datasetAndAxisLabelGroup.position.x += movementControllerL.getAxis(0) * movementSpeedCoeff * -1;
-      datasetAndAxisLabelGroup.position.z += movementControllerL.getAxis(1) * movementSpeedCoeff * -1;
+      datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
+      datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
     }
   }
 
   // Check that the right controller is initialized
-  if (movementControllerR){
+  if (handControlR){
     if (datasetAndAxisLabelGroup) {
       // TODO: Right hand controls go here:
     }
   }
 }
+
+// ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~
 
 /**
  * Event listeners for hand control button press/touch/near-touch
@@ -154,7 +155,6 @@ function setListeners(){
       guiInputHelper.pressed(false)
     });
   }
-
   //On controller removal
   // LEFT CONTROLLER
   if (handControlL) {
@@ -170,7 +170,6 @@ function setListeners(){
       handControlR.parent.remove(controller)
     });
   }
-
   //Press 'A' (Right Controller)(select/deselect a point)
   if (handControlR) {
     handControlR.addEventListener('A press began', function (event) {
@@ -186,7 +185,6 @@ function setListeners(){
       AisPressed = false;
     });
   }
-
   //Press 'B' (Right Controller) to hide a point
   if (handControlR) {
     handControlR.addEventListener('B press began', function (event) {
@@ -215,8 +213,6 @@ function setListeners(){
 
     });
   }
-
-
   //'Click right thumbstick' to invert selection.
   if (handControlR) {
     handControlR.addEventListener('thumbstick press began', function (event) {

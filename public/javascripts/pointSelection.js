@@ -172,10 +172,10 @@ function pointSelectionUpdate() {
  */
 function selectPoint(pointIndex)
 {
-  //make hidden points un-selectable
+  /*//make hidden points un-selectable
   if(pointsGeometry.getAttribute('isHidden').array[pointIndex] === true){
       return;
-  }
+  }*/
   pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] =
     !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
   if(pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] == false){
@@ -433,6 +433,7 @@ function unhideAll(){
     }
 }
 
+
 function invertHidden(){
   for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
     if(pointsGeometry.getAttribute('isHidden').array[i] === true){
@@ -445,7 +446,7 @@ function invertHidden(){
     console.log(hiddenPoints);
 }
 
-//totally broken
+
 function viewHidden(){
     for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
         if(pointsGeometry.getAttribute('isHidden').array[i] === true || getPointColor(i) === new THREE.Color(0,0,0)){

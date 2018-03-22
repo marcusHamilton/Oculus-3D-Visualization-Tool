@@ -18,11 +18,11 @@ var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
 window.addEventListener('vr controller connected', function(event) {
 
-  handControlL = scene.getObjectByName("Oculus Touch (Left)");
-  handControlR = scene.getObjectByName("Oculus Touch (Right)");
-
   controller = event.detail;
   scene.add(controller);
+
+  handControlL = scene.getObjectByName("Oculus Touch (Left)");
+  handControlR = scene.getObjectByName("Oculus Touch (Right)");
 
   //Ensure controllers appear at the right height
   //controller.standingMatrix = renderer.vr.getStandingMatrix();

@@ -93,20 +93,21 @@ function render(timestamp) {
 var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
+  animate(timestamp);
   //Allows this to be called every frame
   var vrControls = new THREE.VRControls(camera);
   var fpVrControls = new THREE.FirstPersonVRControls(camera, scene);
   // Optionally enable vertical movement.
   fpVrControls.verticalMovement = true;
 
-  function animate (timestamp) {
   
-    // Update FirstPersonControls after VRControls.
-    // FirstPersonControls requires a timestamp.
-    vrControls.update();
-    fpVrControls.update(timestamp);
-    animationDisplay.requestAnimationFrame(GameLoop);
 };
+function animate (timestamp) {
+  // Update FirstPersonControls after VRControls.
+  // FirstPersonControls requires a timestamp.
+  vrControls.update();
+  fpVrControls.update(timestamp);
+  animationDisplay.requestAnimationFrame(GameLoop);
 }
 /**
  * Manages retrieval of existing worlds from the database and initializes the

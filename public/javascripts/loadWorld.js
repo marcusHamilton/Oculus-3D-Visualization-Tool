@@ -32,11 +32,6 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
-// Experimental control setup. Doesn't work yet.
-var controllerL;
-var controllerL_Stick_XAxis;
-var controllerL_Stick_YAxis;
-
 /**
  * Called every frame
  */
@@ -63,20 +58,18 @@ function update(timestamp) {
   trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
-/*
-  if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += 0.001;//(controllerL_Stick_XAxis * 0.00001);
-    datasetAndAxisLabelGroup.position.z += 0.001;//(controllerL_Stick_YAxis * 0.00001);
-  }
-  */
+
   //Allows point selection to function
   pointSelectionUpdate();
+
+  updateMovementControls();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
   pointsGeometry.getAttribute('position').needsUpdate = true;
   pointsGeometry.getAttribute('size').needsUpdate = true;
   pointsGeometry.getAttribute('isSelected').needsUpdate = true;
+  pointsGeometry.getAttribute('isHidden').needsUpdate = true;
 }
 
 /**
@@ -338,220 +331,6 @@ function setUpControls() {
 
 }
 
-/**
- * The following is an event listener for when a hand held controller is connected
- */
-
-//This is gross, We'll probably put the listeners in pointSelection instead of
-//having global booleans.
-var AisPressed;
-var XisPressed;
-
-//TODO: Refactor this into its own file and split up the L/R controller events.
-window.addEventListener('vr controller connected', function(event) {
-
-  controller = event.detail;
-  scene.add(controller);
-
-  //Ensure controllers appear at the right height
-  //controller.standingMatrix = renderer.vr.getStandingMatrix();
-  controller.head = window.camera;
-
-  //Add a visual for the controllers
-  var
-    meshColorOff = 0xDB3236, //  Red.
-    meshColorOn = 0xF4C20D, //  Yellow.
-    controllerMaterial = new THREE.MeshStandardMaterial({
-      color: meshColorOff
-    }),
-    controllerMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
-      controllerMaterial
-    ),
-    handleMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(0.03, 0.1, 0.03),
-      controllerMaterial
-    );
-
-  controllerMaterial.flatShading = true;
-  controllerMesh.rotation.x = -Math.PI / 2;
-  handleMesh.position.y = -0.05;
-  controllerMesh.add(handleMesh);
-  controller.userData.mesh = controllerMesh;//  So we can change the color later.
-  controller.add(controllerMesh);
-  castShadows(controller);
-  receiveShadows(controller);
-
-
-  //  Allow this controller to interact with DAT GUI.
-  var guiInputHelper = dat.GUIVR.addInputObject(controller);
-  scene.add(guiInputHelper);
-
-  //Add selection controls
-  initializeSelectionControls();
-  // temporary booleans
-  AisPressed = false;
-  XisPressed = false;
-
-  //Button events. This is currently just using the primary button
-  controller.addEventListener('primary press began', function(event) {
-
-    event.target.userData.mesh.material.color.setHex(meshColorOn);
-    console.log("Right controller trigger press detected, Printing pointSelect debug info:");
-    console.log("Raycaster:");
-    console.log(pointSelectionRaycasterR);
-    console.log("Intersects:");
-    console.log(intersects);
-    console.log("Controller:");
-    console.log(selectionControllerR);
-    console.log("Raycaster Line:");
-    console.log(raycasterLine);
-
-    guiInputHelper.pressed(true)
-  });
-  controller.addEventListener('primary press ended', function(event) {
-
-    event.target.userData.mesh.material.color.setHex(meshColorOff);
-    guiInputHelper.pressed(false)
-  });
-
-  //On controller removal
-  controller.addEventListener('disconnected', function(event) {
-
-    controller.parent.remove(controller)
-  });
-
-  //Press 'A' (select/deselect a point)
-  controller.addEventListener('A press began', function(event) {
-    AisPressed = true;
-    if (intersects) {
-      selectPoint(intersects.index);
-    }
-    if (selectedPoints.length > 0){
-      console.log(getSelectedPointPositions());
-    }
-  });
-  controller.addEventListener('A press ended', function(event) {
-    AisPressed = false;
-
-  });
-  //Press 'B' to hide a point
-  controller.addEventListener('B press began', function(event) {
-
-    //TODO: Point hiding.
-  });
-  controller.addEventListener('B press ended', function(event) {
-
-  });
-
-  //Press 'A' and 'X' to select/deselect all
-  controller.addEventListener('X press began', function(event) {
-    XisPressed = true;
-  });
-  controller.addEventListener('X press ended', function(event) {
-    XisPressed = false;
-  });
-
-  //Hold 'B' and 'Y' hide/unhide all
-  controller.addEventListener('Y press began', function(event) {
-
-  });
-  controller.addEventListener('Y press ended', function(event) {
-
-  });
-
-  controller.addEventListener('Grip press began', function(event) {
-
-  });
-  controller.addEventListener('Grip press ended', function(event) {
-
-  });
-
-  //'Click right thumbstick' to invert selection.
-  controller.addEventListener('thumbstick press began', function(event) {
-    invertSelection();
-  });
-  controller.addEventListener('thumbstick press ended', function(event) {
-
-  });
-
-  //Left thumbstick for movement.
-  //TODO: Thumbstick event listener doesn't work yet. How do we get the axis values?
-  controllerL  = scene.getObjectByName("Oculus Touch (Left)");
-  if (controllerL) {
-    controllerL.addEventListener('thumbstick axis changed', function (event) {
-      controllerL_Stick_XAxis = controllerL.thumbstick[1]
-      console.log(controllerL_Stick_XAxis);
-      controllerL_Stick_YAxis = controllerL.getAxis(1);
-      console.log(controllerL_Stick_YAxis);
-    });
-  }
-  //THREE.VRController.verbosity = 1;
-  //controllerL.
-
-
-});
-
-//Keyboard Controls
-function onAKeyPress(event){
-    var keyCode = event.which;
-    var translationSpeed = 0.1;
-    var rotationSpeed = 0.1;
-    var cameraDirection = new THREE.Vector3();
-    var theta // Angle between x and z
-    var inverseTheta
-    var gamma // Angle between x and y
-    //A == 65 Left
-    if(keyCode == 65){
-      camera.position.z -= translationSpeed;
-    }
-    //D == 68 Right
-    else if (keyCode == 68){
-      camera.position.z += translationSpeed;
-    }
-    //W == 87 Forward
-    else if (keyCode == 87){
-      camera.getWorldDirection(cameraDirection);
-      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      camera.position.x += (translationSpeed*Math.sin(theta));
-      camera.position.z += (translationSpeed*Math.cos(theta));
-    }
-    //S == 83 Backward
-    else if(keyCode == 83){
-      camera.getWorldDirection(cameraDirection);
-      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      camera.position.x -= (translationSpeed*Math.sin(theta));
-      camera.position.z -= (translationSpeed*Math.cos(theta));
-    }
-    //space == 32 Up
-    else if(keyCode == 32){
-      camera.position.y += translationSpeed;
-    }
-    //ctrl == 17  Down
-    else if(keyCode == 17){
-      camera.position.y -= translationSpeed;
-    }
-    //Q == 81 Look left
-    else if(keyCode == 81){
-      camera.rotation.y += rotationSpeed;
-    }
-    //E == 69 Look right
-    else if(keyCode == 69){
-      camera.rotation.y -= rotationSpeed;
-    }
-    //Look up and look down might be unnecasary when this is converted to occulus controller
-    //Doesnt work anyway tho 
-
-    //R == 82 Look Up
-    //else if(keyCode == 82){
-      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      //inverseTheta = Math.PI /2 - theta;
-      //gamma = Math.PI - (inverseTheta + Math.PI /2);
-      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
-      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
-      //camera.rotation.x += rotationSpeed;
-   // }
-  }
 
 
 /**
@@ -605,6 +384,7 @@ function drawDataset(xCol, yCol, zCol)
   var colors = new Float32Array( loadedDataset.length * 3 );
   var sizes = new Float32Array( loadedDataset.length );
   var selected = new Float32Array( loadedDataset.length );
+  var hidden = new Float32Array( loadedDataset.length );
 
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
@@ -652,6 +432,7 @@ function drawDataset(xCol, yCol, zCol)
   pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
   pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
   pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
+  pointsGeometry.addAttribute( 'isHidden', new THREE.BufferAttribute(hidden, 1) );
 
   // create the particle shader system
   pointsSystem = new THREE.Points(

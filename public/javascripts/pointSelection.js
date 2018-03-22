@@ -8,6 +8,7 @@
 
 var selectedPoints = [];  //array containing the indices of every currently
                           //selected point.
+var hiddenPoints = [];
 
 var pointSelectionMouse = new THREE.Vector2();
 var selectionThreshold = 0.04; //the distance the mouse has to be from a point
@@ -98,6 +99,8 @@ function pointSelectionUpdate() {
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
+
+    //console.log(selectionControllerR.getAxis(0));
   }
 
   // If no controllers are present, revert to mouse/camera selection.
@@ -117,16 +120,14 @@ function pointSelectionUpdate() {
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
-    setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+      if(pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
+          setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
-    mousedOverPoint = intersects.index;
-    //var curColor = getPointColor(intersects.index);
-    //pointsGeometry.getAttribute('customColor').array[intersects.index * 3] = 1;
-    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 1] = 1;
-    //pointsGeometry.getAttribute('customColor').array[(intersects.index * 3) + 2] = 1;
-    //console.log(getPointColor(intersects.index));
-    //setPointColor(intersects.index, new THREE.Color(255,255,255));
-    //setPointColor(intersects.index, curColor.setHSL(curColor.getHSL.h, curColor.getHSL.s, curColor.getHSL.l * 1.5 ));
+      }
+      mousedOverPoint = intersects.index;
+
+
+
 
   }
   else {
@@ -146,6 +147,8 @@ function pointSelectionUpdate() {
       selectAll();
     }
   }
+
+
 
   scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
@@ -171,6 +174,10 @@ function pointSelectionUpdate() {
  */
 function selectPoint(pointIndex)
 {
+  /*//make hidden points un-selectable
+  if(pointsGeometry.getAttribute('isHidden').array[pointIndex] === true){
+      return;
+  }*/
   pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] =
     !pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex];
   if(pointsGeometry.getAttribute( 'isSelected' ).array[pointIndex] == false){
@@ -260,13 +267,16 @@ function onClick( event ){
   event.preventDefault();
   if (intersects != null) {
     selectPoint(intersects.index);
+    //hidePoint(intersects.index);
   }
   else {
     clearSelection();
+    //unhideRecent();
   }
   if (selectedPoints.length > 0){
     console.log(getSelectedPointPositions());
   }
+  //console.log(hiddenPoints);
 }
 
 /**
@@ -337,6 +347,8 @@ function colorFromXYZcoords(vec3) {
  *
  * @return {Vector3[]} array of Vector3 objects containing positions
  */
+
+//must be fixed. Based on world position not value of points
 function getSelectedPointPositions() {
 
   var selectedPointPositions = [];
@@ -384,10 +396,75 @@ function getSelectedAxisValues(axis){
 }
 
 
+/////////////////////////////////////////////////////////////////////////
+///////////////////           POINT HIDING            ///////////////////
+/////////////////////////////////////////////////////////////////////////
 
 
+//if presses hide button away from a point, un-hides the most recently hidden point?
+
+function hidePoint(pointIndex){
+
+    pointsGeometry.getAttribute('isHidden').array[pointIndex] = true;
+    hiddenPoints.push(pointIndex);
+    //do the thing that hides it
+    //hiding by changing the colour to black is a very poor solution. Ideally color would include an alpha channel.
+    setPointColor(pointIndex, new THREE.Vector3(0,0,0));
 
 
+}
+
+function unhide(pointIndex){
+    hiddenPoints.splice(hiddenPoints.indexOf(pointIndex),1);
+    pointsGeometry.getAttribute('isHidden').array[pointIndex] = false;
+    //undo the thing that hides it
+    setPointColor(pointIndex, colorFromXYZcoords(new THREE.Vector3(
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)],
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
+        pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
+
+}
+
+function unhideRecent(){
+    var recentIndex = (hiddenPoints[hiddenPoints.length -1]);
+    unhide(recentIndex);
+
+}
+
+function unhideAll(){
+    for(var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+        unhide(i);
+    }
+}
+
+
+function invertHidden(){
+  for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+    if(pointsGeometry.getAttribute('isHidden').array[i] === true){
+      unhide(i);
+    }
+    else {
+      hidePoint(i);
+    }
+  }
+    console.log(hiddenPoints);
+}
+
+
+function viewHidden(){
+    for( var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++){
+        if(pointsGeometry.getAttribute('isHidden').array[i] === true || getPointColor(i) === new THREE.Color(0,0,0)){
+            setPointColor(i, colorFromXYZcoords(new THREE.Vector3(
+                pointsGeometry.getAttribute('position').array[(i*3)],
+                pointsGeometry.getAttribute('position').array[(i*3)+1],
+                pointsGeometry.getAttribute('position').array[(i*3)+2])));
+        }
+        else {
+            setPointColor(i, new THREE.Vector3(0,0,0));
+        }
+    }
+    console.log(hiddenPoints);
+}
 
 
 

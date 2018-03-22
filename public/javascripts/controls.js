@@ -16,6 +16,7 @@ var XisPressed;
  */
 var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
+var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
@@ -53,7 +54,7 @@ window.addEventListener('vr controller connected', function(event) {
   receiveShadows(controller);
 
   //  Allow this controller to interact with DAT GUI.
-  var guiInputHelper = dat.GUIVR.addInputObject(controller);
+  guiInputHelper = dat.GUIVR.addInputObject(controller);
   scene.add(guiInputHelper);
 
   setListeners();
@@ -119,9 +120,9 @@ function updateMovementControls(){
   }
 }
 
-
-// ~~~~~~~~~~~~~~~ SELECTION CONTROLS ~~~~~~~~~~~~~~~~~~~
-
+/**
+ * Event listeners for hand control button press/touch/near-touch
+ */
 function setListeners(){
   //Button events. This is currently just using the primary button
   // Trigger presses print controller debug info.

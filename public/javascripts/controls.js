@@ -2,6 +2,74 @@
  * Handles controller input for interactions in the VR space.
  */
 
+var handControlL; // Left hand Oculus controller
+var handControlR; // Right hand Oculus controller
+
+//This is gross, We'll probably put the listeners in pointSelection instead of
+//having global booleans.
+var AisPressed;
+var XisPressed;
+
+// ~~~~~~~~~~~~~~~ INITIALIZE HAND CONTROLS ~~~~~~~~~~~~~~~~~~~
+/**
+ * The following is an event listener for when a hand held controller is connected
+ */
+window.addEventListener('vr controller connected', function(event) {
+
+  handControlL = scene.getObjectByName("Oculus Touch (Left)");
+  handControlR = scene.getObjectByName("Oculus Touch (Right)");
+
+  controller = event.detail;
+  scene.add(controller);
+
+  //Ensure controllers appear at the right height
+  //controller.standingMatrix = renderer.vr.getStandingMatrix();
+  controller.head = window.camera;
+
+  //Add a visual for the controllers
+  var
+    meshColorOff = 0xDB3236, //  Red.
+    meshColorOn = 0xF4C20D, //  Yellow.
+    controllerMaterial = new THREE.MeshStandardMaterial({
+      color: meshColorOff
+    }),
+    controllerMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+      controllerMaterial
+    ),
+    handleMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(0.03, 0.1, 0.03),
+      controllerMaterial
+    );
+
+  controllerMaterial.flatShading = true;
+  controllerMesh.rotation.x = -Math.PI / 2;
+  handleMesh.position.y = -0.05;
+  controllerMesh.add(handleMesh);
+  controller.userData.mesh = controllerMesh;//  So we can change the color later.
+  controller.add(controllerMesh);
+  castShadows(controller);
+  receiveShadows(controller);
+
+  //  Allow this controller to interact with DAT GUI.
+  var guiInputHelper = dat.GUIVR.addInputObject(controller);
+  scene.add(guiInputHelper);
+
+  setListeners();
+
+  //Add selection controls
+  initializeSelectionControls();
+  //Add movement controls
+  initializeMovementControls();
+
+  // temporary booleans
+  AisPressed = false;
+  XisPressed = false;
+
+});
+/*
+
+*/
 // ~~~~~~~~~~~~~~~ MOVEMENT CONTROLS ~~~~~~~~~~~~~~~~~~~
 
 var movementControllerL; //Object representing the left Oculus controlls.
@@ -53,98 +121,50 @@ function updateMovementControls(){
 
 // ~~~~~~~~~~~~~~~ SELECTION CONTROLS ~~~~~~~~~~~~~~~~~~~
 
-
-
-
-/**
- * The following is an event listener for when a hand held controller is connected
- */
-
-//This is gross, We'll probably put the listeners in pointSelection instead of
-//having global booleans.
-var AisPressed;
-var XisPressed;
-
-//TODO: Refactor this into its own file and split up the L/R controller events.
-window.addEventListener('vr controller connected', function(event) {
-
-  controller = event.detail;
-  scene.add(controller);
-
-  //Ensure controllers appear at the right height
-  //controller.standingMatrix = renderer.vr.getStandingMatrix();
-  controller.head = window.camera;
-
-  //Add a visual for the controllers
-  var
-    meshColorOff = 0xDB3236, //  Red.
-    meshColorOn = 0xF4C20D, //  Yellow.
-    controllerMaterial = new THREE.MeshStandardMaterial({
-      color: meshColorOff
-    }),
-    controllerMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
-      controllerMaterial
-    ),
-    handleMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(0.03, 0.1, 0.03),
-      controllerMaterial
-    );
-
-  controllerMaterial.flatShading = true;
-  controllerMesh.rotation.x = -Math.PI / 2;
-  handleMesh.position.y = -0.05;
-  controllerMesh.add(handleMesh);
-  controller.userData.mesh = controllerMesh;//  So we can change the color later.
-  controller.add(controllerMesh);
-  castShadows(controller);
-  receiveShadows(controller);
-
-
-  //  Allow this controller to interact with DAT GUI.
-  var guiInputHelper = dat.GUIVR.addInputObject(controller);
-  scene.add(guiInputHelper);
-
-  //Add selection controls
-  initializeSelectionControls();
-
-  //Add movement controls
-  initializeMovementControls();
-
-  // temporary booleans
-  AisPressed = false;
-  XisPressed = false;
-
+function setListeners(){
   //Button events. This is currently just using the primary button
-  controller.addEventListener('primary press began', function(event) {
+  // Trigger presses print controller debug info.
+  // LEFT CONTROLLER
+  controllerL.addEventListener('primary press began', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOn);
-    console.log("Right controller trigger press detected, Printing pointSelect debug info:");
-    console.log("Raycaster:");
-    console.log(pointSelectionRaycasterR);
-    console.log("Intersects:");
-    console.log(intersects);
-    console.log("Controller:");
-    console.log(selectionControllerR);
-    console.log("Raycaster Line:");
-    console.log(raycasterLine);
-
+    console.log("Left controller trigger press detected, Printing Controller Object");
     guiInputHelper.pressed(true)
   });
-  controller.addEventListener('primary press ended', function(event) {
+  controllerL.addEventListener('primary press ended', function(event) {
 
     event.target.userData.mesh.material.color.setHex(meshColorOff);
     guiInputHelper.pressed(false)
   });
 
-  //On controller removal
-  controller.addEventListener('disconnected', function(event) {
+  // RIGHT CONTROLLER
+  controllerL.addEventListener('primary press began', function(event) {
 
-    controller.parent.remove(controller)
+    event.target.userData.mesh.material.color.setHex(meshColorOn);
+    console.log("Left controller trigger press detected, Printing Controller Object");
+    guiInputHelper.pressed(true)
+  });
+  controllerL.addEventListener('primary press ended', function(event) {
+
+    event.target.userData.mesh.material.color.setHex(meshColorOff);
+    guiInputHelper.pressed(false)
   });
 
-  //Press 'A' (select/deselect a point)
-  controller.addEventListener('A press began', function(event) {
+
+  //On controller removal
+  // LEFT CONTROLLER
+  controllerL.addEventListener('disconnected', function(event) {
+
+    controllerL.parent.remove(controller)
+  });
+  // RIGHT CONTROLLER
+  controllerR.addEventListener('disconnected', function(event) {
+
+    controllerR.parent.remove(controller)
+  });
+
+  //Press 'A' (Right Controller)(select/deselect a point)
+  controllerR.addEventListener('A press began', function(event) {
     AisPressed = true;
     if (intersects) {
       selectPoint(intersects.index);
@@ -153,52 +173,49 @@ window.addEventListener('vr controller connected', function(event) {
       console.log(getSelectedPointPositions());
     }
   });
-  controller.addEventListener('A press ended', function(event) {
+  controllerR.addEventListener('A press ended', function(event) {
     AisPressed = false;
 
   });
-  //Press 'B' to hide a point
-  controller.addEventListener('B press began', function(event) {
+  //Press 'B' (Right Controller) to hide a point
+  controllerR.addEventListener('B press began', function(event) {
 
     //TODO: Point hiding.
   });
-  controller.addEventListener('B press ended', function(event) {
+  controllerR.addEventListener('B press ended', function(event) {
 
   });
 
-  //Press 'A' and 'X' to select/deselect all
-  controller.addEventListener('X press began', function(event) {
+  //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
+  controllerL.addEventListener('X press began', function(event) {
     XisPressed = true;
   });
-  controller.addEventListener('X press ended', function(event) {
+  controllerR.addEventListener('X press ended', function(event) {
     XisPressed = false;
   });
 
   //Hold 'B' and 'Y' hide/unhide all
-  controller.addEventListener('Y press began', function(event) {
+  controllerL.addEventListener('Y press began', function(event) {
 
   });
-  controller.addEventListener('Y press ended', function(event) {
+  controllerL.addEventListener('Y press ended', function(event) {
 
   });
 
-  controller.addEventListener('Grip press began', function(event) {
-
-  });
-  controller.addEventListener('Grip press ended', function(event) {
-
-  });
 
   //'Click right thumbstick' to invert selection.
-  controller.addEventListener('thumbstick press began', function(event) {
+  controllerR.addEventListener('thumbstick press began', function(event) {
     invertSelection();
   });
-  controller.addEventListener('thumbstick press ended', function(event) {
+  controllerR.addEventListener('thumbstick press ended', function(event) {
 
   });
-});
 
-//Keyboard Controls
+}
+
+
+// ~~~~~~~~~~~~~~~ KEYBOARD CONTROLS ~~~~~~~~~~~~~~~~~~~
+
 function onAKeyPress(event){
   var keyCode = event.which;
   var translationSpeed = 0.1;

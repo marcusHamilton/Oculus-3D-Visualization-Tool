@@ -125,28 +125,28 @@ function setListeners(){
   //Button events. This is currently just using the primary button
   // Trigger presses print controller debug info.
   // LEFT CONTROLLER
-  if (controllerL) {
-    controllerL.addEventListener('primary press began', function (event) {
+  if (handControlL) {
+    handControlL.addEventListener('primary press began', function (event) {
 
       event.target.userData.mesh.material.color.setHex(meshColorOn);
       console.log("Left controller trigger press detected, Printing Controller Object");
       guiInputHelper.pressed(true)
     });
-    controllerL.addEventListener('primary press ended', function (event) {
+    handControlL.addEventListener('primary press ended', function (event) {
 
       event.target.userData.mesh.material.color.setHex(meshColorOff);
       guiInputHelper.pressed(false)
     });
   }
   // RIGHT CONTROLLER
-  if (controllerR) {
-    controllerL.addEventListener('primary press began', function (event) {
+  if (handControlR) {
+    handControlR.addEventListener('primary press began', function (event) {
 
       event.target.userData.mesh.material.color.setHex(meshColorOn);
       console.log("Left controller trigger press detected, Printing Controller Object");
       guiInputHelper.pressed(true)
     });
-    controllerL.addEventListener('primary press ended', function (event) {
+    handControlR.addEventListener('primary press ended', function (event) {
 
       event.target.userData.mesh.material.color.setHex(meshColorOff);
       guiInputHelper.pressed(false)
@@ -155,23 +155,23 @@ function setListeners(){
 
   //On controller removal
   // LEFT CONTROLLER
-  if (controllerL) {
-    controllerL.addEventListener('disconnected', function (event) {
+  if (handControlL) {
+    handControlL.addEventListener('disconnected', function (event) {
 
-      controllerL.parent.remove(controller)
+      handControlL.parent.remove(controller)
     });
   }
   // RIGHT CONTROLLER
-  if (controllerR) {
-    controllerR.addEventListener('disconnected', function (event) {
+  if (handControlR) {
+    handControlR.addEventListener('disconnected', function (event) {
 
-      controllerR.parent.remove(controller)
+      handControlR.parent.remove(controller)
     });
   }
 
   //Press 'A' (Right Controller)(select/deselect a point)
-  if (controllerR) {
-    controllerR.addEventListener('A press began', function (event) {
+  if (handControlR) {
+    handControlR.addEventListener('A press began', function (event) {
       AisPressed = true;
       if (intersects) {
         selectPoint(intersects.index);
@@ -180,47 +180,47 @@ function setListeners(){
         console.log(getSelectedPointPositions());
       }
     });
-    controllerR.addEventListener('A press ended', function (event) {
+    handControlR.addEventListener('A press ended', function (event) {
       AisPressed = false;
     });
   }
 
   //Press 'B' (Right Controller) to hide a point
-  if (controllerR) {
-    controllerR.addEventListener('B press began', function (event) {
+  if (handControlR) {
+    handControlR.addEventListener('B press began', function (event) {
 
       //TODO: Point hiding.
     });
-    controllerR.addEventListener('B press ended', function (event) {
+    handControlR.addEventListener('B press ended', function (event) {
 
     });
   }
   //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
-  if (controllerL) {
-    controllerL.addEventListener('X press began', function (event) {
+  if (handControlL) {
+    handControlL.addEventListener('X press began', function (event) {
       XisPressed = true;
     });
-    controllerL.addEventListener('X press ended', function (event) {
+    handControlL.addEventListener('X press ended', function (event) {
       XisPressed = false;
     });
   }
   //Hold 'B' and 'Y' hide/unhide all
-  if (controllerL) {
-    controllerL.addEventListener('Y press began', function (event) {
+  if (handControlL) {
+    handControlL.addEventListener('Y press began', function (event) {
 
     });
-    controllerL.addEventListener('Y press ended', function (event) {
+    handControlL.addEventListener('Y press ended', function (event) {
 
     });
   }
 
 
   //'Click right thumbstick' to invert selection.
-  if (controllerR) {
-    controllerR.addEventListener('thumbstick press began', function (event) {
+  if (handControlR) {
+    handControlR.addEventListener('thumbstick press began', function (event) {
       invertSelection();
     });
-    controllerR.addEventListener('thumbstick press ended', function (event) {
+    handControlR.addEventListener('thumbstick press ended', function (event) {
 
     });
   }

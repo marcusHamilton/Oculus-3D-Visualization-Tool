@@ -55,6 +55,7 @@ var selectedAxes; //The Axes selected in the VR GUI
 
 //Used for inspection to ensure that the object that is going to be passed is the correct format to be pushed to the database
 var selectedAxesJSON;
+var inspectAxesJSON;
 
 
 /**
@@ -900,7 +901,8 @@ function redrawDataSet(VR){
     }
 	}
   selectedAxesJSON = {0:axisMenu.xAxis,1:axisMenu.yAxis,2:axisMenu.zAxis};
-  console.log(JSON.stringify(selectedAxesJSON));
+  inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+  console.log(inspectAxesJSON);
   selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));	
 }
 

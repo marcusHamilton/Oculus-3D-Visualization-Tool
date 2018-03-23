@@ -33,11 +33,6 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-//Creating rig to attach camera too
-var rig = new THREE.Object3D();
-
-
-
 
 /**
  * Called every frame
@@ -272,6 +267,7 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+  var rig = new THREE.Object3D();
   rig.add(camera);
   scene.add(rig);
 

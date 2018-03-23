@@ -134,7 +134,7 @@ function Manager() {
     renderer.vr.enabled = true;
     renderer.vr.standing = true;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setSize(window.innerWidth, window.innerHeight);
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
@@ -160,13 +160,19 @@ function Manager() {
 
     //This can be removed after development if desired
     drawFPSstats();
-    axiiMenu = new axisMenuObj();
-    axisMenu();
 
+    //Initializes the axis selection interfaces
+    axisMenu = new selectedAxes();
+    selectedAxes = new selectedAxesVR();
+    
+    //Builds the GUIs
+    VRGui();
+    BRGui();
+    
+    dat.GUIVR.enableMouse(camera,renderer);
 
-
-    // The [0] index of loadedDataset contains the 3 selected axis column indices
-    drawDataset(axiiMenu.xAxis,axiiMenu.yAxis,axiiMenu.zAxis);
+    // axisMenu contains the 3 selected axis columns as properties
+    drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
     
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
@@ -325,16 +331,8 @@ function setUpControls() {
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  dat.GUIVR.enableMouse(camera,renderer);
-  var gui = dat.GUIVR.create('Settings');
-  gui.position.set(100 , 100, 100);
-  gui.rotation.set(Math.PI / -6, 0, 0);
-  scene.add(gui);
-  // gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
-  // gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
-  // gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
-  castShadows(gui);
-
+  
+  
 }
 
 
@@ -456,6 +454,8 @@ function drawDataset(xCol, yCol, zCol)
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
+
+  scene.add(VRGui);
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }
@@ -541,63 +541,5 @@ function drawAxisLabels() {
 }
 
 
-/**
-Constructor for an object that holds the currently selected axis values as well
-as the array of labels to be displayed by the dropdowns
-**/
-function axisMenuObj(){
-  this.xAxis = loadedDataset[0][0]; //holds current x axis
-  this.yAxis = loadedDataset[0][1]; //holds current y axis
-  this.zAxis = loadedDataset[0][2]; //holds current z axis
-  this.axiiOptions = loadedDataset[1]; //hold the row of data containing axis labels
-}
 
-/**
-  This populates the axis menu on browsers
-  **/
-function axisMenu() {
-  (function() {
-    var script2 = document.createElement('script');
-    script2.onload = function() {
-      menu = new dat.GUI();
-      menu.autoPlace = false;
-      folder = menu.addFolder("axis")
-      folder.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.1, 0.001);
-      folder.add(axiiMenu, 'xAxis', axiiMenu.axiiOptions);
-      folder.add(axiiMenu, 'yAxis', axiiMenu.axiiOptions);
-      folder.add(axiiMenu, 'zAxis', axiiMenu.axiiOptions);
-      folder.add(redraw,'redraw');
-      folder.__controllers[0].__onChange = redraw.redraw;
-      folder.__controllers[1].__select.selectedIndex = axiiMenu.xAxis;
-      folder.__controllers[2].__select.selectedIndex = axiiMenu.yAxis;
-      folder.__controllers[3].__select.selectedIndex = axiiMenu.zAxis;
-      };
-    script2.src = '//rawgit.com/dataarts/dat.gui/master/build/dat.gui.js';
-    document.head.appendChild(script2);
-  })();
-}
 
-//clears and redraws data set
-function redrawDataSet(VR){
-  if(VR == 0){
-    axiiMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
-    axiiMenu.yAxis = folder.__controllers[2].__select.selectedIndex;
-    axiiMenu.zAxis = folder.__controllers[3].__select.selectedIndex;
-  }
-  else{
-    axiiMenu.xAxis = menu.__controllers[1].__select.selectedIndex;
-    axiiMenu.yAxis = menu.__controllers[2].__select.selectedIndex;
-    axiiMenu.zAxis = menu.__controllers[3].__select.selectedIndex;
-  }
-  loadedDataset[0][0] = axiiMenu.xAxis;
-  loadedDataset[0][1] = axiiMenu.yAxis;
-  loadedDataset[0][2] = axiiMenu.zAxis;
-    while(scene.children.length > 0){ 
-    scene.remove(scene.children[0]); 
-}
-    console.log("Removed children")
-    drawDataset(axiiMenu.xAxis,axiiMenu.yAxis,axiiMenu.zAxis);
-    console.log("Redrew Data");
-    VRGUI();
-    drawAxisLabels();
-}

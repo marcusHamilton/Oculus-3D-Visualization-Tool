@@ -203,11 +203,8 @@ function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   scene.name = "Scene";
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
-  var light = new THREE.AmbientLight(0xFFFFFF, 1, 100);
-  light.position.set(1, 10, -0.5);
-  scene.add(light);
+
   addParsedDataToScene();
 
   //Export the built world

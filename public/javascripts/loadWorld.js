@@ -34,7 +34,7 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 //Creating rig to attach camera too
-const rig = new THREE.Object3D();
+var rig = new THREE.Object3D();
 
 
 

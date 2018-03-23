@@ -93,7 +93,7 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-var GameLoop = function(timestamp) {
+function GameLoop(timestamp){
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
@@ -267,6 +267,7 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+  console.log("Initializing rig");
   var rig = new THREE.Object3D();
   rig.add(camera);
   scene.add(rig);

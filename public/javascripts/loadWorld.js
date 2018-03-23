@@ -24,7 +24,7 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var pointVars={plotPointSizeCoeff:0.00}; //Default datapoint size
+var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns

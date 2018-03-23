@@ -75,6 +75,8 @@ window.addEventListener('vr controller connected', function(event) {
  * This gets called when a controller wakes up or is plugged in, providing
  * a reference to the left and right controller objects.
  */
+
+
 var movementSpeedCoeff = 0.3;
 function initializeMovementControls(){
   // Example event listener for button press/touch/near-touch
@@ -106,8 +108,10 @@ function updateMovementControls(){
     if (datasetAndAxisLabelGroup){
       // TODO: Left hand controls go here:
       // Just a quick test
-      datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
-      datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+      //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
+      //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+      rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff * -1;
+      rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
     }
   }
 

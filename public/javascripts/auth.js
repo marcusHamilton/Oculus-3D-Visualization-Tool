@@ -261,7 +261,7 @@ function updateAxisSelectionInDatabase(worldId, selectedAxii){
   var axiiRef = database.ref('worlds/'+worldId+'/object/userData')
   var AxiiSelection = axiiRef.child("0");
   AxiiSelection.set(selectedAxii);
-  console.log("Pushed selection "+selectedAxii+" to the database.")
+  console.log("Pushed selection "+ inspectAxesJSON + " to the database.")
 }
 
 

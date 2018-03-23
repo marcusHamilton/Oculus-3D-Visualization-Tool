@@ -1,8 +1,5 @@
 var VRGui;
 var BRGui;
-var xDrop;
-var yDrop;
-var zDrop;
 var folder; //BR GUI menu element
 var pSizeSlider;
 

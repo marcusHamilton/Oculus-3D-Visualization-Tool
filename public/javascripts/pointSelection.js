@@ -121,7 +121,7 @@ function pointSelectionUpdate() {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
       if(pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
-          setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+          setPointScale(intersects.index, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
       }
       mousedOverPoint = intersects.index;
@@ -132,7 +132,7 @@ function pointSelectionUpdate() {
   }
   else {
 
-    setPointScale(mousedOverPoint, mousedOverPointOGSize);
+    setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
   // Press 'A' and 'X' is select/deselect all points.
@@ -465,11 +465,3 @@ function viewHidden(){
     }
     console.log(hiddenPoints);
 }
-
-
-
-
-
-
-
-

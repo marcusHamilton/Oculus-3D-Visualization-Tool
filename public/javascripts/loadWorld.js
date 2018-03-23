@@ -641,7 +641,7 @@ function redrawDataSet(VR){
     axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
     axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
     axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
-    if(axisMenu.xAxis != -1 && axisMenu.xAxis != -1 && axisMenu.xAxis != -1){
+    if(axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0){
     	//Console logs to validate selection from gui vs. what is being saved, both should be the same.
       console.log("X-Axis: "+ axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
       console.log("Y-Axis: "+ axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));

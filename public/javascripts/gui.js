@@ -15,16 +15,13 @@ function VRGui(){
   slider.name("Point Size");
 
   //Dropdown for choosing X axis
-  var xDrop = VRGui.add(axisMenu, 'xAxis', axisMenu.axesOptions);
-  // xDrop.onChange(function(value){selectedAxes.selectedX = value});
+  var xDrop = VRGui.add(selectedAxes, 'selectedX', axisMenu.axesOptions);
   
   //Dropdown for choosing Y axis
-  var yDrop = VRGui.add(axisMenu, 'yAxis', axisMenu.axesOptions);
-  // yDrop.onChange(function(value){selectedAxes.selectedY = value});
+  var yDrop = VRGui.add(selectedAxes, 'selectedY', axisMenu.axesOptions);
 
   //Dropdown for choosing Z axis
-  var zDrop = VRGui.add(axisMenu, 'zAxis', axisMenu.axesOptions);
-  // zDrop.onChange(function(value){selectedAxes.selectedZ = value});
+  var zDrop = VRGui.add(selectedAxes, 'selectedZ', axisMenu.axesOptions);
 
   //Button to redraw using redraw with a vr switch to trigger the axis data to come from the vr GUI
   VRGui.add(redraw,'redrawVR');
@@ -58,6 +55,7 @@ function BRGui() {
 
       //Dropdown for choosing Z axis
       var zSelect = folder.add(axisMenu, 'zAxis', axisMenu.axesOptions);
+
       folder.add(redraw,'redraw');
       folder.add(pushAxesToDB, 'pushAxesToDB');
 
@@ -70,4 +68,5 @@ function BRGui() {
     document.head.appendChild(script2);
   })();
 }
+
 

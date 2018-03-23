@@ -24,18 +24,13 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var plotPointSizeCoeff = 0.01; //Default datapoint size
+var pointVars={plotPointSizeCoeff:0.00}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-
-// Experimental control setup. Doesn't work yet.
-var controllerL;
-var controllerL_Stick_XAxis;
-var controllerL_Stick_YAxis;
 
 /**
  * Called every frame
@@ -58,21 +53,16 @@ function update(timestamp) {
   //Add all updates below here
 
   //Ensure that we are looking for controller input
-
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
-/*
-  if (datasetAndAxisLabelGroup && controllerL) {
-    datasetAndAxisLabelGroup.position.x += 0.001;//(controllerL_Stick_XAxis * 0.00001);
-    datasetAndAxisLabelGroup.position.z += 0.001;//(controllerL_Stick_YAxis * 0.00001);
-  }
-  */
+
   //Allows point selection to function
   pointSelectionUpdate();
+
+  updateMovementControls();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -144,7 +134,7 @@ function Manager() {
     renderer.vr.enabled = true;
     renderer.vr.standing = true;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setSize(window.innerWidth, window.innerHeight);
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
@@ -160,8 +150,8 @@ function Manager() {
         renderer.vr.setDevice(display);
         animationDisplay = display;
         setStageDimensions(display.stageParameters);
-        camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
-        camera.rotation.y = 270 * Math.PI / 180;
+        camera.position.set(0, 0, 0);
+        // camera.rotation.y = 180;
       })
       .catch(function() {
         // If there is no display available, fallback to window
@@ -171,15 +161,25 @@ function Manager() {
     //This can be removed after development if desired
     drawFPSstats();
 
-    // The [0] index of loadedDataset contains the 3 selected axis column indices
-    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+    //Initializes the axis selection interfaces
+    axisMenu = new selectedAxes();
+    selectedAxes = new selectedAxesVR();
+    
+    //Builds the GUIs
+    VRGui();
+    BRGui();
+    
+    dat.GUIVR.enableMouse(camera,renderer);
+
+    // axisMenu contains the 3 selected axis columns as properties
+    drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
     
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
     //Center the non-VR camera on the data and back a bit
-    camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
-    camera.rotation.y = 270 * Math.PI / 180;
+    camera.position.set(0, 0,  0);
+    camera.rotation.y = 0 * Math.PI / 180;
 
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
@@ -275,7 +275,7 @@ function setUpControls() {
   camera.position.z = vrControls.userHeight;
 
   //Add fps controls as well
-  trackballControls = new THREE.TrackballControls(camera);
+  trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
   trackballControls.rotateSpeed = 1.0;
   trackballControls.zoomSpeed = 10;
   trackballControls.panSpeed = 10;
@@ -325,243 +325,16 @@ function setUpControls() {
   torus.position.set(-0.25, 1.4, -1.5);
   torus.castShadow = true;
   torus.receiveShadow = true;
+  torus.visible = true;
   scene.add(torus);
+
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  dat.GUIVR.enableMouse(camera);
-  var gui = dat.GUIVR.create('Settings');
-  gui.position.set(100 , 100, 100);
-  gui.rotation.set(Math.PI / -6, 0, 0);
-  scene.add(gui);
-  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
-  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
-  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
-  castShadows(gui);
-
+  
+  
 }
 
-/**
- * The following is an event listener for when a hand held controller is connected
- */
-
-//This is gross, We'll probably put the listeners in pointSelection instead of
-//having global booleans.
-var AisPressed;
-var XisPressed;
-
-//TODO: Refactor this into its own file and split up the L/R controller events.
-window.addEventListener('vr controller connected', function(event) {
-
-  controller = event.detail;
-  scene.add(controller);
-
-  //Ensure controllers appear at the right height
-  //controller.standingMatrix = renderer.vr.getStandingMatrix();
-  controller.head = window.camera;
-
-  //Add a visual for the controllers
-  var
-    meshColorOff = 0xDB3236, //  Red.
-    meshColorOn = 0xF4C20D, //  Yellow.
-    controllerMaterial = new THREE.MeshStandardMaterial({
-      color: meshColorOff
-    }),
-    controllerMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
-      controllerMaterial
-    ),
-    handleMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(0.03, 0.1, 0.03),
-      controllerMaterial
-    );
-
-  controllerMaterial.flatShading = true;
-  controllerMesh.rotation.x = -Math.PI / 2;
-  handleMesh.position.y = -0.05;
-  controllerMesh.add(handleMesh);
-  controller.userData.mesh = controllerMesh;//  So we can change the color later.
-  controller.add(controllerMesh);
-  castShadows(controller);
-  receiveShadows(controller);
-
-
-  //  Allow this controller to interact with DAT GUI.
-  var guiInputHelper = dat.GUIVR.addInputObject(controller);
-  scene.add(guiInputHelper);
-
-  //Add selection controls
-  initializeSelectionControls();
-  // temporary booleans
-  AisPressed = false;
-  XisPressed = false;
-
-  //Button events. This is currently just using the primary button
-  controller.addEventListener('primary press began', function(event) {
-
-    event.target.userData.mesh.material.color.setHex(meshColorOn);
-    console.log("Right controller trigger press detected, Printing pointSelect debug info:");
-    console.log("Raycaster:");
-    console.log(pointSelectionRaycasterR);
-    console.log("Intersects:");
-    console.log(intersects);
-    console.log("Controller:");
-    console.log(selectionControllerR);
-    console.log("Raycaster Line:");
-    console.log(raycasterLine);
-
-    guiInputHelper.pressed(true)
-  });
-  controller.addEventListener('primary press ended', function(event) {
-
-    event.target.userData.mesh.material.color.setHex(meshColorOff);
-    guiInputHelper.pressed(false)
-  });
-
-  //On controller removal
-  controller.addEventListener('disconnected', function(event) {
-
-    controller.parent.remove(controller)
-  });
-
-  //Press 'A' (select/deselect a point)
-  controller.addEventListener('A press began', function(event) {
-    AisPressed = true;
-    if (intersects) {
-      selectPoint(intersects.index);
-    }
-    if (selectedPoints.length > 0){
-      console.log(getSelectedPointPositions());
-    }
-  });
-  controller.addEventListener('A press ended', function(event) {
-    AisPressed = false;
-
-  });
-  //Press 'B' to hide a point
-    controller.addEventListener('B press began', function(event) {
-
-        if (intersects) {
-            hidePoint(intersects.index);
-        }
-        else{
-          unhideRecent();
-        }
-
-    });
-  controller.addEventListener('B press ended', function(event) {
-
-  });
-
-  //Press 'A' and 'X' to select/deselect all
-  controller.addEventListener('X press began', function(event) {
-    XisPressed = true;
-
-  });
-  controller.addEventListener('X press ended', function(event) {
-    XisPressed = false;
-  });
-
-  //Hold 'B' and 'Y' hide/unhide all
-  controller.addEventListener('Y press began', function(event) {
-
-  });
-  controller.addEventListener('Y press ended', function(event) {
-
-  });
-
-  controller.addEventListener('Grip press began', function(event) {
-
-  });
-  controller.addEventListener('Grip press ended', function(event) {
-
-  });
-
-  //'Click right thumbstick' to invert selection.
-  controller.addEventListener('thumbstick press began', function(event) {
-    invertSelection();
-  });
-  controller.addEventListener('thumbstick press ended', function(event) {
-
-  });
-
-  //Left thumbstick for movement.
-  //TODO: Thumbstick event listener doesn't work yet. How do we get the axis values?
-  controllerL  = scene.getObjectByName("Oculus Touch (Left)");
-  if (controllerL) {
-    controllerL.addEventListener('thumbstick axis changed', function (event) {
-      controllerL_Stick_XAxis = controllerL.thumbstick[1]
-      console.log(controllerL_Stick_XAxis);
-      controllerL_Stick_YAxis = controllerL.getAxis(1);
-      console.log(controllerL_Stick_YAxis);
-    });
-  }
-  //THREE.VRController.verbosity = 1;
-  //controllerL.
-
-
-});
-
-//Keyboard Controls
-function onAKeyPress(event){
-    var keyCode = event.which;
-    var translationSpeed = 0.1;
-    var rotationSpeed = 0.1;
-    var cameraDirection = new THREE.Vector3();
-    var theta // Angle between x and z
-    var inverseTheta
-    var gamma // Angle between x and y
-    //A == 65 Left
-    if(keyCode == 65){
-      camera.position.z -= translationSpeed;
-    }
-    //D == 68 Right
-    else if (keyCode == 68){
-      camera.position.z += translationSpeed;
-    }
-    //W == 87 Forward
-    else if (keyCode == 87){
-      camera.getWorldDirection(cameraDirection);
-      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      camera.position.x += (translationSpeed*Math.sin(theta));
-      camera.position.z += (translationSpeed*Math.cos(theta));
-    }
-    //S == 83 Backward
-    else if(keyCode == 83){
-      camera.getWorldDirection(cameraDirection);
-      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      camera.position.x -= (translationSpeed*Math.sin(theta));
-      camera.position.z -= (translationSpeed*Math.cos(theta));
-    }
-    //space == 32 Up
-    else if(keyCode == 32){
-      camera.position.y += translationSpeed;
-    }
-    //ctrl == 17  Down
-    else if(keyCode == 17){
-      camera.position.y -= translationSpeed;
-    }
-    //Q == 81 Look left
-    else if(keyCode == 81){
-      camera.rotation.y += rotationSpeed;
-    }
-    //E == 69 Look right
-    else if(keyCode == 69){
-      camera.rotation.y -= rotationSpeed;
-    }
-    //Look up and look down might be unnecasary when this is converted to occulus controller
-    //Doesnt work anyway tho 
-
-    //R == 82 Look Up
-    //else if(keyCode == 82){
-      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      //inverseTheta = Math.PI /2 - theta;
-      //gamma = Math.PI - (inverseTheta + Math.PI /2);
-      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
-      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
-      //camera.rotation.x += rotationSpeed;
-   // }
-  }
 
 
 /**
@@ -592,7 +365,7 @@ function drawDataset(xCol, yCol, zCol)
   // points geometry contains a list of all the point vertices pushed below
   pointsGeometry = new THREE.BufferGeometry();
 
-  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
+  var pointSize = pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
 
   // Grab the OpenGLSL shader definitions from page html
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
@@ -681,6 +454,8 @@ function drawDataset(xCol, yCol, zCol)
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
+
+  scene.add(VRGui);
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }
@@ -764,3 +539,4 @@ function drawAxisLabels() {
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
 }
+

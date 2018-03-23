@@ -229,6 +229,14 @@ function onGeometryDatabaseChange(worldId){
 	  });
 }
 
+function onAxisDatabaseChange(worldId){
+  var axisRef = firebase.database().ref('worlds/'+worldId+'/object/userdata/0');
+  axisRef.on('value', function(snapshot) {
+    console.log(snapshot.val());
+    //update the axis values
+  });
+}
+
 
 /*
 When a geometry changes on the client side, this function needs to be called
@@ -241,6 +249,19 @@ Returns: geometry will be updated in the database
 function updateGeometryInDatabase(worldId, geometryId, geometry){
 	var geometryRef = database.ref('worlds/'+worldId+'/'+geometryId);
 	geometryRef.update(geometry);
+}
+
+/*
+When the selected axii change for a world and need to be pushed to the database, call this function
+@Inputs:
+  worldId: ID of the world in the database
+  selectedAxii: JSON format of the loadedDataset[0] array(aka the axii selection array)  
+*/
+function updateAxisSelectionInDatabase(worldId, selectedAxii){
+  var axiiRef = database.ref('worlds/'+worldId+'/object/userData')
+  var AxiiSelection = axiiRef.child("0");
+  AxiiSelection.set(selectedAxii);
+  console.log("Pushed selection "+ inspectAxesJSON + " to the database.")
 }
 
 

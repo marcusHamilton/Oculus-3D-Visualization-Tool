@@ -111,7 +111,6 @@ function initializeMovementControls(){
  */
 function updateMovementControls(){
   // Check that the left controller is initialized
-    console.log("Updating movement Controls");
   if (handControlL){
     // Just a quick test
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;

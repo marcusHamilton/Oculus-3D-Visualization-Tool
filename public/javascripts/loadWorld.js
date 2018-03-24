@@ -170,7 +170,7 @@ function Manager() {
     drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
     
     //Handle Keyboard Input
-    document.addEventListener('keydown', onAKeyPress, false);
+    //document.addEventListener('keydown', onAKeyPress, false);
     
     //Center the non-VR camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);

@@ -128,11 +128,12 @@ function initializeMovementControls(){
 /**
  * This gets called in the main update() loop.
  */
+camera.name = "camera";
 var aMatrix = new THREE.Matrix4();
 var aDirection = new THREE.Vector3(0,0,1);
 function updateMovementControls(){
   //camera.getWorldDirection(cameraDirection);
-  aMatrix.extractRotation(rig.camera.matrix);
+  aMatrix.extractRotation(rig.getObjectByName("camera").matrix);
   aMatrix.extractBasis(aDirection);
   //aMatrix.multiplyVector3(aDirection);
   // Check that the left controller is initialize

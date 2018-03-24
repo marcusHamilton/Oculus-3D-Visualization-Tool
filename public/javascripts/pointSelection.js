@@ -23,6 +23,8 @@ var pointSelectionRaycasterL;
 var pointSelectionRaycasterR;
 var raycasterLine;
 var isRaycasterLineActive;
+
+var rayRig;
 /**
  * Initializes the event listeners for point selection
  */
@@ -36,6 +38,7 @@ function initializeSelectionControls()
 
   selectionControllerL = scene.getObjectByName("Oculus Touch (Left)");
   selectionControllerR = scene.getObjectByName("Oculus Touch (Right)");
+
 
   // We were originally going to allow selection with the left controller,
   // But I think we'll probably limit it to the right control, and have tools
@@ -83,6 +86,7 @@ function initializeSelectionControls()
  */
 var mousedOverPoint;
 var arrow;
+
 function pointSelectionUpdate() {
   // calculate objects intersecting the ray
 
@@ -98,7 +102,8 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
-    console.log("Controller Position: "+selectionControllerR.position);
+    console.log("Controller Position: ");
+    console.log(selectionControllerR.position);
     console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);
     //rig.add(pointSelectionRaycasterR);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);

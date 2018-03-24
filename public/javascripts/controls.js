@@ -27,10 +27,14 @@ window.addEventListener('vr controller connected', function(event) {
 
   handControlL = scene.getObjectByName("Oculus Touch (Left)");
   handControlR = scene.getObjectByName("Oculus Touch (Right)");
-  console.log("Attaching left controller to rig");
-  rig.add(handControlL);
-  console.log("Attaching right controller to rig");
-  rig.add(handControlR);
+  if(handControlL != null){
+    console.log("Attaching left controller to rig");
+    rig.add(handControlL);
+  }
+  if(handControlR != null){
+    console.log("Attaching right controller to rig");
+    rig.add(handControlR);
+  }
 
 
   // if (handControlL != null){
@@ -128,8 +132,9 @@ var aMatrix = new THREE.Matrix4();
 var aDirection = new THREE.Vector3(0,0,1);
 function updateMovementControls(){
   //camera.getWorldDirection(cameraDirection);
-  aMatrix.extractRotation(camera.matrix);
-  aMatrix.multiplyVector3(aDirection);
+  aMatrix.extractRotation(rig.camera.matrix);
+  aMatrix.extractBasis(aDirection);
+  //aMatrix.multiplyVector3(aDirection);
   // Check that the left controller is initialize
   if (handControlL){
     //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");

@@ -12,7 +12,7 @@ var XisPressed;
 
 var rotationSpeed = 0.1;
 var cameraDirection = new THREE.Vector3();
-var theta // Angle between x and z
+var theta; // Angle between x and z
 // ~~~~~~~~~~~~~~~ INITIALIZE HAND CONTROLS ~~~~~~~~~~~~~~~~~~~
 /**
  * The following is an event listener for when a hand held controller is connected
@@ -32,10 +32,14 @@ angleQuaternion = new THREE.Quaternion();
 
   handControlL = scene.getObjectByName("Oculus Touch (Left)");
   handControlR = scene.getObjectByName("Oculus Touch (Right)");
-  console.log("Attaching left controller to rig");
-  rig.add(handControlL);
-  console.log("Attaching right controller to rig");
-  rig.add(handControlR);
+  if(handControlL != null){
+    console.log("Attaching left controller to rig");
+    rig.add(handControlL);
+  }
+  if(handControlR != null){
+    console.log("Attaching right controller to rig");
+    rig.add(handControlR);
+  }
 
 
   // if (handControlL != null){
@@ -129,8 +133,14 @@ function initializeMovementControls(){
 /**
  * This gets called in the main update() loop.
  */
+camera.name = "camera";
+var aMatrix = new THREE.Matrix4();
+var aDirection = new THREE.Vector3(0,0,1);
 function updateMovementControls(){
-  camera.getWorldDirection(cameraDirection);
+  //camera.getWorldDirection(cameraDirection);
+  aMatrix.extractRotation(rig.getObjectByName("camera").matrix);
+  aMatrix.extractBasis(aDirection);
+  //aMatrix.multiplyVector3(aDirection);
   // Check that the left controller is initialize
   if (handControlL){
     //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
@@ -139,13 +149,11 @@ function updateMovementControls(){
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
 
 
-      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
 
-      rig.translateX(handControlL.getAxis(0));
-      rig.translateZ(handControlL.getAxis(1)*(-1));
-
-      //rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta));
-      //rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta)*(-1));
+      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      //theta = camera.rotation.y;
+      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff * aDirection.x);
+      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * aDirection.z);
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

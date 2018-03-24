@@ -142,7 +142,7 @@ function updateMovementControls(){
     var aMatrix = new THREE.Matrix4();
     var aDirection = new THREE.Vector3(0,0,1);
 
-  aMatrix.extractRotation(rig.getChildByName("camera").matrix);
+  aMatrix.extractRotation(camera.projectionMatrix);
   aMatrix.extractBasis(aDirection);
   //aMatrix.multiplyVector3(aDirection);
   // Check that the left controller is initialize

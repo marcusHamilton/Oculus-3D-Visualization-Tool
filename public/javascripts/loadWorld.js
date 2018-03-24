@@ -34,6 +34,7 @@ var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 var rig; //Rig to group camera
 
+camera.name = "camera";
 /**
  * Called every frame
  */

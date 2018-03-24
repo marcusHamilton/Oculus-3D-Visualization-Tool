@@ -22,7 +22,7 @@ var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
-  camera.name = "camera";
+
 
 
 //cosnt ZAXIS = new THREE.Vector3(0,0,1);

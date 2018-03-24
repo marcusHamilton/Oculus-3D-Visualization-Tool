@@ -125,7 +125,7 @@ function initializeMovementControls(){
  * This gets called in the main update() loop.
  */
 var aMatrix = new THREE.Matrix4();
-var aDirection = new Vector3(0,0,1);
+var aDirection = new THREE.Vector3(0,0,1);
 function updateMovementControls(){
   //camera.getWorldDirection(cameraDirection);
   aMatrix.extractRotation(camera.matrix);

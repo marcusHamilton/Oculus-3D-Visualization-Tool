@@ -124,8 +124,12 @@ function initializeMovementControls(){
 /**
  * This gets called in the main update() loop.
  */
+var aMatrix = new THREE.Matrix4();
+var aDirection = new Vector3(0,0,1);
 function updateMovementControls(){
-  camera.getWorldDirection(cameraDirection);
+  //camera.getWorldDirection(cameraDirection);
+  aMatrix.extractRotation(camera.matrix);
+  aMatrix.multiplyVector3(aDirection);
   // Check that the left controller is initialize
   if (handControlL){
     //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
@@ -135,9 +139,9 @@ function updateMovementControls(){
 
 
       //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      theta = camera.rotation.y;
-      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff * Math.sin(theta));
-      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * Math.cos(theta));
+      //theta = camera.rotation.y;
+      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff * aDirection.x);
+      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * aDirection.z);
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

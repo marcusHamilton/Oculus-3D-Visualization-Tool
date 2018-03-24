@@ -264,19 +264,19 @@ function onMouseMove( event ) {
  */
 function onClick( event ){
 
-  event.preventDefault();
-  if (intersects != null) {
-    selectPoint(intersects.index);
-    //hidePoint(intersects.index);
-  }
-  else {
-    clearSelection();
-    //unhideRecent();
-  }
-  if (selectedPoints.length > 0){
-    console.log(getSelectedPointPositions());
-  }
-  //console.log(hiddenPoints);
+    event.preventDefault();
+    if (intersects != null) {
+        selectPoint(intersects.index);
+        //hidePoint(intersects.index);
+    }
+    else {
+        clearSelection();
+        //unhideRecent();
+    }
+    if (selectedPoints.length > 0){
+        console.log(getSelectedPointPositions());
+    }
+    //console.log(hiddenPoints);
 }
 
 /**

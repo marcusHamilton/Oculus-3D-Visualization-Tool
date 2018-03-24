@@ -5,33 +5,32 @@
  * the library.
  */
 
-
 function mean(dataVector){
-    return stats.mean(dataVector);
+    return jStat.mean(dataVector);
 }
 
 function sum(dataVector){
-    return stats.sum(dataVector);
+    return jStat.sum(dataVector);
 }
 
 function median(dataVector){
-    return stats.median(dataVector);
+    return jStat.median(dataVector);
 }
 
 function mode(dataVector){
-    return stats.mode(dataVector);
+    return jStat.mode(dataVector);
 }
 
 function variance(dataVector){
-    return stats.variance(dataVector);
+    return jStat.variance(dataVector);
 }
 
 function stdev(dataVector){
-    return stats.stdev(dataVector);
+    return jStat.stdev(dataVector);
 }
 
 function histogram(dataVector){
-    return stats.histogram(dataVector);
+    return jStat.histogram(dataVector);
 }
 
 

@@ -48,6 +48,7 @@ function initializeSelectionControls()
     console.log(selectionControllerL);
     pointSelectionRaycasterL = new THREE.Raycaster();
     pointSelectionRaycasterL.params.Points.threshold = selectionThreshold;
+    rig.add(selectionControllerL);
   }
 
   if (selectionControllerR){
@@ -55,6 +56,7 @@ function initializeSelectionControls()
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
+    rig.add(selectionControllerR);
     selectionControllerR.addEventListener('A touch began', function(event) {
       isRaycasterLineActive = true;
     });
@@ -102,7 +104,7 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-    pointSelectionRaycasterR.set(rig.position, direction);
+    pointSelectionRaycasterR.set(rightMesh.position, direction);
     console.log("Controller Position: ");
     console.log(handControlR.position);
     //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);

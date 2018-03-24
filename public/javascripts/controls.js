@@ -22,10 +22,10 @@ var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
-cosnt ZAXIS = new THREE.Vector3(0,0,1);
-const YAXIS = new THREE.Vector3(0,1,0);
+//cosnt ZAXIS = new THREE.Vector3(0,0,1);
+//const YAXIS = new THREE.Vector3(0,1,0);
 
-angleQuaternion = new THREE.Quaternion();
+//angleQuaternion = new THREE.Quaternion();
 
   controller = event.detail;
   scene.add(controller);

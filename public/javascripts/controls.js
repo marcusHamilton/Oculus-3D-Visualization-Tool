@@ -134,9 +134,9 @@ function updateMovementControls(){
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
 
 
-      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff/*Math.sin(theta)*/);
-      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * 1/*Math.sin(theta)*/);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff * Math.sin(theta));
+      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * Math.cos(theta));
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

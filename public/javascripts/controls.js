@@ -61,11 +61,12 @@ window.addEventListener('vr controller connected', function(event) {
   handleMesh.position.y = -0.05;
   controllerMesh.add(handleMesh);
   controller.userData.mesh = controllerMesh;//  So we can change the color later.
-  controller.add(controllerMesh);
 
-  controllerMesh.name = "C_Mesh";
+    controllerMesh.name = "C_Mesh";
+    controller.add(controllerMesh);
 
-  rightMesh = controllerMesh.getChildByName("C_Mesh");
+
+
 
   castShadows(controller);
   receiveShadows(controller);

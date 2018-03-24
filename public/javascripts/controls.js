@@ -22,6 +22,11 @@ var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
+cosnt ZAXIS = new THREE.Vector3(0,0,1);
+const YAXIS = new THREE.Vector3(0,1,0);
+
+angleQuaternion = new THREE.Quaternion();
+
   controller = event.detail;
   scene.add(controller);
 
@@ -135,8 +140,12 @@ function updateMovementControls(){
 
 
       theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta))*(-1);
-      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta));
+
+      rig.translateX(handControlL.getAxis(0));
+      rig.translateZ(handControlL.getAxis(1)*(-1));
+
+      //rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta));
+      //rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta)*(-1));
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

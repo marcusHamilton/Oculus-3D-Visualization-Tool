@@ -22,6 +22,10 @@ var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
+  camera.name = "camera";
+  var aMatrix = new THREE.Matrix4();
+  var aDirection = new THREE.Vector3(0,0,1);
+
 //cosnt ZAXIS = new THREE.Vector3(0,0,1);
 //const YAXIS = new THREE.Vector3(0,1,0);
 
@@ -133,9 +137,7 @@ function initializeMovementControls(){
 /**
  * This gets called in the main update() loop.
  */
-camera.name = "camera";
-var aMatrix = new THREE.Matrix4();
-var aDirection = new THREE.Vector3(0,0,1);
+
 function updateMovementControls(){
   //camera.getWorldDirection(cameraDirection);
   aMatrix.extractRotation(rig.getObjectByName("camera").matrix);

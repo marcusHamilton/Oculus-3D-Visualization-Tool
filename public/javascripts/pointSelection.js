@@ -104,8 +104,8 @@ function pointSelectionUpdate() {
     //selectionControllerR.position = handControlR.position;
     pointSelectionRaycasterR.set(handControlR.position, direction);
     console.log("Controller Position: ");
-    console.log(selectionControllerR.position);
-    console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);
+    console.log(handControlR.position);
+    //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);
     //rig.add(pointSelectionRaycasterR);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 

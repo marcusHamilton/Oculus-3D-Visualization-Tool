@@ -120,8 +120,8 @@ function updateMovementControls(){
     // Just a quick test
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-    rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff * -1;
-    rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+    rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
+    rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
     }
   }
 

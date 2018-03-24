@@ -101,6 +101,7 @@ function pointSelectionUpdate() {
     direction.applyMatrix4(matrix);
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
+    selectionControllerR.position = handControlR.position;
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
     console.log("Controller Position: ");
     console.log(selectionControllerR.position);

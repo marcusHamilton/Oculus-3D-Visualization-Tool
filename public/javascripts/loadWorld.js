@@ -57,7 +57,7 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 

@@ -103,10 +103,11 @@ function pointSelectionUpdate() {
 
     var direction = new THREE.Vector3( 0, 0, 1 );
     direction.applyMatrix4(matrix);
+    var meshPosition = aRightMesh.getWorldPosition();
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-    pointSelectionRaycasterR.set(aRightMesh.getWorldPosition(), direction);
+    pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);
     //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);

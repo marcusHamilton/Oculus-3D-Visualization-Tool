@@ -62,9 +62,11 @@ function update(timestamp) {
   THREE.VRController.update();
 
   //Allows point selection to function
-  pointSelectionUpdate();
+
 
   updateMovementControls();
+
+    pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;

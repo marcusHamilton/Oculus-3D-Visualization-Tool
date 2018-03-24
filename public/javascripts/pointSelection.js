@@ -106,7 +106,7 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-    pointSelectionRaycasterR.set(rightMesh.position, direction);
+    pointSelectionRaycasterR.set(handControlR.position, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);
     //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);

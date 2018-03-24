@@ -28,6 +28,8 @@ window.addEventListener('vr controller connected', function(event) {
   rig.add(handControlL);
   console.log("Attaching right controller to rig");
   rig.add(handControlR);
+
+
   // if (handControlL != null){
   //   console.log("Left hand controller attached to rig");
   //   rig.add(handControlL);
@@ -65,7 +67,7 @@ window.addEventListener('vr controller connected', function(event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
 
-
+    aRightMesh = handControlR.getChildByName("C_Mesh");
 
 
   castShadows(controller);
@@ -167,6 +169,8 @@ function setListeners(){
       event.target.userData.mesh.material.color.setHex(meshColorOn);
       console.log("Right controller trigger press detected, Printing Controller Object");
       guiInputHelper.pressed(true)
+        console.log("Mesh Position: ");
+      console.log(aRightMesh.position);
     });
     handControlR.addEventListener('primary press ended', function (event) {
 

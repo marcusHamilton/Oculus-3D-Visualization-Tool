@@ -10,6 +10,9 @@ var handControlR; // Right hand Oculus controller
 var AisPressed;
 var XisPressed;
 
+var rotationSpeed = 0.1;
+var cameraDirection = new THREE.Vector3();
+var theta // Angle between x and z
 // ~~~~~~~~~~~~~~~ INITIALIZE HAND CONTROLS ~~~~~~~~~~~~~~~~~~~
 /**
  * The following is an event listener for when a hand held controller is connected
@@ -263,9 +266,7 @@ function setListeners(){
 function onAKeyPress(event){
   var keyCode = event.which;
   var translationSpeed = 0.1;
-  var rotationSpeed = 0.1;
-  var cameraDirection = new THREE.Vector3();
-  var theta // Angle between x and z
+
   var inverseTheta
   var gamma // Angle between x and y
   //A == 65 Left

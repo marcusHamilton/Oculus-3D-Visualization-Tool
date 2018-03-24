@@ -110,8 +110,9 @@ function initializeMovementControls(){
  * This gets called in the main update() loop.
  */
 function updateMovementControls(){
-  // Check that the left controller is initialized
+  // Check that the left controller is initialize
   if (handControlL){
+    console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
     // Just a quick test
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
@@ -122,11 +123,10 @@ function updateMovementControls(){
 
   // Check that the right controller is initialized
   if (handControlR){
-    if (datasetAndAxisLabelGroup) {
-      // TODO: Right hand controls go here:
-    }
+      // TODO: Right hand controls go here
+        //rig.position.x  += handControlR.getAxis(0) * movementSpeedCoeff * -1;
   }
-}
+
 
 // ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~
 

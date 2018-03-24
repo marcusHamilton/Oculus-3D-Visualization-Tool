@@ -97,7 +97,7 @@ window.addEventListener('vr controller connected', function(event) {
  */
 
 
-var movementSpeedCoeff = 0.3;
+var movementSpeedCoeff = 0.1;
 function initializeMovementControls(){
   // Example event listener for button press/touch/near-touch
   // Look at VRController.js:956 for how to define other events
@@ -128,8 +128,14 @@ function updateMovementControls(){
     // Just a quick test
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-    rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
-    rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
+
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta));
+      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta));
+
+      //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
+      //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
     }
   }
 

@@ -97,7 +97,8 @@ function pointSelectionUpdate() {
     direction.applyMatrix4(matrix);
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
-    pointSelectionRaycasterR.set(selectionControllerR.position, direction);
+    pointSelectionRaycasterR.set(selectionControllerR.position, direction); //<------------
+    rig.add(pointSelectionRaycasterR);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
 
     //console.log(selectionControllerR.getAxis(0));

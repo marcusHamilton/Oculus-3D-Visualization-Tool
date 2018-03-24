@@ -98,8 +98,8 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(selectionControllerR.position, direction);
-    console.log("Controller Position: "+selectionControllerR);
-    console.log("Direction: "+ direction);
+    console.log("Controller Position: "+selectionControllerR.position);
+    console.log("Direction: x: "+ direction.x+" y: "direction.y+" z: "direction.z);
     //rig.add(pointSelectionRaycasterR);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 

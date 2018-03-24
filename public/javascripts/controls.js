@@ -134,8 +134,8 @@ function updateMovementControls(){
 
       camera.getWorldDirection(cameraDirection);
       theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta));
-      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta));
+      rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta))*(-1);
+      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta))*(-1);
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
@@ -178,8 +178,8 @@ function setListeners(){
       event.target.userData.mesh.material.color.setHex(meshColorOn);
       console.log("Right controller trigger press detected, Printing Controller Object");
       guiInputHelper.pressed(true)
-        console.log("Mesh Position: ");
-      console.log(aRightMesh.position);
+        console.log("Camera Direction: ");
+      console.log(cameraDirection);
     });
     handControlR.addEventListener('primary press ended', function (event) {
 

@@ -12,7 +12,7 @@ var XisPressed;
 
 var rotationSpeed = 0.1;
 var cameraDirection = new THREE.Vector3();
-var theta // Angle between x and z
+var theta; // Angle between x and z
 // ~~~~~~~~~~~~~~~ INITIALIZE HAND CONTROLS ~~~~~~~~~~~~~~~~~~~
 /**
  * The following is an event listener for when a hand held controller is connected
@@ -135,8 +135,8 @@ function updateMovementControls(){
 
 
       //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-      rig.translate(handControlL.getAxis(0)*movementSpeedCoeff/*Math.sin(theta)*/, x);
-      rig.translate(handControlL.getAxis(1)*movementSpeedCoeff/*Math.sin(theta)*/, z);
+      rig.translateX(handControlL.getAxis(0)*movementSpeedCoeff/*Math.sin(theta)*/);
+      rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * 1/*Math.sin(theta)*/);
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

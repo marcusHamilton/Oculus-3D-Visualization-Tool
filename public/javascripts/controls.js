@@ -24,14 +24,18 @@ window.addEventListener('vr controller connected', function(event) {
 
   handControlL = scene.getObjectByName("Oculus Touch (Left)");
   handControlR = scene.getObjectByName("Oculus Touch (Right)");
-  if (handControlL != null){
-    console.log("Left hand controller attached to rig");
-    rig.add(handControlL);
-  }
-  if (handControlR != null){
-    console.log("Right hand controller attached to rig");
-    rig.add(handControlR);
-  }
+  console.log("Attaching left controller to rig");
+  rig.add(handControlL);
+  console.log("Attaching right controller to rig");
+  rig.add(handControlR);
+  // if (handControlL != null){
+  //   console.log("Left hand controller attached to rig");
+  //   rig.add(handControlL);
+  //}
+  // if (handControlR != null){
+  //   console.log("Right hand controller attached to rig");
+  //   rig.add(handControlR);
+  // }
 
   //Ensure controllers appear at the right height
   //controller.standingMatrix = renderer.vr.getStandingMatrix();
@@ -112,7 +116,7 @@ function initializeMovementControls(){
 function updateMovementControls(){
   // Check that the left controller is initialize
   if (handControlL){
-    console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
+    //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
     // Just a quick test
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;

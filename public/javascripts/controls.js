@@ -136,7 +136,7 @@ function updateMovementControls(){
 
       theta = Math.atan2(cameraDirection.x, cameraDirection.z);
       rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta))*(-1);
-      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta))*(-1);
+      rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta));
 
       //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
       //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

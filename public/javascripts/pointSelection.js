@@ -24,7 +24,7 @@ var pointSelectionRaycasterR;
 var raycasterLine;
 var isRaycasterLineActive;
 
-var rayRig;
+
 /**
  * Initializes the event listeners for point selection
  */
@@ -102,7 +102,7 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-    pointSelectionRaycasterR.set(handControlR.position, direction);
+    pointSelectionRaycasterR.set(rig.position, direction);
     console.log("Controller Position: ");
     console.log(handControlR.position);
     //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);

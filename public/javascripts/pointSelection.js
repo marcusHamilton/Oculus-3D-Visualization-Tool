@@ -57,7 +57,7 @@ function initializeSelectionControls()
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
     rightMesh = selectionControllerR.getChildByName("C_Mesh");
-    rig.add(rightMesh);
+    //rig.add(rightMesh);
 
     selectionControllerR.addEventListener('A touch began', function(event) {
       isRaycasterLineActive = true;

@@ -125,6 +125,7 @@ function initializeMovementControls(){
  * This gets called in the main update() loop.
  */
 function updateMovementControls(){
+  camera.getWorldDirection(cameraDirection);
   // Check that the left controller is initialize
   if (handControlL){
     //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
@@ -132,7 +133,7 @@ function updateMovementControls(){
     //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
     //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
 
-      camera.getWorldDirection(cameraDirection);
+
       theta = Math.atan2(cameraDirection.x, cameraDirection.z);
       rig.position.x += handControlL.getAxis(0)*(movementSpeedCoeff*Math.sin(theta))*(-1);
       rig.position.z += handControlL.getAxis(1)*(movementSpeedCoeff*Math.cos(theta))*(-1);

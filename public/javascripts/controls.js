@@ -113,14 +113,11 @@ function updateMovementControls(){
   // Check that the left controller is initialized
     console.log("Updating movement Controls");
   if (handControlL){
-    // Check that the dataset has been drawn
-    if (datasetAndAxisLabelGroup){
-      // TODO: Left hand controls go here:
-      // Just a quick test
-      //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
-      //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-      rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff * -1;
-      rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+    // Just a quick test
+    //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
+    //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+    rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff * -1;
+    rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
     }
   }
 

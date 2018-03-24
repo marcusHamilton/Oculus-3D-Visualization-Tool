@@ -81,7 +81,6 @@ function render(timestamp) {
 
   if (enterVR.isPresenting()) {
     vrControls.update();
-    fpVrControls.update(timestamp);
     renderer.render(scene, camera);
     effect.render(scene, camera);
   } else {

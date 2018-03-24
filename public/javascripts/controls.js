@@ -23,8 +23,7 @@ var guiInputHelper
 window.addEventListener('vr controller connected', function(event) {
 
   camera.name = "camera";
-  var aMatrix = new THREE.Matrix4();
-  var aDirection = new THREE.Vector3(0,0,1);
+
 
 //cosnt ZAXIS = new THREE.Vector3(0,0,1);
 //const YAXIS = new THREE.Vector3(0,1,0);
@@ -140,6 +139,9 @@ function initializeMovementControls(){
 
 function updateMovementControls(){
   //camera.getWorldDirection(cameraDirection);
+    var aMatrix = new THREE.Matrix4();
+    var aDirection = new THREE.Vector3(0,0,1);
+
   aMatrix.extractRotation(rig.getObjectByName("camera").matrix);
   aMatrix.extractBasis(aDirection);
   //aMatrix.multiplyVector3(aDirection);

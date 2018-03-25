@@ -154,32 +154,48 @@ function updateMovementControls(){
     //camera.position.copy(rig.position);
     if (handControlR) {
 
-        rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);
+        //rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);
         rig.translateZ(handControlR.getAxis(1) * movementSpeedCoeff);
 
         if(rightGrip){
             rig.translateY(movementSpeedCoeff);
         }
+        if(handControlR.getAxis(0) > 0){
+            turnLeft = true;
+        }
+        if(handControlR.getAxis(0) < 0){
+            turnRight = true;
+        }
+        else if(handControlR.getAxis(0) == 0){
+            turnLeft = false;
+            turnRight = false;
+        }
+        if(turnLeft){
+            rig.rotation.y -= 0.0174533;
+        }
+        if(turnRight){
+            rig.rotation.y += 0.0174533;
+        }
     }
 
     if (handControlL) {
       //var snapAngle = Math.PI/6;
-        if(handControlL.getAxis(0) > 0){
-          turnLeft = true;
-        }
-        if(handControlL.getAxis(0) < 0){
-          turnRight = true;
-        }
-        else if(handControlL.getAxis(0) == 0){
-          turnLeft = false;
-          turnRight = false;
-        }
-        if(turnLeft){
-          rig.rotation.y -= 0.0174533;
-        }
-        if(turnRight){
-          rig.rotation.y += 0.0174533;
-        }
+      //   if(handControlL.getAxis(0) > 0){
+      //     turnLeft = true;
+      //   }
+      //   if(handControlL.getAxis(0) < 0){
+      //     turnRight = true;
+      //   }
+      //   else if(handControlL.getAxis(0) == 0){
+      //     turnLeft = false;
+      //     turnRight = false;
+      //   }
+      //   if(turnLeft){
+      //     rig.rotation.y -= 0.0174533;
+      //   }
+      //   if(turnRight){
+      //     rig.rotation.y += 0.0174533;
+      //   }
         if(leftGrip){
             rig.translateY((-1)*movementSpeedCoeff);
         }

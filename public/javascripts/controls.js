@@ -144,6 +144,7 @@ function updateMovementControls(){
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
         rig.rotation.y -= (0.0174533)*(handControlL.getAxis(0));
+        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
         // if(handControlL.getAxis(0) > 0){
         //   turnLeft = true;
         // }

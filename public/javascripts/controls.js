@@ -150,8 +150,10 @@ function updateMovementControls() {
         // Just a quick test
         //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-        rig.quaternion.setFromUnitVectors(ZAXIS, aDirection)
+        rig.quaternion.setFromUnitVectors(ZAXIS, aDirection);
+        rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * (-1));
+
         console.log("Rig: Quaternion: ")
         console.log(rig.quaternion);
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
@@ -199,9 +201,7 @@ function setListeners() {
 
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
-            guiInputHelper.pressed(true)
-            console.log("Camera Direction: ");
-            console.log(cameraDirection);
+            guiInputHelper.pressed(true);
         });
         handControlR.addEventListener('primary press ended', function (event) {
 

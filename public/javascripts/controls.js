@@ -141,7 +141,7 @@ function updateMovementControls() {
     //camera.getWorldDirection(cameraDirection);
     var ZAXIS = new THREE.Vector3(0,0,1);
     var YAXIS = new THREE.Vector3(0,1,0);
-    var aDirecction = ZAXIS.clone();
+    var aDirection = ZAXIS.clone();
     aDirection.applyQuaternion(camera.quaternion);
     aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
     aDirection.normalize();

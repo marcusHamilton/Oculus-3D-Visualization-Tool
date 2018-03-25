@@ -142,15 +142,16 @@ function updateMovementControls() {
     var ZAXIS = new THREE.Vector3(0,0,1);
     var YAXIS = new THREE.Vector3(0,1,0);
     var aDirection = ZAXIS.clone();
-    aDirection.applyQuaternion(camera.quaternion);
-    aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
-    //aDirection.normalize();
+    camera.position.copy(rig.position)
     if (handControlL) {
         //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
         // Just a quick test
         //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-
+        aDirection.applyQuaternion(camera.quaternion);
+        aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
+        aDirection.normalize();
+        aDirection.x = aDirection *
         rig.quaternion.setFromUnitVectors(ZAXIS, aDirection);
         rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
@@ -202,8 +203,10 @@ function setListeners() {
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
             guiInputHelper.pressed(true);
-            console.log("Rig: Quaternion: ")
+            console.log("Rig: Quaternion: ");
             console.log(rig.quaternion);
+            conole.log("Camera Quaternion: ");
+            console.log(camera.quaternion);
         });
         handControlR.addEventListener('primary press ended', function (event) {
 

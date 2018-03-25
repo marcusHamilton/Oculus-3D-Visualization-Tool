@@ -178,7 +178,7 @@ function updateMovementControls(){
         // Check that the right controller is initialized
     }
     if (handControlR) {
-      var snapAngle = Math.PI/6;
+      //var snapAngle = Math.PI/6;
         if(handControlR.getAxis(0) > 0){
           turnLeft = true;
         }
@@ -190,10 +190,10 @@ function updateMovementControls(){
           turnRight = false;
         }
         if(turnLeft){
-          rig.rotation.y += snapAngle;
+          rig.rotation.y += 0.0174533;
         }
         if(turnRight){
-          rig.rotation.y -= snapAngle;
+          rig.rotation.y -= 0.0174533;
         }
 
     }

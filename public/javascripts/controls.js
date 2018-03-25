@@ -172,16 +172,16 @@ function updateMovementControls() {
 
         //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
         //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
+        / Check that the right controller is initialized
+    if (handControlR) {
+        // TODO: Right hand controls go here
+        var snapAngel = (Math.PI/6);
+        rig.makeRotationY(handControlR.getAxis(0) * movementSpeedCoeff);
+        }
     }
 }
 
-// Check that the right controller is initialized
-if (handControlR) {
-    // TODO: Right hand controls go here
-    var snapAngel = (Math.PI/6);
 
-    rig.makeRotationY(handControlR.getAxis(0) * movementSpeedCoeff);
-}
 
 
 // ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~

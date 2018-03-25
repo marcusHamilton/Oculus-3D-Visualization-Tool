@@ -185,8 +185,9 @@ function setListeners() {
             guiInputHelper.pressed(true);
             console.log("pointSelectionRaycaster: ");
             console.log(pointSelectionRaycasterR);
-            console.log("handControlR: ");
+            console.log("rig: ");
             console.log(handControlR.direction);
+            console.log(reportDisplays());
         });
         handControlR.addEventListener('primary press ended', function (event) {
 
@@ -344,5 +345,28 @@ function setListeners() {
         //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
         //camera.rotation.x += rotationSpeed;
         // }
+    }
+
+    function reportDisplays() {
+        navigator.getVRDisplays().then(function(displays) {
+            console.log(displays.length + ' displays');
+            for(var i = 0; i < displays.length; i++) {
+                var cap = displays[i].capabilities;
+                // cap is a VRDisplayCapabilities object
+                var listItem = document.createElement('li');
+                listItem.innerHTML = '<strong>Display ' + (i+1) + '</strong>'
+                    + '<br>VR Display ID: ' + displays[i].displayId
+                    + '<br>VR Display Name: ' + displays[i].displayName
+                    + '<br>Display can present content: ' + cap.canPresent
+                    + '<br>Display is separate from the computer\'s main display: ' + cap.hasExternalDisplay
+                    + '<br>Display can return position info: ' + cap.hasPosition
+                    + '<br>Display can return orientation info: ' + cap.hasOrientation
+                    + '<br>Display max layers: ' + cap.maxLayers;
+                list.appendChild(listItem);
+            }
+
+            setTimeout(reportGamepads, 1000);
+            // For VR, controllers will only be active after their corresponding headset is active
+        });
     }
 }

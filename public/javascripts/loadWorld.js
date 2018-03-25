@@ -37,8 +37,7 @@ var rig; //Rig to group camera
 camera.name = "camera";
 
 //For controls
-var ZAXIS = new THREE.Vector3(0,0,1);
-var YAXIS = new THREE.Vector3(0,1,0);
+
 
 
 /**

@@ -144,23 +144,7 @@ function updateMovementControls(){
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
         rig.rotation.y -= (0.0174533)*(handControlL.getAxis(0));
-        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
-        // if(handControlL.getAxis(0) > 0){
-        //   turnLeft = true;
-        // }
-        // if(handControlL.getAxis(0) < 0){
-        //   turnRight = true;
-        // }
-        // else if(handControlL.getAxis(0) == 0){
-        //   turnLeft = false;
-        //   turnRight = false;
-        // }
-        // if(turnLeft){
-        //   rig.rotation.y -= 0.0174533;
-        // }
-        // if(turnRight){
-        //   rig.rotation.y += 0.0174533;
-        // }
+
         if(leftGrip){
             rig.translateY((-1)*movementSpeedCoeff);
         }
@@ -199,14 +183,10 @@ function setListeners() {
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
             guiInputHelper.pressed(true);
-            // console.log("Direction x: ");
-            // console.log(aDirection.x);
-            // console.log("Direction y: ");
-            // console.log(aDirection.y);
-            // console.log("Direction z: ");
-            // console.log(aDirection.z);
-            // console.log("Camera Rotation: ");
-            // console.log(camera.rotation);
+            console.log("pointSelectionRaycaster: ");
+            console.log(pointSelectionRaycasterR);
+            console.log("handControlR: ");
+            console.log(handControlR.direction);
         });
         handControlR.addEventListener('primary press ended', function (event) {
 

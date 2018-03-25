@@ -137,7 +137,7 @@ function initializeMovementControls() {
  * This gets called in the main update() loop.
  */
 
-function updateMovementControls() {
+function updateMovementControls(){
     //camera.getWorldDirection(cameraDirection);
     //var ZAXIS = new THREE.Vector3(0,0,1);
     //var YAXIS = new THREE.Vector3(0,1,0);
@@ -173,11 +173,10 @@ function updateMovementControls() {
         //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
         //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
         / Check that the right controller is initialized
+    }
     if (handControlR) {
-        // TODO: Right hand controls go here
-        var snapAngel = (Math.PI/6);
+        var snapAngel = (Math.PI / 6);
         rig.makeRotationY(handControlR.getAxis(0) * movementSpeedCoeff);
-        }
     }
 }
 

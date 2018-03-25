@@ -32,11 +32,6 @@ window.addEventListener('vr controller connected', function (event) {
 
 
 
-
-
-
-//angleQuaternion = new THREE.Quaternion();
-
     controller = event.detail;
     scene.add(controller);
 
@@ -51,15 +46,6 @@ window.addEventListener('vr controller connected', function (event) {
         rig.add(handControlR);
     }
 
-
-    // if (handControlL != null){
-    //   console.log("Left hand controller attached to rig");
-    //   rig.add(handControlL);
-    //}
-    // if (handControlR != null){
-    //   console.log("Right hand controller attached to rig");
-    //   rig.add(handControlR);
-    // }
 
     //Ensure controllers appear at the right height
     //controller.standingMatrix = renderer.vr.getStandingMatrix();
@@ -146,56 +132,33 @@ function initializeMovementControls() {
  */
 
 function updateMovementControls(){
-    //camera.getWorldDirection(cameraDirection);
-    //var ZAXIS = new THREE.Vector3(0,0,1);
-    //var YAXIS = new THREE.Vector3(0,1,0);
-    //var aDirection = ZAXIS.clone();
-    var aDirection = new THREE.Vector3();
-    //camera.position.copy(rig.position);
+
+    //Right controller: Horizontal movement + positive vertical movement
     if (handControlR) {
-
-        //rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);
+        rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);
         rig.translateZ(handControlR.getAxis(1) * movementSpeedCoeff);
-
         if(rightGrip){
             rig.translateY(movementSpeedCoeff);
         }
-        if(handControlR.getAxis(0) > 0){
-            turnLeft = true;
+    }
+    //Left Controller: Rotation + negative vertical movement
+    if (handControlL) {
+        if(handControlL.getAxis(0) > 0){
+          turnLeft = true;
         }
-        if(handControlR.getAxis(0) < 0){
-            turnRight = true;
+        if(handControlL.getAxis(0) < 0){
+          turnRight = true;
         }
-        else if(handControlR.getAxis(0) == 0){
-            turnLeft = false;
-            turnRight = false;
+        else if(handControlL.getAxis(0) == 0){
+          turnLeft = false;
+          turnRight = false;
         }
         if(turnLeft){
-            rig.rotation.y -= 0.0174533;
+          rig.rotation.y -= 0.0174533;
         }
         if(turnRight){
-            rig.rotation.y += 0.0174533;
+          rig.rotation.y += 0.0174533;
         }
-    }
-
-    if (handControlL) {
-      //var snapAngle = Math.PI/6;
-      //   if(handControlL.getAxis(0) > 0){
-      //     turnLeft = true;
-      //   }
-      //   if(handControlL.getAxis(0) < 0){
-      //     turnRight = true;
-      //   }
-      //   else if(handControlL.getAxis(0) == 0){
-      //     turnLeft = false;
-      //     turnRight = false;
-      //   }
-      //   if(turnLeft){
-      //     rig.rotation.y -= 0.0174533;
-      //   }
-      //   if(turnRight){
-      //     rig.rotation.y += 0.0174533;
-      //   }
         if(leftGrip){
             rig.translateY((-1)*movementSpeedCoeff);
         }

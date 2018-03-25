@@ -20,6 +20,9 @@ var theta; // Angle between x and z
 var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper
+
+var turnRight = false;
+var turnLeft = false;
 window.addEventListener('vr controller connected', function (event) {
 
 
@@ -175,8 +178,24 @@ function updateMovementControls(){
         / Check that the right controller is initialized
     }
     if (handControlR) {
-        var snapAngel = (Math.PI / 6);
-        rig.makeRotationY(handControlR.getAxis(0) * movementSpeedCoeff);
+      var snapAngle = Math.PI/6;
+        if(handControlR.getAxis(0) > 0){
+          turnLeft = true;
+        }
+        if(handControlR.getAxis(0) < 0){
+          turnRight = true;
+        }
+        else if(handControlR.getAxis(0) == 0){
+          turnLeft = false;
+          turnRight = false;
+        }
+        if(turnLeft){
+          rig.rotation.y += snapAngle;
+        }
+        if(turnRight){
+          rig.rotation.y -= snapAngle;
+        }
+
     }
 }
 

@@ -155,20 +155,20 @@ function updateMovementControls() {
         //aDirection.x = aDirection *
         //rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
 
-        aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.z)) - ((camera.quaternion.w)*(camera.quaternion.y)));
-        aDirection.z = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
-        aDirection.y = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
+        // aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.z)) - ((camera.quaternion.w)*(camera.quaternion.y)));
+        // aDirection.z = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
+        // aDirection.y = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
+        //
+        // aDirection.normalize();
 
-        aDirection.normalize();
-
-        rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff*aDirection.x);
-        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff*aDirection.z);
+        //rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff*aDirection.x);
+        //rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff*aDirection.z);
 
 
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
         //theta = camera.rotation.y;
-        //rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff * aDirection.x);
-        //rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff * aDirection.z);
+        rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
+        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
 
         //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
         //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
@@ -178,7 +178,7 @@ function updateMovementControls() {
 // Check that the right controller is initialized
 if (handControlR) {
     // TODO: Right hand controls go here
-    //rig.position.x  += handControlR.getAxis(0) * movementSpeedCoeff * -1;
+    rig.rotation.y  += handControlR.getAxis(0) * movementSpeedCoeff * -1;
 }
 
 

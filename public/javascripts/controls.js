@@ -25,8 +25,9 @@ window.addEventListener('vr controller connected', function (event) {
 
 
 
-//cosnt ZAXIS = new THREE.Vector3(0,0,1);
-//const YAXIS = new THREE.Vector3(0,1,0);
+var ZAXIS = new THREE.Vector3(0,0,1);
+var YAXIS = new THREE.Vector3(0,1,0);
+var aDirecction = ZAXIS.clone();
 
 //angleQuaternion = new THREE.Quaternion();
 
@@ -140,24 +141,21 @@ function initializeMovementControls() {
 
 function updateMovementControls() {
     //camera.getWorldDirection(cameraDirection);
-    var aMatrix = new THREE.Matrix4();
-    var aDirection = new THREE.Vector3(0, 0, 1);
-
-    aMatrix.extractRotation(camera.Matrix);
-    aMatrix.extractBasis(aDirection);
-    //aMatrix.multiplyVector3(aDirection);
-    // Check that the left controller is initialize
+    aDirection.applyQuaternion(camera.quaternion);
+    aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
+    aDirection.normalize();
     if (handControlL) {
         //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
         // Just a quick test
         //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-
+        rig.quaternion.setFromUnitVectors(ZAXIS, aDirection)
+        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
 
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
         //theta = camera.rotation.y;
-        rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff * aDirection.x);
-        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff * aDirection.z);
+        //rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff * aDirection.x);
+        //rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff * aDirection.z);
 
         //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
         //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;

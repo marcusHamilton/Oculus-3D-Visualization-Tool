@@ -42,7 +42,7 @@ describe('testing newWorld.js', function(){
       newWorld.setZAxisIndex(3);
       newWorld.setSceneForTesting();
 
-      sceneUserData = [1,2,3,'index', "x", "y", "z",1,1,1,1,2,2,2,2,3,3,3,3,]
+      sceneUserData = [[1,2,3],'index', "x", "y", "z",1,1,1,1,2,2,2,2,3,3,3,3,]
     });
 
     it('should be correct in scene.userData', function(){

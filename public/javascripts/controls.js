@@ -205,7 +205,7 @@ function setListeners() {
             guiInputHelper.pressed(true);
             console.log("Rig: Quaternion: ");
             console.log(rig.quaternion);
-            conole.log("Camera Quaternion: ");
+            console.log("Camera Quaternion: ");
             console.log(camera.quaternion);
         });
         handControlR.addEventListener('primary press ended', function (event) {

@@ -139,24 +139,30 @@ function initializeMovementControls() {
 
 function updateMovementControls() {
     //camera.getWorldDirection(cameraDirection);
-    var ZAXIS = new THREE.Vector3(0,0,1);
-    var YAXIS = new THREE.Vector3(0,1,0);
-    var aDirection = ZAXIS.clone();
-    camera.position.copy(rig.position);
+    //var ZAXIS = new THREE.Vector3(0,0,1);
+    //var YAXIS = new THREE.Vector3(0,1,0);
+    //var aDirection = ZAXIS.clone();
+    var aDirection = new THREE.Vector3();
+    //camera.position.copy(rig.position);
     if (handControlL) {
         //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
         // Just a quick test
         //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
-        aDirection.applyQuaternion(camera.quaternion);
-        aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
-        aDirection.normalize();
+        //aDirection.applyQuaternion(camera.quaternion);
+        //aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
+        //aDirection.normalize();
         //aDirection.x = aDirection *
-        rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
+        //rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
 
+        aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.z)) - ((camera.quaternion.w)*(camera.quaternion.y)));
+        aDirection.y = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
+        aDirection.z = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
 
-        rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
-        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
+        aDirection.normalize();
+
+        rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff*aDirection.x);
+        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff*aDirection.z);
 
 
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);

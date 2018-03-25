@@ -152,9 +152,9 @@ function updateMovementControls() {
         aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
         aDirection.normalize();
         //aDirection.x = aDirection *
-        rig.quaternion.setFromUnitVectors(ZAXIS, aDirection);
-        rig.quaternion.x = camera.quaternion.x;
-        rig.quaternion.z = camera.quaternion.z;
+        rig.rotation.setFromQuaternion(ZAXIS, aDirection);
+        
+
         rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
 

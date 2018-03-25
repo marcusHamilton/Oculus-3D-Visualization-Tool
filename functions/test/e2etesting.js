@@ -60,6 +60,17 @@ var webdriver = require('selenium-webdriver');
 
  driver.get("https://3dvisualizationtool.ml");
 
+ driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
+ var handle = driver.getWindowHandle();
+ //var iterator = handle.iterator();
+ // var WindowHandlerID = iterator.next();
+  driver.switchTo().window(handle);
+ console.log("switch to google log in");
+
+ driver.findElement(By.xpath('//*[@id="identifierId"]')).sendKeys("oculus3dvisualizationtool@gmail.com");
+ driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div/div[1]/div/content/span')).click();
+ driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/form/div[1]/div/div[1]/div/div[1]/input')).sendKeys("osgood371");
+ driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div/content/span')).click();
  // driver.wait(until.elementLocated(By.id("identifierId")), 50000);
  // driver.getCurrentUrl().then(function( url ){
  // console.log(url);
@@ -174,6 +185,18 @@ it("click logo should work", () =>{
              .forBrowser('firefox')
              .build();
          driver.get("https://3dvisualizationtool.ml/dashboard");
+
+         driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
+         var handle = driver.getWindowHandle();
+         //var iterator = handle.iterator();
+         // var WindowHandlerID = iterator.next();
+          driver.switchTo().window(handle);
+          console.log("switch to google log in");
+
+         driver.findElement(By.xpath('//*[@id="identifierId"]')).sendKeys("oculus3dvisualizationtool@gmail.com");
+         driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div/div[1]/div/content/span')).click();
+         driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/form/div[1]/div/div[1]/div/div[1]/input')).sendKeys("osgood371");
+         driver.findElement(By.xpath('/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div/content/span')).click();
      });
 
      /**

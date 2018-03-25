@@ -178,7 +178,9 @@ function updateMovementControls() {
 // Check that the right controller is initialized
 if (handControlR) {
     // TODO: Right hand controls go here
-    rig.rotation.y  += handControlR.getAxis(0) * movementSpeedCoeff * -1;
+    var snapAngel = (Math.PI/6);
+
+    rig.makeRotationY(handControlR.getAxis(0) * movementSpeedCoeff);
 }
 
 

@@ -57,6 +57,8 @@ function initializeSelectionControls()
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
     rightMesh = selectionControllerR.getChildByName("C_Mesh");
+    rig.add(selectionControllerR);
+
     //rig.add(rightMesh);
 
     selectionControllerR.addEventListener('A touch began', function(event) {
@@ -99,7 +101,7 @@ function pointSelectionUpdate() {
   }*/
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
-    //rig.add(selectionControllerR);
+
     matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
     direction.applyMatrix4(matrix);

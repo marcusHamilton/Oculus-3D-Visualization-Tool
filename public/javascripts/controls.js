@@ -19,7 +19,7 @@ var theta; // Angle between x and z
  */
 var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
-var guiInputHelper
+var guiInputHelper;
 
 var turnRight = false;
 var turnLeft = false;
@@ -175,7 +175,7 @@ function updateMovementControls(){
 
         //rig.position.x  += handControlL.getAxis(0) * movementSpeedCoeff;
         //rig.position.z += handControlL.getAxis(1) * movementSpeedCoeff;
-        / Check that the right controller is initialized
+        // Check that the right controller is initialized
     }
     if (handControlR) {
       var snapAngle = Math.PI/6;

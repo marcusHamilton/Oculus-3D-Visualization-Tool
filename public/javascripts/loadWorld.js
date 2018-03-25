@@ -69,8 +69,7 @@ function update(timestamp) {
 
   //Allows point selection to function
 
-
-  updateMovementControls();
+    updateMovementControls();
 
     pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.

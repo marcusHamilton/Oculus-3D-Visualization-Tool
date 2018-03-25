@@ -156,8 +156,8 @@ function updateMovementControls() {
         //rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
 
         aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.z)) - ((camera.quaternion.w)*(camera.quaternion.y)));
-        aDirection.y = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
-        aDirection.z = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
+        aDirection.z = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
+        aDirection.y = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
 
         aDirection.normalize();
 

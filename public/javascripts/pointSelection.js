@@ -100,7 +100,7 @@ function pointSelectionUpdate() {
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
     //rig.add(selectionControllerR);
-    matrix.extractRotation( aRightMesh.matrix );
+    matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
     direction.applyMatrix4(matrix);
     var meshPosition = aRightMesh.getWorldPosition();

@@ -143,25 +143,26 @@ function updateMovementControls(){
     }
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
-        if(handControlL.getAxis(0) > 0){
-          turnLeft = true;
-        }
-        if(handControlL.getAxis(0) < 0){
-          turnRight = true;
-        }
-        else if(handControlL.getAxis(0) == 0){
-          turnLeft = false;
-          turnRight = false;
-        }
-        if(turnLeft){
-          rig.rotation.y -= 0.0174533;
-        }
-        if(turnRight){
-          rig.rotation.y += 0.0174533;
-        }
-        if(leftGrip){
-            rig.translateY((-1)*movementSpeedCoeff);
-        }
+        rig.rotation.y = rig.rotation.y*(handControlL.getAxis(0));
+        // if(handControlL.getAxis(0) > 0){
+        //   turnLeft = true;
+        // }
+        // if(handControlL.getAxis(0) < 0){
+        //   turnRight = true;
+        // }
+        // else if(handControlL.getAxis(0) == 0){
+        //   turnLeft = false;
+        //   turnRight = false;
+        // }
+        // if(turnLeft){
+        //   rig.rotation.y -= 0.0174533;
+        // }
+        // if(turnRight){
+        //   rig.rotation.y += 0.0174533;
+        // }
+        // if(leftGrip){
+        //     rig.translateY((-1)*movementSpeedCoeff);
+        // }
     }
 }
 

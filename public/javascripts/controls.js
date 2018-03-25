@@ -155,9 +155,9 @@ function updateMovementControls() {
         //aDirection.x = aDirection *
         //rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
 
-        aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.z)) - ((camera.quaternion.w)*(camera.quaternion.y)));
-        aDirection.z = (2)*(((camera.quaternion.y)*(camera.quaternion.z)) + ((camera.quaternion.w)*(camera.quaternion.x)));
-        aDirection.y = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.y)*(camera.quaternion.y)));
+        aDirection.x = (2)*(((camera.quaternion.x)*(camera.quaternion.y)) - ((camera.quaternion.w)*(camera.quaternion.z)));
+        aDirection.z = (2)*(((camera.quaternion.z)*(camera.quaternion.y)) + ((camera.quaternion.w)*(camera.quaternion.x)));
+        aDirection.y = 1 - (2)*(((camera.quaternion.x)*(camera.quaternion.x)) + ((camera.quaternion.z)*(camera.quaternion.z)));
 
         aDirection.normalize();
 
@@ -211,12 +211,12 @@ function setListeners() {
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
             guiInputHelper.pressed(true);
-            console.log("Rig: Quaternion: ");
-            console.log(rig.quaternion);
-            console.log("Camera Quaternion: ");
-            console.log(camera.quaternion);
-            console.log("Rig Rotation: ");
-            console.log(rig.rotation);
+            console.log("Direction x: ");
+            console.log(aDirection.x);
+            console.log("Direction y: ");
+            console.log(aDirection.y);
+            console.log("Direction z: ");
+            console.log(aDirection.z);
             console.log("Camera Rotation: ");
             console.log(camera.rotation);
         });

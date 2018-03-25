@@ -150,9 +150,10 @@ function updateMovementControls() {
         // Just a quick test
         //datasetAndAxisLabelGroup.position.x += handControlL.getAxis(0) * movementSpeedCoeff * -1;
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
+
         rig.quaternion.setFromUnitVectors(ZAXIS, aDirection);
         rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
-        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * (-1));
+        rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
 
 
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);

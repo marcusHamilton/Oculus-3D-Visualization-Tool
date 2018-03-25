@@ -142,7 +142,7 @@ function updateMovementControls() {
     var ZAXIS = new THREE.Vector3(0,0,1);
     var YAXIS = new THREE.Vector3(0,1,0);
     var aDirection = ZAXIS.clone();
-    camera.position.copy(rig.position)
+    camera.position.copy(rig.position);
     if (handControlL) {
         //console.log("Left controler ACTIVATE!!!!!!!!!!!!!");
         // Just a quick test
@@ -152,8 +152,8 @@ function updateMovementControls() {
         aDirection.sub(YAXIS.clone().multiplyScalar(aDirection.dot(YAXIS)));
         aDirection.normalize();
         //aDirection.x = aDirection *
-        rig.rotation.setFromQuaternion(ZAXIS, aDirection);
-        
+        rig.quaternion.setFromQuaternion(ZAXIS, aDirection);
+
 
         rig.translateX(handControlL.getAxis(0)* movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff);
@@ -209,6 +209,10 @@ function setListeners() {
             console.log(rig.quaternion);
             console.log("Camera Quaternion: ");
             console.log(camera.quaternion);
+            console.log("Rig Rotation: ";
+            console.log(rig.rotation);
+            console.log("Camera Rotation: ");
+            console.log(camera.rotation);
         });
         handControlR.addEventListener('primary press ended', function (event) {
 

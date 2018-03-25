@@ -215,7 +215,7 @@ function setListeners() {
             console.log(rig.quaternion);
             console.log("Camera Quaternion: ");
             console.log(camera.quaternion);
-            console.log("Rig Rotation: ";
+            console.log("Rig Rotation: ");
             console.log(rig.rotation);
             console.log("Camera Rotation: ");
             console.log(camera.rotation);

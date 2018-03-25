@@ -143,7 +143,7 @@ function updateMovementControls(){
     }
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
-        rig.rotation.y = rig.rotation.y*(handControlL.getAxis(0));
+        rig.rotation.y += (0.0174533)*(handControlL.getAxis(0));
         // if(handControlL.getAxis(0) > 0){
         //   turnLeft = true;
         // }
@@ -160,9 +160,9 @@ function updateMovementControls(){
         // if(turnRight){
         //   rig.rotation.y += 0.0174533;
         // }
-        // if(leftGrip){
-        //     rig.translateY((-1)*movementSpeedCoeff);
-        // }
+        if(leftGrip){
+            rig.translateY((-1)*movementSpeedCoeff);
+        }
     }
 }
 

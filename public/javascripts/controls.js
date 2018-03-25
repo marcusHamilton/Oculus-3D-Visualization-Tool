@@ -152,7 +152,8 @@ function updateMovementControls() {
         //datasetAndAxisLabelGroup.position.z += handControlL.getAxis(1) * movementSpeedCoeff * -1;
         rig.quaternion.setFromUnitVectors(ZAXIS, aDirection)
         rig.translateZ(handControlL.getAxis(1)*movementSpeedCoeff * (-1));
-        console.log("Rig: Quaternion: " + rig.quaternion);
+        console.log("Rig: Quaternion: ")
+        console.log(rig.quaternion);
         //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
         //theta = camera.rotation.y;
         //rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff * aDirection.x);

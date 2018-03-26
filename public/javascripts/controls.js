@@ -183,12 +183,12 @@ function setListeners() {
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
             guiInputHelper.pressed(true);
-            var testVector = new THREE.Vector3(0,0,1);
-            var aMatrix = new THREE.Matrix4();
-            aMatrix.extractRotation(handControlR.matrix);
-            testVector.multiplyScalar(-1);
-            console.log("Direction of Controllers");
-            console.log(testVector);
+            // var testVector = new THREE.Vector3(0,0,1);
+            // var aMatrix = new THREE.Matrix4();
+            // aMatrix.extractRotation(handControlR.matrix);
+            // testVector.multiplyScalar(-1);
+            // console.log("Direction of Controllers");
+            // console.log(testVector);
 
         });
         handControlR.addEventListener('primary press ended', function (event) {

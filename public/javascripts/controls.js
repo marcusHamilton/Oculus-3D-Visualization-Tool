@@ -145,7 +145,7 @@ function updateMovementControls(){
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
         rig.rotation.y -= (0.0174533)*(handControlL.getAxis(0));
-        rotationVector = new THREE.Vector3(0,(0.0174533)*(handControlL.getAxis(0)),0);
+        //rotationVector = new THREE.Vector3(0,(0.0174533)*(handControlL.getAxis(0)),0);
         //rotationVector.y -= (0.0174533)*(handControlL.getAxis(0));
         //pointSelectionRaycasterR.set(aRightMesh,rotationVector);
 

@@ -27,7 +27,7 @@ var turnLeft = false;
 var rightGrip;
 var leftGrip;
 
-var rotationVector = new THREE.Vector3();
+rotationVector = new THREE.Vector3();
 
 window.addEventListener('vr controller connected', function (event) {
 

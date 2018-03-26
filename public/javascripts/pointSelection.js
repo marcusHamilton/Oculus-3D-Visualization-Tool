@@ -104,15 +104,19 @@ function pointSelectionUpdate() {
 
     matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
+
     direction.applyMatrix4(matrix);
     var meshPosition = aRightMesh.getWorldPosition();
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
+
     //selectionControllerR.position = handControlR.position;
     aRightMesh.updateMatrixWorld();
-    localMatrix = new THREE.Matrix4().set(aRightMesh.matrixWorld);
+    localMatrix = new THREE.Matrix4().getInverse(aRightMesh.matrixWorld);
     direction.applyMatrix4(localMatrix);
-    //direction.multiplyScalar(-1);
+      console.log("Direction Matrix: ");
+      console.log(Direction);
+
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);

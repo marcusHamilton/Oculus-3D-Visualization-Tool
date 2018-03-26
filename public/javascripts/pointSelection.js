@@ -120,7 +120,7 @@ function pointSelectionUpdate() {
     // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
-    rotVector = direction.angleTo(rig.getWorldDirection)
+    rotVector = rig.getWorldDirection.angleTo(direction);
     direction.rotation.y += rotVector;
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");

@@ -27,6 +27,7 @@ var turnLeft = false;
 var rightGrip;
 var leftGrip;
 
+var rotationVector = new THREE.Vector3();
 
 window.addEventListener('vr controller connected', function (event) {
 
@@ -144,6 +145,9 @@ function updateMovementControls(){
     //Left Controller: Rotation + negative vertical movement
     if (handControlL) {
         rig.rotation.y -= (0.0174533)*(handControlL.getAxis(0));
+        rotationVector = pointSelectionRaycasterR.direction;
+        rotationVector.y -= (0.0174533)*(handControlL.getAxis(0));
+        pointSelectionRaycasterR.set(aRightMesh,rotationVector);
 
         if(leftGrip){
             rig.translateY((-1)*movementSpeedCoeff);

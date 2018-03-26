@@ -108,6 +108,7 @@ function pointSelectionUpdate() {
     var meshPosition = aRightMesh.getWorldPosition();
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
+    direction.add(rotationVector);
     //selectionControllerR.position = handControlR.position;
     // rightMesh.updateMatrixWorld();
     // localMatrix = new THREE.Matrix4().getInverse(rightMesh.matrixWorld);

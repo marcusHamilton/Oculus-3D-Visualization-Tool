@@ -109,9 +109,9 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-    rig.updateMatrixWorld();
-    localMatrix = new THREE.Matrix4().getInverse(rig.matrixWorld);
-    direction.applyMatrix4(localMatrix);
+    // rightMesh.updateMatrixWorld();
+    // localMatrix = new THREE.Matrix4().getInverse(rightMesh.matrixWorld);
+    // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
 

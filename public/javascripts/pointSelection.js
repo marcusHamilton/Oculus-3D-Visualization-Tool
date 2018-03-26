@@ -115,7 +115,7 @@ function pointSelectionUpdate() {
     localMatrix = new THREE.Matrix4().getInverse(aRightMesh.matrixWorld);
     direction.applyMatrix4(localMatrix);
       console.log("Direction Matrix: ");
-      console.log(Direction);
+      console.log(direction);
 
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");

@@ -110,9 +110,9 @@ function pointSelectionUpdate() {
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
     aRightMesh.updateMatrixWorld();
-    localMatrix = new THREE.Matrix4().getInverse(aRightMesh.matrixWorld);
+    localMatrix = new THREE.Matrix4(aRightMesh.matrixWorld);
     direction.applyMatrix4(localMatrix);
-    //direction.multiplyScalar(-1);
+    direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);

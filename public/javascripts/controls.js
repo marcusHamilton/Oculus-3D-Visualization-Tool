@@ -27,7 +27,7 @@ var turnLeft = false;
 var rightGrip;
 var leftGrip;
 
-
+var rotAngle;
 
 window.addEventListener('vr controller connected', function (event) {
 
@@ -133,7 +133,7 @@ function initializeMovementControls() {
  */
 
 function updateMovementControls(){
-
+    rotAngle = Math.atan2(rig.getWorldDirection.z, rig.getWorldDirection.x);
     //Right controller: Horizontal movement + positive vertical movement
     if (handControlR) {
         rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);

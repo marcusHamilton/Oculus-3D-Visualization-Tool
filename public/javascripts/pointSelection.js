@@ -25,6 +25,7 @@ var raycasterLine;
 var isRaycasterLineActive;
 
 
+
 /**
  * Initializes the event listeners for point selection
  */
@@ -99,6 +100,10 @@ function pointSelectionUpdate() {
   /*if (selectionControllerL){
     pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
   }*/
+
+
+
+
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
 
@@ -115,7 +120,7 @@ function pointSelectionUpdate() {
     // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
-
+    direction.add(rig.getWorldDirection.y);
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);

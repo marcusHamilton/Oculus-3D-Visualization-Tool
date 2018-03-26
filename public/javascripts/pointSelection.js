@@ -58,7 +58,6 @@ function initializeSelectionControls()
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
     rightMesh = selectionControllerR.getChildByName("C_Mesh");
     rig.add(selectionControllerR);
-    rig.add(pointSelectionRaycasterR);
 
     //rig.add(rightMesh);
 
@@ -105,13 +104,15 @@ function pointSelectionUpdate() {
 
     matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
-    //rig.add(direction);
     direction.applyMatrix4(matrix);
     var meshPosition = aRightMesh.getWorldPosition();
     //matrix.multiplyVector3( direction );
     direction.multiplyScalar(-1);
     //selectionControllerR.position = handControlR.position;
-
+    rig.updateMatrixWorld();
+    localMatrix = new THREE.Matrix4().getInvers(rig.matrixWorld);
+    direction.applyMatrix4(localMatrix);
+    direction.multiplyScalar(-1);
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);

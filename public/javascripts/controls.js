@@ -54,7 +54,8 @@ window.addEventListener('vr controller connected', function(event) {
   receiveShadows(controller);
 
   //  Allow this controller to interact with DAT GUI.
-  guiInputHelper = dat.GUIVR.addInputObject(controller);
+  guiInputHelper = dat.GUIVR.addInputObject(dat.GUIVR.createInput(controller));
+
   scene.add(guiInputHelper);
 
   setListeners();

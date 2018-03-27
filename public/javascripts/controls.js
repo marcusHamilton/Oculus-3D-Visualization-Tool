@@ -135,22 +135,22 @@ function initializeMovementControls() {
 function updateMovementControls(){
     rotAngle = Math.atan2(rig.getWorldDirection.z, rig.getWorldDirection.x);
     //Right controller: Horizontal movement + positive vertical movement
-    if (handControlR) {
-        rig.translateX(handControlR.getAxis(0) * movementSpeedCoeff);
-        rig.translateZ(handControlR.getAxis(1) * movementSpeedCoeff);
+    if (handControlL) {
+        rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
+        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
         if(rightGrip){
             rig.translateY(movementSpeedCoeff);
         }
     }
     //Left Controller: Rotation + negative vertical movement
-    if (handControlL) {
-        rig.rotation.y -= (0.0174533)*(handControlL.getAxis(0));
+    if (handControlR) {
+        rig.rotation.y -= (0.0174533)*(handControlR.getAxis(0));
         //rotationVector = new THREE.Vector3(0,(0.0174533)*(handControlL.getAxis(0)),0);
         //rotationVector.y -= (0.0174533)*(handControlL.getAxis(0));
         //pointSelectionRaycasterR.set(aRightMesh,rotationVector);
 
         if(leftGrip){
-            rig.translateY((-1)*movementSpeedCoeff);
+            rig.translateY((-1)*movementSpeedCoeff*(0.01));
         }
     }
 }

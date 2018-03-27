@@ -138,8 +138,8 @@ function updateMovementControls(){
     if (handControlL) {
         rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
-        if(rightGrip){
-            rig.translateY(movementSpeedCoeff);
+        if(leftGrip){
+            rig.translateY(movementSpeedCoeff*(0.1));
         }
     }
     //Left Controller: Rotation + negative vertical movement
@@ -149,8 +149,8 @@ function updateMovementControls(){
         //rotationVector.y -= (0.0174533)*(handControlL.getAxis(0));
         //pointSelectionRaycasterR.set(aRightMesh,rotationVector);
 
-        if(leftGrip){
-            rig.translateY((-1)*movementSpeedCoeff*(0.01));
+        if(rightGrip){
+            rig.translateY((-1)*movementSpeedCoeff*(0.1));
         }
     }
 }

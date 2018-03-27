@@ -112,7 +112,7 @@ function pointSelectionUpdate() {
     direction.applyMatrix4(matrix);
     var meshPosition = aRightMesh.getWorldPosition();
     //matrix.multiplyVector3( direction );
-      rotVector = direction.angleTo(rigDirection);
+      //rotVector = direction.angleTo(rigDirection);
     direction.multiplyScalar(-1);
     //direction.add(rotationVector);
     //selectionControllerR.position = handControlR.position;
@@ -122,7 +122,7 @@ function pointSelectionUpdate() {
       //console.log("Direction Matrix: ");
       //console.log(direction);
 
-    direction.rotation.y += rotVector;
+    //direction.rotation.y += rotVector;
     pointSelectionRaycasterR.set(meshPosition, direction);
     //console.log("Controller Position: ");
     //console.log(handControlR.position);

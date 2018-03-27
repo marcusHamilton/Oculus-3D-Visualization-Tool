@@ -32,6 +32,10 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+var redraw = {redraw:function(){redrawDataSet(0)},redrawVR:function(){redrawDataSet(1)}}; //function for Redraw button in browser
+var pushAxesToDB = {pushAxesToDB:function(){updateAxisSelectionInDatabase(worldID,selectedAxesJSON)}};
+
+
 /**
  * Called every frame
  */

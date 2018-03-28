@@ -24,7 +24,7 @@ var guiInputHelper;
 var rightGrip;
 var leftGrip;
 
-var directionalArrow = new THREE.Object3D();
+//var directionalArrow = new THREE.Object3D();
 
 window.addEventListener('vr controller connected', function (event) {
 
@@ -73,29 +73,29 @@ window.addEventListener('vr controller connected', function (event) {
     aRightMesh = handControlR.getChildByName("C_Mesh");
 
     //Add Visual for Direction
-    var
-        directionalArrowMaterial = new THREE.MeshStandardMaterial({
-            color: meshColorOff
-        }),
-        directionalArrowMesh = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
-            directionalArrowMaterial
-        ),
-        directionalArrowHandleMesh = new THREE.Mesh(
-            new THREE.BoxGeometry(0.03, 0.1, 0.03),
-            directionalArrowMaterial
-        );
-
-    directionalArrowMaterial.flatShading = true;
-    directionalArrowMesh.rotation.x = -Math.PI / 2;
-    directionalArrowHandleMesh.position.y = -0.05;
-    directionalArrowMesh.add(directionalArrowHandleMesh);
-
-    directionalArrow.add(directionalArrowMesh);
-    //rig.add(directionalArrow);
-
-    castShadows(directionalArrow);
-    receiveShadows(directionalArrow);
+    // var
+    //     directionalArrowMaterial = new THREE.MeshStandardMaterial({
+    //         color: meshColorOff
+    //     }),
+    //     directionalArrowMesh = new THREE.Mesh(
+    //         new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+    //         directionalArrowMaterial
+    //     ),
+    //     directionalArrowHandleMesh = new THREE.Mesh(
+    //         new THREE.BoxGeometry(0.03, 0.1, 0.03),
+    //         directionalArrowMaterial
+    //     );
+    //
+    // directionalArrowMaterial.flatShading = true;
+    // directionalArrowMesh.rotation.x = -Math.PI / 2;
+    // directionalArrowHandleMesh.position.y = -0.05;
+    // directionalArrowMesh.add(directionalArrowHandleMesh);
+    //
+    // directionalArrow.add(directionalArrowMesh);
+    // //rig.add(directionalArrow);
+    //
+    // castShadows(directionalArrow);
+    // receiveShadows(directionalArrow);
 
     castShadows(controller);
     receiveShadows(controller);
@@ -301,11 +301,11 @@ function setListeners() {
         }
         //Touch right thumbstick to show directional arrow
         if (handControlL && handControlL != null){
-            selectionControllerR.addEventListener('left thumbstick touch began', function(event) {
-                rig.add(directionalArrow);
+            selectionControllerR.addEventListener('thumbstick touch began', function(event) {
+                //rig.add(directionalArrow);
             });
-            selectionControllerR.addEventListener('left thumbstick touch ended', function(event) {
-                rig.remove(directionalArrow);
+            selectionControllerR.addEventListener('thumbstick touch ended', function(event) {
+                //rig.remove(directionalArrow);
             });
         }
     }

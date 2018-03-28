@@ -150,7 +150,7 @@ function updateMovementControls(){
         //pointSelectionRaycasterR.set(aRightMesh,rotationVector);
 
         if(rightGrip){
-            rig.translateY((-1)*movementSpeedCoeff*(0.1));
+            rig.translateY((-1)*movementSpeedCoeff*(0.5));
         }
     }
 }
@@ -220,6 +220,7 @@ function setListeners() {
     if (handControlR) {
         handControlR.addEventListener('A press began', function (event) {
             AisPressed = true;
+            console.log("A Pressed");
             if (intersects) {
                 selectPoint(intersects.index);
             }

@@ -63,6 +63,7 @@ function initializeSelectionControls()
     //rig.add(rightMesh);
 
     selectionControllerR.addEventListener('A touch began', function(event) {
+        console.log("A Touched");
       isRaycasterLineActive = true;
     });
     selectionControllerR.addEventListener('A touch ended', function(event) {

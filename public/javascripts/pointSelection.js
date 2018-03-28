@@ -115,6 +115,7 @@ function pointSelectionUpdate() {
     //matrix.multiplyVector3( direction );
       //rotVector = direction.angleTo(rigDirection);
     direction.multiplyScalar(-1);
+    direction.transfromDirection(rig.matrix)
     //direction.add(rotationVector);
     //selectionControllerR.position = handControlR.position;
     // rightMesh.updateMatrixWorld();

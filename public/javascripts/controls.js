@@ -16,7 +16,6 @@ var XisPressed;
  */
 var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
-var guiInputHelper
 var guiInputHelper;
 window.addEventListener('vr controller connected', function(event) {
 

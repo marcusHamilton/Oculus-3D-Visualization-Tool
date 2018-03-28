@@ -172,11 +172,8 @@ function Manager() {
     VRGui();
     // BRGui(); May break things dont uncomment
 
-    
+    //Uncomment if you need to use mouse as input for GUI in VR
     // dat.GUIVR.enableMouse(camera,renderer);
-    
-    //Shows the gamepads connected to the browser window
-    console.log(window.navigator.getGamepads());
 
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);

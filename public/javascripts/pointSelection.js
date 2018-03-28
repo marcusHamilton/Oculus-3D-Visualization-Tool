@@ -107,7 +107,7 @@ function pointSelectionUpdate() {
 
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
-    //Find Rotation of controllwe
+    //Find Rotation of controller
     matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
     //Apply rotation to the raycaster direction

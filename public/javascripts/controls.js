@@ -211,21 +211,21 @@ function setListeners() {
     }
     //On controller removal
     // LEFT CONTROLLER
-    if (handControlL && handControlL != null) {
+    if (handControlL != null) {
         handControlL.addEventListener('disconnected', function (event) {
 
             handControlL.parent.remove(controller)
         });
     }
     // RIGHT CONTROLLER
-    if (handControlR && handControlR != null) {
+    if (handControlR != null) {
         handControlR.addEventListener('disconnected', function (event) {
 
             handControlR.parent.remove(controller)
         });
     }
     //Press 'A' (Right Controller)(select/deselect a point)
-    if (handControlR && handControlR != null) {
+    if (handControlR != null) {
         handControlR.addEventListener('A press began', function (event) {
             AisPressed = true;
             console.log("A Pressed");
@@ -241,7 +241,7 @@ function setListeners() {
         });
     }
     //Press 'B' (Right Controller) to hide a point
-    if (handControlR && handControlR != null) {
+    if (handControlR != null) {
         handControlR.addEventListener('B press began', function (event) {
             if (intersects) {
                 hidePoint(intersects.index);
@@ -255,7 +255,7 @@ function setListeners() {
         });
     }
     //Press "grip" (Right Controller) to move in positive vertical direction
-    if (handControlR && handControlR != null) {
+    if (handControlR != null) {
         handControlR.addEventListener('grip press began', function (event) {
             rightGrip = true;
         });
@@ -264,7 +264,7 @@ function setListeners() {
         });
     }
     //Press "grip" (left controller) to move in negative vertical direction
-    if (handControlL && handControlL != null) {
+    if (handControlL != null) {
         handControlL.addEventListener('grip press began', function (event) {
             leftGrip = true;
         });
@@ -273,7 +273,7 @@ function setListeners() {
         });
 
         //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
-        if (handControlL && handControlL != null) {
+        if (handControlL != null) {
             handControlL.addEventListener('X press began', function (event) {
                 XisPressed = true;
             });
@@ -282,7 +282,7 @@ function setListeners() {
             });
         }
         //Hold 'B' and 'Y' hide/unhide all
-        if (handControlL && handControlL != null) {
+        if (handControlL != null) {
             handControlL.addEventListener('Y press began', function (event) {
 
             });
@@ -291,7 +291,7 @@ function setListeners() {
             });
         }
         //'Click right thumbstick' to invert selection.
-        if (handControlR && handControlR != null) {
+        if (handControlR != null) {
             handControlR.addEventListener('thumbstick press began', function (event) {
                 invertSelection();
             });
@@ -300,7 +300,7 @@ function setListeners() {
             });
         }
         //Touch right thumbstick to show directional arrow
-        if (handControlL && handControlL != null){
+        if (handControlL != null){
             selectionControllerR.addEventListener('thumbstick touch began', function(event) {
                 //rig.add(directionalArrow);
             });

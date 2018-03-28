@@ -239,12 +239,9 @@ function onAKeyPress(event){
   var translationSpeed = 0.1;
   var rotationSpeed = 0.1;
   var cameraDirection = new THREE.Vector3();
-  var theta // Angle between x and z
   var inverseTheta
   var gamma // Angle between x and y
   var theta; // Angle between x and z
-  var inverseTheta;
-  var gamma; // Angle between x and y
   //A == 65 Left
   if(keyCode == 65){
     camera.position.z -= translationSpeed;

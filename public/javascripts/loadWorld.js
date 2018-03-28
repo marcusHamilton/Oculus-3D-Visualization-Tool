@@ -30,6 +30,8 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
+var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+
 /**
  * Called every frame
  */
@@ -174,8 +176,9 @@ function Manager() {
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
+
     //Center the non-VR camera on the data and back a bit
-    camera.position.set(0,0,0);
+    camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
     onAxisDatabaseChange(worldID);
 
@@ -435,8 +438,18 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
 
+  var lightSphereMat = new THREE.MeshBasicMaterial({color:new THREE.Color(1,1,1)}); 
+  var lightSphereGeo = new THREE.SphereGeometry(10,23,23); 
+  var sphereMesh = new THREE.Mesh(
+	lightSphereGeo,
+	lightSphereMat
+);
+
+ // var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  scene.add(light0);
   scene.add(VRGui);
   drawAxisLabels();
+  light0.add(sphereMesh);
   scene.add(datasetAndAxisLabelGroup);
 }
 

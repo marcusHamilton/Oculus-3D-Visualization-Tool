@@ -122,7 +122,7 @@ function pointSelectionUpdate() {
     // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
-    //direction.y += rigDirection.y;
+    direction.y += rigDirection.y;
     pointSelectionRaycasterR.set(meshPosition, direction);
 
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);

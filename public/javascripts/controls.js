@@ -160,16 +160,14 @@ function setListeners(){
   if (handControlL) {
     handControlL.addEventListener('disconnected', function (event) {
 
-      handControlL.parent.remove(controller)
-      handControlL.parent.remove(handControlR)
+      handControlL.parent.remove(handControlR);
     });
   }
   // RIGHT CONTROLLER
   if (handControlR) {
     handControlR.addEventListener('disconnected', function (event) {
 
-      handControlR.parent.remove(controller)
-      handControlR.parent.remove(handControlL)
+      handControlR.parent.remove(handControlL);
     });
   }
   //Press 'A' (Right Controller)(select/deselect a point)

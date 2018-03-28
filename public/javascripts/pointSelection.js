@@ -174,7 +174,7 @@ function pointSelectionUpdate() {
     }
   }
 
-    scene.remove ( raycasterLine );
+   // scene.remove ( raycasterLine );
 
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;

@@ -182,7 +182,7 @@ function pointSelectionUpdate() {
 
 
 
-  scene.remove ( raycasterLine );
+
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;
     if (intersects){
@@ -197,6 +197,7 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
+    scene.remove ( raycasterLine );
 
 }
 

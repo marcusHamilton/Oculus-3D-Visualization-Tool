@@ -16,7 +16,7 @@ var XisPressed;
  */
 var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
-var guiInputHelper
+var guiInputHelper;
 window.addEventListener('vr controller connected', function(event) {
 
   controller = event.detail;
@@ -160,14 +160,14 @@ function setListeners(){
   if (handControlL) {
     handControlL.addEventListener('disconnected', function (event) {
 
-      handControlL.parent.remove(controller)
+      handControlL.parent.remove(handControlR);
     });
   }
   // RIGHT CONTROLLER
   if (handControlR) {
     handControlR.addEventListener('disconnected', function (event) {
 
-      handControlR.parent.remove(controller)
+      handControlR.parent.remove(handControlL);
     });
   }
   //Press 'A' (Right Controller)(select/deselect a point)
@@ -236,9 +236,9 @@ function onAKeyPress(event){
   var translationSpeed = 0.1;
   var rotationSpeed = 0.1;
   var cameraDirection = new THREE.Vector3();
-  var theta // Angle between x and z
   var inverseTheta
   var gamma // Angle between x and y
+  var theta; // Angle between x and z
   //A == 65 Left
   if(keyCode == 65){
     camera.position.z -= translationSpeed;

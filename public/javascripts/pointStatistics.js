@@ -1,7 +1,7 @@
 /**
  * Contains everything to do with statistical analysis of points within a world.
  *
- * Most functions are simple helpers that will call stats-lite library functions without having to directly use
+ * Most functions are simple wrappers that will call stats-lite library functions without having to directly use
  * the library.
  */
 

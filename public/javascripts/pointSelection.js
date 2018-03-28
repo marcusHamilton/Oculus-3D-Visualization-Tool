@@ -270,7 +270,7 @@ function onClick( event ){
         //hidePoint(intersects.index);
     }
     else {
-        clearSelection();
+        //clearSelection();
         //unhideRecent();
     }
     if (selectedPoints.length > 0){
@@ -465,4 +465,19 @@ function viewHidden(){
         }
     }
     console.log(hiddenPoints);
+}
+
+/**
+ * Helper to make sure on axis change, selected points also persist
+ */
+function recolorSelected(){
+
+    for(var i = 0; i < selectedPoints.length; i++){
+        if(selectedPoints[i] == true){
+            setPointColor(i, new THREE.Color(1,1,1));
+            if(pointsGeometry.getAttribute('isSelected').array[i] === false){
+                pointsGeometry.getAttribute('isSelected').array[i] === true;
+            }
+        }
+    }
 }

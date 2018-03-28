@@ -21,16 +21,12 @@ var meshColorOff = 0xDB3236; //  Red.
 var meshColorOn = 0xF4C20D; //  Yellow.
 var guiInputHelper;
 
-var turnRight = false;
-var turnLeft = false;
-
 var rightGrip;
 var leftGrip;
 
-var rotAngle;
+var directionalArrow;
 
 window.addEventListener('vr controller connected', function (event) {
-
 
 
     controller = event.detail;
@@ -47,14 +43,12 @@ window.addEventListener('vr controller connected', function (event) {
         rig.add(handControlR);
     }
 
-
     //Ensure controllers appear at the right height
     //controller.standingMatrix = renderer.vr.getStandingMatrix();
     controller.head = window.camera;
 
     //Add a visual for the controllers
     var
-
         controllerMaterial = new THREE.MeshStandardMaterial({
             color: meshColorOff
         }),
@@ -78,6 +72,30 @@ window.addEventListener('vr controller connected', function (event) {
 
     aRightMesh = handControlR.getChildByName("C_Mesh");
 
+    //Add Visual for Direction
+    var
+        directionalArrowMaterial = new THREE.MeshStandardMaterial({
+            color: meshColorOff
+        }),
+        directionalArrowMesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+            directionalArrowMaterial
+        ),
+        directionalArrowHandleMesh = new THREE.Mesh(
+            new THREE.BoxGeometry(0.03, 0.1, 0.03),
+            directionalArrowMaterial
+        );
+
+    directionalArrowMaterial.flatShading = true;
+    directionalArrowMesh.rotation.x = -Math.PI / 2;
+    directionalArrowHandleMesh.position.y = -0.05;
+    directionalArrowMesh.add(directionalArrowHandleMesh);
+
+    directionalArrow.add(directionalArrowMesh);
+    //rig.add(directionalArrow);
+
+    castShadows(directionalArrow);
+    receiveShadows(directionalArrow);
 
     castShadows(controller);
     receiveShadows(controller);
@@ -183,12 +201,6 @@ function setListeners() {
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Right controller trigger press detected, Printing Controller Object");
             guiInputHelper.pressed(true);
-            // var testVector = new THREE.Vector3(0,0,1);
-            // var aMatrix = new THREE.Matrix4();
-            // aMatrix.extractRotation(handControlR.matrix);
-            // testVector.multiplyScalar(-1);
-            // console.log("Direction of Controllers");
-            // console.log(testVector);
 
         });
         handControlR.addEventListener('primary press ended', function (event) {
@@ -285,6 +297,15 @@ function setListeners() {
             });
             handControlR.addEventListener('thumbstick press ended', function (event) {
 
+            });
+        }
+        //Touch right thumbstick to show directional arrow
+        if (handControlL && handControlL != null){
+            selectionControllerR.addEventListener('left thumbstick touch began', function(event) {
+                rig.add(directionalArrow);
+            });
+            selectionControllerR.addEventListener('left thumbstick touch ended', function(event) {
+                rig.remove(directionalArrow);
             });
         }
     }

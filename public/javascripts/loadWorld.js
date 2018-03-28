@@ -11,7 +11,6 @@ var effect; //The variable responsible for holding the vreffect
 var vrButton; //Enter vr button seen at start
 var enterVR; //Holds info of whether or not the user is in VR
 var animationDisplay = window; //Holds the HMD (By default is window)
-var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
@@ -47,11 +46,6 @@ function update(timestamp) {
   // var testInputHelper = dat.GUIVR.addInputObject(testObject);
   // console.log(testInputHelper);
   // scene.add(testInputHelper);
-
-
-
-  //torus.rotation.y += 0.002
-  //if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
 
   //Add all updates below here
 
@@ -181,8 +175,8 @@ function Manager() {
     document.addEventListener('keydown', onAKeyPress, false);
     
     //Center the non-VR camera on the data and back a bit
-    camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
-    camera.rotation.y = 270 * Math.PI / 180;
+    camera.position.set(0,0,0);
+    camera.rotation.y = 0 * Math.PI / 180;
     onAxisDatabaseChange(worldID);
 
     //GameLoop must be called last after everything to ensure that
@@ -314,24 +308,6 @@ function setUpControls() {
   receiveShadows = function(obj) {
     applyDown(obj, 'receiveShadow', true)
   };
-
-  //Soooo...... The torus is critical to functionality apparently.
-  //Removing it messes up the lighting in the scene and turns the whole
-  //rendered dataset black.
-  //Arbitrary shape for testing gui settings
-  torus = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
-    new THREE.MeshStandardMaterial({
-      roughness: 0.01,
-      metalness: 0.2
-    })
-  );
-  torus.position.set(-0.25, 1.4, -1.5);
-  torus.castShadow = true;
-  torus.receiveShadow = true;
-  torus.visible = true;
-  scene.add(torus);
-
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR

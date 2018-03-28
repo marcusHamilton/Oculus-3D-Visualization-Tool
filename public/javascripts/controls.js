@@ -292,6 +292,7 @@ function setListeners() {
             });
         }
     }
+}
 
 
 // ~~~~~~~~~~~~~~~ KEYBOARD CONTROLS ~~~~~~~~~~~~~~~~~~~
@@ -355,4 +356,3 @@ function setListeners() {
     }
 
 
-}

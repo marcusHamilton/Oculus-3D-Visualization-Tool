@@ -106,7 +106,6 @@ function pointSelectionUpdate() {
 
 
   if (selectionControllerR) {
-      console.log("Selction ControlR ACTIVATE!!!!!!!!!");
     var matrix = new THREE.Matrix4();
     var rigDirection = rig.getWorldDirection;
     matrix.extractRotation( selectionControllerR.matrix );
@@ -123,13 +122,9 @@ function pointSelectionUpdate() {
     // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
-
     direction.y += rigDirection.y;
     pointSelectionRaycasterR.set(meshPosition, direction);
-    //console.log("Controller Position: ");
-    //console.log(handControlR.position);
-    //console.log("Direction: x: " + direction.x + " y: " + direction.y + " z: " + direction.z);
-    //rig.add(pointSelectionRaycasterR);
+
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 
     //console.log(selectionControllerR.getAxis(0));
@@ -160,7 +155,6 @@ function pointSelectionUpdate() {
 
 
 
-
   }
   else {
 
@@ -180,8 +174,7 @@ function pointSelectionUpdate() {
     }
   }
 
-
-
+    scene.remove ( raycasterLine );
 
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;
@@ -197,7 +190,6 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-    scene.remove ( raycasterLine );
 
 }
 

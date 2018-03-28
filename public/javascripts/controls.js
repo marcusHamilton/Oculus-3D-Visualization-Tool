@@ -24,7 +24,7 @@ var guiInputHelper;
 var rightGrip;
 var leftGrip;
 
-var directionalArrow;
+var directionalArrow = new THREE.Object3D();
 
 window.addEventListener('vr controller connected', function (event) {
 

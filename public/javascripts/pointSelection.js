@@ -107,28 +107,20 @@ function pointSelectionUpdate() {
 
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
-    var rigDirection = rig.getWorldDirection;
+    //Find Rotation of controllwe
     matrix.extractRotation( selectionControllerR.matrix );
     var direction = new THREE.Vector3( 0, 0, 1 );
+    //Apply rotation to the raycaster direction
     direction.applyMatrix4(matrix);
+    //Get controller world position
     var meshPosition = aRightMesh.getWorldPosition();
-    //matrix.multiplyVector3( direction );
-      //rotVector = direction.angleTo(rigDirection);
     direction.multiplyScalar(-1);
-    direction.transformDirection(rig.matrix)
-    //direction.add(rotationVector);
-    //selectionControllerR.position = handControlR.position;
-    // rightMesh.updateMatrixWorld();
-    // localMatrix = new THREE.Matrix4().getInverse(rightMesh.matrixWorld);
-    // direction.applyMatrix4(localMatrix);
-      //console.log("Direction Matrix: ");
-      //console.log(direction);
-    //direction.y += rigDirection.y;
+    //Apply rotation from rig
+    direction.transformDirection(rig.matrix);
     pointSelectionRaycasterR.set(meshPosition, direction);
-
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 
-    //console.log(selectionControllerR.getAxis(0));
+
   }
   // If no controllers are present, revert to mouse/camera selection.
   if (selectionControllerL == null && selectionControllerR == null) {

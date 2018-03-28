@@ -122,25 +122,22 @@ function pointSelectionUpdate() {
     // direction.applyMatrix4(localMatrix);
       //console.log("Direction Matrix: ");
       //console.log(direction);
-    direction.y += rigDirection.y;
+    //direction.y += rigDirection.y;
     pointSelectionRaycasterR.set(meshPosition, direction);
 
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 
     //console.log(selectionControllerR.getAxis(0));
   }
-
   // If no controllers are present, revert to mouse/camera selection.
   if (selectionControllerL == null && selectionControllerR == null) {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
     intersects = pointSelectionRaycaster.intersectObject(pointsSystem);
   }
 
-
   if (intersects != null) {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
-
   // Reset point size when not moused over
   setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;
@@ -152,9 +149,6 @@ function pointSelectionUpdate() {
 
       }
       mousedOverPoint = intersects.index;
-
-
-
   }
   else {
 
@@ -174,7 +168,7 @@ function pointSelectionUpdate() {
     }
   }
 
-   // scene.remove ( raycasterLine );
+   scene.remove ( raycasterLine );
 
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;

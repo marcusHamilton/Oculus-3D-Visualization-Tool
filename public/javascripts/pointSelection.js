@@ -106,6 +106,7 @@ function pointSelectionUpdate() {
 
 
   if (selectionControllerR) {
+      console.log("Selction ControlR ACTIVATE!!!!!!!!!");
     var matrix = new THREE.Matrix4();
     var rigDirection = rig.getWorldDirection;
     matrix.extractRotation( selectionControllerR.matrix );
@@ -191,6 +192,7 @@ function pointSelectionUpdate() {
       lineLength = 1000000;
     }
     if (isRaycasterLineActive) {
+        console.log("raycasterline is active");
       raycasterLine = new THREE.ArrowHelper(pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff, 0, 0);
       scene.add(raycasterLine);
     }

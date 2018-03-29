@@ -438,18 +438,12 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
 
-  var lightSphereMat = new THREE.MeshBasicMaterial({color:new THREE.Color(1,1,1)}); 
-  var lightSphereGeo = new THREE.SphereGeometry(10,23,23); 
-  var sphereMesh = new THREE.Mesh(
-	lightSphereGeo,
-	lightSphereMat
-);
-
  // var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
+  scene.add(controllerMesh);
+  // scene.add(controller.userData.mesh);
   drawAxisLabels();
-  light0.add(sphereMesh);
   scene.add(datasetAndAxisLabelGroup);
 }
 

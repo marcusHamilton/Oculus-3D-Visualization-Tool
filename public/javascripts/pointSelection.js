@@ -132,20 +132,20 @@ function pointSelectionUpdate() {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
   // Reset point size when not moused over
-  setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
       if(pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
-          setPointScale(intersects.index, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+          setPointScale(intersects.index, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
       }
       mousedOverPoint = intersects.index;
   }
   else {
 
-    setPointScale(mousedOverPoint, plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+    setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
   // Press 'A' and 'X' is select/deselect all points.
@@ -200,7 +200,7 @@ function selectPoint(pointIndex)
       pointsGeometry.getAttribute('position').array[(pointIndex*3)+1],
       pointsGeometry.getAttribute('position').array[(pointIndex*3)+2])));
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
-      plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+      pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
   else{
     selectedPoints.push(pointIndex);
@@ -228,7 +228,7 @@ function clearSelection()
         pointsGeometry.getAttribute('position').array[(i*3)+1],
         pointsGeometry.getAttribute('position').array[(i*3)+2])));
       setPointScale(i, pointsGeometry.getAttribute('size').array[i] =
-        plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+        pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
     }
   }
   pointsGeometry.getAttribute( 'isSelected' ).array = selected;

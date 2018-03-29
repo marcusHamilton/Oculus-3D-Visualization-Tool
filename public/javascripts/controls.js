@@ -371,5 +371,3 @@ function setListeners() {
         //camera.rotation.x += rotationSpeed;
         // }
     }
-
-

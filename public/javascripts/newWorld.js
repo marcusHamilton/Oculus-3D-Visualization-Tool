@@ -40,15 +40,9 @@ function setSceneForTesting(){
   scene.name = "Scene";
   // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
+  var light = new THREE.AmbientLight(0xFFFFFF, 1, 100);
   light.position.set(1, 10, -0.5);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
-  light.shadow.camera.near = 1;
-  light.shadow.camera.far = 12;
   scene.add(light);
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));
 }
 
 function getScene() {
@@ -209,17 +203,8 @@ function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   scene.name = "Scene";
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
-  light.position.set(1, 10, -0.5);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
-  light.shadow.camera.near = 1;
-  light.shadow.camera.far = 12;
-  scene.add(light);
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));
+
   addParsedDataToScene();
 
   //Export the built world

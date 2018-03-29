@@ -181,7 +181,7 @@ function setListeners() {
     //Button events. This is currently just using the primary button
     // Trigger presses print controller debug info.
     // LEFT CONTROLLER
-    if (handControlL && handControlL != null) {
+    if (handControlL != null) {
         handControlL.addEventListener('primary press began', function (event) {
 
             event.target.userData.mesh.material.color.setHex(meshColorOn);
@@ -195,7 +195,7 @@ function setListeners() {
         });
     }
     // RIGHT CONTROLLER
-    if (handControlR && handControlR != null) {
+    if (handControlR != null) {
         handControlR.addEventListener('primary press began', function (event) {
 
             event.target.userData.mesh.material.color.setHex(meshColorOn);

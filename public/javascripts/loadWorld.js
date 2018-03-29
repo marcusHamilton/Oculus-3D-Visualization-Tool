@@ -442,7 +442,7 @@ function drawDataset(xCol, yCol, zCol)
   scene.add(light0);
   scene.add(VRGui);
   // scene.add(controllerMesh);
-  scene.add(controller.userData.mesh);
+  scene.add(controller);
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }

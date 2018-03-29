@@ -69,9 +69,9 @@ window.addEventListener('vr controller connected', function (event) {
 
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
-
-    aRightMesh = handControlR.getChildByName("C_Mesh");
-
+    if (handControlR && handControlR != null) {
+        aRightMesh = handControlR.getChildByName("C_Mesh");
+    }
     //Add Visual for Direction
     // var
     //     directionalArrowMaterial = new THREE.MeshStandardMaterial({

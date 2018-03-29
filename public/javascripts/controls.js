@@ -228,7 +228,7 @@ function setListeners() {
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('A press began', function (event) {
             AisPressed = true;
-            console.log("A Pressed");
+            //console.log("A Pressed");
             if (intersects) {
                 selectPoint(intersects.index);
             }

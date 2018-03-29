@@ -63,7 +63,7 @@ function initializeSelectionControls()
     //rig.add(rightMesh);
 
     selectionControllerR.addEventListener('A touch began', function(event) {
-        console.log("A Touched");
+        //console.log("A Touched");
       isRaycasterLineActive = true;
     });
     selectionControllerR.addEventListener('A touch ended', function(event) {
@@ -172,7 +172,7 @@ function pointSelectionUpdate() {
       lineLength = 1000000;
     }
     if (isRaycasterLineActive) {
-        console.log("raycasterline is active");
+        //console.log("raycasterline is active");
       raycasterLine = new THREE.ArrowHelper(pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff, 0, 0);
       scene.add(raycasterLine);
     }

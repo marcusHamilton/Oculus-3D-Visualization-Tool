@@ -2,7 +2,6 @@
  * Contains all major functions called on the VRWorld.ejs page for loading an
  * existing world from the database and drawing the data visualization.
  */
-
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
@@ -30,13 +29,6 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-var rig; //Rig to group camera
-
-camera.name = "camera";
-
-//For controls
-
-
 
 var light0;
 
@@ -62,15 +54,14 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  // trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
   //Allows point selection to function
+  pointSelectionUpdate();
 
-    updateMovementControls();
-
-    pointSelectionUpdate();
+  updateMovementControls();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -98,12 +89,11 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-function GameLoop(timestamp){
+var GameLoop = function(timestamp) {
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  
-  window.requestAnimationFrame(GameLoop);
+  animationDisplay.requestAnimationFrame(GameLoop);
 };
 
 /**
@@ -188,7 +178,6 @@ function Manager() {
     
 
     //Center the non-VR camera on the data and back a bit
-
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
     onAxisDatabaseChange(worldID);
@@ -285,11 +274,6 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
-  console.log("Initializing rig");
-
-  rig = new THREE.Object3D();
-  rig.add(camera);
-  scene.add(rig);
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);

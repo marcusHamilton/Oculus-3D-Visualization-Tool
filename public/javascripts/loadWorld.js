@@ -441,8 +441,8 @@ function drawDataset(xCol, yCol, zCol)
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  scene.add(controllerMesh);
-  // scene.add(controller.userData.mesh);
+  // scene.add(controllerMesh);
+  scene.add(controller.userData.mesh);
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
 }

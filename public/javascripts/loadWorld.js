@@ -369,13 +369,13 @@ function drawDataset(xCol, yCol, zCol)
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
   var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
 
-  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
+  var texture = new THREE.TextureLoader().load( "images/shader2.png" );
 
   // Configure point material shader
   var pointsMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      color:   { value: new THREE.Color( 0xffffff ) }//,
-      // texture: { value: texture }
+      color:   { value: new THREE.Color( 1,1,1 ) },
+      texture: { value: texture }
     },
     vertexShader: myVertexShader,
     fragmentShader: myFragmentShader

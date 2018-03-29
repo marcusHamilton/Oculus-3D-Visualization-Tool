@@ -301,10 +301,10 @@ function setListeners() {
         }
         //Touch right thumbstick to show directional arrow
         if (handControlR && handControlR != null){
-            selectionControllerR.addEventListener('thumbstick touch began', function(event) {
+            handControlR.addEventListener('thumbstick touch began', function(event) {
                 //rig.add(directionalArrow);
             });
-            selectionControllerR.addEventListener('thumbstick touch ended', function(event) {
+            handControlR.addEventListener('thumbstick touch ended', function(event) {
                 //rig.remove(directionalArrow);
             });
         }

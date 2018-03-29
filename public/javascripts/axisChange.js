@@ -33,9 +33,7 @@ function redrawDataSet(VR){
     console.log("Z-Axis: "+ axisMenu.zAxis + "|Browser selected: " + folder.__controllers[3].__select.selectedIndex);
 
       // console.log("Removing children")
-    while(scene.children.length > 0){
-      scene.remove(scene.children[0]);
-    }
+      scene.remove(scene.findObjectByName("DatasetAxisGroup"));
     
   // console.log("Redrawing Data");
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);

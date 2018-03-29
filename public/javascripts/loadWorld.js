@@ -2,6 +2,7 @@
  * Contains all major functions called on the VRWorld.ejs page for loading an
  * existing world from the database and drawing the data visualization.
  */
+
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
@@ -29,6 +30,13 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
+var rig; //Rig to group camera
+
+camera.name = "camera";
+
+//For controls
+
+
 
 var light0;
 
@@ -54,14 +62,15 @@ function update(timestamp) {
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
   //Allows point selection to function
-  pointSelectionUpdate();
 
-  updateMovementControls();
+    updateMovementControls();
+
+    pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -89,11 +98,12 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-var GameLoop = function(timestamp) {
+function GameLoop(timestamp){
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  animationDisplay.requestAnimationFrame(GameLoop);
+  
+  window.requestAnimationFrame(GameLoop);
 };
 
 /**
@@ -178,10 +188,10 @@ function Manager() {
     
 
     //Center the non-VR camera on the data and back a bit
+
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
-    onAxisDatabaseChange(worldID);
-
+ //   onAxisDatabaseChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -274,6 +284,11 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+  console.log("Initializing rig");
+
+  rig = new THREE.Object3D();
+  rig.add(camera);
+  scene.add(rig);
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -436,17 +451,15 @@ function drawDataset(xCol, yCol, zCol)
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
+  datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  if(controller != null && controller){
-  scene.add(handControlR);
-  scene.add(handControlL);
-}
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);
+  scene.add(rig);
 }
 
 /**
@@ -461,6 +474,7 @@ function drawDataset(xCol, yCol, zCol)
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
   var axisLabelGroup = new THREE.Group();
+  axisLabelGroup.name = "AxisLabelGroup";
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({

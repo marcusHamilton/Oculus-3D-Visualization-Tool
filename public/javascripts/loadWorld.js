@@ -30,7 +30,7 @@ var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 
-var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+var light0;
 
 /**
  * Called every frame
@@ -438,7 +438,7 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
 
- // var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
   scene.add(controllerMesh);

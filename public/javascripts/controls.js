@@ -300,7 +300,7 @@ function setListeners() {
             });
         }
         //Touch right thumbstick to show directional arrow
-        if (handControlL != null){
+        if (handControlR != null){
             selectionControllerR.addEventListener('thumbstick touch began', function(event) {
                 //rig.add(directionalArrow);
             });

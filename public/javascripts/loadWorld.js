@@ -442,8 +442,8 @@ function drawDataset(xCol, yCol, zCol)
   scene.add(light0);
   scene.add(VRGui);
   if(controller != null && controller){
-  scene.add(controllerR);
-  scene.add(controllerL);
+  scene.add(handControlR);
+  scene.add(handControlL);
 }
   drawAxisLabels();
   scene.add(datasetAndAxisLabelGroup);

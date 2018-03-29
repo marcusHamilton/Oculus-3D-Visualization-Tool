@@ -169,7 +169,7 @@ function Manager() {
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR
-    // dat.GUIVR.enableMouse(camera,renderer);
+    dat.GUIVR.enableMouse(camera,renderer);
 
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);

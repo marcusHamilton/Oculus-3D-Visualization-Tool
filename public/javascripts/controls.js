@@ -271,7 +271,7 @@ function setListeners() {
         handControlL.addEventListener('grip press ended', function (event) {
             leftGrip = false;
         });
-
+        }
         //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
         if (handControlL && handControlL != null) {
             handControlL.addEventListener('X press began', function (event) {
@@ -308,7 +308,7 @@ function setListeners() {
                 //rig.remove(directionalArrow);
             });
         }
-    }
+
 }
 
 

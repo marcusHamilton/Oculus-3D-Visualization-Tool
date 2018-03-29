@@ -38,7 +38,7 @@ camera.name = "camera";
 
 
 
-var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+var light0;
 
 /**
  * Called every frame
@@ -179,7 +179,7 @@ function Manager() {
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR
-    // dat.GUIVR.enableMouse(camera,renderer);
+    dat.GUIVR.enableMouse(camera,renderer);
 
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
@@ -454,18 +454,14 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup = new THREE.Group();
   datasetAndAxisLabelGroup.add(pointsSystem);
 
-  var lightSphereMat = new THREE.MeshBasicMaterial({color:new THREE.Color(1,1,1)}); 
-  var lightSphereGeo = new THREE.SphereGeometry(10,23,23); 
-  var sphereMesh = new THREE.Mesh(
-	lightSphereGeo,
-	lightSphereMat
-);
-
- // var light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
+  if(controller != null && controller){
+  scene.add(handControlR);
+  scene.add(handControlL);
+}
   drawAxisLabels();
-  light0.add(sphereMesh);
   scene.add(datasetAndAxisLabelGroup);
 }
 

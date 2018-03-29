@@ -23,6 +23,9 @@ var pointSelectionRaycasterL;
 var pointSelectionRaycasterR;
 var raycasterLine;
 var isRaycasterLineActive;
+
+
+
 /**
  * Initializes the event listeners for point selection
  */
@@ -37,6 +40,7 @@ function initializeSelectionControls()
   selectionControllerL = scene.getObjectByName("Oculus Touch (Left)");
   selectionControllerR = scene.getObjectByName("Oculus Touch (Right)");
 
+
   // We were originally going to allow selection with the left controller,
   // But I think we'll probably limit it to the right control, and have tools
   // on this one.
@@ -45,6 +49,7 @@ function initializeSelectionControls()
     console.log(selectionControllerL);
     pointSelectionRaycasterL = new THREE.Raycaster();
     pointSelectionRaycasterL.params.Points.threshold = selectionThreshold;
+    rig.add(selectionControllerL);
   }
 
   if (selectionControllerR){
@@ -52,7 +57,13 @@ function initializeSelectionControls()
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
+    rightMesh = selectionControllerR.getChildByName("C_Mesh");
+    rig.add(selectionControllerR);
+
+    //rig.add(rightMesh);
+
     selectionControllerR.addEventListener('A touch began', function(event) {
+        //console.log("A Touched");
       isRaycasterLineActive = true;
     });
     selectionControllerR.addEventListener('A touch ended', function(event) {
@@ -83,37 +94,43 @@ function initializeSelectionControls()
  */
 var mousedOverPoint;
 var arrow;
+
 function pointSelectionUpdate() {
   // calculate objects intersecting the ray
 
   /*if (selectionControllerL){
     pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
   }*/
+
+
+
+
   if (selectionControllerR) {
     var matrix = new THREE.Matrix4();
+    //Find Rotation of controller
     matrix.extractRotation( selectionControllerR.matrix );
-
     var direction = new THREE.Vector3( 0, 0, 1 );
+    //Apply rotation to the raycaster direction
     direction.applyMatrix4(matrix);
-    //matrix.multiplyVector3( direction );
+    //Get controller world position
+    var meshPosition = aRightMesh.getWorldPosition();
     direction.multiplyScalar(-1);
-    pointSelectionRaycasterR.set(selectionControllerR.position, direction);
-    intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
+    //Apply rotation from rig
+    direction.transformDirection(rig.matrix);
+    pointSelectionRaycasterR.set(meshPosition, direction);
+    intersects = pointSelectionRaycasterR.intersectObject(pointsSystem);
 
-    //console.log(selectionControllerR.getAxis(0));
+
   }
-
   // If no controllers are present, revert to mouse/camera selection.
   if (selectionControllerL == null && selectionControllerR == null) {
     pointSelectionRaycaster.setFromCamera(pointSelectionMouse, camera);
     intersects = pointSelectionRaycaster.intersectObject(pointsSystem);
   }
 
-
   if (intersects != null) {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
-
   // Reset point size when not moused over
   setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   //pointsGeometry.boundingBox = null;
@@ -125,10 +142,6 @@ function pointSelectionUpdate() {
 
       }
       mousedOverPoint = intersects.index;
-
-
-
-
   }
   else {
 
@@ -148,9 +161,8 @@ function pointSelectionUpdate() {
     }
   }
 
+   scene.remove ( raycasterLine );
 
-
-  scene.remove ( raycasterLine );
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;
     if (intersects){
@@ -160,6 +172,7 @@ function pointSelectionUpdate() {
       lineLength = 1000000;
     }
     if (isRaycasterLineActive) {
+        //console.log("raycasterline is active");
       raycasterLine = new THREE.ArrowHelper(pointSelectionRaycasterR.ray.direction, pointSelectionRaycasterR.ray.origin, lineLength, 0xff00ff, 0, 0);
       scene.add(raycasterLine);
     }

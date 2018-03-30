@@ -456,6 +456,7 @@ function viewHidden() {
     }
     console.log(hiddenPoints);
 }
+}
 
 /**
  * Helper to make sure on axis change, selected points also persist
@@ -466,7 +467,6 @@ function recolorSelected(){
             setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
             if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false){
                 pointsGeometry.getAttribute('isSelected').array[i] === true;
-
-        }
+            }
     }
-  }
+}

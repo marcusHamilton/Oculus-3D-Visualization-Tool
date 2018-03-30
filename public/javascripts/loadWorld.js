@@ -161,7 +161,7 @@ function Manager() {
     var playerColour = THREE.Color(Red,Green,Blue);
 
     playerGeometry = new THREE.SphereGeometry(.5,25,25);
-    playerMaterial = new THREE.MeshBasicMaterial();
+    playerMaterial = new THREE.MeshBasicMaterial({color: playerColour});
    // playerMaterial.color = playerColour;
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);

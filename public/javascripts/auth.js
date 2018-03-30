@@ -240,6 +240,16 @@ function onAxisDatabaseChange(worldId) {
 }
 
 
+function onSelectionChange(worldId) {
+  var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
+  axisRef.on('child_changed', function (dataSnapshot) {
+    console.log(dataSnapshot.val());
+    selectedPoints = dataSnapshot.val();
+    redraw.redrawVR();
+  });
+}
+
+
 /*
 When a geometry changes on the client side, this function needs to be called
 in order to update the geometry in the database.
@@ -266,6 +276,13 @@ function updateAxisSelectionInDatabase(worldId, selectedAxii) {
   console.log("Pushed selection " + inspectAxesJSON + " to the database.")
 }
 
+function updateSelectionInDatabase(worldId, selectionDBJSON) {
+  var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
+  selectionRef.set(selectionDBJSON);
+  console.log("Pushed selection " + selectionDBJSON + " to the database.");
+}
+
+
 
 /*
 Query a worldInfo object by world id
@@ -279,7 +296,7 @@ function getWorldInfo(worldId) {
   return queryRef.once('value').then(function (snapshot) {
     result = snapshot.val();
   }).then(function () {
-    return result
+    return result;
   });
 }
 

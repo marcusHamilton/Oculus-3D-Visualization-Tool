@@ -192,7 +192,8 @@ function Manager() {
 
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
- //   onAxisDatabaseChange(worldID);
+    onAxisDatabaseChange(worldID);
+    onSelectionChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

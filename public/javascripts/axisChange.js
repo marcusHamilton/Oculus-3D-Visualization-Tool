@@ -9,7 +9,13 @@ var redraw = {
 }; //function for Redraw button in browser
 var pushAxesToDB = {
   pushAxesToDB: function () {
-    updateAxisSelectionInDatabase(worldID, selectedAxesJSON)
+    updateAxisSelectionInDatabase(worldID, selectedAxesJSON);
+    inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+    console.log(inspectAxesJSON);
+    selectedPointsJSON = selectedPoints;
+    selectedPointsJSONInspect = JSON.stringify(selectedPointsJSON)
+    selectedPointsJSON = JSON.parse(selectedPointsJSONInspect);
+    updateSelectionInDatabase(worldID,selectedPointsJSON);
   }
 };
 var axisMenu;

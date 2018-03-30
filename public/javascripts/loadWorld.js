@@ -33,8 +33,6 @@ var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 var rig; //Rig to group camera
 
-camera.name = "camera";
-
 //For controls
 
 
@@ -139,6 +137,7 @@ function Manager() {
     console.log(object);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.name = "camera";
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.vr.enabled = true;

@@ -242,7 +242,7 @@ function onAxisDatabaseChange(worldId) {
 
 function onSelectionChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
-  axisRef.on('child_changed', function (dataSnapshot) {
+  axisRef.on('value', function (dataSnapshot) {
     console.log(dataSnapshot.val());
     selectedPoints = dataSnapshot.val();
     redraw.redrawVR();

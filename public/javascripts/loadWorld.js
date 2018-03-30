@@ -1,3 +1,4 @@
+
 /**
  * Contains all major functions called on the VRWorld.ejs page for loading an
  * existing world from the database and drawing the data visualization.
@@ -543,3 +544,4 @@ function drawAxisLabels() {
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
 }
+

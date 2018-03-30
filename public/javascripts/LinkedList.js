@@ -2,20 +2,20 @@ function LinkedList() {
   var length = 0;
   var head = null;
 
-  var Node = function(element) {
+  var Node = function (element) {
     this.element = element;
     this.next = null;
   };
 
-  this.size = function() {
+  this.size = function () {
     return length;
   };
 
-  this.head = function() {
+  this.head = function () {
     return head;
   };
 
-  this.add = function(element) {
+  this.add = function (element) {
     var node = new Node(element);
     if (head === null) {
       head = node;
@@ -32,7 +32,7 @@ function LinkedList() {
     length++;
   };
 
-  this.remove = function(element) {
+  this.remove = function (element) {
     var currentNode = head;
     var previousNode;
     if (currentNode.element === element) {
@@ -49,11 +49,11 @@ function LinkedList() {
     length--;
   };
 
-  this.isEmpty = function() {
+  this.isEmpty = function () {
     return length === 0;
   };
 
-  this.indexOf = function(element) {
+  this.indexOf = function (element) {
     var currentNode = head;
     var index = -1;
 
@@ -68,7 +68,7 @@ function LinkedList() {
     return -1;
   };
 
-  this.elementAt = function(index) {
+  this.elementAt = function (index) {
     var currentNode = head;
     var count = 0;
     while (count < index) {
@@ -79,7 +79,7 @@ function LinkedList() {
   };
 
 
-  this.addAt = function(index, element) {
+  this.addAt = function (index, element) {
     var node = new Node(element);
 
     var currentNode = head;
@@ -105,7 +105,7 @@ function LinkedList() {
     length++;
   }
 
-  this.removeAt = function(index) {
+  this.removeAt = function (index) {
     var currentNode = head;
     var previousNode;
     var currentIndex = 0;
@@ -127,7 +127,7 @@ function LinkedList() {
   }
 
   //Prints the entire list to the console
-  this.toString = function() {
+  this.toString = function () {
     var currentSize = this.size();
     for (var i = 0; i < currentSize; i++) {
       console.log(this.elementAt(i));

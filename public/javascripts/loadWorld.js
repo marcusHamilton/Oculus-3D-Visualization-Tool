@@ -162,7 +162,9 @@ function Manager() {
       }
       return colour;
   }
+
     playerColour = getRandomColour();
+    console.log(playerColour);
     playerGeometry = new THREE.SphereGeometry(.5,10,10);
     playerMaterial = new THREE.MeshBasicMaterial({playerColour});
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);

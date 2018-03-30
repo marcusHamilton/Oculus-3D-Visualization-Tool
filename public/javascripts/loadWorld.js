@@ -154,9 +154,16 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
-
+  function getRandomColour(){
+      var nums = "0123456789ABCDEF";
+      var colour = "0x";
+      for (var i = 0; i < 6; i++) {
+          colour += nums[Math.floor(Math.random() * 16)];
+      }
+      return colour;
+  }
     playerColour = getRandomColour();
-    playerGeometry = new THREE.SphereGeometry(2,10,10);
+    playerGeometry = new THREE.SphereGeometry(.5,10,10);
     playerMaterial = new THREE.MeshBasicMaterial(playerColour);
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);
@@ -583,11 +590,3 @@ function drawAxisLabels() {
   //scene.add(axisLabelGroup);
 }
 
-function getRandomColour(){
-    var nums = "0123456789ABCDEF";
-    var colour = "0x";
-    for (var i = 0; i < 6; i++) {
-        colour += nums[Math.floor(Math.random() * 16)];
-    }
-    return colour;
-}

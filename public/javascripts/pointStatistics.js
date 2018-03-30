@@ -1,6 +1,5 @@
 /**
  * Contains everything to do with statistical analysis of points within a world.
- *
  * Most functions are simple wrappers that will call stats-lite library functions without having to directly use
  * the library.
  */
@@ -32,6 +31,5 @@ function stdev(dataVector){
 function histogram(dataVector){
     return jStat.histogram(dataVector);
 }
-
 
 

@@ -35,6 +35,7 @@ var datasetAndAxisLabelGroup;
 var playerSphere;
 var playerGeometry;
 var playerMaterial;
+var playerColour
 var rig; //Rig to group camera
 
 camera.name = "camera";
@@ -153,8 +154,10 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
+
+    playerColour = getRandomColour();
     playerGeometry = new THREE.SphereGeometry(2,10,10);
-    playerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+    playerMaterial = new THREE.MeshBasicMaterial(playerColour);
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);
 
@@ -578,4 +581,13 @@ function drawAxisLabels() {
   axisLabelGroup.rotation.set(0, -0.785398, 0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
+}
+
+function getRandomColour(){
+    var nums = "0123456789ABCDEF";
+    var colour = "0x";
+    for (var i = 0; i < 6; i++) {
+        colour += nums[Math.floor(Math.random() * 16)];
+    }
+    return colour;
 }

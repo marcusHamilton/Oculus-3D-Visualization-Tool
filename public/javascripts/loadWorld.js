@@ -158,10 +158,10 @@ function Manager() {
     var Green = Math.random();
     var Blue = Math.random();
 
-    var playerColour = THREE.Color(Red,Green,Blue);
+    var playerColour = new THREE.color(Red,Green,Blue);
 
     playerGeometry = new THREE.SphereGeometry(.5,25,25);
-    playerMaterial = new THREE.MeshBasicMaterial({color: playerColour});
+    playerMaterial = new THREE.MeshBasicMaterial();
    // playerMaterial.color = playerColour;
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);

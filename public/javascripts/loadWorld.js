@@ -158,7 +158,7 @@ function Manager() {
     var Green = Math.random();
     var Blue = Math.random();
 
-    var playerColour = THREE.color(Red,Green,Blue);
+    var playerColour = THREE.Color(Red,Green,Blue);
 
     playerGeometry = new THREE.SphereGeometry(.5,25,25);
     playerMaterial = new THREE.MeshBasicMaterial();

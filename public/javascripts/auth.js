@@ -227,25 +227,31 @@ function onGeometryDatabaseChange(worldId) {
   });
 }
 
+//Listener
 function onAxisDatabaseChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/userData/0');
   axisRef.on('child_changed', function (dataSnapshot) {
-    console.log(dataSnapshot.val());
-    loadedDataset[0] = dataSnapshot.val();
-    selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
-    selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
-    selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
-    redraw.redrawVR();
+      loadedDataset[0] = dataSnapshot.val();
+      selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
+      selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
+      selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
+      redraw.redrawVR();
   });
 }
 
-
+//Listener
 function onSelectionChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
   axisRef.on('value', function (dataSnapshot) {
-    console.log(dataSnapshot.val());
-    selectedPoints = dataSnapshot.val();
-    redraw.redrawVR();
+    // console.log(dataSnapshot.val()); //uncomment to see the value from the database
+    if(dataSnapshot.val() != null){
+      selectedPoints = dataSnapshot.val();
+      redraw.redrawVR();
+    }
+    else{
+      console.log("No selected points saved in DB.")
+      selectedPoints = [];
+    }
   });
 }
 
@@ -264,22 +270,23 @@ function updateGeometryInDatabase(worldId, geometryId, geometry) {
 }
 
 /*
-When the selected axii change for a world and need to be pushed to the database, call this function
+When the selected axes change for a world and need to be pushed to the database, call this function
 @Inputs:
   worldId: ID of the world in the database
   selectedAxii: JSON format of the loadedDataset[0] array(aka the axii selection array)  
 */
-function updateAxisSelectionInDatabase(worldId, selectedAxii) {
-  var axiiRef = database.ref('worlds/' + worldId + '/object/userData')
-  var AxiiSelection = axiiRef.child("0");
-  AxiiSelection.set(selectedAxii);
-  console.log("Pushed selection " + inspectAxesJSON + " to the database.")
+function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
+  var axesRef = database.ref('worlds/' + worldId + '/object/userData')
+  var AxiiSelection = axesRef.child("0");
+  AxiiSelection.set(selectedAxesJSON);
+  console.log("Pushed selection " + selectedAxesJSON + " to the database.")
 }
 
-function updateSelectionInDatabase(worldId, selectionDBJSON) {
+//push selected points to db
+function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
   var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
-  selectionRef.set(selectionDBJSON);
-  console.log("Pushed selection " + selectionDBJSON + " to the database.");
+  selectionRef.set(selectedPointsJSON);
+  console.log("Pushed selection " + selectedPointsJSON + " to the database.");
 }
 
 

@@ -27,8 +27,8 @@ function VRGui() {
   VRGui.add(redraw, 'redrawVR');
 
   // //Button that pushes the currently drawn axis selection to the database
-  var pushDB = VRGui.add(pushAxesToDB, 'pushAxesToDB');
-  pushDB.name("Push Axis Selection");
+  var pushDB = VRGui.add(pushToDB, 'pushToDB');
+  pushDB.name("Push Axis/Selection");
 }
 
 /**

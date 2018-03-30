@@ -10,8 +10,6 @@ var selectedPoints = []; //array containing the indices of every currently
 //selected point.
 var hiddenPoints = [];
 
-var selectedPointsJSON;
-
 var pointSelectionMouse = new THREE.Vector2();
 var selectionThreshold = 0.04; //the distance the mouse has to be from a point
 //in order for it to register as selectable

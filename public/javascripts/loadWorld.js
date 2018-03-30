@@ -172,8 +172,8 @@ function Manager() {
     drawFPSstats();
 
     //Initializes the axis selection interfaces
-    axisMenu = new selectedAxes();
-    selectedAxes = new selectedAxesVR();
+    axisMenu = new SelectedAxes();
+    selectedAxes = new SelectedAxesVR();
     
     //Builds the GUIs
     VRGui();

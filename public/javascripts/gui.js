@@ -90,7 +90,7 @@ function BRGui() {
 }
 
 function scaleMenu() {
-  scaleSlider = VRGui.add(scaleInterface, 'x', 1, 10);
+  scaleSlider = VRGui.add(scaleInterface, 'x', 0.1, 10);
   scaleSlider.onChange(scaleSystem.scaleAll);
 }
 

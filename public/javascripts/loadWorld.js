@@ -154,20 +154,15 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
-  function getRandomColour(){
-      var nums = "0123456789ABCDEF";
-      var colour = "0x";
-      for (var i = 0; i < 6; i++) {
-          colour += nums[Math.floor(Math.random() * 16)];
-      }
-      return colour;
-  }
+    var Red = MATH.random();
+    var Green = Math.random();
+    var Blue = MATH.random();
 
-    playerColour = getRandomColour();
-    console.log(playerColour);
+    var playerColour = THREE.color(Red,Green,Blue);
+
     playerGeometry = new THREE.SphereGeometry(.5,25,25);
     playerMaterial = new THREE.MeshBasicMaterial();
-    playerMaterial.color = playerColour;
+   // playerMaterial.color = playerColour;
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);
 

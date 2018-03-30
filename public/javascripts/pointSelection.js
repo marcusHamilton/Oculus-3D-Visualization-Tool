@@ -52,6 +52,7 @@ function initializeSelectionControls()
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
+	rig.add(selectionControllerR);
     selectionControllerR.addEventListener('A touch began', function(event) {
       isRaycasterLineActive = true;
     });
@@ -90,14 +91,18 @@ function pointSelectionUpdate() {
     pointSelectionRaycasterL.set(selectionControllerL.position, selectionControllerL.rotation);
   }*/
   if (selectionControllerR) {
+	//var controllerWorldposition = new THREE.Vector3();
+	//controllerWorldposition = selectionControllerR.getWorldPosition();
     var matrix = new THREE.Matrix4();
     matrix.extractRotation( selectionControllerR.matrix );
-
+	var meshPosition = aRightMesh.getWorldPosition();
     var direction = new THREE.Vector3( 0, 0, 1 );
     direction.applyMatrix4(matrix);
+	direction.multiplyScalar(-1);
+	direction.transformDirection(rig.matrix);
     //matrix.multiplyVector3( direction );
-    direction.multiplyScalar(-1);
-    pointSelectionRaycasterR.set(selectionControllerR.position, direction);
+    
+    pointSelectionRaycasterR.set(meshPosition, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
 
     //console.log(selectionControllerR.getAxis(0));

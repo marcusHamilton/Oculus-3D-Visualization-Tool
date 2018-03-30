@@ -231,7 +231,7 @@ function onGeometryDatabaseChange(worldId){
 
 function onAxisDatabaseChange(worldId){
   var axisRef = database.ref('worlds/'+worldId+'/object/userData/0');
-  axisRef.on('value', function(dataSnapshot) {
+  axisRef.on('child_changed', function(dataSnapshot) {
     console.log(dataSnapshot.val());
     loadedDataset[0] = dataSnapshot.val();
     selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];

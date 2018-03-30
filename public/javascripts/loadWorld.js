@@ -154,9 +154,9 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
-    var Red = MATH.random();
+    var Red = Math.random();
     var Green = Math.random();
-    var Blue = MATH.random();
+    var Blue = Math.random();
 
     var playerColour = THREE.color(Red,Green,Blue);
 

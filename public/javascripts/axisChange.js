@@ -65,7 +65,9 @@ function redrawDataSet(VR){
   selectedAxesJSON = {0:axisMenu.xAxis,1:axisMenu.yAxis,2:axisMenu.zAxis};
   inspectAxesJSON = JSON.stringify(selectedAxesJSON);
   console.log(inspectAxesJSON);
-  selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));  
+  selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));
+
+  recolorSelected();
 }
 
 /**

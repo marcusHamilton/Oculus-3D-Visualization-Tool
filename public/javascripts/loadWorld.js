@@ -32,6 +32,9 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
+var playerSphere;
+var playerGeometry;
+var playerMaterial;
 var rig; //Rig to group camera
 
 camera.name = "camera";
@@ -150,6 +153,24 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
+    playerGeometry = new THREE.SphereGeometry(2,10,10);
+    playerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+    playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
+    scene.add(playerSphere);
+
+
+    /*
+      var text2 = document.createElement('div');
+      text2.style.position = 'absolute';
+   //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+      text2.style.width = 100;
+      text2.style.height = 100;
+      text2.style.backgroundColor = "blue";
+      text2.innerHTML = "hi there!";
+      text2.style.top = 1 + 'px';
+      text2.style.left = 1 + 'px';
+      document.body.appendChild(text2);
+  */
     // Handle canvas resizing
     window.addEventListener('resize', onResize, true);
     window.addEventListener('vrdisplaypresentchange', onResize, true);
@@ -208,6 +229,13 @@ function Manager() {
  * Click on the widget to see other stats.
  * Can be removed after development.
  */
+function toXYCoords (pos) {
+    var vector = projector.projectVector(pos.clone(), camera);
+    vector.x = (vector.x + 1)/2 * window.innerWidth;
+    vector.y = -(vector.y - 1)/2 * window.innerHeight;
+    return vector;
+}
+
 function drawFPSstats() {
   (function () {
     var script = document.createElement('script');
@@ -288,6 +316,7 @@ function setUpControls() {
   camera.position.z = vrControls.userHeight;
   console.log("Initializing rig");
 
+  //comment
   rig = new THREE.Object3D();
   rig.add(camera);
   scene.add(rig);
@@ -311,6 +340,7 @@ function setUpControls() {
   effect.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
+  rig.add(playerSphere);
   //Set up controls gui
   applyDown = function (obj, key, value) {
     obj[key] = value;
@@ -459,6 +489,7 @@ function drawDataset(xCol, yCol, zCol) {
   datasetAndAxisLabelGroup.name = "DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
+
   light0 = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
   scene.add(light0);
   scene.add(VRGui);
@@ -500,13 +531,13 @@ function drawAxisLabels() {
 
   // Push line points into geometries, extending 1.5X beyond the largest point
   geometryX.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryX.vertices.push(new THREE.Vector3(plotInitSizeX * 1.5, 0, 0));
+  geometryX.vertices.push(new THREE.Vector3(plotInitSizeX ,0, 0));
 
   geometryY.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryY.vertices.push(new THREE.Vector3(0, plotInitSizeY * 1.5, 0));
+  geometryY.vertices.push(new THREE.Vector3(0, plotInitSizeY, 0));
 
   geometryZ.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryZ.vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ * 1.5));
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ));
 
   // Create line objects
   var lineX = new THREE.Line(geometryX, materialX);
@@ -524,7 +555,7 @@ function drawAxisLabels() {
     lineXTicks.add(new THREE.Geometry());
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
+    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ));
     axisLabelGroup.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
   }
   var lineYTicks = new LinkedList();
@@ -540,7 +571,7 @@ function drawAxisLabels() {
     lineZTicks.add(new THREE.Geometry());
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
+    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ, 0, plotInitSizeZ / largestZ * zUnits));
     axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);

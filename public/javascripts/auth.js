@@ -239,6 +239,18 @@ function onAxisDatabaseChange(worldId) {
   });
 }
 
+//You only need to call this function once and it will listen for position changes.
+//+ Whenever a users position in the world changes, the contents of this function
+//+ will be run.
+//Input: current world id
+//Returns: geometry object (json) that has changed in the database
+function onUserPositionChange(worldId, UID) {
+  var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
+  userRef.on('child_changed', function (snapshot) {
+    console.log(snapshot.val());
+    // UPDATE THE GEOMETRY IN THE SCENE
+  });
+}
 
 /*
 When a geometry changes on the client side, this function needs to be called
@@ -254,7 +266,7 @@ function updateGeometryInDatabase(worldId, geometryId, geometry) {
 }
 
 /*
-When the selected axii change for a world and need to be pushed to the database, call this function
+When the selected points change for a world and need to be pushed to the database, call this function
 @Inputs:
   worldId: ID of the world in the database
   selectedAxii: JSON format of the loadedDataset[0] array(aka the axii selection array)  
@@ -265,6 +277,19 @@ function updateAxisSelectionInDatabase(worldId, selectedAxii) {
   AxiiSelection.set(selectedAxii);
   console.log("Pushed selection " + inspectAxesJSON + " to the database.")
 }
+
+/*
+When a users position changes within a world and needs to be pushed to the database, call this function
+@Inputs:
+  worldId: ID of the world in the database
+  selectedAxii: JSON format of the players location  
+*/
+function updateUserPositionInDatabase(worldId, UID) {
+  var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
+  userRef.set(camera.getWorldPosition());
+  // console.log("Pushed position of " + UID + ".Their position is: " + rig.getWorldPosition());
+}
+
 
 
 /*

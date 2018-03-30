@@ -23,7 +23,9 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
+var pointVars = {
+  plotPointSizeCoeff: 0.005
+}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
@@ -60,7 +62,7 @@ function update(timestamp) {
   //Add all updates below here
 
   //Ensure that we are looking for controller input
-  
+
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,9 +70,9 @@ function update(timestamp) {
 
   //Allows point selection to function
 
-    updateMovementControls();
+  updateMovementControls();
 
-    pointSelectionUpdate();
+  pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -98,11 +100,11 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-function GameLoop(timestamp){
+function GameLoop(timestamp) {
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  
+
   window.requestAnimationFrame(GameLoop);
 };
 
@@ -116,15 +118,15 @@ function Manager() {
   //First get the scene from the data base
   var retrievedString = sessionStorage.getItem('selectedID');
   worldID = JSON.parse(retrievedString);
-  console.log('worldID is: '+worldID);
+  console.log('worldID is: ' + worldID);
   scene = new THREE.Scene();
   var worldURL = '/worlds/' + worldID;
 
   /**
    * FIREBASE GET
-  */
+   */
 
-  function loadScene(response){
+  function loadScene(response) {
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
     scene.add(object);
@@ -155,14 +157,14 @@ function Manager() {
     addEnterVrButtons();
     //Get HMD type
     enterVR.getVRDisplay()
-      .then(function(display) {
+      .then(function (display) {
         renderer.vr.setDevice(display);
         animationDisplay = display;
         setStageDimensions(display.stageParameters);
         camera.position.set(plotInitSizeX / 2.0, plotInitSizeY * 1.5, camera.position.z);
         camera.rotation.y = 270 * Math.PI / 180;
       })
-      .catch(function() {
+      .catch(function () {
         // If there is no display available, fallback to window
         animationDisplay = window;
       });
@@ -173,25 +175,25 @@ function Manager() {
     //Initializes the axis selection interfaces
     axisMenu = new selectedAxes();
     selectedAxes = new selectedAxesVR();
-    
+
     //Builds the GUIs
     VRGui();
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR
-    dat.GUIVR.enableMouse(camera,renderer);
+    dat.GUIVR.enableMouse(camera, renderer);
 
     // axisMenu contains the 3 selected axis columns as properties
-    drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
+    drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
-    
+
 
     //Center the non-VR camera on the data and back a bit
 
-    camera.position.set(-1,0,0);
+    camera.position.set(-1, 0, 0);
     camera.rotation.y = 0 * Math.PI / 180;
- //   onAxisDatabaseChange(worldID);
+    //   onAxisDatabaseChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -207,9 +209,9 @@ function Manager() {
  * Can be removed after development.
  */
 function drawFPSstats() {
-  (function() {
+  (function () {
     var script = document.createElement('script');
-    script.onload = function() {
+    script.onload = function () {
       var stats = new Stats();
       document.body.appendChild(stats.dom);
       requestAnimationFrame(function loop() {
@@ -243,7 +245,7 @@ function onResize(e) {
  * as offers a link to the webvr page to learn more.
  * On clicking enter vr the scene is loaded appropriately for the
  * headset.
-*/
+ */
 function addEnterVrButtons() {
   // Create WebVR UI Enter VR Button
   var options = {
@@ -252,23 +254,23 @@ function addEnterVrButtons() {
     corners: 'square'
   };
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
-    .on("enter", function() {
+    .on("enter", function () {
       console.log("enter VR");
     })
-    .on("exit", function() {
+    .on("exit", function () {
       console.log("exit VR");
       camera.quaternion.set(0, 0, 0, 1);
     })
-    .on("error", function(error) {
+    .on("error", function (error) {
       document.getElementById("learn-more").style.display = "inline";
       console.error(error)
     })
-    .on("hide", function() {
+    .on("hide", function () {
       document.getElementById("ui").style.display = "none";
       // On iOS there is no button to close fullscreen mode, so we need to provide one
       if (enterVR.state == webvrui.State.PRESENTING_FULLSCREEN) document.getElementById("exit").style.display = "initial";
     })
-    .on("show", function() {
+    .on("show", function () {
       document.getElementById("ui").style.display = "inherit";
       document.getElementById("exit").style.display = "none";
     });
@@ -310,27 +312,27 @@ function setUpControls() {
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
   //Set up controls gui
-  applyDown = function(obj, key, value) {
+  applyDown = function (obj, key, value) {
     obj[key] = value;
     if (obj.children !== undefined && obj.children.length > 0) {
 
-      obj.children.forEach(function(child) {
+      obj.children.forEach(function (child) {
 
         applyDown(child, key, value)
       })
     }
   };
-  castShadows = function(obj) {
+  castShadows = function (obj) {
     applyDown(obj, 'castShadow', true)
   };
-  receiveShadows = function(obj) {
+  receiveShadows = function (obj) {
     applyDown(obj, 'receiveShadow', true)
   };
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  
-  
+
+
 }
 
 
@@ -350,8 +352,7 @@ function setUpControls() {
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
-function drawDataset(xCol, yCol, zCol)
-{
+function drawDataset(xCol, yCol, zCol) {
   assert(loadedDataset, 'loadedDataset must be defined for drawDataset()');
   assert(xCol >= 0,
     'drawDataset() xCol value must be a positive integer');
@@ -366,27 +367,31 @@ function drawDataset(xCol, yCol, zCol)
   var pointSize = pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
 
   // Grab the OpenGLSL shader definitions from page html
-  var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
-  var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
+  var myVertexShader = document.getElementById('vertexshader').textContent;
+  var myFragmentShader = document.getElementById('fragmentshader').textContent;
 
-  var texture = new THREE.TextureLoader().load( "images/shader2.png" );
+  var texture = new THREE.TextureLoader().load("images/shader2.png");
 
   // Configure point material shader
   var pointsMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      color:   { value: new THREE.Color( 1,1,1 ) },
-      texture: { value: texture }
+      color: {
+        value: new THREE.Color(1, 1, 1)
+      },
+      texture: {
+        value: texture
+      }
     },
     vertexShader: myVertexShader,
     fragmentShader: myFragmentShader
   });
 
   // Arrays to hold information to be passed into BufferGeometries
-  var positions = new Float32Array( loadedDataset.length * 3 );
-  var colors = new Float32Array( loadedDataset.length * 3 );
-  var sizes = new Float32Array( loadedDataset.length );
-  var selected = new Float32Array( loadedDataset.length );
-  var hidden = new Float32Array( loadedDataset.length );
+  var positions = new Float32Array(loadedDataset.length * 3);
+  var colors = new Float32Array(loadedDataset.length * 3);
+  var sizes = new Float32Array(loadedDataset.length);
+  var selected = new Float32Array(loadedDataset.length);
+  var hidden = new Float32Array(loadedDataset.length);
 
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
@@ -409,18 +414,18 @@ function drawDataset(xCol, yCol, zCol)
   for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
-    var pX = (loadedDataset[i][xCol]/largestX)*plotInitSizeX;
-    var pY = (loadedDataset[i][yCol]/largestY)*plotInitSizeY;
-    var pZ = (loadedDataset[i][zCol]/largestZ)*plotInitSizeZ;
+    var pX = (loadedDataset[i][xCol] / largestX) * plotInitSizeX;
+    var pY = (loadedDataset[i][yCol] / largestY) * plotInitSizeY;
+    var pZ = (loadedDataset[i][zCol] / largestZ) * plotInitSizeZ;
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
-    p.toArray( positions, i * 3 );
+    p.toArray(positions, i * 3);
 
     // Set point color RGB values to magnitude of XYZ values
     color = colorFromXYZcoords(p);
     //color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
-    color.toArray( colors, i * 3 );
+    color.toArray(colors, i * 3);
 
     // Set the sizes of all the points to be added to BufferGeometry
     sizes[i] = pointSize;
@@ -430,11 +435,11 @@ function drawDataset(xCol, yCol, zCol)
   plotCenterVec3 = new THREE.Vector3(plotInitSizeX / 2.0, plotInitSizeY / 2.0, plotInitSizeZ / 2.0);
 
   // Add all the point information to the BufferGeometry
-  pointsGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-  pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
-  pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
-  pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
-  pointsGeometry.addAttribute( 'isHidden', new THREE.BufferAttribute(hidden, 1) );
+  pointsGeometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+  pointsGeometry.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
+  pointsGeometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  pointsGeometry.addAttribute('isSelected', new THREE.BufferAttribute(selected, 1));
+  pointsGeometry.addAttribute('isHidden', new THREE.BufferAttribute(hidden, 1));
 
   // create the particle shader system
   pointsSystem = new THREE.Points(
@@ -447,14 +452,14 @@ function drawDataset(xCol, yCol, zCol)
   //Position the dataset in a reasonable spot. This will probably change when
   //we start implementing collaboration.
   pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
-  pointsSystem.rotation.set(0,-0.785398,0);
+  pointsSystem.rotation.set(0, -0.785398, 0);
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
-  datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
+  datasetAndAxisLabelGroup.name = "DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
-  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  light0 = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
   scene.add(light0);
   scene.add(VRGui);
   scene.add(rig);
@@ -539,7 +544,7 @@ function drawAxisLabels() {
     axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
-  axisLabelGroup.rotation.set(0,-0.785398,0);
+  axisLabelGroup.rotation.set(0, -0.785398, 0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
 }

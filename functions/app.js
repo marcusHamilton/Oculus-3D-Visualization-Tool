@@ -33,13 +33,15 @@ firebase.initializeApp({
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/favicon.ico', express.static('config/favicon.ico'));
 
 //CREATE a world
-app.post("/uploadWorld", function (req, res){
+app.post("/uploadWorld", function (req, res) {
   var worldsRef = firebase.database().ref("/").child("worlds");
   var worldData = req.body;
   var newWorldRef = worldsRef.push(worldData);
@@ -55,10 +57,10 @@ app.post("/uploadWorld", function (req, res){
 // });
 
 //GET all world ids
-app.get("/worlds", function(req, res){
-  firebase.database().ref('/worlds').once('value').then(function(snapshot) {
+app.get("/worlds", function (req, res) {
+  firebase.database().ref('/worlds').once('value').then(function (snapshot) {
     var keys = [];
-    snapshot.forEach(function(childSnapshot){
+    snapshot.forEach(function (childSnapshot) {
       keys.push(childSnapshot.key)
     });
     res.send(keys);
@@ -66,7 +68,7 @@ app.get("/worlds", function(req, res){
 });
 
 //GET a world
-app.get("/worlds/:id", function(req, res){
+app.get("/worlds/:id", function (req, res) {
   worldId = req.params.id;
   var uid = null;
   //Verify user token
@@ -76,12 +78,12 @@ app.get("/worlds/:id", function(req, res){
   // }).catch(function(error) {
   // });
 
-  firebase.database().ref('/worlds/' + worldId).once('value').then(function(snapshot) {
+  firebase.database().ref('/worlds/' + worldId).once('value').then(function (snapshot) {
     // res.send(snapshot.val());
     var firebaseWorld = snapshot.val();
     var numGeom = firebaseWorld.geometries.length;
 
-    for (var i=0; i<numGeom; i++){
+    for (var i = 0; i < numGeom; i++) {
       firebaseWorld.geometries[i].data["normals"] = [];
       firebaseWorld.geometries[i].data["faces"] = [];
     }
@@ -90,7 +92,7 @@ app.get("/worlds/:id", function(req, res){
 });
 
 //DELETE a world
-app.delete("/worlds/:id", function(req, res){
+app.delete("/worlds/:id", function (req, res) {
   worldId = req.params.id;
 
   //Verify user token
@@ -100,14 +102,14 @@ app.delete("/worlds/:id", function(req, res){
   // }).catch(function(error) {
   // });
 
-  firebase.database().ref('/worlds/' + worldId).remove().then(function(){
+  firebase.database().ref('/worlds/' + worldId).remove().then(function () {
     res.redirect("/");
   });
 });
 
 //TODO
 //UPDATE a world
-app.put("/worlds/:id", function(req, res){
+app.put("/worlds/:id", function (req, res) {
   worldId = req.params.id;
   var worldData = req.body;
 
@@ -120,8 +122,10 @@ app.put("/worlds/:id", function(req, res){
 
   ref = firebase.database().ref("/worlds").child(worldId);
   ref.update(worldData);
-  res.send({"status": 'success',
-            "worldId": worldId});
+  res.send({
+    "status": 'success',
+    "worldId": worldId
+  });
 });
 
 app.use('/', index);
@@ -132,14 +136,14 @@ app.use('/dashboard', dashboard);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

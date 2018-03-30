@@ -480,7 +480,7 @@ function recolorSelected(){
     for(var i = 0; i < selectedPoints.length; i++){
             setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
             if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false){
-                pointsGeometry.getAttribute('isSelected').array[i] === true;
+                pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === true;
 
         }
     }

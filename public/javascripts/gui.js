@@ -2,6 +2,26 @@ var VRGui;
 var BRGui;
 var folder; //BR GUI menu element
 var pSizeSlider;
+var scaleSlider;
+
+var scaleInterface;
+
+var scaleSystem = {
+  scaleAll:function(){
+    scaleInterface.y = scaleInterface.x;
+    scaleInterface.z = scaleInterface.x;
+    datasetAndAxisLabelGroup.scale.x = scaleInterface.x;
+    datasetAndAxisLabelGroup.scale.y = scaleInterface.y;
+    datasetAndAxisLabelGroup.scale.z = scaleInterface.z;
+  }
+}
+
+
+function ScaleObject(){
+  this.x = datasetAndAxisLabelGroup.scale.x;
+  this.y = datasetAndAxisLabelGroup.scale.y;
+  this.z = datasetAndAxisLabelGroup.scale.z;
+};
 
 //Creates the VR gui object which contains a number of useful tools
 function VRGui() {
@@ -68,3 +88,9 @@ function BRGui() {
     document.head.appendChild(script2);
   })();
 }
+
+function scaleMenu() {
+  scaleSlider = VRGui.add(scaleInterface, 'x', 1, 10);
+  scaleSlider.onChange(scaleSystem.scaleAll);
+}
+

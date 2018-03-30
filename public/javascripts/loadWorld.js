@@ -102,7 +102,7 @@ function GameLoop(timestamp){
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  
+
   window.requestAnimationFrame(GameLoop);
 };
 

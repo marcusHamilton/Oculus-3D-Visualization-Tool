@@ -77,7 +77,9 @@ function update(timestamp) {
   //updateMovementControls();
   updatePointsPosition();
 
-  pointSelectionUpdate();
+    pointSelectionUpdate();
+
+    updateUserPositionInDatabase(worldID, getUID());
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -203,7 +205,8 @@ function Manager() {
 
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
-    //   onAxisDatabaseChange(worldID);
+    onAxisDatabaseChange(worldID);
+    onUserPositionChange(worldID, getUID());
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

@@ -183,6 +183,10 @@ function Manager() {
 
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
+
+    scaleInterface = new ScaleObject();
+    scaleMenu();
+    
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
@@ -459,6 +463,7 @@ function drawDataset(xCol, yCol, zCol)
   scene.add(VRGui);
   scene.add(rig);
   drawAxisLabels();
+
   initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
 }

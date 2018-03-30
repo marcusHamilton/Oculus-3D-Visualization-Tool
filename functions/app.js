@@ -11,7 +11,6 @@ var features = require('./routes/features');
 var about = require('./routes/about');
 var VRWorld = require('./routes/VRWorld');
 var dashboard = require('./routes/dashboard');
-
 var app = express();
 
 // view engine setup

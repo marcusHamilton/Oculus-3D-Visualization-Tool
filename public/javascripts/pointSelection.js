@@ -262,18 +262,20 @@ function onMouseMove(event) {
  */
 function onClick(event) {
 
-  event.preventDefault();
-  if (intersects != null) {
-    selectPoint(intersects.index);
-    //hidePoint(intersects.index);
-  } else {
-    clearSelection();
-    //unhideRecent();
-  }
-  if (selectedPoints.length > 0) {
-    console.log(getSelectedPointPositions());
-  }
-  //console.log(hiddenPoints);
+    event.preventDefault();
+    if (intersects != null) {
+        selectPoint(intersects.index);
+        //hidePoint(intersects.index);
+    }
+    else {
+        //clearSelection();
+        //unhideRecent();
+    }
+    if (selectedPoints.length > 0){
+        console.log(getSelectedPointPositions());
+    }
+    //console.log(hiddenPoints);
+
 }
 
 /**
@@ -342,18 +344,19 @@ function colorFromXYZcoords(vec3) {
  * @return {Vector3[]} array of Vector3 objects containing positions
  */
 
-//must be fixed. Based on world position not value of points
 function getSelectedPointPositions() {
 
   var selectedPointPositions = [];
 
-  for (var i = 0; i < selectedPoints.length; i++) {
-    var tempX, tempY, tempZ;
-    tempX = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3];
-    tempY = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 1];
-    tempZ = pointsGeometry.getAttribute('position').array[selectedPoints[i] * 3 + 2];
+  for(var i = 0; i < selectedPoints.length; i++){
+    var dataRow;
+    dataRow = loadedDataset[selectedPoints[i]];
 
-    selectedPointPositions.push(new THREE.Vector3(tempX, tempY, tempZ));
+    var pointPosition = new THREE.Vector3(dataRow[axisMenu.xAxis],
+                                          dataRow[axisMenu.yAxis],
+                                          dataRow[axisMenu.zAxis]);
+
+    selectedPointPositions.push(pointPosition);
   }
 
   return selectedPointPositions;
@@ -451,6 +454,19 @@ function viewHidden() {
     } else {
       setPointColor(i, new THREE.Vector3(0, 0, 0));
     }
-  }
-  console.log(hiddenPoints);
+    console.log(hiddenPoints);
 }
+
+/**
+ * Helper to make sure on axis change, selected points also persist
+ */
+function recolorSelected(){
+
+    for(var i = 0; i < selectedPoints.length; i++){
+            setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
+            if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false){
+                pointsGeometry.getAttribute('isSelected').array[i] === true;
+
+        }
+    }
+  }

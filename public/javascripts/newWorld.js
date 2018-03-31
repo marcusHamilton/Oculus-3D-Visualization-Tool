@@ -18,37 +18,31 @@ var x_AxisIndex; //The x-axis index of which to use for scatter plot positioning
 var y_AxisIndex; //The y-axis of which to use for scatter plot positioning
 var z_AxisIndex; //The z-axis of which to use for scatter plot positioning
 
-function setParsedData(data){
+function setParsedData(data) {
   parsedData = data;
 }
 
-function setXAxisIndex(data){
+function setXAxisIndex(data) {
   x_AxisIndex = data;
 }
 
-function setYAxisIndex(data){
+function setYAxisIndex(data) {
   y_AxisIndex = data;
 }
 
-function setZAxisIndex(data){
+function setZAxisIndex(data) {
   z_AxisIndex = data;
 }
 
-function setSceneForTesting(){
+function setSceneForTesting() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   scene.name = "Scene";
   // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
+  var light = new THREE.AmbientLight(0xFFFFFF, 1, 100);
   light.position.set(1, 10, -0.5);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
-  light.shadow.camera.near = 1;
-  light.shadow.camera.far = 12;
   scene.add(light);
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));
 }
 
 function getScene() {
@@ -71,10 +65,10 @@ function loadCSVLocal() {
   Papa.parse(file, {
     //header: true,
     dynamicTyping: true,
-    error: function(error) { //error callback
+    error: function (error) { //error callback
       SomethingWentWrong(error);
     },
-    complete: function(results) { //success call back
+    complete: function (results) { //success call back
       parsedData = results.data;
       success();
     }
@@ -119,10 +113,10 @@ function loadCSVremote() {
     download: true,
     //header: true,
     dynamicTyping: true,
-    error: function(error) { //error callback
+    error: function (error) { //error callback
       SomethingWentWrong(error);
     },
-    complete: function(results) { //success call back
+    complete: function (results) { //success call back
       parsedData = results.data;
       success();
     }
@@ -167,7 +161,7 @@ function getOptions() {
     });
   }
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     $('.js-responsive-dropdown').select2({
       placeholder: 'Select axis',
       data: dropdownOptions,
@@ -209,17 +203,8 @@ function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
   scene.name = "Scene";
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   //Add light and floor
-  var light = new THREE.DirectionalLight(0xFFFFFF, 1, 100);
-  light.position.set(1, 10, -0.5);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
-  light.shadow.camera.near = 1;
-  light.shadow.camera.far = 12;
-  scene.add(light);
-  scene.add(new THREE.HemisphereLight(0x909090, 0x404040));
+
   addParsedDataToScene();
 
   //Export the built world
@@ -241,15 +226,16 @@ function build3DSpace() {
  * @pre y_AxisIndex must be >= 0
  * @pre z_AxisIndex must be >= 0
  */
-function addParsedDataToScene()
-{
-  assert(parsedData,"");
-  assert(x_AxisIndex >= 0,"");
-  assert(y_AxisIndex >= 0,"");
-  assert(z_AxisIndex >= 0,"");
+function addParsedDataToScene() {
+  assert(parsedData, "");
+  assert(x_AxisIndex >= 0, "");
+  assert(y_AxisIndex >= 0, "");
+  assert(z_AxisIndex >= 0, "");
 
   // scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
-  scene.userData = [[x_AxisIndex,y_AxisIndex,z_AxisIndex]].concat(parsedData);
+  scene.userData = [
+    [x_AxisIndex, y_AxisIndex, z_AxisIndex]
+  ].concat(parsedData);
 
   scene.name = fileName;
 

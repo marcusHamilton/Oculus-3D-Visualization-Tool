@@ -1,7 +1,9 @@
+
 /**
  * Contains all major functions called on the VRWorld.ejs page for loading an
  * existing world from the database and drawing the data visualization.
  */
+
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
@@ -11,8 +13,6 @@ var effect; //The variable responsible for holding the vreffect
 var vrButton; //Enter vr button seen at start
 var enterVR; //Holds info of whether or not the user is in VR
 var animationDisplay = window; //Holds the HMD (By default is window)
-var delta;
-var torus;
 var lastRender = 0; //Keeps track of last render to avoid obselete rendering
 var windowWidth = window.innerWidth; //The width of the browser window
 var windowHeight = window.innerHeight; //The height of the browser window
@@ -24,45 +24,52 @@ var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
-var plotPointSizeCoeff = 0.01; //Default datapoint size
+var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX = 0; //Largest X value in the dataset for selected columns
 var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
+var rig; //Rig to group camera
+
+//For controls
+
+
+
+var light0;
 
 /**
  * Called every frame
  */
 function update(timestamp) {
-  //Calculate delta to allow smoother object movement
   if (timestamp == null) {
     //Fixes small lag at begining of program where
     //timestamp is null
     timestamp = 15;
   }
-  delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
-
-
-
-  //torus.rotation.y += 0.002
-  //if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
+  // //Checking for dat.guivr error
+  // console.log(timestamp);
+  // var testObject = new THREE.Object3D();
+  // var testInputHelper = dat.GUIVR.addInputObject(testObject);
+  // console.log(testInputHelper);
+  // scene.add(testInputHelper);
 
   //Add all updates below here
 
   //Ensure that we are looking for controller input
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
   //Allows point selection to function
-  pointSelectionUpdate();
 
-  updateMovementControls();
+    updateMovementControls();
+
+    pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -90,11 +97,12 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-var GameLoop = function(timestamp) {
+function GameLoop(timestamp){
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  animationDisplay.requestAnimationFrame(GameLoop);
+
+  window.requestAnimationFrame(GameLoop);
 };
 
 /**
@@ -129,12 +137,13 @@ function Manager() {
     console.log(object);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.name = "camera";
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.vr.enabled = true;
     renderer.vr.standing = true;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setSize(window.innerWidth, window.innerHeight);
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
@@ -161,16 +170,28 @@ function Manager() {
     //This can be removed after development if desired
     drawFPSstats();
 
-    // The [0] index of loadedDataset contains the 3 selected axis column indices
-    drawDataset(loadedDataset[0][0],loadedDataset[0][1],loadedDataset[0][2]);
+    //Initializes the axis selection interfaces
+    axisMenu = new selectedAxes();
+    selectedAxes = new selectedAxesVR();
     
+    //Builds the GUIs
+    VRGui();
+    // BRGui(); May break things dont uncomment
+
+    //Uncomment if you need to use mouse as input for GUI in VR
+    dat.GUIVR.enableMouse(camera,renderer);
+
+    // axisMenu contains the 3 selected axis columns as properties
+    drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
-    //Center the non-VR camera on the data and back a bit
-    camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
-    camera.rotation.y = 270 * Math.PI / 180;
 
+    //Center the non-VR camera on the data and back a bit
+
+    camera.position.set(-1,0,0);
+    camera.rotation.y = 0 * Math.PI / 180;
+ //   onAxisDatabaseChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -263,9 +284,14 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+  console.log("Initializing rig");
+
+  rig = new THREE.Object3D();
+  rig.add(camera);
+  scene.add(rig);
 
   //Add fps controls as well
-  trackballControls = new THREE.TrackballControls(camera);
+  trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
   trackballControls.rotateSpeed = 1.0;
   trackballControls.zoomSpeed = 10;
   trackballControls.panSpeed = 10;
@@ -301,34 +327,10 @@ function setUpControls() {
     applyDown(obj, 'receiveShadow', true)
   };
 
-  //Soooo...... The torus is critical to functionality apparently.
-  //Removing it messes up the lighting in the scene and turns the whole
-  //rendered dataset black.
-  //Arbitrary shape for testing gui settings
-  torus = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
-    new THREE.MeshStandardMaterial({
-      roughness: 0.01,
-      metalness: 0.2
-    })
-  );
-  torus.position.set(-0.25, 1.4, -1.5);
-  torus.castShadow = true;
-  torus.receiveShadow = true;
-  scene.add(torus);
-
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  dat.GUIVR.enableMouse(camera);
-  var gui = dat.GUIVR.create('Settings');
-  gui.position.set(100 , 100, 100);
-  gui.rotation.set(Math.PI / -6, 0, 0);
-  scene.add(gui);
-  gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
-  gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
-  gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
-  castShadows(gui);
-
+  
+  
 }
 
 
@@ -361,19 +363,19 @@ function drawDataset(xCol, yCol, zCol)
   // points geometry contains a list of all the point vertices pushed below
   pointsGeometry = new THREE.BufferGeometry();
 
-  var pointSize = plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
+  var pointSize = pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ);
 
   // Grab the OpenGLSL shader definitions from page html
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
   var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
 
-  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
+  var texture = new THREE.TextureLoader().load( "images/shader2.png" );
 
   // Configure point material shader
   var pointsMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      color:   { value: new THREE.Color( 0xffffff ) }//,
-      // texture: { value: texture }
+      color:   { value: new THREE.Color( 1,1,1 ) },
+      texture: { value: texture }
     },
     vertexShader: myVertexShader,
     fragmentShader: myFragmentShader
@@ -449,8 +451,15 @@ function drawDataset(xCol, yCol, zCol)
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
+  datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
+
+  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  scene.add(light0);
+  scene.add(VRGui);
+  scene.add(rig);
   drawAxisLabels();
+  initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
 }
 
@@ -466,6 +475,7 @@ function drawDataset(xCol, yCol, zCol)
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
   var axisLabelGroup = new THREE.Group();
+  axisLabelGroup.name = "AxisLabelGroup";
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({
@@ -533,3 +543,4 @@ function drawAxisLabels() {
   datasetAndAxisLabelGroup.add(axisLabelGroup);
   //scene.add(axisLabelGroup);
 }
+

@@ -16,7 +16,7 @@ function addUserHelper(WorldID) {
 
 function addUser() {
     //regex to check that the email is a gmail account
-    var reg = new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$");
+    var reg = new RegExp("^[\\w.+\\-]+@gmail\\.com$");
     if (document.getElementById('addEmail').value == "") {
         document.getElementById('badEmailMessage').style = "display:none";
         document.getElementById('noEmailMessage').style = "display:block";

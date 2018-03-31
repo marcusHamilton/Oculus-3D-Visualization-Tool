@@ -1,3 +1,6 @@
+var axisMenu; //Interface between data and redraw function for broswer gui
+var selectedAxes; //The Axes selected in the VR GUI
+
 //DAT GUI variables
 var redraw = {
   redraw: function () {
@@ -7,18 +10,26 @@ var redraw = {
     redrawDataSet(1)
   }
 }; //function for Redraw button in browser
-var pushAxesToDB = {
-  pushAxesToDB: function () {
-    updateAxisSelectionInDatabase(worldID, selectedAxesJSON)
+var pushToDB = {
+  pushToDB: function () {
+    //reformatting selectedAxesJSON
+    if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0){
+      inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+      console.log(inspectAxesJSON); //inspection log
+      selectedAxesJSON = JSON.parse(inspectAxesJSON);
+      updateAxisSelectionInDatabase(worldID,selectedAxesJSON);
+
+      //reformatting selectedPoints
+      inspectSelectedPointsJSON = JSON.stringify(selectedPoints);
+      console.log(inspectSelectedPointsJSON);
+      selectedPointsJSON = JSON.parse(inspectSelectedPointsJSON);
+      updateSelectionInDatabase(worldID,selectedPointsJSON);
+    }
+    else{console.log("Could not push to database due to blank dropdown")}
   }
 };
-var axisMenu;
-//Interface between data and redraw function for broswer gui
-var selectedAxes; //The Axes selected in the VR GUI
 
-//Used for inspection to ensure that the object that is going to be passed is the correct format to be pushed to the database
-var selectedAxesJSON;
-var inspectAxesJSON;
+
 
 
 /*Clears the scene and redraws data set
@@ -76,10 +87,6 @@ function redrawDataSet(VR) {
     1: axisMenu.yAxis,
     2: axisMenu.zAxis
   };
-  inspectAxesJSON = JSON.stringify(selectedAxesJSON);
-  console.log(inspectAxesJSON);
-  selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));
-  
   recolorSelected();
 
 
@@ -89,7 +96,7 @@ function redrawDataSet(VR) {
 Constructor for an object that holds the currently selected axis values as well
 as the array of labels to be displayed by the dropdowns
 **/
-function selectedAxes() {
+function SelectedAxes() {
   this.xAxis = loadedDataset[0][0]; //holds current x axis
   this.yAxis = loadedDataset[0][1]; //holds current y axis
   this.zAxis = loadedDataset[0][2]; //holds current z axis
@@ -97,7 +104,7 @@ function selectedAxes() {
 }
 
 //Holds the selected axis choices for the VR GUI
-function selectedAxesVR() {
+function SelectedAxesVR() {
   this.selectedX = loadedDataset[0][0];
   this.selectedY = loadedDataset[0][1];
   this.selectedZ = loadedDataset[0][2];

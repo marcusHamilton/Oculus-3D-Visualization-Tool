@@ -24,6 +24,8 @@ var guiInputHelper;
 var rightGrip;
 var leftGrip;
 
+var isRotating = false;
+
 //var directionalArrow = new THREE.Object3D();
 
 window.addEventListener('vr controller connected', function (event) {
@@ -153,7 +155,7 @@ function initializeMovementControls() {
  */
 
 function updateMovementControls() {
-    rotAngle = Math.atan2(rig.getWorldDirection.z, rig.getWorldDirection.x);
+    //rotAngle = Math.atan2(rig.getWorldDirection.z, rig.getWorldDirection.x);
     //left controller: Horizontal movement + positive vertical movement
     if (handControlL && handControlL != null) {
         rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
@@ -164,7 +166,12 @@ function updateMovementControls() {
     }
     //right Controller: Rotation + negative vertical movement
     if (handControlR) {
-        rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
+        if(handControlR.getAxis(0) != 0) {
+            rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
+            isRotating = true;
+        } else {
+            isRotating = false;
+        }
         if (rightGrip) {
             rig.translateY((-1) * movementSpeedCoeff * (0.5));
         }

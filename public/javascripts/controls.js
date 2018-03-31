@@ -24,7 +24,7 @@ var guiInputHelper;
 var rightGrip;
 var leftGrip;
 
-var isRotating = false;
+
 
 //var directionalArrow = new THREE.Object3D();
 
@@ -70,7 +70,7 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
     //Points in forward direction
-    directionArrow = new THREE.ArrowHelper(rig.direction,rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
+    directionArrow = new THREE.ArrowHelper(rig.direction.normalize(),rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
     rig.add(directionArrow);
 
     if (handControlR && handControlR != null) {
@@ -171,12 +171,6 @@ function updateMovementControls() {
     if (handControlR) {
         if(handControlR.getAxis(0) != 0) {
             rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
-            isRotating = true;
-            scene.add(directionArrow);
-        } else {
-            isRotating = false;
-            scene.remove(directionArrow);
-        }
         if (rightGrip) {
             rig.translateY((-1) * movementSpeedCoeff * (0.5));
         }
@@ -315,10 +309,10 @@ function setListeners() {
     //Touch right thumbstick to show directional arrow
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('thumbstick touch began', function (event) {
-            //rig.add(directionalArrow);
+            scene.add(directionArrow);
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {
-            //rig.remove(directionalArrow);
+            scene.remove(directionArrow);
         });
     }
 
@@ -383,4 +377,4 @@ function onAKeyPress(event) {
     //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
     //camera.rotation.x += rotationSpeed;
     // }
-}
+}}

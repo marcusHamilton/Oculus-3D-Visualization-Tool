@@ -313,13 +313,27 @@ function reloadWorlds() {
 }
 
 //Helper function to help load in a world for a user
-function reloadHelper(key) {
-  return database.ref("worlds/" + key).once('value').then(function (snapshot) {
+function reloadHelper(key){
+  return database.ref("worlds/" +key).once('value').then(function(snapshot){
     var world = snapshot.val()
-    var name = world.object.name;
-    $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#" id="' + key + '" data-toggle="modal" data-target="#addUser-modal" onClick="addUserHelper(this.id)">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
+    if(world){
+      var name = world.object.name;
+      $('#worldContainer').append('  <div class="btn-group"><a href="/VRWorld" onClick="packID(this.id)" type="button" class="btn btn-primary" id="' + key + '">' + name + '</a><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu worldOptions" role="menu"><li><a href="#" id="' + key + '" data-toggle="modal" data-target="#addUser-modal" onClick="addUserHelper(this.id)">Add User</a></li><li><a href="#" onClick="deleteWorld(this.id)" id="' + key + '">Delete</a></li></ul></div>');
+    }
   });
 }
 
+//adds a collaborator to a world if the user and world both exist
+function addCollab(email, worldID){
+  var user = firebase.auth().currentUser;
+
+  //only signed-in users can add collaborators to their worlds
+  if(user){
+
+  }
+  else{
+    alert("Please sign-in with your gmail account to add collaborators to your worlds.");
+  }
+}
 //******************************************************************************
 //******************************************************************************

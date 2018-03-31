@@ -10,27 +10,20 @@ function addCollab(userID) {
 
 }
 
-function addUserHelper(WorldID)
-{
-    document.getElementById('worldIDInputBox').value=WorldID;
+function addUserHelper(WorldID) {
+    document.getElementById('worldIDInputBox').value = WorldID;
 }
 
-function addUser()
-{
+function addUser() {
     //regex to check that the email is a gmail account
-    var reg = new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$");
-    if(document.getElementById('addEmail').value == "")
-    {
-        document.getElementById('badEmailMessage').style="display:none";
-        document.getElementById('noEmailMessage').style="display:block";
-    }
-    else if(!reg.test(document.getElementById('addEmail').value))
-    {
-        document.getElementById('noEmailMessage').style="display:none";
-        document.getElementById('badEmailMessage').style="display:block";
-    }
-    else
-    {
+    var reg = new RegExp("^[\\w.+\\-]+@gmail\\.com$");
+    if (document.getElementById('addEmail').value == "") {
+        document.getElementById('badEmailMessage').style = "display:none";
+        document.getElementById('noEmailMessage').style = "display:block";
+    } else if (!reg.test(document.getElementById('addEmail').value)) {
+        document.getElementById('noEmailMessage').style = "display:none";
+        document.getElementById('badEmailMessage').style = "display:block";
+    } else {
         var email = document.getElementById('addEmail').value;
         var worldID = document.getElementById('worldIDInputBox').value;
         console.log("Adding email: " + email + " to world: " + worldID);
@@ -39,8 +32,8 @@ function addUser()
 
         //Reset the modal box for more use
         $('#addUser-modal').modal('hide');
-        document.getElementById('noEmailMessage').style="display:none";
-        document.getElementById('badEmailMessage').style="display:none";
+        document.getElementById('noEmailMessage').style = "display:none";
+        document.getElementById('badEmailMessage').style = "display:none";
         document.getElementById('addEmail').value = "";
         document.getElementById('worldIDInputBox').value = "";
     }

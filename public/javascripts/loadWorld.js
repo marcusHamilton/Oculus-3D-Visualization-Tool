@@ -30,7 +30,6 @@ var largestY = 0; //Largest Y value in the dataset for selected columns
 var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
-var datasetAndAxisLabelGroup;
 
 /**
  * Called every frame
@@ -45,10 +44,8 @@ function update(timestamp) {
   delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
-
-
-  //torus.rotation.y += 0.002
-  //if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
+  torus.rotation.y += 0.002
+  if (torus.rotation.y > Math.PI) torus.rotation.y -= (Math.PI * 2) //  Keep DAT GUI display tidy!
 
   //Add all updates below here
 
@@ -61,15 +58,12 @@ function update(timestamp) {
 
   //Allows point selection to function
   pointSelectionUpdate();
-
-  updateMovementControls();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
   pointsGeometry.getAttribute('position').needsUpdate = true;
   pointsGeometry.getAttribute('size').needsUpdate = true;
   pointsGeometry.getAttribute('isSelected').needsUpdate = true;
-  pointsGeometry.getAttribute('isHidden').needsUpdate = true;
 }
 
 /**
@@ -101,7 +95,6 @@ var GameLoop = function(timestamp) {
  * Manages retrieval of existing worlds from the database and initializes the
  * current scene.
  */
-
 function Manager() {
   //Initialize camera, scene, and renderer
   //First get the scene from the data base
@@ -114,7 +107,6 @@ function Manager() {
   /**
    * FIREBASE GET
   */
-
   function loadScene(response){
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
@@ -167,7 +159,7 @@ function Manager() {
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
     
-    //Center the non-VR camera on the data and back a bit
+    //Center the camera on the data and back a bit
     camera.position.set(plotInitSizeX * 1.2, camera.position.z,  plotInitSizeZ * 1.2);
     camera.rotation.y = 270 * Math.PI / 180;
 
@@ -232,7 +224,7 @@ function addEnterVrButtons() {
   };
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
     .on("enter", function() {
-      console.log("enter VR");
+      console.log("enter VR")
     })
     .on("exit", function() {
       console.log("exit VR");
@@ -301,9 +293,6 @@ function setUpControls() {
     applyDown(obj, 'receiveShadow', true)
   };
 
-  //Soooo...... The torus is critical to functionality apparently.
-  //Removing it messes up the lighting in the scene and turns the whole
-  //rendered dataset black.
   //Arbitrary shape for testing gui settings
   torus = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.4, 0.15, 256, 32),
@@ -321,16 +310,136 @@ function setUpControls() {
   //  https://github.com/dataarts/dat.guiVR
   dat.GUIVR.enableMouse(camera);
   var gui = dat.GUIVR.create('Settings');
-  gui.position.set(100 , 100, 100);
+  gui.position.set(0.2, 0.8, -1);
   gui.rotation.set(Math.PI / -6, 0, 0);
   scene.add(gui);
   gui.add(torus.position, 'x', -1, 1).step(0.001).name('Position X');
   gui.add(torus.position, 'y', -1, 2).step(0.001).name('Position Y');
   gui.add(torus.rotation, 'y', -Math.PI, Math.PI).step(0.001).name('Rotation').listen();
   castShadows(gui);
-
 }
 
+/**
+ * The following is an event listener for when a hand held controller is connected
+ */
+window.addEventListener('vr controller connected', function(event) {
+
+  controller = event.detail;
+  scene.add(controller);
+
+  //Ensure controllers appear at the right height
+  //controller.standingMatrix = renderer.vr.getStandingMatrix();
+  controller.head = window.camera;
+
+  //Add a visual for the controllers
+  var
+    meshColorOff = 0xDB3236, //  Red.
+    meshColorOn = 0xF4C20D, //  Yellow.
+    controllerMaterial = new THREE.MeshStandardMaterial({
+      color: meshColorOff
+    }),
+    controllerMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+      controllerMaterial
+    ),
+    handleMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(0.03, 0.1, 0.03),
+      controllerMaterial
+    );
+
+  controllerMaterial.flatShading = true;
+  controllerMesh.rotation.x = -Math.PI / 2;
+  handleMesh.position.y = -0.05;
+  controllerMesh.add(handleMesh);
+  controller.userData.mesh = controllerMesh;//  So we can change the color later.
+  controller.add(controllerMesh);
+  castShadows(controller);
+  receiveShadows(controller);
+
+
+  //  Allow this controller to interact with DAT GUI.
+  var guiInputHelper = dat.GUIVR.addInputObject(controller);
+  scene.add(guiInputHelper);
+
+  //Button events. This is currently just using the primary button
+  controller.addEventListener('primary press began', function(event) {
+
+    event.target.userData.mesh.material.color.setHex(meshColorOn);
+    guiInputHelper.pressed(true)
+  });
+  controller.addEventListener('primary press ended', function(event) {
+
+    event.target.userData.mesh.material.color.setHex(meshColorOff);
+    guiInputHelper.pressed(false)
+  });
+
+  //On controller removal
+  controller.addEventListener('disconnected', function(event) {
+
+    controller.parent.remove(controller)
+  })
+});
+
+//Keyboard Controls
+function onAKeyPress(event){
+    var keyCode = event.which;
+    var translationSpeed = 0.1;
+    var rotationSpeed = 0.1;
+    var cameraDirection = new THREE.Vector3();
+    var theta // Angle between x and z
+    var inverseTheta
+    var gamma // Angle between x and y
+    //A == 65 Left
+    if(keyCode == 65){
+      camera.position.z -= translationSpeed;
+    }
+    //D == 68 Right
+    else if (keyCode == 68){
+      camera.position.z += translationSpeed;
+    }
+    //W == 87 Forward
+    else if (keyCode == 87){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x += (translationSpeed*Math.sin(theta));
+      camera.position.z += (translationSpeed*Math.cos(theta));
+    }
+    //S == 83 Backward
+    else if(keyCode == 83){
+      camera.getWorldDirection(cameraDirection);
+      theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      camera.position.x -= (translationSpeed*Math.sin(theta));
+      camera.position.z -= (translationSpeed*Math.cos(theta));
+    }
+    //space == 32 Up
+    else if(keyCode == 32){
+      camera.position.y += translationSpeed;
+    }
+    //ctrl == 17  Down
+    else if(keyCode == 17){
+      camera.position.y -= translationSpeed;
+    }
+    //Q == 81 Look left
+    else if(keyCode == 81){
+      camera.rotation.y += rotationSpeed;
+    }
+    //E == 69 Look right
+    else if(keyCode == 69){
+      camera.rotation.y -= rotationSpeed;
+    }
+    //Look up and look down might be unnecasary when this is converted to occulus controller
+    //Doesnt work anyway tho 
+
+    //R == 82 Look Up
+    //else if(keyCode == 82){
+      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      //inverseTheta = Math.PI /2 - theta;
+      //gamma = Math.PI - (inverseTheta + Math.PI /2);
+      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
+      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
+      //camera.rotation.x += rotationSpeed;
+   // }
+  }
 
 
 /**
@@ -384,7 +493,6 @@ function drawDataset(xCol, yCol, zCol)
   var colors = new Float32Array( loadedDataset.length * 3 );
   var sizes = new Float32Array( loadedDataset.length );
   var selected = new Float32Array( loadedDataset.length );
-  var hidden = new Float32Array( loadedDataset.length );
 
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
@@ -416,8 +524,7 @@ function drawDataset(xCol, yCol, zCol)
     p.toArray( positions, i * 3 );
 
     // Set point color RGB values to magnitude of XYZ values
-    color = colorFromXYZcoords(p);
-    //color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
+    color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
     color.toArray( colors, i * 3 );
 
     // Set the sizes of all the points to be added to BufferGeometry
@@ -432,7 +539,6 @@ function drawDataset(xCol, yCol, zCol)
   pointsGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
   pointsGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
   pointsGeometry.addAttribute( 'isSelected', new THREE.BufferAttribute( selected, 1 ) );
-  pointsGeometry.addAttribute( 'isHidden', new THREE.BufferAttribute(hidden, 1) );
 
   // create the particle shader system
   pointsSystem = new THREE.Points(
@@ -441,17 +547,8 @@ function drawDataset(xCol, yCol, zCol)
 
   pointsSystem.name = "PointsSystem";
   // add it to the scene
-
-  //Position the dataset in a reasonable spot. This will probably change when
-  //we start implementing collaboration.
-  pointsSystem.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
-  pointsSystem.rotation.set(0,-0.785398,0);
-
-  //Keep the drawn dataset and axis labels in a group.
-  datasetAndAxisLabelGroup = new THREE.Group();
-  datasetAndAxisLabelGroup.add(pointsSystem);
+  scene.add(pointsSystem);
   drawAxisLabels();
-  scene.add(datasetAndAxisLabelGroup);
 }
 
 /**
@@ -461,11 +558,8 @@ function drawDataset(xCol, yCol, zCol)
  * @precondition scene must be initialized
  * @postcondition axis labels are drawn from 0,0
  */
-
-//TODO: Rewrite to allow for negative values.
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
-  var axisLabelGroup = new THREE.Group();
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({
@@ -499,9 +593,9 @@ function drawAxisLabels() {
   var lineZ = new THREE.Line(geometryZ, materialZ);
 
   // Add them to the scene
-  axisLabelGroup.add(lineX);
-  axisLabelGroup.add(lineY);
-  axisLabelGroup.add(lineZ);
+  scene.add(lineX);
+  scene.add(lineY);
+  scene.add(lineZ);
 
   // Axis line ticks - Just draws 10 ticks on each axis
   var lineXTicks = new LinkedList();
@@ -510,7 +604,7 @@ function drawAxisLabels() {
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
     lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
+    scene.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
   }
   var lineYTicks = new LinkedList();
   for (var yUnits = 1; yUnits <= 10; yUnits++) {
@@ -518,7 +612,7 @@ function drawAxisLabels() {
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX * 0.1, plotInitSizeY / largestY * yUnits, 0));
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
     lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
+    scene.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
   }
   var lineZTicks = new LinkedList();
   for (var zUnits = 1; zUnits <= 10; zUnits++) {
@@ -526,10 +620,6 @@ function drawAxisLabels() {
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
-    axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
+    scene.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
-  axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
-  axisLabelGroup.rotation.set(0,-0.785398,0);
-  datasetAndAxisLabelGroup.add(axisLabelGroup);
-  //scene.add(axisLabelGroup);
 }

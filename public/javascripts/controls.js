@@ -62,7 +62,6 @@ window.addEventListener('vr controller connected', function (event) {
             new THREE.BoxGeometry(0.03, 0.1, 0.03),
             controllerMaterial
         );
-
     controllerMaterial.flatShading = true;
     controllerMesh.rotation.x = -Math.PI / 2;
     handleMesh.position.y = -0.05;
@@ -70,6 +69,10 @@ window.addEventListener('vr controller connected', function (event) {
     controller.userData.mesh = controllerMesh; //  So we can change the color later.
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
+    //Points in forward direction
+    directionArrow = new THREE.ArrowHelper(rig.direction,rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
+    rig.add(directionArrow);
+
     if (handControlR && handControlR != null) {
         aRightMesh = handControlR.getChildByName("C_Mesh");
     }
@@ -169,8 +172,10 @@ function updateMovementControls() {
         if(handControlR.getAxis(0) != 0) {
             rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
             isRotating = true;
+            scene.add(directionArrow);
         } else {
             isRotating = false;
+            scene.remove(directionArrow);
         }
         if (rightGrip) {
             rig.translateY((-1) * movementSpeedCoeff * (0.5));

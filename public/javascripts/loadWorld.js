@@ -166,7 +166,6 @@ function Manager() {
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);
 
-    directionArrow = new THREE.ArrowHelper(rig.direction,rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
     /*
       var text2 = document.createElement('div');
       text2.style.position = 'absolute';

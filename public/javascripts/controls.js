@@ -53,7 +53,7 @@ window.addEventListener('vr controller connected', function (event) {
             color: meshColorOff
         }),
         controllerMesh = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+            new THREE.ConeGeometry(0.005, 0.05, 25, 1),
             controllerMaterial
         ),
         handleMesh = new THREE.Mesh(

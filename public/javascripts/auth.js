@@ -281,7 +281,6 @@ function onUserPositionChange(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
   userRef.on('child_changed', function (snapshot) {
     console.log(snapshot.val());
-    rig.position = snapshot.val();
   });
 }
 

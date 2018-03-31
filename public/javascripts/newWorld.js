@@ -109,41 +109,47 @@ function loadCSVremote() {
   //Grab the file from the html dom system
   var url = document.getElementById('csvURL').value;
 
-  Papa.parse(url, {
-    download: true,
-    //header: true,
-    dynamicTyping: true,
-    error: function (error) { //error callback
-      SomethingWentWrong(error);
-    },
-    complete: function (results) { //success call back
-      parsedData = results.data;
-      success();
-    }
-  });
-
-  //Message if there is success
-  function success() {
-    //Data is stored in the browser storage and can be retrieved and used on
-    //other html pages
-    getOptions();
-
-
-    //Clean up webpage and notify of success
-    var toRemove = document.getElementById('urlBar');
-    toRemove.remove();
-    document.getElementById('localLoadLabel').remove();
-    var continueButton = document.getElementById('continueToVirtual');
-    continueButton.innerHTML = '<a href="#" class="btn btn-success" role="button" onclick="getResults()">Continue</a> ';
+  if(url == "")
+  {
+    console.log("Input was empty");
   }
-
-  //Message if there is an error
-  function SomethingWentWrong(error) {
-    console.log(error);
-
-    //display error info on the webpage
-    var message = document.getElementById('successMessage');
-    message.innerHTML = '<br><div class="alert alert-danger"><strong>Error!</strong> Wrong URL?</div> ';
+  else{
+    Papa.parse(url, {
+      download: true,
+      //header: true,
+      dynamicTyping: true,
+      error: function (error) { //error callback
+        SomethingWentWrong(error);
+      },
+      complete: function (results) { //success call back
+        parsedData = results.data;
+        success();
+      }
+    });
+  
+    //Message if there is success
+    function success() {
+      //Data is stored in the browser storage and can be retrieved and used on
+      //other html pages
+      getOptions();
+  
+  
+      //Clean up webpage and notify of success
+      var toRemove = document.getElementById('urlBar');
+      toRemove.remove();
+      document.getElementById('localLoadLabel').remove();
+      var continueButton = document.getElementById('continueToVirtualURL');
+      continueButton.innerHTML = '<a href="#" class="btn btn-success" role="button" onclick="getResults()">Continue</a> ';
+    }
+  
+    //Message if there is an error
+    function SomethingWentWrong(error) {
+      console.log(error);
+  
+      //display error info on the webpage
+      var message = document.getElementById('successMessage');
+      message.innerHTML = '<br><div class="alert alert-danger"><strong>Error!</strong> Wrong URL?</div> ';
+    }
   }
 }
 

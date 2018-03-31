@@ -70,7 +70,7 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
     //Points in forward direction
-    directionArrow = new THREE.ArrowHelper(rig.direction.normalize(),rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
+    directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),rig.getWorldPosition(),2,0x0055ff,0.5,0.5);
     rig.add(directionArrow);
 
     if (handControlR && handControlR != null) {

@@ -6,10 +6,6 @@ function packID(id) {
     sessionStorage.setItem('selectedID', JSON.stringify(id));
 }
 
-function addCollab(userID) {
-
-}
-
 function addUserHelper(WorldID) {
     document.getElementById('worldIDInputBox').value = WorldID;
 }

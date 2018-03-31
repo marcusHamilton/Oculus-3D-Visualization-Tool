@@ -111,6 +111,10 @@ function isUserEqual(googleUser, firebaseUser) {
   return false;
 }
 
+//******************************************************************************
+//                          DATABASE functions
+//******************************************************************************
+
 //Checks whether the user has been created in the database or not
 function userExistsDB(firebaseUID) {
   database.ref("users/" + firebaseUID).once("value", snapshot => {
@@ -128,7 +132,7 @@ function userExistsDB(firebaseUID) {
 function createUserDB(firebaseUID) {
   database.ref('users/' + firebaseUID).set({
     "name": {
-      "give_name": profile.getGivenName(),
+      "given_name": profile.getGivenName(),
       "family_name": profile.getFamilyName()
     },
     "email": profile.getEmail(),
@@ -136,10 +140,6 @@ function createUserDB(firebaseUID) {
   });
   console.log("Success: Added " + profile.getName() + " as an authenticated user to the database.");
 }
-
-//******************************************************************************
-//                          DATABASE functions
-//******************************************************************************
 
 function getUID() {
   return firebase.auth().currentUser.uid;
@@ -329,11 +329,58 @@ function addCollab(email, worldID){
 
   //only signed-in users can add collaborators to their worlds
   if(user){
-
+    //check if email is synced with a valid user
+    checkUserEmailExists(email, worldID);
   }
   else{
-    alert("Please sign-in with your gmail account to add collaborators to your worlds.");
+    alert("Please sign-in with your gmail account.");
   }
+}
+
+//makes sure that the given collaborator email has a valid user existing
+  //if it does not find a user then no changes are made in collaboration
+function checkUserEmailExists(collabEmail, worldID){
+  return database.ref('users').orderByKey().once('value').then(function(snapshot){
+    snapshot.forEach(function(childSnapshot) {
+      //search through each user to find the user associated with the email
+      var collab = childSnapshot.val();
+      var collabKey = childSnapshot.key;
+
+      //emails match
+      if(collab.email == collabEmail){
+        //check whether the world has a collaboration made 
+        checkWorldCollab(collabKey, worldID);
+        return true;
+      }
+    });
+  });
+}
+
+//check if the world exists in collaborations
+    //if there is a collaboration, then add the user to the list
+    //if there isn't a collaboration, make a new one and add the user to the list
+function checkWorldCollab(collaboratorID, worldID){
+  return database.ref("worlds/" +worldID).once('value').then(function(snapshot){
+    var world = snapshot.val();
+    if(world.collabation){
+      //push to existing collaboration
+      addToWorldCollab(collaboratorID, collaborationID);
+    }
+    else{
+      //create a new collaboration for the world
+      createWorldCollab(collaboratorID, worldID);
+    }
+  });
+}
+
+//adds a collaboration to an existing collaboration
+function addtoWorldCollab(){
+
+}
+
+//creates a new collaboration object for the world and adds the first collaborator to it
+function createWorldCollab(collaboratorID, worldID){
+  alert("hi");
 }
 //******************************************************************************
 //******************************************************************************

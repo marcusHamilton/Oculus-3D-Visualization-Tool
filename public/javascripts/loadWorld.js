@@ -528,8 +528,8 @@ function drawAxisLabels() {
       smallestZpos = pointsGeometry.getAttribute('position').array[i+2];
     }
   }
-  console.log("Smallest: " + smallestXpos + ", " + smallestYpos + ", " + smallestZpos);
-  console.log("Largest: " + largestXpos + ", " + largestYpos + ", " + largestZpos);
+  //console.log("Smallest: " + smallestXpos + ", " + smallestYpos + ", " + smallestZpos);
+  //console.log("Largest: " + largestXpos + ", " + largestYpos + ", " + largestZpos);
 
   // Push line points into geometries, extending 1.5X beyond the largest point
   geometryX.vertices.push(new THREE.Vector3(smallestXpos, 0, 0));

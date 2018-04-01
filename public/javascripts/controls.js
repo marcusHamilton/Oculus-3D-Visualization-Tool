@@ -80,6 +80,7 @@ window.addEventListener('vr controller connected', function (event) {
     arrowMaterial.flatShading = true;
     arrowMesh.position.y = 0.1;
     arrowMesh.add(arrowLineMesh);
+    arrowMesh.rotateX(Math.PI/2);
     rig.add(arrowMesh);
 
     if (handControlR && handControlR != null) {

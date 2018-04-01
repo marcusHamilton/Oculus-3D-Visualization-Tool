@@ -328,11 +328,20 @@ function setPointScale(datasetIndex, size) {
  */
 function colorFromXYZcoords(vec3) {
 
+  // values between 0 and 1 to specify the darkest/lightest color possible.
+  // (So that we don't end up with pure black or pure white points).
+  var colorFloor = 0.1;
+  var colorCeiling = 0.5;
   // Set point color RGB values to magnitude of XYZ values
   var newColor = new THREE.Color();
 
+  // Fraction of the distance the vector is at between the smallest, and largest values
+  var xFraction = colorFloor + ((vec3.x + Math.abs(smallestXpos)) / (largestXpos - smallestXpos) * (1 - colorFloor - (1 - colorCeiling)));
+  var yFraction = colorFloor + ((vec3.y + Math.abs(smallestYpos)) / (largestYpos - smallestYpos) * (1 - colorFloor - (1 - colorCeiling)));
+  var zFraction = colorFloor + ((vec3.z + Math.abs(smallestZpos)) / (largestZpos - smallestZpos) * (1 - colorFloor - (1 - colorCeiling)));
+
   // Assemble the RGB components in a color value.
-  newColor.setRGB(vec3.x / largestX, vec3.y / largestY, vec3.z / largestZ);
+  newColor.setRGB(xFraction, yFraction, zFraction);
 
   return newColor;
 }

@@ -298,17 +298,30 @@ function reloadWorlds() {
 
   //Fetch all the worlds that a user owns
   //TODO: Fetch worlds they collaborate with as well
-  return database.ref('users/' + getUID()).child("worlds").once('value').then(function (snapshot) {
-    var worlds = snapshot.val();
+  return database.ref('users/' + getUID()).once('value').then(function (snapshot) {
+    var user = snapshot.val();
 
-    //load in each world
-    for (var key in worlds) {
+    //load in each user owned world
+    for (var worldKey in user.worlds) {
       //Key must evaluate to true in order for user to have access to the world
-      if (worlds[key]) {
-        reloadHelper(key);
+      if (user.worlds[worldKey]) {
+        document.getElementById('spinningLoader').style = "display:none";
+        reloadHelper(worldKey);
       }
     }
-    document.getElementById('spinningLoader').style = "display:none";
+    //load in collaboration worlds
+    for(var collabKey in user.collaborations){
+      //Key must evaluate to true in order for user to have access to the world
+      if (user.collaborations[collabKey]) {
+        //get the world associated with the collaboration object and load it in for the user
+        return database.ref('collaborations/' +collabKey).once('value').then(function (snapshot){
+          var collaboration = snapshot.val();
+
+          document.getElementById('spinningLoader').style = "display:none";
+          reloadHelper(collaboration.world_id);
+        });
+      }
+    }
   });
 }
 
@@ -330,7 +343,17 @@ function addCollab(email, worldID){
   //only signed-in users can add collaborators to their worlds
   if(user){
     //check if email is synced with a valid user
-    checkUserEmailExists(email, worldID);
+    return database.ref("worlds/" +worldID).once('value').then(function(snapshot){
+      var world = snapshot.val();
+
+      //only owners of worlds can add collaborators to their worlds
+      if(world.owner_id = getUID()){
+        checkUserEmailExists(email, worldID);
+      }
+      else{
+        alert("You must be the owner of the world: " + worldID + " to add collaborators to it.");
+      }
+    });
   }
   else{
     alert("Please sign-in with your gmail account.");
@@ -396,23 +419,19 @@ function addToWorldCollab(collaboratorID, worldID, collaborationID){
 
 //creates a new collaboration object for the world and adds the first collaborator to it
 function createWorldCollab(collaboratorID, worldID){
-  var ownerObj = {};
   var collaboratorObj = {};
-  var worldObj = {};
   var collaborationUserObj = {};
   var collaborationWorldObj = {};
+  var collaborationJSON = {};
   var ownerID = getUID();
-  var collaborationRef, worldRef, collaboratorRef, ownerJSON, worldJSON, collaboratorJSON;
+  var collaborationRef, worldRef, collaboratorRef;
 
   //preparing to push ownerID, worldID and collaboratorID to the collaboration object
-  ownerObj[ownerID] = true;
   collaboratorObj[collaboratorID] = true;
-  worldObj[worldID] = true;
 
-  var collaborationJSON = {}
-  collaborationJSON['owner'] = ownerObj
-  collaborationJSON['world'] = worldObj
-  collaborationJSON['collaborators'] = collaboratorObj
+  collaborationJSON['owner_id'] = ownerID;
+  collaborationJSON['world_id'] = worldID;
+  collaborationJSON['collaborators'] = collaboratorObj;
 
   //Pushing the new collaboration to the database
   collaborationRef = database.ref('/collaborations').push(collaborationJSON);

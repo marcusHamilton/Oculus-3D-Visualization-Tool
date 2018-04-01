@@ -347,7 +347,7 @@ function setUpControls() {
   effect.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
 
-  rig.add(playerSphere);
+  camera.add(playerSphere);
   //Set up controls gui
   applyDown = function (obj, key, value) {
     obj[key] = value;

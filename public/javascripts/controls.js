@@ -330,6 +330,8 @@ function setListeners() {
 
             scene.add(arrowMesh);
             scene.add(arrowLineMesh);
+            arrowLineMesh.add(arrowMesh);
+            arrowLineMesh.rotateY(-Math.PI/2);
             rig.add(arrowMesh);
 
         });

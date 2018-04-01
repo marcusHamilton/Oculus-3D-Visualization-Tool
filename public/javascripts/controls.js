@@ -169,14 +169,14 @@ function updateMovementControls() {
     }
     //right Controller: Rotation + negative vertical movement
     if (handControlR) {
-        if(handControlR.getAxis(0) != 0) {
+        if (handControlR.getAxis(0) != 0) {
             rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
-        if (rightGrip) {
-            rig.translateY((-1) * movementSpeedCoeff * (0.5));
+            if (rightGrip) {
+                rig.translateY((-1) * movementSpeedCoeff * (0.5));
+            }
         }
     }
 }
-
 
 
 
@@ -377,4 +377,4 @@ function onAKeyPress(event) {
     //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
     //camera.rotation.x += rotationSpeed;
     // }
-}}
+}

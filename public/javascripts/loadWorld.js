@@ -214,7 +214,7 @@ function Manager() {
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
     //Handle Keyboard Input
-    //document.addEventListener('keydown', onAKeyPress, false);
+    document.addEventListener('keydown', onAKeyPress, false);
 
 
     //Center the non-VR camera on the data and back a bit

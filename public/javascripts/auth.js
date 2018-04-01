@@ -347,3 +347,13 @@ function reloadHelper(key) {
 
 //******************************************************************************
 //******************************************************************************
+
+
+
+
+function AddWorldByKey(worldRefKey){
+      var userWorldObj = {};
+    userWorldObj[worldRefKey] = 'true';
+    console.log(worldRefKey);
+    firebase.database().ref('/users/' + getUID()).child("worlds").update(userWorldObj);
+}

@@ -341,6 +341,7 @@ function addCollab(email, worldID){
   //if it does not find a user then no changes are made in collaboration
 function checkUserEmailExists(collabEmail, worldID){
   return database.ref('users').orderByKey().once('value').then(function(snapshot){
+    var found = 0;
     snapshot.forEach(function(childSnapshot) {
       //search through each user to find the user associated with the email
       var collab = childSnapshot.val();
@@ -350,9 +351,13 @@ function checkUserEmailExists(collabEmail, worldID){
       if(collab.email == collabEmail){
         //check whether the world has a collaboration made 
         checkWorldCollab(collabKey, worldID);
+        found = 1;
         return true;
       }
     });
+    if(found == 0){
+      alert("ERROR: There are no users associated with the email: " + collabEmail);
+    }
   });
 }
 
@@ -364,7 +369,7 @@ function checkWorldCollab(collaboratorID, worldID){
     var world = snapshot.val();
     if(world.collabation){
       //push to existing collaboration
-      addToWorldCollab(collaboratorID, collaborationID);
+      addToWorldCollab(collaboratorID, worldID, collaborationID);
     }
     else{
       //create a new collaboration for the world
@@ -374,13 +379,22 @@ function checkWorldCollab(collaboratorID, worldID){
 }
 
 //adds a collaboration to an existing collaboration
-function addtoWorldCollab(){
+function addToWorldCollab(collaboratorID, worldID, collaborationID){
+  var collaboratorObj, collaborationObj = {};
+  collaboratorObj[collaboratorID] = 'true';
+  collaborationObj[collaborationID] = 'true';
 
+
+  //updates the collaboration object as well as the collaborators list of collaborations
+  collaborationRef = firebase.database.ref('/collaborations/' + collaborationID).child("collaborators").update(collaboratorObj);
+  userRef = firebase.database.ref('users/ + collaboratorID').child("collaborations").update(collaborationObj);
+
+  console.log("Successfully added user: " + collaboratorID + " to the collaborations list for world: " + worldID ".");
 }
 
 //creates a new collaboration object for the world and adds the first collaborator to it
 function createWorldCollab(collaboratorID, worldID){
-  alert("hi");
+
 }
 //******************************************************************************
 //******************************************************************************

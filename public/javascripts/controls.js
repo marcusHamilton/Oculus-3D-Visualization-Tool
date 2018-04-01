@@ -335,7 +335,7 @@ function setListeners() {
             arrowMesh.position = camera.getWorldPosition();
             arrowMesh.position.y = -1;
             arrowMesh.position.x = 0;
-            arrowMesh.position.z = 1;
+            arrowMesh.position.z = - 1;
             rig.add(arrowMesh);
 
         });

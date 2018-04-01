@@ -24,7 +24,9 @@ var guiInputHelper;
 var rightGrip;
 var leftGrip;
 
-
+var arrowMesh;
+var arrowLineMesh;
+var arrowMaterial;
 
 //var directionalArrow = new THREE.Object3D();
 
@@ -70,8 +72,15 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
     //Points in forward direction
-    directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),camera.getWorldPosition(),2,0x0055ff,0,0);
-    camera.add(directionArrow);
+    // directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),camera.getWorldPosition(),2,0x0055ff,0,0);
+    // camera.add(directionArrow);
+    arrowMaterial = new THREE.MeshStandardMaterial({color: meshColorOff});
+    arrowMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.005,0.075,1,8));
+    arrowLineMesh = new THREE.Mesh(new THREE.BoxGeometry(0.05,1,0.03));
+    arrowMaterial.flatShading = true;
+    arrowMesh.position.y = -0.1;
+    arrowMesh.add(arrowLineMesh);
+    rig.add(arrowMesh);
 
     if (handControlR && handControlR != null) {
         aRightMesh = handControlR.getChildByName("C_Mesh");
@@ -310,13 +319,15 @@ function setListeners() {
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('thumbstick touch began', function (event) {
             console.log("thumbstick touch started");
-            camera.getWorldDirection(cameraDirection);
-            directionArrow.setDirection(cameraDirection.normalize());
-            scene.add(directionArrow);
+            //camera.getWorldDirection(cameraDirection);
+            //directionArrow.setDirection(cameraDirection.normalize());
+            scene.add(arrowMesh);
+            scene.add(arrowLineMesh);
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {
             console.log("Thumbstick touch ended");
-            scene.remove(directionArrow);
+            scene.remove(arrowMesh);
+            scene.remove(arrowLineMesh);
         });
     }
 

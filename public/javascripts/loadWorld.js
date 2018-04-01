@@ -33,6 +33,13 @@ var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
 var rig; //Rig to group camera
 
+var largestXpos;
+var largestYpos;
+var largestZpos;
+var smallestXpos;
+var smallestYpos;
+var smallestZpos;
+
 //For controls
 
 
@@ -422,10 +429,7 @@ function drawDataset(xCol, yCol, zCol)
     // Add Vector3 p to the positions array to be added to BufferGeometry.
     p.toArray( positions, i * 3 );
 
-    // Set point color RGB values to magnitude of XYZ values
-    color = colorFromXYZcoords(p);
-    //color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
-    color.toArray( colors, i * 3 );
+
 
     // Set the sizes of all the points to be added to BufferGeometry
     sizes[i] = pointSize;
@@ -464,6 +468,17 @@ function drawDataset(xCol, yCol, zCol)
   scene.add(VRGui);
   scene.add(rig);
   drawAxisLabels();
+
+  for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){
+      // Set point color RGB values to magnitude of XYZ values
+      color = colorFromXYZcoords(new THREE.Vector3(
+        pointsGeometry.getAttribute('position').array[i],
+        pointsGeometry.getAttribute('position').array[i+1],
+        pointsGeometry.getAttribute('position').array[i+2]
+      ));
+      color.toArray(colors, i);
+    }
+
   initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
 }
@@ -498,12 +513,12 @@ function drawAxisLabels() {
   var geometryY = new THREE.Geometry();
   var geometryZ = new THREE.Geometry();
 
-  var largestXpos = Number.MIN_VALUE;
-  var largestYpos = Number.MIN_VALUE;
-  var largestZpos = Number.MIN_VALUE;
-  var smallestXpos = Number.MAX_VALUE;
-  var smallestYpos = Number.MAX_VALUE;
-  var smallestZpos = Number.MAX_VALUE;
+  largestXpos = Number.MIN_VALUE;
+  largestYpos = Number.MIN_VALUE;
+  largestZpos = Number.MIN_VALUE;
+  smallestXpos = Number.MAX_VALUE;
+  smallestYpos = Number.MAX_VALUE;
+  smallestZpos = Number.MAX_VALUE;
 
   // Find smallest/largest XYZ positions
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3) {

@@ -37,6 +37,8 @@ var playerGeometry;
 var playerMaterial;
 var directionArrow;
 var rig; //Rig to group camera
+var inVr = false;
+
 
 camera.name = "camera";
 
@@ -292,10 +294,12 @@ function addEnterVrButtons() {
   enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
     .on("enter", function () {
       console.log("enter VR");
+      inVr = true;
     })
     .on("exit", function () {
       console.log("exit VR");
       camera.quaternion.set(0, 0, 0, 1);
+      inVr = false;
     })
     .on("error", function (error) {
       document.getElementById("learn-more").style.display = "inline";

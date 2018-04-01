@@ -180,7 +180,7 @@ function writeWorld(jsonFile) {
 
     //associate the world with the signed-in user
     var userWorldObj = {};
-    userWorldObj[worldRefKey] = 'true';
+    userWorldObj[worldRefKey] = true;
     firebase.database().ref('/users/' + user.uid).child("worlds").update(userWorldObj);
   } else {
     alert("Please sign in to create VR worlds.");
@@ -288,7 +288,7 @@ function getWorldInfo(worldId) {
 // var result = getWorldInfo(worldId);
 // console.log(result);
 
-//Needs to be refactored for realtime database. This is not efficient
+//reloads the dashboard to get all the worlds a user owns and collaborates with
 function reloadWorlds() {
   var myNode = document.getElementById("worldContainer");
   while (myNode.firstChild) {
@@ -367,9 +367,9 @@ function checkUserEmailExists(collabEmail, worldID){
 function checkWorldCollab(collaboratorID, worldID){
   return database.ref("worlds/" +worldID).once('value').then(function(snapshot){
     var world = snapshot.val();
-    if(world.collabation){
+    if(world.collaboration_id){
       //push to existing collaboration
-      addToWorldCollab(collaboratorID, worldID, collaborationID);
+      addToWorldCollab(collaboratorID, worldID, world.collaboration_id);
     }
     else{
       //create a new collaboration for the world
@@ -380,21 +380,52 @@ function checkWorldCollab(collaboratorID, worldID){
 
 //adds a collaboration to an existing collaboration
 function addToWorldCollab(collaboratorID, worldID, collaborationID){
-  var collaboratorObj, collaborationObj = {};
-  collaboratorObj[collaboratorID] = 'true';
-  collaborationObj[collaborationID] = 'true';
+  var collaboratorObj = {};
+  var collaborationObj = {};
+  var collaborationRef;
+  collaboratorObj[collaboratorID] = true;
+  collaborationObj[collaborationID] = true;
 
 
   //updates the collaboration object as well as the collaborators list of collaborations
-  collaborationRef = firebase.database.ref('/collaborations/' + collaborationID).child("collaborators").update(collaboratorObj);
-  userRef = firebase.database.ref('users/ + collaboratorID').child("collaborations").update(collaborationObj);
+  collaborationRef = database.ref('/collaborations/' + collaborationID).child("collaborators").update(collaboratorObj);
+  userRef = database.ref('users/' + collaboratorID).child("collaborations").update(collaborationObj);
 
-  console.log("Successfully added user: " + collaboratorID + " to the collaborations list for world: " + worldID ".");
+  console.log("Successfully added user: " + collaboratorID + " to the collaborations list for world: " + worldID + ".");
 }
 
 //creates a new collaboration object for the world and adds the first collaborator to it
 function createWorldCollab(collaboratorID, worldID){
+  var ownerObj = {};
+  var collaboratorObj = {};
+  var worldObj = {};
+  var collaborationUserObj = {};
+  var collaborationWorldObj = {};
+  var ownerID = getUID();
+  var collaborationRef, worldRef, collaboratorRef, ownerJSON, worldJSON, collaboratorJSON;
 
+  //preparing to push ownerID, worldID and collaboratorID to the collaboration object
+  ownerObj[ownerID] = true;
+  collaboratorObj[collaboratorID] = true;
+  worldObj[worldID] = true;
+
+  var collaborationJSON = {}
+  collaborationJSON['owner'] = ownerObj
+  collaborationJSON['world'] = worldObj
+  collaborationJSON['collaborators'] = collaboratorObj
+
+  //Pushing the new collaboration to the database
+  collaborationRef = database.ref('/collaborations').push(collaborationJSON);
+
+  //using the collaboration ID an object to be pushed to worlds and user collaboration info
+  collaborationUserObj[collaborationRef.key] = true;
+  collaborationWorldObj['collaboration_id'] = collaborationRef.key;
+
+  //Update the world and collaborator with the collaboration
+  collaboratorRef = database.ref('users/' + collaboratorID).child("collaborations").update(collaborationUserObj);
+  worldRef = database.ref('worlds/' + worldID).update(collaborationWorldObj);
+
+  console.log("Successfully added user: " + collaboratorID + " to the collaborations list for world: " + worldID + ".");
 }
 //******************************************************************************
 //******************************************************************************

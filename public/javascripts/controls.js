@@ -77,8 +77,8 @@ window.addEventListener('vr controller connected', function (event) {
     arrowMaterial = new THREE.MeshStandardMaterial({color: 0x0055ff});
     arrowMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.005,0.075,0.5,8));
     arrowLineMesh = new THREE.Mesh(new THREE.BoxGeometry(0.03,1,0.03));
-    arrowLineMesh.position.y = -0.75;
-    arrowMaterial.flatShading = true;
+    //arrowLineMesh.position.y = -0.75;
+    //arrowMaterial.flatShading = true;
     arrowMesh.rotateX(-Math.PI/2);
     // arrowMesh.position.y = -1.5;
     // arrowMesh.position.x = -0.4;
@@ -333,7 +333,9 @@ function setListeners() {
             scene.add(arrowLineMesh);
             arrowMesh.add(arrowLineMesh);
             arrowMesh.position = camera.getWorldPosition();
-
+            arrowMesh.position.y = -1;
+            arrowMesh.position.x = 1;
+            arrowMesh.position.z = 1;
             rig.add(arrowMesh);
 
         });

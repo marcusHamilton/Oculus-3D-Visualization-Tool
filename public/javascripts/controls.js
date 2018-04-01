@@ -80,7 +80,7 @@ window.addEventListener('vr controller connected', function (event) {
     //arrowLineMesh.position.y = -0.75;
     //arrowMaterial.flatShading = true;
     arrowMesh.rotateX(-Math.PI/2);
-    //arrowMesh.position.x = -1;
+    arrowMesh.position.x = -1;
     // arrowMesh.position.y = -1.5;
     // arrowMesh.position.x = -0.4;
     // arrowMesh.position.z = -0.7;
@@ -332,7 +332,7 @@ function setListeners() {
 
             scene.add(arrowMesh);
             scene.add(arrowLineMesh);
-            arrowMesh.position.z = -2;
+            //arrowMesh.position.z = -2;
             arrowMesh.add(arrowLineMesh);
             arrowMesh.position = camera.getWorldPosition();
             arrowMesh.position.y = -1;

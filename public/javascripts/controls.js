@@ -339,7 +339,7 @@ function setListeners() {
             arrowMesh.position.y = -1;
             arrowMesh.position.x = - 0.45;
             arrowMesh.position.z = - 1;
-            rig.add(arrowLineMesh);
+            rig.add(arrowMesh);
 
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {

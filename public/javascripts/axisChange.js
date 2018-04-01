@@ -1,5 +1,6 @@
 var axisMenu; //Interface between data and redraw function for broswer gui
 var selectedAxes; //The Axes selected in the VR GUI
+var selectedAxesJSON;
 
 //DAT GUI variables
 var redraw = {
@@ -14,15 +15,15 @@ var pushToDB = {
   pushToDB: function () {
     //reformatting selectedAxesJSON
     if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0){
-      inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+      var inspectAxesJSON = JSON.stringify(selectedAxesJSON);
       console.log(inspectAxesJSON); //inspection log
       selectedAxesJSON = JSON.parse(inspectAxesJSON);
       updateAxisSelectionInDatabase(worldID,selectedAxesJSON);
 
       //reformatting selectedPoints
-      inspectSelectedPointsJSON = JSON.stringify(selectedPoints);
+      var inspectSelectedPointsJSON = JSON.stringify(selectedPoints);
       console.log(inspectSelectedPointsJSON);
-      selectedPointsJSON = JSON.parse(inspectSelectedPointsJSON);
+      var selectedPointsJSON = JSON.parse(inspectSelectedPointsJSON);
       updateSelectionInDatabase(worldID,selectedPointsJSON);
     }
     else{console.log("Could not push to database due to blank dropdown")}

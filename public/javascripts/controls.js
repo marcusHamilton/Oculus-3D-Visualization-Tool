@@ -74,10 +74,10 @@ window.addEventListener('vr controller connected', function (event) {
     //Points in forward direction
     // directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),camera.getWorldPosition(),2,0x0055ff,0,0);
     // camera.add(directionArrow);
-    arrowMaterial = new THREE.MeshStandardMaterial({color: meshColorOff});
+    arrowMaterial = new THREE.MeshStandardMaterial({color: 0x0055ff});
     arrowMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.005,0.075,0.5,8));
     arrowLineMesh = new THREE.Mesh(new THREE.BoxGeometry(0.03,1,0.03));
-    arrowLineMesh.position.y = -1;
+    arrowLineMesh.position.y = -0.75;
     arrowMaterial.flatShading = true;
     // arrowMesh.position.y = -1.5;
     // arrowMesh.position.x = -0.4;
@@ -86,7 +86,7 @@ window.addEventListener('vr controller connected', function (event) {
     // arrowMesh.rotateX(-Math.PI/2);
     // camera.add(arrowMesh);
     arrowLineMesh.add(arrowMesh);
-    rig.add(arrowLineMesh);
+    //rig.add(arrowLineMesh);
 
     if (handControlR && handControlR != null) {
         aRightMesh = handControlR.getChildByName("C_Mesh");
@@ -330,12 +330,14 @@ function setListeners() {
 
             scene.add(arrowMesh);
             scene.add(arrowLineMesh);
+            rig.add(arrowMesh);
 
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {
             console.log("Thumbstick touch ended");
             scene.remove(arrowMesh);
             scene.remove(arrowLineMesh);
+            rig.remove(arrowMesh);
         });
     }
 

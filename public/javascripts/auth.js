@@ -196,21 +196,37 @@ function deleteWorld(id) {
   //check if user owns the world
   return database.ref('worlds/' + id).once('value').then(function (snapshot) {
     world = snapshot.val();
-    console.log(world.owner_id);
 
-    //owns the world, remove it from the database
+    //user owns the world, remove it completely from the database as well as collaborations
     if (world.owner_id == getUID()) {
-      database.ref('users/' + getUID() + '/worlds/' + id).remove();
-      database.ref('worlds/' + id).remove();
-      console.log("Deleted the user's world" + id + ".");
-      //TODO: Remove from collaborators list as well
-    }
-    //TODO: Check if the user is a collaborator
-    else {
-      console.log("User cannot delete a world they do not own.");
-    }
 
-    reloadWorlds();
+      return database.ref('collaborations/' + world.collaboration_id).once('value').then(function (snapshot){
+        var collaborationRef = snapshot.val();
+
+        //if there are collaborators for the world being deleted, remove the world from their list of collaborations
+        if(collaborationRef){
+          for(var collaboratorKey in collaborationRef.collaborators){
+            database.ref('users/' + collaboratorKey + '/collaborations/' +world.collaboration_id).remove();
+          }
+          //remove the collaboration object
+          database.ref('collaborations/' + world.collaboration_id).remove();
+        }
+
+        //remove the owner's world completely
+        database.ref('users/' + getUID() + '/worlds/' + id).remove();
+        database.ref('worlds/' + id).remove();
+        console.log("Deleted the user's world" + id + ".");
+        reloadWorlds();
+      });
+
+    }
+    //User must be a collaborator so remove them from the world's list of collaborators
+    else {
+      database.ref('users/' + getUID() + '/collaborations/' + world.collaboration_id).remove();
+      database.ref('collaborations/' + world.collaboration_id + '/collaborators/' + getUID()).remove();
+      console.log("Removed the user: " + getUID() + " from the list of collaborators for the world: " + id + ".");
+      reloadWorlds();
+    }
   });
 }
 

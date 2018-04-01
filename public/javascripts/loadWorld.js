@@ -165,6 +165,7 @@ function Manager() {
    // playerMaterial.color = playerColour;
     playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
     scene.add(playerSphere);
+    camera.add(playerSphere);
 
     /*
       var text2 = document.createElement('div');

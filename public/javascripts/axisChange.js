@@ -29,6 +29,18 @@ var pushToDB = {
     else{console.log("Could not push to database due to blank dropdown")}
   }
 };
+var liveUpdate = {
+  liveX: function() {
+    axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
+  },
+  liveY: function() {
+    axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+  },
+  liveZ: function() {
+    axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
+  }
+}
+
 
 
 
@@ -62,9 +74,6 @@ function redrawDataSet(VR) {
     drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
     drawAxisLabels();
   } else {
-    axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
-    axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
-    axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
     if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
       //Console logs to validate selection from gui vs. what is being saved, both should be the same.
       console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
@@ -91,6 +100,13 @@ function redrawDataSet(VR) {
   recolorSelected();
 
 
+}
+
+
+function initAxisMenu() {
+  axisMenu.xAxis = loadedDataset[0][0];
+  axisMenu.yAxis = loadedDataset[0][1];
+  axisMenu.zAxis = loadedDataset[0][2];
 }
 
 /**

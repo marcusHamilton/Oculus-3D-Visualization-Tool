@@ -16,12 +16,15 @@ function VRGui() {
 
   // //Dropdown for choosing X axis
   var xDrop = VRGui.add(selectedAxes, 'selectedX', axisMenu.axesOptions);
+  xDrop.onChange(liveUpdate.liveX);
 
   // //Dropdown for choosing Y axis
   var yDrop = VRGui.add(selectedAxes, 'selectedY', axisMenu.axesOptions);
+  yDrop.onChange(liveUpdate.liveY);
 
   // //Dropdown for choosing Z axis
   var zDrop = VRGui.add(selectedAxes, 'selectedZ', axisMenu.axesOptions);
+  zDrop.onChange(liveUpdate.liveZ);
 
   // //Button to redraw using redraw with a vr switch to trigger the axis data to come from the vr GUI
   VRGui.add(redraw, 'redrawVR');

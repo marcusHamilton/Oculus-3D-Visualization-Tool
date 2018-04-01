@@ -177,6 +177,8 @@ function Manager() {
     
     //Builds the GUIs
     VRGui();
+
+    initAxisMenu();
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR

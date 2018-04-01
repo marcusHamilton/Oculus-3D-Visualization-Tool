@@ -310,7 +310,7 @@ function setListeners() {
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('thumbstick touch began', function (event) {
             //rig.add(directionArrow);
-            directionArrow.set(camera.direction.normalize(),(rig.getWorldPosition()))
+            directionArrow.set(camera.getWorldDirection().normalize(),(rig.getWorldPosition()))
             scene.add(directionArrow);
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {

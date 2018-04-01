@@ -70,8 +70,8 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
     //Points in forward direction
-    directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),rig.getWorldPosition(),2,0x0055ff,0,0);
-    rig.add(directionArrow);
+    directionArrow = new THREE.ArrowHelper(rig.getWorldDirection().normalize(),camera.getWorldPosition(),2,0x0055ff,0,0);
+    camera.add(directionArrow);
 
     if (handControlR && handControlR != null) {
         aRightMesh = handControlR.getChildByName("C_Mesh");
@@ -309,13 +309,13 @@ function setListeners() {
     //Touch right thumbstick to show directional arrow
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('thumbstick touch began', function (event) {
+            console.log("thumbstick touch started");
             camera.getWorldDirection(cameraDirection);
             directionArrow.setDirection(cameraDirection.normalize());
-            playerSphere.add(directionArrow);
             scene.add(directionArrow);
         });
         handControlR.addEventListener('thumbstick touch ended', function (event) {
-            playerSphere.remove(directionArrow);
+            console.log("Thumbstick touch ended");
             scene.remove(directionArrow);
         });
     }

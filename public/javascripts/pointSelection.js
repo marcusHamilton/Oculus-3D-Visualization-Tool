@@ -11,7 +11,7 @@ var selectedPoints = []; //array containing the indices of every currently
 var hiddenPoints = [];
 
 var pointSelectionMouse = new THREE.Vector2();
-var selectionThreshold = 0.04 * datasetAndAxisLabelGroup.scale; //the distance the mouse has to be from a point
+var selectionThreshold = 0.04 * pointVars.plotPointSizeCoeff + 0.001; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 
@@ -166,7 +166,7 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-    selectionThreshold = 0.04 * datasetAndAxisLabelGroup.scale;
+    selectionThreshold = 0.04 * pointVars.plotPointSizeCoeff + 0.001;
 }
 
 /**

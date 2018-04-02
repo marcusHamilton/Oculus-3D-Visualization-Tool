@@ -119,20 +119,19 @@ function pointSelectionUpdate() {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
 
+  var originalPointSize = pointVars.plotPointSizeCoeff;
+
   // Reset point size when not moused over
-  setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  setPointScale(mousedOverPoint, originalPointSize);
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
     if (pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
-      setPointScale(intersects.index, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+      setPointScale(intersects.index, originalPointSize * 2);
 
     }
     mousedOverPoint = intersects.index;
-
-
-
 
   } else {
 

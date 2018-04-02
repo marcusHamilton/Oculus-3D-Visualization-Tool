@@ -52,7 +52,7 @@ function initializeSelectionControls() {
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
-    //rig.add(selectionControllerR);
+    userPresence.add(selectionControllerR);
     selectionControllerR.addEventListener('A touch began', function (event) {
       isRaycasterLineActive = true;
     });
@@ -101,7 +101,7 @@ function pointSelectionUpdate() {
     var direction = new THREE.Vector3(0, 0, 1);
     direction.applyMatrix4(matrix);
     direction.multiplyScalar(-1);
-    direction.transformDirection(rig.matrix);
+    direction.transformDirection(userPresence.matrix);
     //matrix.multiplyVector3( direction );
 
     pointSelectionRaycasterR.set(meshPosition, direction);

@@ -624,3 +624,12 @@ function drawAxisLabels() {
   //scene.add(axisLabelGroup);
 }
 
+function newPlayerSphere(){
+  var playerColour = new THREE.Color(Math.random(),Math.random(),Math.random());
+  var playerGeometry = new THREE.SphereGeometry(.5,25,25);
+  var playerMaterial = new THREE.MeshBasicMaterial({color: playerColour});
+  var playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
+  playerSphere.visible = false;
+  return playerSphere;
+}
+

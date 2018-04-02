@@ -245,9 +245,21 @@ function onAxisDatabaseChange(worldId) {
 //Input: current world id
 //Returns: geometry object (json) that has changed in the database
 function onUserPositionChange(worldId, UID) {
-  var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
-  userRef.on('child_changed', function (snapshot) {
-    console.log(snapshot.val());
+  var userRef = database.ref('worlds/' + worldId + '/object/usersData/');
+  userRef.on('value', function (snapshot) {
+    console.log("Pos from the db" + snapshot.val());
+    var dbPositionObj = snapshot.val();
+    var array = Object.keys(dbPositionObj);
+    for(var i = 0 ; i < array.length; i++){
+      var s = 1;
+      if(array[i] != getUID()){
+          rigs[i+s].position.x = dbPositionObj[array[i]].position.x;
+          rigs[i+s].position.y = dbPositionObj[array[i]].position.y;
+          rigs[i+s].position.z = dbPositionObj[array[i]].position.z;
+        //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
+      }
+      else{s = 0;}
+    }
   });
 }
 
@@ -285,7 +297,12 @@ When a users position changes within a world and needs to be pushed to the datab
 */
 function updateUserPositionInDatabase(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
-  userRef.set(camera.getWorldPosition());
+  var positionObj = camera.getWorldPosition();
+  var PosJSON = JSON.stringify(positionObj);
+  console.log("Pushing: " + PosJSON);
+  PosJSON = JSON.parse(PosJSON);
+
+  userRef.set(PosJSON);
   // console.log("Pushed position of " + UID + ".Their position is: " + rig.getWorldPosition());
 }
 

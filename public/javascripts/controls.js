@@ -158,6 +158,7 @@ function updateMovementControls() {
     if (handControlL && handControlL != null) {
         rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
         rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
+        rig.setRotationFromQuaternion(camera.getWorldQuaternion);
         if (leftGrip) {
             rig.translateY(movementSpeedCoeff * (0.5));
         }

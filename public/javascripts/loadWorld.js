@@ -482,7 +482,6 @@ function drawDataset(xCol, yCol, zCol)
       ));
       color.toArray(colors, i);
     }
-
   initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
 }

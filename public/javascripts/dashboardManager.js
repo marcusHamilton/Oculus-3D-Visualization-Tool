@@ -6,10 +6,6 @@ function packID(id) {
     sessionStorage.setItem('selectedID', JSON.stringify(id));
 }
 
-function addCollab(userID) {
-
-}
-
 function addUserHelper(WorldID) {
     document.getElementById('worldIDInputBox').value = WorldID;
 }
@@ -28,7 +24,8 @@ function addUser() {
         var worldID = document.getElementById('worldIDInputBox').value;
         console.log("Adding email: " + email + " to world: " + worldID);
 
-        //Do stuff with email and worldID here
+        //attempt to add the collaborator with their given email at the specified worldID
+        addCollab(email, worldID);
 
         //Reset the modal box for more use
         $('#addUser-modal').modal('hide');

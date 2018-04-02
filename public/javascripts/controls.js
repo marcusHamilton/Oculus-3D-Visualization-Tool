@@ -333,12 +333,12 @@ function setListeners() {
 
             scene.add(arrowMesh);
             scene.add(arrowLineMesh);
-            arrowLineMesh.position.z = -2;
+            arrowLineMesh.position.z = -1;
             arrowMesh.add(arrowLineMesh);
             arrowMesh.position = camera.getWorldPosition();
             arrowMesh.position.y = -1;
             arrowMesh.position.x = - 0.45;
-            arrowMesh.position.z = - 1;
+            arrowMesh.position.z = - 1.5;
             rig.add(arrowMesh);
 
         });

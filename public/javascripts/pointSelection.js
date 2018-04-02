@@ -165,7 +165,9 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-    selectionThreshold = 0.04 + pointVars.plotPointSizeCoeff + 0.001;
+  if(selectionThreshold > 0.04) {
+      selectionThreshold = 0.04 + pointVars.plotPointSizeCoeff + 0.001;
+  }
 }
 
 /**

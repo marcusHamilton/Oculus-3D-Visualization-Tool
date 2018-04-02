@@ -240,7 +240,7 @@ function onAxisDatabaseChange(worldId) {
 }
 
 //You only need to call this function once and it will listen for position changes.
-//+ Whenever a users position in the world changes, the contents of this function
+//+ Whenever another users position in the world changes, the contents of this function
 //+ will be run.
 //Input: current world id
 //Returns: geometry object (json) that has changed in the database
@@ -251,14 +251,13 @@ function onUserPositionChange(worldId, UID) {
     var dbPositionObj = snapshot.val();
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
-      var s = 1;
       if(array[i] != getUID()){
-          rigs[i+s].position.x = dbPositionObj[array[i]].position.x;
-          rigs[i+s].position.y = dbPositionObj[array[i]].position.y;
-          rigs[i+s].position.z = dbPositionObj[array[i]].position.z;
+          otherUsers[i].position.x = dbPositionObj[array[i]].position.x;
+          otherUsers[i].position.y = dbPositionObj[array[i]].position.y;
+          otherUsers[i].position.z = dbPositionObj[array[i]].position.z;
+          otherUsers[i].visible = true;
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
       }
-      else{s = 0;}
     }
   });
 }

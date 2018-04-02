@@ -31,7 +31,8 @@ var largestZ = 0; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-var rigs = []; //Rig to group camera rig[0] is always the current users
+var userPresence; //hold th reference for the users player sphere and camera
+var otherUsers = []; //Hold the references to the other users spheres
 
 //For controls
 
@@ -193,6 +194,11 @@ function Manager() {
 
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
+
+    for(var i = 0; i<10; i++){
+      otherUsers[i] = newPlayerSphere();
+      scene.add(otherUsers[i]);
+    }
     onAxisDatabaseChange(worldID);
     onUserPositionChange(worldID, getUID());
     //GameLoop must be called last after everything to ensure that
@@ -290,10 +296,10 @@ function setUpControls() {
   console.log("Initializing rig");
 
 
-  rigs[0] = new THREE.Object3D();
-  camera.add(rigs[0]);
+  userPresence = newPlayerSphere();
+  camera.add(userPresence);
 
-  scene.add(rigs[0]);
+  scene.add(camera);
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -462,7 +468,7 @@ function drawDataset(xCol, yCol, zCol)
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  scene.add(rigs[0]);
+  scene.add(userPresence);
   drawAxisLabels();
   initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
@@ -549,3 +555,11 @@ function drawAxisLabels() {
   //scene.add(axisLabelGroup);
 }
 
+function newPlayerSphere(){
+  var playerColour = new THREE.Color(Math.random(),Math.random(),Math.random());
+  var playerGeometry = new THREE.SphereGeometry(.5,25,25);
+  var playerMaterial = new THREE.MeshBasicMaterial({color: playerColour});
+  var playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
+  playerSphere.visible = false;
+  return playerSphere;
+}

@@ -31,7 +31,7 @@ var largestZ; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-var rig; //Rig to group camera
+var rigs = []; //Rig to group camera rig[0] is always the current users
 
 var largestXpos;
 var largestYpos;
@@ -307,6 +307,11 @@ function setUpControls() {
 
   scene.add(rig);
 
+  rigs[0] = new THREE.Object3D();
+  camera.add(rigs[0]);
+
+  scene.add(rigs[0]);
+
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
   trackballControls.rotateSpeed = 1.0;
@@ -476,7 +481,7 @@ function drawDataset(xCol, yCol, zCol)
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  scene.add(rig);
+  scene.add(rigs[0]);
   drawAxisLabels();
 
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){

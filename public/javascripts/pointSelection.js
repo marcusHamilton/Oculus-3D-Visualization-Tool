@@ -166,7 +166,7 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-
+    selectionThreshold = 0.04 * datasetAndAxisLabelGroup.scale;
 }
 
 /**

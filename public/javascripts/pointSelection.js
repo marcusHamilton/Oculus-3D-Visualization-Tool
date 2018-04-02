@@ -11,7 +11,7 @@ var selectedPoints = []; //array containing the indices of every currently
 var hiddenPoints = [];
 
 var pointSelectionMouse = new THREE.Vector2();
-var selectionThreshold = 0.04 * pointVars.plotPointSizeCoeff + 0.001; //the distance the mouse has to be from a point
+var selectionThreshold = 0.04 + pointVars.plotPointSizeCoeff + 0.001; //the distance the mouse has to be from a point
 //in order for it to register as selectable
 var intersects;
 
@@ -135,7 +135,7 @@ function pointSelectionUpdate() {
 
   } else {
 
-    setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+    setPointScale(mousedOverPoint, originalPointSize * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
   // Press 'A' and 'X' is select/deselect all points.

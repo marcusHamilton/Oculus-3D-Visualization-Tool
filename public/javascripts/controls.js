@@ -334,7 +334,7 @@ function setListeners() {
             scene.add(arrowMesh);
             scene.add(arrowLineMesh);
             arrowLineMesh.position.z = 1.5;
-            arrowLineMesh.position.y = -1;
+            arrowLineMesh.position.y = -2;
             arrowMesh.add(arrowLineMesh);
             arrowMesh.position = camera.getWorldPosition();
             arrowMesh.position.y = -1;

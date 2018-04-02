@@ -34,6 +34,8 @@ var datasetAndAxisLabelGroup;
 var userPresence; //hold th reference for the users player sphere and camera
 var otherUsers = []; //Hold the references to the other users spheres
 
+var collabGroup;
+
 //For controls
 
 
@@ -195,9 +197,12 @@ function Manager() {
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
 
+    collabGroup = new THREE.Group();
+    collabGroup.add(datasetAndAxisLabelGroup);
+
     for(var i = 0; i<10; i++){
       otherUsers[i] = newPlayerSphere();
-      scene.add(otherUsers[i]);
+      collabGroup.add(otherUsers[i]);
     }
     onAxisDatabaseChange(worldID);
     onUserPositionChange(worldID, getUID());

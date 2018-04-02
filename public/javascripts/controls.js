@@ -156,17 +156,17 @@ function updateMovementControls() {
     rotAngle = Math.atan2(userPresence.getWorldDirection.z, userPresence.getWorldDirection.x);
     //left controller: Horizontal movement + positive vertical movement
     if (handControlL && handControlL != null) {
-        userPresence.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
-        userPresence.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
+        camera.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
+        camera.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
         if (leftGrip) {
-            userPresence.translateY(movementSpeedCoeff * (0.5));
+            camera.translateY(movementSpeedCoeff * (0.5));
         }
     }
     //right Controller: Rotation + negative vertical movement
     if (handControlR) {
-        userPresence.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
+        camera.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
         if (rightGrip) {
-            userPresence.translateY((-1) * movementSpeedCoeff * (0.5));
+            camera.translateY((-1) * movementSpeedCoeff * (0.5));
         }
     }
 }

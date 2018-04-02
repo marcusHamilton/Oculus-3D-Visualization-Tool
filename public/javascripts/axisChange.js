@@ -1,10 +1,10 @@
 //DAT GUI variables
 var redraw = {
   redraw: function () {
-    redrawDataSet(0)
+    redrawDataSet()
   },
   redrawVR: function () {
-    redrawDataSet(1)
+    redrawDataSetVR()
   }
 }; //function for Redraw button in browser
 var pushAxesToDB = {
@@ -32,9 +32,44 @@ var inspectAxesJSON;
   Result:
     Dataset is redrawn based on the axis selection from the desired source (VR/BR)
 */
-function redrawDataSet(VR) {
-  if (VR === 0) {
-    axisMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
+function redrawDataSetVR() {
+	axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
+    axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+    axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
+    if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
+      //Console logs to validate selection from gui vs. what is being saved, both should be the same.
+      console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
+      console.log("Y-Axis: " + axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
+      console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
+
+      // console.log("Removing children")
+	  scene.remove(scene.getObjectByName("DatasetAxisGroup"));
+
+      /*while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }*/
+      // console.log("Redrawing Data");
+      drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
+      drawAxisLabels();
+    } else {
+      console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
+        "If any are left blank no changes will occur in the drawn data set.");
+    }
+	
+	selectedAxesJSON = {
+      0: axisMenu.xAxis,
+      1: axisMenu.yAxis,
+      2: axisMenu.zAxis
+    };
+    inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+    console.log(inspectAxesJSON);
+    selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));
+  
+    recolorSelected();
+}
+
+function redrawDataSet() {
+	axisMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
     axisMenu.yAxis = folder.__controllers[2].__select.selectedIndex;
     axisMenu.zAxis = folder.__controllers[3].__select.selectedIndex;
 
@@ -49,27 +84,24 @@ function redrawDataSet(VR) {
     // console.log("Redrawing Data");
     drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
     drawAxisLabels();
-  } else {
-    axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
-    axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
-    axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
-    if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
-      //Console logs to validate selection from gui vs. what is being saved, both should be the same.
-      console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
-      console.log("Y-Axis: " + axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
-      console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
+	
+	selectedAxesJSON = {
+      0: axisMenu.xAxis,
+      1: axisMenu.yAxis,
+      2: axisMenu.zAxis
+    };
+    inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+    console.log(inspectAxesJSON);
+    selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));
+  
+    recolorSelected();
+}
 
-      // console.log("Removing children")
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
-      // console.log("Redrawing Data");
-      drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
-      drawAxisLabels();
-    } else {
-      console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
-        "If any are left blank no changes will occur in the drawn data set.");
-    }
+/*function redrawDataSet(VR) {
+  if (VR === 0) {
+    
+  } else {
+    
   }
   selectedAxesJSON = {
     0: axisMenu.xAxis,
@@ -83,7 +115,7 @@ function redrawDataSet(VR) {
   recolorSelected();
 
 
-}
+}*/
 
 /**
 Constructor for an object that holds the currently selected axis values as well

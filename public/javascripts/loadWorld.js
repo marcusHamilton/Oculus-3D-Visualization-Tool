@@ -74,7 +74,8 @@ function update(timestamp) {
 
   //Allows point selection to function
 
-  updateMovementControls();
+  //updateMovementControls();
+  updatePointsPosition();
 
   pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
@@ -298,7 +299,9 @@ function setUpControls() {
   console.log("Initializing rig");
 
   rig = new THREE.Object3D();
-  rig.add(camera);
+  
+  camera.add(rig);
+
   scene.add(rig);
 
   //Add fps controls as well

@@ -27,6 +27,20 @@ function renderButton() {
       'onfailure': signInFailure
     });
   });
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    // User is signed in.
+    if(user){
+    } 
+    // User is not signed in.
+    else{
+      //relocate them to the home page if they sign out while on the dashboard
+      if (document.URL.indexOf("dashboard") !== -1){
+        window.location.href = "/";
+        console.log("Redirecting user to the home page from the dashboard because they are not signed-in.");
+      }
+    }
+  });
 }
 
 //User successfully signs in with Google oAuth, proceed to Firebase authentication
@@ -53,7 +67,8 @@ function signInSuccess(googleUser) {
         console.log("Signed " + profile.getName() + " into Firebase.");
         postLogin();
       });
-    } else {
+    }
+    else{
       console.log(profile.getName() + ' is already signed-in to Firebase.');
       postLogin();
     }
@@ -62,7 +77,9 @@ function signInSuccess(googleUser) {
 
 //Program flow after the user successfully signs in or is already signed-in
 function postLogin() {
+  //create user in DB for the authenticated user if there isn't one already
   userExistsDB(getUID());
+
   //reloadWorlds if currently on the dashboard
   if (document.URL.indexOf("dashboard") !== -1) {
     reloadWorlds();
@@ -299,13 +316,8 @@ function getWorldInfo(worldId) {
   });
 }
 
-//test getWorldInfo
-// var worldId = '-L6UfQx0beRgpsbWxeNt';
-// var result = getWorldInfo(worldId);
-// console.log(result);
-
 //reloads the dashboard to get all the worlds a user owns and collaborates with
-function reloadWorlds() {
+function reloadWorlds(){
   var myNode = document.getElementById("worldContainer");
   while (myNode.firstChild) {
     myNode.removeChild(myNode.firstChild);

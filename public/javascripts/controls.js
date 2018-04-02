@@ -36,11 +36,11 @@ window.addEventListener('vr controller connected', function (event) {
     handControlR = scene.getObjectByName("Oculus Touch (Right)");
     if (handControlL && handControlL != null) {
         console.log("Attaching left controller to rig");
-        //rig.add(handControlL);
+        userPresence.add(handControlL);
     }
     if (handControlR && handControlR!= null) {
         console.log("Attaching right controller to rig");
-        //rig.add(handControlR);
+        userPresence.add(handControlR);
     }
 
     //Ensure controllers appear at the right height

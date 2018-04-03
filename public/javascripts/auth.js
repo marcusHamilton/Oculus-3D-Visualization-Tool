@@ -232,10 +232,11 @@ function onAxisDatabaseChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/userData/0');
   axisRef.on('child_changed', function (dataSnapshot) {
       loadedDataset[0] = dataSnapshot.val();
-      selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
-      selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
-      selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
+      axisMenu.xAxis = axisMenu.axesOptions[loadedDataset[0][0]];
+      axisMenu.yAxis = axisMenu.axesOptions[loadedDataset[0][1]];
+      axisMenu.zAxis = axisMenu.axesOptions[loadedDataset[0][2]];
       redraw.redrawVR();
+	  console.log("Axis received");
   });
 }
 

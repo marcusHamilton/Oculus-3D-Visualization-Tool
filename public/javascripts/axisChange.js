@@ -15,7 +15,7 @@ var pushToDB = {
   pushToDB: function () {
     //reformatting selectedAxesJSON
     if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0){
-      var inspectAxesJSON = JSON.stringify(selectedAxesJSON);
+      var inspectAxesJSON = JSON.stringify(axisMenu);
       console.log(inspectAxesJSON); //inspection log
       selectedAxesJSON = JSON.parse(inspectAxesJSON);
       updateAxisSelectionInDatabase(worldID,selectedAxesJSON);
@@ -81,22 +81,17 @@ function redrawDataSet(VR) {
       console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
 
       // console.log("Removing children")
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
+
+	  scene.remove(scene.getObjectByName("DatasetAxisGroup"));
       // console.log("Redrawing Data");
       drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
+	  
       drawAxisLabels();
     } else {
       console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
         "If any are left blank no changes will occur in the drawn data set.");
     }
   }
-  selectedAxesJSON = {
-    0: axisMenu.xAxis,
-    1: axisMenu.yAxis,
-    2: axisMenu.zAxis
-  };
   recolorSelected();
 
 

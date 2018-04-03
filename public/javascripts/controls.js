@@ -153,7 +153,7 @@ function initializeMovementControls() {
  */
 
  function updatePointsPosition() {
-	 points = scene.getObjectByName("DatasetAxisGroup")
+	 points = datasetAndAxisLabelGroup;
 	 if (handControlL && handControlL != null) {
 		 camDir = camera.getWorldDirection()
 		 //xMovement = movementSpeedCoeff * (handControlL.getAxis(1) * camDir.x - handControlL.getAxis(0) * camDir.x);

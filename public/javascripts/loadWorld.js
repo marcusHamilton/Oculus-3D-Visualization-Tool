@@ -28,6 +28,9 @@ var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX; //Largest X value in the dataset for selected columns
 var largestY; //Largest Y value in the dataset for selected columns
 var largestZ; //Largest Z value in the dataset for selected columns
+var smallestX;
+var smallestY;
+var smallestZ;
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var axisLabelGroup
@@ -57,8 +60,8 @@ function update(timestamp) {
     timestamp = 15;
   }
   lastRender = timestamp;
-  pointsSystem.rotation.y += 0.001;
-  axisLabelGroup.rotation.y += 0.001;
+  //pointsSystem.rotation.y += 0.001;
+  //axisLabelGroup.rotation.y += 0.001;
 
   // //Checking for dat.guivr error
   // console.log(timestamp);
@@ -81,6 +84,16 @@ function update(timestamp) {
   updateMovementControls();
 
   pointSelectionUpdate();
+
+  /*
+  if (axisLabelGroup instanceof THREE.Object3D) {
+    axisLabelGroup.traverse(function (child) {
+      if (child.name === "label") {
+        child.lookAt(camera.position);
+      }
+    });
+  }
+  */
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -407,16 +420,16 @@ function drawDataset(xCol, yCol, zCol)
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
 
-  largestX = Number.MIN_VALUE;
-  largestY = Number.MIN_VALUE;
-  largestZ = Number.MIN_VALUE;
-  smallestX = Number.MAX_VALUE;
-  smallestY = Number.MAX_VALUE;
-  smallestZ = Number.MAX_VALUE;
+  largestX = loadedDataset[2][xCol];
+  largestY = loadedDataset[2][yCol];
+  largestZ = loadedDataset[2][zCol];
+  smallestX = loadedDataset[2][xCol];
+  smallestY = loadedDataset[2][yCol];
+  smallestZ = loadedDataset[2][zCol];
 
 
   // Find largest XYZ values, and largest overall entry.
-  for (var i = 1; i < loadedDataset.length; i++) {
+  for (var i = 2; i < loadedDataset.length; i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
       largestX = loadedDataset[i][xCol];
@@ -452,9 +465,9 @@ function drawDataset(xCol, yCol, zCol)
   for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
-    var pX = ((loadedDataset[i][xCol] - mx)/dx)*plotInitSizeX;
-    var pY = ((loadedDataset[i][yCol] - my)/dy)*plotInitSizeY;
-    var pZ = ((loadedDataset[i][zCol] - mz)/dz)*plotInitSizeZ;
+    var pX = ((loadedDataset[i][xCol]/* - mx*/)/dx)*plotInitSizeX;
+    var pY = ((loadedDataset[i][yCol]/* - my*/)/dy)*plotInitSizeY;
+    var pZ = ((loadedDataset[i][zCol]/* - mz*/)/dz)*plotInitSizeZ;
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
@@ -597,92 +610,56 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineY);
   axisLabelGroup.add(lineZ);
 
-
-/*
-  var loader2 = new THREE.FontLoader();
-  loader2.setPath('');
-  console.log(loader2.path);
-  loader2.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
-    console.log("aprint");
-    var geometry = new THREE.TextGeometry( 'Hello three.js!', {
-      font: font,
-      size: 80,
-      height: 5,
-      curveSegments: 12,
-      bevelEnabled: true,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelSegments: 5
-    } );
-  },
-    function(e) {
-      console.log("onProgress callback")
-      console.log(e);
-    },
-    function(e) {
-      console.log("onError callback")
-      console.log(e);
-    });
-
-*/
-  // Define font parameters
-  // Draw Text labels
-  //var fontGeometry;
-  var loader = new THREE.FontLoader();
-  console.log(loader);
-  loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
-    console.log("font loader");
-    var fontGeometry = new THREE.TextGeometry('Hello three.js!', {
-      font: font,
-      size: .05,
-      height: .01,
-      curveSegments: 12,
-      bevelEnabled: false,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelSegments: 5
-    });
-    console.log(fontGeometry);
-    var fontMaterial = new THREE.MeshPhongMaterial({color: new THREE.Color(1,1,1)});
-    var textMesh = new THREE.Mesh( fontGeometry, fontMaterial);
-    console.log(textMesh);
-    textMesh.position.set(0,0,0);
-    console.log();
-    scene.add(textMesh);
-
-  });
-
-
+  // Add text labels to the axisLabelGroup
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + largestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,largestYpos,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + largestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,largestZpos), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + smallestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(smallestXpos,0,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + smallestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,smallestYpos,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + smallestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,smallestZpos), axisLabelGroup);
+  drawTextLabel("(0,0,0)", 0.1, new THREE.Color(1,1,1), new THREE.Vector3(0,0,0), axisLabelGroup);
 
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
 
-  //scene.add(axisLabelGroup);
 }
 
 /**
- * Creates a
- * @param labelString
- * @param textSize
- * @param color
+ * Creates a THREE.Mesh object 3D representation of a text string and
+ * adds it to a group.
+ * @param labelString {String} : The text take make a mesh for
+ * @param textSize {Number} : The size of the font
+ * @param color {THREE.Color} : The color
+ * @param position {THREE.Vector3} : Initial position.
+ * @param group {THREE.Object3D} : The group to add the mesh to.
  */
-function newTextLabel(labelString, textSize, color){
+function drawTextLabel(labelString, textSize, color, position, group){
   var loader = new THREE.FontLoader();
+  loader.setPath('');
   loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
-    var fontGeometry = new THREE.TextGeometry(labelString, {
-      font: font,
-      size: textSize,
-      height: .01,
-      curveSegments: 12,
-      bevelEnabled: false,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelSegments: 5
+      var geometry = new THREE.TextGeometry( labelString, {
+        font: font,
+        size: textSize,
+        height: .01,
+        curveSegments: 12,
+        bevelEnabled: false,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelSegments: 5
+      } );
+      var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+      var textMesh = new THREE.Mesh(geometry, fontMaterial);
+      textMesh.position.set(position.x, position.y, position.z)
+      textMesh.name = "label";
+      group.add(textMesh);
+    },
+    function(e) {
+      //console.log("onProgress callback");
+      //console.log(e);
+    },
+    function(e) {
+      //console.log("onError callback");
+      //console.log(e);
     });
-    var fontMaterial = new THREE.MeshPhongMaterial({color: color});
-    var textMesh = new THREE.Mesh(fontGeometry, fontMaterial);
-    textMesh.position.set(0, 0, 0);
-    return textMesh;
-  });
 }

@@ -31,7 +31,8 @@ var largestZ; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
-var rig; //Rig to group camera
+var userPresence; //hold th reference for the users player sphere and camera
+var otherUsers = []; //Hold the references to the other users spheres
 
 var largestXpos;
 var largestYpos;
@@ -39,6 +40,8 @@ var largestZpos;
 var smallestXpos;
 var smallestYpos;
 var smallestZpos;
+
+var collabGroup;
 
 //For controls
 
@@ -74,9 +77,14 @@ function update(timestamp) {
 
   //Allows point selection to function
 
-  updateMovementControls();
+  //updateMovementControls();
+  if(datasetAndAxisLabelGroup != null){
+    updatePointsPosition();
+  }
 
-  pointSelectionUpdate();
+    pointSelectionUpdate();
+
+    updateUserPositionInDatabase(worldID, getUID());
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -178,11 +186,13 @@ function Manager() {
     drawFPSstats();
 
     //Initializes the axis selection interfaces
-    axisMenu = new selectedAxes();
-    selectedAxes = new selectedAxesVR();
-
+    axisMenu = new SelectedAxes();
+    selectedAxes = new SelectedAxesVR();
+    
     //Builds the GUIs
     VRGui();
+
+    initAxisMenu();
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR
@@ -202,7 +212,19 @@ function Manager() {
 
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
-    //   onAxisDatabaseChange(worldID);
+
+    collabGroup = new THREE.Group();
+    collabGroup.add(datasetAndAxisLabelGroup);
+    scene.add(collabGroup);
+
+    for(var i = 0; i<2; i++){
+      otherUsers[i] = newPlayerSphere();
+      scene.add(otherUsers[i]);
+      collabGroup.add(otherUsers[i]);
+    }
+    onAxisDatabaseChange(worldID);
+    onUserPositionChange(worldID, getUID());
+    onSelectionChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -298,8 +320,13 @@ function setUpControls() {
   console.log("Initializing rig");
 
   rig = new THREE.Object3D();
-  rig.add(camera);
-  scene.add(rig);
+  
+  camera.add(rig);
+
+  userPresence = newPlayerSphere();
+  camera.add(userPresence);
+
+  scene.add(camera);
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -470,7 +497,7 @@ function drawDataset(xCol, yCol, zCol)
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  scene.add(rig);
+  scene.add(userPresence);
   drawAxisLabels();
 
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){
@@ -482,9 +509,7 @@ function drawDataset(xCol, yCol, zCol)
       ));
       color.toArray(colors, i);
     }
-
   initializeSelectionControls();
-  scene.add(datasetAndAxisLabelGroup);
 }
 
 /**
@@ -600,6 +625,15 @@ function drawAxisLabels() {
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
-
   //scene.add(axisLabelGroup);
 }
+
+function newPlayerSphere(){
+  var playerColour = new THREE.Color(Math.random(),Math.random(),Math.random());
+  var playerGeometry = new THREE.SphereGeometry(.5,25,25);
+  var playerMaterial = new THREE.MeshBasicMaterial({color: playerColour});
+  var playerSphere = new THREE.Mesh(playerGeometry, playerMaterial);
+  playerSphere.visible = false;
+  return playerSphere;
+}
+

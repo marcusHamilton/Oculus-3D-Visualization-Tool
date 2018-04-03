@@ -94,7 +94,7 @@ function calculateSelectionStats(){
 
 }
 
-function drawStats(){
+function drawSelectionStats(){
 
     statsLabelGroup = new THREE.Group();
     // Title
@@ -130,7 +130,7 @@ function drawStats(){
     drawTextLabel(stats.varianceY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.72,0), statsLabelGroup);
     drawTextLabel(stats.standardDevY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.84,0), statsLabelGroup);
 
-    // Y column stats
+    // Z column stats
     drawTextLabel(stats.meanZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.24,0), statsLabelGroup)
     drawTextLabel(stats.medianZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.36,0), statsLabelGroup);
     drawTextLabel(stats.modeZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.48,0), statsLabelGroup);
@@ -144,7 +144,28 @@ function drawStats(){
     statsLabelGroup.position.z = -1;
 
     scene.add(statsLabelGroup);
+}
 
+function drawSinglePointXYZValues(pointIndex){
+    var pointLabelGroup = new THREE.Group();
+    var pointValues = new THREE.Vector3(
+      loadedDataset[pointIndex][loadedDataset[0][0]],
+      loadedDataset[pointIndex][loadedDataset[0][1]],
+      loadedDataset[pointIndex][loadedDataset[0][2]]
+    );
+    var pointPosition = new THREE.Vector3(
+      pointsGeometry.getAttribute('position').array[(pointIndex * 3)],
+      pointsGeometry.getAttribute('position').array[(pointIndex * 3)+1],
+      pointsGeometry.getAttribute('position').array[(pointIndex * 3)+2]
+    )
+
+    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x, 0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(pointPosition.x,pointPosition.y + .12,pointPosition.z), axisLabelGroup);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y, 0.1, new THREE.Color(0,0.7,0), new THREE.Vector3(pointPosition.x,pointPosition.y,pointPosition.z), axisLabelGroup);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z, 0.1, new THREE.Color(0,0,0.7), new THREE.Vector3(pointPosition.x,pointPosition.y - .12,pointPosition.z), axisLabelGroup);
+
+    //pointLabelGroup.position = position;
+
+    //scene.add(pointLabelGroup);
 
 }
 

@@ -508,7 +508,6 @@ function drawDataset(xCol, yCol, zCol)
     }
 
   initializeSelectionControls();
-  scene.add(datasetAndAxisLabelGroup);
 }
 
 /**

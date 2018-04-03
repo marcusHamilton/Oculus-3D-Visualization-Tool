@@ -345,7 +345,7 @@ function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
 function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
   var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
   selectionRef.set(selectedPointsJSON);
-  console.log("Pushed selection " + selectedPointsJSON + " to the database.");
+  // console.log("Pushed selection " + selectedPointsJSON + " to the database.");
 }
 /*
 When a users position changes within a world and needs to be pushed to the database, call this function
@@ -364,7 +364,7 @@ function updateUserPositionInDatabase(worldId, UID) {
 
 
   var PosJSON = JSON.stringify(positionObj);
-  console.log("Pushing: " + PosJSON);
+  // console.log("Pushing: " + PosJSON);
   PosJSON = JSON.parse(PosJSON);
 
   userRef.set(PosJSON);

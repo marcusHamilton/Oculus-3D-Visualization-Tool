@@ -43,7 +43,7 @@ function redrawDataSetVR() {
       console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
 
       // console.log("Removing children")
-	 collabGroup.remove(scene.getObjectByName("DatasetAxisGroup"));
+	 collabGroup.remove(collabGroup.getObjectByName("DatasetAxisGroup"));
 
       /*while (scene.children.length > 0) {
         scene.remove(scene.children[0]);

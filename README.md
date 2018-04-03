@@ -40,25 +40,17 @@ You may follow instructions on how to get up and running on our git wiki or by c
 ## Authors
 
 * **Jeremy Fehr** - *Project Manager*
-* **Scott Laskowski** - *Build Master*
+* **Scott Laskowski** - *Build Master/Dev*
 * **Marcus Hamilton** - *Lead Developer*
 * **Owen Smallwood** - *Lead Tester/Dev*
-* **Hongyi Xue** - *Risk Officer*
+* **Hongyi Xue** - *Risk Officer/Tester*
 * **Davidson Eklund** - *Developer/Triage*
 * **Nicholas Seaboyer** - *Tester/Triage*
 * **Wynston Ramsay** - *Developer/Triage*
-* **Fahd Hussain** - *Developer*  
-* **Justin Neumeyer** - *Tester*   
-
+* **Fahd Hussain** - *Developer*   
 
 See also the list of [contributors](https://github.com/mah985/Oculus-3D-Visualization-Tool/graphs/contributors) who participated in this project.
 
 ## License
 
 None as of yet.
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc

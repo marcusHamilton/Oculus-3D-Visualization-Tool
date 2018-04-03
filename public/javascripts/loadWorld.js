@@ -506,7 +506,6 @@ function drawDataset(xCol, yCol, zCol)
       ));
       color.toArray(colors, i);
     }
-
   initializeSelectionControls();
 }
 
@@ -623,7 +622,6 @@ function drawAxisLabels() {
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
-
   //scene.add(axisLabelGroup);
 }
 

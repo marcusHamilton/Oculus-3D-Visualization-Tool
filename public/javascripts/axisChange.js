@@ -51,6 +51,7 @@ function redrawDataSetVR() {
       // console.log("Redrawing Data");
       drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
       drawAxisLabels();
+      collabGroup.add(datasetAndAxisLabelGroup);
     } else {
       console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
         "If any are left blank no changes will occur in the drawn data set.");

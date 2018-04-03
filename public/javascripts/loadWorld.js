@@ -498,7 +498,8 @@ function drawDataset(xCol, yCol, zCol)
   scene.add(light0);
   scene.add(VRGui);
   scene.add(userPresence);
-  scene.add(controller);
+  scene.add(aRightMesh);
+  scene.add(aLeftMesh);
   drawAxisLabels();
 
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){

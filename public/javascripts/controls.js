@@ -70,9 +70,11 @@ window.addEventListener('vr controller connected', function (event) {
     controller.add(controllerMesh);
     if (handControlR && handControlR != null) {
         aRightMesh = handControlR.getChildByName("C_Mesh");
+        scene.add(aRightMesh);
     }
 	 if (handControlL && handControlL != null) {
         aLeftMesh = handControlL.getChildByName("C_Mesh");
+        scene.add(aLeftMesh);
     }
     //Add Visual for Direction
     // var

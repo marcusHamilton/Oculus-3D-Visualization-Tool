@@ -76,7 +76,7 @@ function BRGui() {
       //Dropdown for choosing Z axis
       var zSelect = folder.add(axisMenu, 'zAxis', axisMenu.axesOptions);
 
-      folder.add(redraw, 'redraw');
+      folder.add(redraw, 'redrawVR');
       folder.add(pushAxesToDB, 'pushAxesToDB');
 
       //Initializes with the selection from the loaded dataset

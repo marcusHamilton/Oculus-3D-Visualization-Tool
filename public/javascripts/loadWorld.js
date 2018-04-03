@@ -213,6 +213,7 @@ function Manager() {
 
     collabGroup = new THREE.Group();
     collabGroup.add(datasetAndAxisLabelGroup);
+    scene.add(collabGroup);
 
     for(var i = 0; i<2; i++){
       otherUsers[i] = newPlayerSphere();

@@ -30,7 +30,7 @@ window.addEventListener('vr controller connected', function (event) {
 
 
     controller = event.detail;
-    scene.add(controller);
+    // scene.add(controller);
 
     handControlL = scene.getObjectByName("Oculus Touch (Left)");
     handControlR = scene.getObjectByName("Oculus Touch (Right)");
@@ -69,11 +69,9 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.name = "C_Mesh";
     controller.add(controllerMesh);
     if (handControlR && handControlR != null) {
-        handControlR.add(controllerMesh);
         aRightMesh = handControlR.getChildByName("C_Mesh");
     }
 	 if (handControlL && handControlL != null) {
-        handControlL.add(controllerMesh);
         aLeftMesh = handControlL.getChildByName("C_Mesh");
     }
     //Add Visual for Direction

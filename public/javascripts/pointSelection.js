@@ -330,8 +330,8 @@ function colorFromXYZcoords(vec3) {
 
   // values between 0 and 1 to specify the darkest/lightest color possible.
   // (So that we don't end up with pure black or pure white points).
-  var colorFloor = 0.1;
-  var colorCeiling = 0.5;
+  var colorFloor = 0.2;
+  var colorCeiling = 0.75;
   // Set point color RGB values to magnitude of XYZ values
   var newColor = new THREE.Color();
 

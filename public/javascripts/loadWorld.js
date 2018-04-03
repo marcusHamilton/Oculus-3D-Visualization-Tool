@@ -30,6 +30,7 @@ var largestY; //Largest Y value in the dataset for selected columns
 var largestZ; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
+var axisLabelGroup
 var datasetAndAxisLabelGroup;
 var rig; //Rig to group camera
 
@@ -56,6 +57,9 @@ function update(timestamp) {
     timestamp = 15;
   }
   lastRender = timestamp;
+  pointsSystem.rotation.y += 0.001;
+  axisLabelGroup.rotation.y += 0.001;
+
   // //Checking for dat.guivr error
   // console.log(timestamp);
   // var testObject = new THREE.Object3D();
@@ -406,6 +410,10 @@ function drawDataset(xCol, yCol, zCol)
   largestX = Number.MIN_VALUE;
   largestY = Number.MIN_VALUE;
   largestZ = Number.MIN_VALUE;
+  smallestX = Number.MAX_VALUE;
+  smallestY = Number.MAX_VALUE;
+  smallestZ = Number.MAX_VALUE;
+
 
   // Find largest XYZ values, and largest overall entry.
   for (var i = 1; i < loadedDataset.length; i++) {
@@ -419,15 +427,34 @@ function drawDataset(xCol, yCol, zCol)
     if (loadedDataset[i][zCol] > largestZ) {
       largestZ = loadedDataset[i][zCol];
     }
+    if (loadedDataset[i][xCol] < smallestX) {
+      smallestX = loadedDataset[i][xCol];
+    }
+    if (loadedDataset[i][yCol] < smallestY) {
+      smallestY = loadedDataset[i][yCol];
+    }
+    if (loadedDataset[i][zCol] < smallestZ) {
+      smallestZ = loadedDataset[i][zCol];
+    }
     largestEntry = Math.max(largestX, largestY, largestZ);
   }
+
+  var dx = (largestX - smallestX);
+  var dy = (largestY - smallestY);
+  var dz = (largestZ - smallestZ);
+
+  var mx = (largestX + smallestX)/2;
+  var my = (largestY + smallestY)/2;
+  var mz = (largestZ + smallestZ)/2;
+
+
 
   for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
-    var pX = (loadedDataset[i][xCol]/largestX)*plotInitSizeX;
-    var pY = (loadedDataset[i][yCol]/largestY)*plotInitSizeY;
-    var pZ = (loadedDataset[i][zCol]/largestZ)*plotInitSizeZ;
+    var pX = ((loadedDataset[i][xCol] - mx)/dx)*plotInitSizeX;
+    var pY = ((loadedDataset[i][yCol] - my)/dy)*plotInitSizeY;
+    var pZ = ((loadedDataset[i][zCol] - mz)/dz)*plotInitSizeZ;
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
@@ -498,7 +525,7 @@ function drawDataset(xCol, yCol, zCol)
 //TODO: Rewrite to allow for negative values.
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
-  var axisLabelGroup = new THREE.Group();
+  axisLabelGroup = new THREE.Group();
   axisLabelGroup.name = "AxisLabelGroup";
 
   // Set line colors
@@ -570,36 +597,92 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineY);
   axisLabelGroup.add(lineZ);
 
-  // Axis line ticks - Just draws 10 ticks on each axis
-  /*
-  var lineXTicks = new LinkedList();
-  for (var xUnits = 1; xUnits <= 10; xUnits++) {
-    lineXTicks.add(new THREE.Geometry());
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
-  }
-  var lineYTicks = new LinkedList();
-  for (var yUnits = 1; yUnits <= 10; yUnits++) {
-    lineYTicks.add(new THREE.Geometry());
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX * 0.1, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
-  }
-  var lineZTicks = new LinkedList();
-  for (var zUnits = 1; zUnits <= 10; zUnits++) {
-    lineZTicks.add(new THREE.Geometry());
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
-    axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
-  }
-  */
+
+/*
+  var loader2 = new THREE.FontLoader();
+  loader2.setPath('');
+  console.log(loader2.path);
+  loader2.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+    console.log("aprint");
+    var geometry = new THREE.TextGeometry( 'Hello three.js!', {
+      font: font,
+      size: 80,
+      height: 5,
+      curveSegments: 12,
+      bevelEnabled: true,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 5
+    } );
+  },
+    function(e) {
+      console.log("onProgress callback")
+      console.log(e);
+    },
+    function(e) {
+      console.log("onError callback")
+      console.log(e);
+    });
+
+*/
+  // Define font parameters
+  // Draw Text labels
+  //var fontGeometry;
+  var loader = new THREE.FontLoader();
+  console.log(loader);
+  loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+    console.log("font loader");
+    var fontGeometry = new THREE.TextGeometry('Hello three.js!', {
+      font: font,
+      size: .05,
+      height: .01,
+      curveSegments: 12,
+      bevelEnabled: false,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 5
+    });
+    console.log(fontGeometry);
+    var fontMaterial = new THREE.MeshPhongMaterial({color: new THREE.Color(1,1,1)});
+    var textMesh = new THREE.Mesh( fontGeometry, fontMaterial);
+    console.log(textMesh);
+    textMesh.position.set(0,0,0);
+    console.log();
+    scene.add(textMesh);
+
+  });
+
+
+
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
 
   //scene.add(axisLabelGroup);
+}
+
+/**
+ * Creates a
+ * @param labelString
+ * @param textSize
+ * @param color
+ */
+function newTextLabel(labelString, textSize, color){
+  var loader = new THREE.FontLoader();
+  loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+    var fontGeometry = new THREE.TextGeometry(labelString, {
+      font: font,
+      size: textSize,
+      height: .01,
+      curveSegments: 12,
+      bevelEnabled: false,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 5
+    });
+    var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+    var textMesh = new THREE.Mesh(fontGeometry, fontMaterial);
+    textMesh.position.set(0, 0, 0);
+    return textMesh;
+  });
 }

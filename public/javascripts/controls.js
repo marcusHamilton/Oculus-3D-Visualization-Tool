@@ -173,7 +173,6 @@ function updateMovementControls() {
 
 
 
-
 // ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~
 
 /**

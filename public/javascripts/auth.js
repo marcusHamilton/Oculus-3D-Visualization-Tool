@@ -230,11 +230,11 @@ function onGeometryDatabaseChange(worldId) {
 //Listener
 function onAxisDatabaseChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/userData/0');
-  axisRef.on('child_changed', function (dataSnapshot) {
+  axisRef.on('value', function (dataSnapshot) {
       loadedDataset[0] = dataSnapshot.val();
-      axisMenu.xAxis = axisMenu.axesOptions[loadedDataset[0][0]];
-      axisMenu.yAxis = axisMenu.axesOptions[loadedDataset[0][1]];
-      axisMenu.zAxis = axisMenu.axesOptions[loadedDataset[0][2]];
+      selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
+      selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
+      selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
       redraw.redrawVR();
 	  console.log("Axis received");
   });

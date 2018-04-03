@@ -15,10 +15,10 @@ var pushToDB = {
   pushToDB: function () {
     //reformatting selectedAxesJSON
     if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0){
-      var inspectAxesJSON = JSON.stringify(axisMenu);
+      var inspectAxesJSON = JSON.stringify(selectedAxesJSON);
       console.log(inspectAxesJSON); //inspection log
-      selectedAxesJSON = JSON.parse(inspectAxesJSON);
-      updateAxisSelectionInDatabase(worldID,selectedAxesJSON);
+      inspectAxesJSON = JSON.parse(inspectAxesJSON);
+      updateAxisSelectionInDatabase(worldID,inspectAxesJSON);
 
       //reformatting selectedPoints
       var inspectSelectedPointsJSON = JSON.stringify(selectedPoints);
@@ -32,12 +32,15 @@ var pushToDB = {
 var liveUpdate = {
   liveX: function() {
     axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
+	updateAxisJson();
   },
   liveY: function() {
     axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+	updateAxisJson();
   },
   liveZ: function() {
     axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
+	updateAxisJson();
   }
 }
 
@@ -75,6 +78,9 @@ function redrawDataSet(VR) {
     drawAxisLabels();
   } else {
     if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
+		    axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
+			axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+			axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
       //Console logs to validate selection from gui vs. what is being saved, both should be the same.
       console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
       console.log("Y-Axis: " + axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
@@ -92,9 +98,12 @@ function redrawDataSet(VR) {
         "If any are left blank no changes will occur in the drawn data set.");
     }
   }
+  selectedAxesJSON = {
+	  0:axisMenu.xAxis,
+	  1:axisMenu.yAxis,
+	  2:axisMenu.zAxis
+  };
   recolorSelected();
-
-
 }
 
 
@@ -121,3 +130,11 @@ function SelectedAxesVR() {
   this.selectedY = loadedDataset[0][1];
   this.selectedZ = loadedDataset[0][2];
 };
+
+function updateAxisJson(){
+	 selectedAxesJSON = {
+	  0:axisMenu.xAxis,
+	  1:axisMenu.yAxis,
+	  2:axisMenu.zAxis
+  };
+}

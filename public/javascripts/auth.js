@@ -1,3 +1,5 @@
+var positionObj;
+var dbPositionObj;
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyBqX2igua_Vqc3QMh9vESrIWwv3jjY9AhU",
@@ -281,7 +283,7 @@ function onUserPositionChange(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/');
   userRef.on('value', function (snapshot) {
     console.log("Pos from the db" + snapshot.val());
-    var dbPositionObj = snapshot.val();
+    dbPositionObj = snapshot.val();
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
@@ -330,7 +332,12 @@ When a users position changes within a world and needs to be pushed to the datab
 */
 function updateUserPositionInDatabase(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
-  var positionObj = camera.getWorldPosition() - datasetAndAxisLabelGroup.getWorldPosition();
+  positionObj = camera.getWorldPosition()
+  var datPos= datasetAndAxisLabelGroup.getWorldPosition();
+  positionObj.x = positionObj.x - datPos.x;
+  positionObj.y = positionObj.y - datPos.y;
+  positionObj.z = positionObj.z - datPos.z;
+
   var PosJSON = JSON.stringify(positionObj);
   console.log("Pushing: " + PosJSON);
   PosJSON = JSON.parse(PosJSON);

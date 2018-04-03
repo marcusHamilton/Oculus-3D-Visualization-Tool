@@ -78,7 +78,9 @@ function update(timestamp) {
   //Allows point selection to function
 
   //updateMovementControls();
-  updatePointsPosition();
+  if(datasetAndAxisLabelGroup != null){
+    updatePointsPosition();
+  }
 
     pointSelectionUpdate();
 
@@ -212,8 +214,9 @@ function Manager() {
     collabGroup = new THREE.Group();
     collabGroup.add(datasetAndAxisLabelGroup);
 
-    for(var i = 0; i<10; i++){
+    for(var i = 0; i<2; i++){
       otherUsers[i] = newPlayerSphere();
+      scene.add(otherUsers[i]);
       collabGroup.add(otherUsers[i]);
     }
     onAxisDatabaseChange(worldID);

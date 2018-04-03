@@ -134,6 +134,7 @@ function pointSelectionUpdate() {
 
     }
     mousedOverPoint = intersects.index;
+	console.log(pointsGeometry.getAttribute('isSelected').array[mousedOverPoint]);
 
   } else {
 
@@ -476,8 +477,8 @@ function recolorSelected() {
 
     for(var i = 0; i < selectedPoints.length; i++){
             setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
-            if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false){
-                pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === true;
+            if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] == false){
+                pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] = true;
 
         }
     }

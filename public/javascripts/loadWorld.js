@@ -641,7 +641,7 @@ function drawTextLabel(labelString, textSize, color, position, group){
       var geometry = new THREE.TextGeometry( labelString, {
         font: font,
         size: textSize,
-        height: .01,
+        height: .005,
         curveSegments: 12,
         bevelEnabled: false,
         bevelThickness: 10,

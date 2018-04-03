@@ -507,7 +507,7 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
-  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  light0 = new THREE.HemisphereLight(0xffffff,0xffffff,1);
   scene.add(light0);
   scene.add(VRGui);
   scene.add(rig);

@@ -121,24 +121,23 @@ function pointSelectionUpdate() {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
 
+  var originalPointSize = pointVars.plotPointSizeCoeff;
+
   // Reset point size when not moused over
-  setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  setPointScale(mousedOverPoint, Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * originalPointSize );
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
     if (pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
-      setPointScale(intersects.index, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+      setPointScale(intersects.index, originalPointSize * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
     }
     mousedOverPoint = intersects.index;
 
-
-
-
   } else {
 
-    setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+    setPointScale(mousedOverPoint, originalPointSize * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
   // Press 'A' and 'X' is select/deselect all points.
@@ -168,7 +167,9 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-
+  if(selectionThreshold > 0.04) {
+      selectionThreshold = 0.04 + pointVars.plotPointSizeCoeff + 0.001;
+  }
 }
 
 /**
@@ -473,10 +474,11 @@ function viewHidden() {
  */
 function recolorSelected() {
 
-  for (var i = 0; i < selectedPoints.length; i++) {
-    setPointColor(selectedPoints[i], new THREE.Color(1, 1, 1));
-    if (pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false) {
-      pointsGeometry.getAttribute('isSelected').array[i] === true;
+    for(var i = 0; i < selectedPoints.length; i++){
+            setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
+            if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false){
+                pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === true;
+
+        }
     }
   }
-}

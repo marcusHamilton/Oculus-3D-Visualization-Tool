@@ -262,18 +262,34 @@ function onGeometryDatabaseChange(worldId) {
   });
 }
 
+//Listener
 function onAxisDatabaseChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/userData/0');
-  axisRef.on('child_changed', function (dataSnapshot) {
-    console.log(dataSnapshot.val());
-    loadedDataset[0] = dataSnapshot.val();
-    selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
-    selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
-    selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
-    redraw.redrawVR();
+  axisRef.on('value', function (dataSnapshot) {
+      loadedDataset[0] = dataSnapshot.val();
+      selectedAxes.selectedX = axisMenu.axesOptions[loadedDataset[0][0]];
+      selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
+      selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
+      redraw.redrawVR();
+	  console.log("Axis received");
   });
 }
 
+//Listener
+function onSelectionChange(worldId) {
+  var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
+  axisRef.on('value', function (dataSnapshot) {
+    // console.log(dataSnapshot.val()); //uncomment to see the value from the database
+    if(dataSnapshot.val() != null){
+      selectedPoints = dataSnapshot.val();
+      redraw.redrawVR();
+    }
+    else{
+      console.log("No selected points saved in DB.")
+      selectedPoints = [];
+    }
+  });
+}
 //You only need to call this function once and it will listen for position changes.
 //+ Whenever another users position in the world changes, the contents of this function
 //+ will be run.
@@ -298,6 +314,7 @@ function onUserPositionChange(worldId, UID) {
   });
 }
 
+
 /*
 When a geometry changes on the client side, this function needs to be called
 in order to update the geometry in the database.
@@ -312,18 +329,24 @@ function updateGeometryInDatabase(worldId, geometryId, geometry) {
 }
 
 /*
-When the selected points change for a world and need to be pushed to the database, call this function
+When the selected axes change for a world and need to be pushed to the database, call this function
 @Inputs:
   worldId: ID of the world in the database
   selectedAxii: JSON format of the loadedDataset[0] array(aka the axii selection array)  
 */
-function updateAxisSelectionInDatabase(worldId, selectedAxii) {
-  var axiiRef = database.ref('worlds/' + worldId + '/object/userData')
-  var AxiiSelection = axiiRef.child("0");
-  AxiiSelection.set(selectedAxii);
-  console.log("Pushed selection " + inspectAxesJSON + " to the database.")
+function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
+  var axesRef = database.ref('worlds/' + worldId + '/object/userData')
+  var AxiiSelection = axesRef.child("0");
+  AxiiSelection.set(selectedAxesJSON);
+  console.log("Pushed selection " + selectedAxesJSON + " to the database.")
 }
 
+//push selected points to db
+function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
+  var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
+  selectionRef.set(selectedPointsJSON);
+  console.log("Pushed selection " + selectedPointsJSON + " to the database.");
+}
 /*
 When a users position changes within a world and needs to be pushed to the database, call this function
 @Inputs:
@@ -337,6 +360,8 @@ function updateUserPositionInDatabase(worldId, UID) {
   positionObj.x = positionObj.x - datPos.x;
   positionObj.y = positionObj.y - datPos.y;
   positionObj.z = positionObj.z - datPos.z;
+
+
 
   var PosJSON = JSON.stringify(positionObj);
   console.log("Pushing: " + PosJSON);
@@ -360,7 +385,7 @@ function getWorldInfo(worldId) {
   return queryRef.once('value').then(function (snapshot) {
     result = snapshot.val();
   }).then(function () {
-    return result
+    return result;
   });
 }
 

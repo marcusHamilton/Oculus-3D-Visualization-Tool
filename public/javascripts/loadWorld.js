@@ -186,11 +186,13 @@ function Manager() {
     drawFPSstats();
 
     //Initializes the axis selection interfaces
-    axisMenu = new selectedAxes();
-    selectedAxes = new selectedAxesVR();
-
+    axisMenu = new SelectedAxes();
+    selectedAxes = new SelectedAxesVR();
+    
     //Builds the GUIs
     VRGui();
+
+    initAxisMenu();
     // BRGui(); May break things dont uncomment
 
     //Uncomment if you need to use mouse as input for GUI in VR
@@ -222,6 +224,7 @@ function Manager() {
     }
     onAxisDatabaseChange(worldID);
     onUserPositionChange(worldID, getUID());
+    onSelectionChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();

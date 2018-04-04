@@ -5,10 +5,12 @@ var selectedAxesJSON;
 //DAT GUI variables
 var redraw = {
   redraw: function () {
-    redrawDataSet()
+    redrawDataSet();
+    drawSelectionStats();
   },
   redrawVR: function () {
-    redrawDataSetVR()
+    redrawDataSetVR();
+    drawSelectionStats();
   }
 }; //function for Redraw button in browser
 var pushToDB = {

@@ -28,8 +28,12 @@ var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX; //Largest X value in the dataset for selected columns
 var largestY; //Largest Y value in the dataset for selected columns
 var largestZ; //Largest Z value in the dataset for selected columns
+var smallestX;
+var smallestY;
+var smallestZ;
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
+var axisLabelGroup
 var datasetAndAxisLabelGroup;
 var userPresence; //hold th reference for the users player sphere and camera
 var otherUsers = []; //Hold the references to the other users spheres
@@ -42,6 +46,9 @@ var smallestYpos;
 var smallestZpos;
 
 var collabGroup;
+
+var isFontReady = false;
+var loadedFont;
 
 //For controls
 
@@ -59,6 +66,10 @@ function update(timestamp) {
     timestamp = 15;
   }
   lastRender = timestamp;
+
+  pointsSystem.rotation.y += 0.001;
+  axisLabelGroup.rotation.y += 0.001;
+
   // //Checking for dat.guivr error
   // console.log(timestamp);
   // var testObject = new THREE.Object3D();
@@ -132,6 +143,10 @@ function Manager() {
   worldID = JSON.parse(retrievedString);
   console.log('worldID is: '+worldID);
   scene = new THREE.Scene();
+
+  initLabelFont();
+  console.log("Loading Helvetiker_Regular");
+
   var worldURL = '/worlds/' + worldID;
 
   /**
@@ -430,12 +445,16 @@ function drawDataset(xCol, yCol, zCol)
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
 
-  largestX = Number.MIN_VALUE;
-  largestY = Number.MIN_VALUE;
-  largestZ = Number.MIN_VALUE;
+  largestX = loadedDataset[2][xCol];
+  largestY = loadedDataset[2][yCol];
+  largestZ = loadedDataset[2][zCol];
+  smallestX = loadedDataset[2][xCol];
+  smallestY = loadedDataset[2][yCol];
+  smallestZ = loadedDataset[2][zCol];
+
 
   // Find largest XYZ values, and largest overall entry.
-  for (var i = 1; i < loadedDataset.length; i++) {
+  for (var i = 2; i < loadedDataset.length; i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
       largestX = loadedDataset[i][xCol];
@@ -446,15 +465,34 @@ function drawDataset(xCol, yCol, zCol)
     if (loadedDataset[i][zCol] > largestZ) {
       largestZ = loadedDataset[i][zCol];
     }
+    if (loadedDataset[i][xCol] < smallestX) {
+      smallestX = loadedDataset[i][xCol];
+    }
+    if (loadedDataset[i][yCol] < smallestY) {
+      smallestY = loadedDataset[i][yCol];
+    }
+    if (loadedDataset[i][zCol] < smallestZ) {
+      smallestZ = loadedDataset[i][zCol];
+    }
     largestEntry = Math.max(largestX, largestY, largestZ);
   }
+
+  var dx = (largestX - smallestX);
+  var dy = (largestY - smallestY);
+  var dz = (largestZ - smallestZ);
+
+  var mx = (largestX + smallestX)/2;
+  var my = (largestY + smallestY)/2;
+  var mz = (largestZ + smallestZ)/2;
+
+
 
   for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
-    var pX = (loadedDataset[i][xCol]/largestX)*plotInitSizeX;
-    var pY = (loadedDataset[i][yCol]/largestY)*plotInitSizeY;
-    var pZ = (loadedDataset[i][zCol]/largestZ)*plotInitSizeZ;
+    var pX = ((loadedDataset[i][xCol]/* - mx*/)/dx)*plotInitSizeX;
+    var pY = ((loadedDataset[i][yCol]/* - my*/)/dy)*plotInitSizeY;
+    var pZ = ((loadedDataset[i][zCol]/* - mz*/)/dz)*plotInitSizeZ;
     var p = new THREE.Vector3(pX, pY, pZ);
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
@@ -494,7 +532,7 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
-  light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
+  light0 = new THREE.HemisphereLight(0xffffff,0xffffff,1);
   scene.add(light0);
   scene.add(VRGui);
   scene.add(userPresence);
@@ -524,7 +562,7 @@ function drawDataset(xCol, yCol, zCol)
 //TODO: Rewrite to allow for negative values.
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
-  var axisLabelGroup = new THREE.Group();
+  axisLabelGroup = new THREE.Group();
   axisLabelGroup.name = "AxisLabelGroup";
 
   // Set line colors
@@ -596,37 +634,19 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineY);
   axisLabelGroup.add(lineZ);
 
-  // Axis line ticks - Just draws 10 ticks on each axis
-  /*
-  var lineXTicks = new LinkedList();
-  for (var xUnits = 1; xUnits <= 10; xUnits++) {
-    lineXTicks.add(new THREE.Geometry());
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, plotInitSizeY * 0.1, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, 0));
-    lineXTicks.elementAt(xUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX / largestX * xUnits, 0, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineXTicks.elementAt(xUnits - 1), materialX));
-  }
-  var lineYTicks = new LinkedList();
-  for (var yUnits = 1; yUnits <= 10; yUnits++) {
-    lineYTicks.add(new THREE.Geometry());
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeX * 0.1, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, 0));
-    lineYTicks.elementAt(yUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY / largestY * yUnits, plotInitSizeZ * 0.1));
-    axisLabelGroup.add(new THREE.Line(lineYTicks.elementAt(yUnits - 1), materialY));
-  }
-  var lineZTicks = new LinkedList();
-  for (var zUnits = 1; zUnits <= 10; zUnits++) {
-    lineZTicks.add(new THREE.Geometry());
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, plotInitSizeY * 0.1, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ / largestZ * zUnits));
-    lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
-    axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
-  }
-  */
+  // Add text labels to the axisLabelGroup
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + largestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,largestYpos,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + largestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,largestZpos), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + smallestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(smallestXpos,0,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + smallestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,smallestYpos,0), axisLabelGroup);
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + smallestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,smallestZpos), axisLabelGroup);
+  drawTextLabel("(0,0,0)", 0.1, new THREE.Color(1,1,1), new THREE.Vector3(0,0,0), axisLabelGroup);
+
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
-  //scene.add(axisLabelGroup);
+
 }
 
 function newPlayerSphere(){
@@ -638,3 +658,82 @@ function newPlayerSphere(){
   return playerSphere;
 }
 
+
+/**
+ * Creates a THREE.Mesh object 3D representation of a text string and
+ * adds it to a group.
+ * @param labelString {String} : The text take make a mesh for
+ * @param textSize {Number} : The size of the font
+ * @param color {THREE.Color} : The color
+ * @param position {THREE.Vector3} : Initial position.
+ * @param group {THREE.Object3D} : The group to add the mesh to.
+ */
+function drawTextLabel(labelString, textSize, color, position, group) {
+  var loader = new THREE.FontLoader();
+  loader.setPath('');
+  if (!isFontReady){
+    console.log("Font not ready, loading now.");
+    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
+        loadedFont = font;
+        var geometry = new THREE.TextGeometry(labelString, {
+          font: font,
+          size: textSize,
+          height: .005,
+          curveSegments: 12,
+          bevelEnabled: false,
+          bevelThickness: 10,
+          bevelSize: 8,
+          bevelSegments: 5
+        });
+        var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+        var textMesh = new THREE.Mesh(geometry, fontMaterial);
+        textMesh.position.set(position.x, position.y, position.z)
+        textMesh.name = "label";
+        group.add(textMesh);
+      },
+      function (e) {
+        console.log("onProgress callback");
+        console.log(e);
+      },
+      function (e) {
+        console.log("onError callback");
+        console.log(e);
+      });
+  }
+  else {
+    var geometry = new THREE.TextGeometry(labelString, {
+      font: loadedFont,
+      size: textSize,
+      height: .005,
+      curveSegments: 6,
+      bevelEnabled: false,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 5
+    });
+    var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+    var textMesh = new THREE.Mesh(geometry, fontMaterial);
+    textMesh.position.set(position.x, position.y, position.z);
+    textMesh.name = "label";
+    group.add(textMesh);
+  }
+}
+
+
+function initLabelFont(){
+  var loader = new THREE.FontLoader();
+  loader.setPath('');
+  loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+      loadedFont = font;
+      isFontReady = true;
+      console.log("Helvetiker_Regular loaded.");
+    },
+    function(e) {
+      console.log("onProgress callback");
+      console.log(e);
+    },
+    function(e) {
+      console.log("onError callback");
+      console.log(e);
+    });
+}

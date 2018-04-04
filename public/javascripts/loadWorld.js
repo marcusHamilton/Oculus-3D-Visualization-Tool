@@ -32,12 +32,13 @@ var smallestX;
 var smallestY;
 var smallestZ;
 var largestEntry = 0; //Largest value in the dataset for selected columns
-var plotCenterVec3; //Centerpoint of visualization in world space
-var axisLabelGroup
-var datasetAndAxisLabelGroup;
+var plotCenterVec3; // Centerpoint of visualization in world space
+var axisLabelGroup; // This group contains the text meshes for the axis labels
+var datasetAndAxisLabelGroup; //This group contains the points system and axis labels
 var userPresence; //hold th reference for the users player sphere and camera
 var otherUsers = []; //Hold the references to the other users spheres
 
+// min and max *world position* values for each vertex in the points system
 var largestXpos;
 var largestYpos;
 var largestZpos;
@@ -47,8 +48,8 @@ var smallestZpos;
 
 var collabGroup;
 
-var isFontReady = false;
-var loadedFont;
+var isFontReady = false; // Boolean to make sure the 3D font is loaded before using it.
+var loadedFont; // An object representing the 3D font
 
 //For controls
 
@@ -420,6 +421,7 @@ function drawDataset(xCol, yCol, zCol)
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
   var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
 
+  // The .png file to use for the point field icons
   var texture = new THREE.TextureLoader().load( "images/shader3.png" );
 
   // Configure point material shader
@@ -442,6 +444,7 @@ function drawDataset(xCol, yCol, zCol)
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
 
+  // Min and max values in the parsed dataset.
   largestX = loadedDataset[2][xCol];
   largestY = loadedDataset[2][yCol];
   largestZ = loadedDataset[2][zCol];
@@ -474,15 +477,16 @@ function drawDataset(xCol, yCol, zCol)
     largestEntry = Math.max(largestX, largestY, largestZ);
   }
 
+  // The span between min and max value in each axis
   var dx = (largestX - smallestX);
   var dy = (largestY - smallestY);
   var dz = (largestZ - smallestZ);
 
+  /*
   var mx = (largestX + smallestX)/2;
   var my = (largestY + smallestY)/2;
   var mz = (largestZ + smallestZ)/2;
-
-
+  */
 
   for (var i = 1; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
@@ -494,8 +498,6 @@ function drawDataset(xCol, yCol, zCol)
 
     // Add Vector3 p to the positions array to be added to BufferGeometry.
     p.toArray( positions, i * 3 );
-
-
 
     // Set the sizes of all the points to be added to BufferGeometry
     sizes[i] = pointSize;
@@ -539,9 +541,9 @@ function drawDataset(xCol, yCol, zCol)
   for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){
       // Set point color RGB values to magnitude of XYZ values
       color = colorFromXYZcoords(new THREE.Vector3(
-        pointsGeometry.getAttribute('position').array[i],
-        pointsGeometry.getAttribute('position').array[i+1],
-        pointsGeometry.getAttribute('position').array[i+2]
+          pointsGeometry.getAttribute('position').array[i],
+          pointsGeometry.getAttribute('position').array[i+1],
+          pointsGeometry.getAttribute('position').array[i+2]
       ));
       color.toArray(colors, i);
     }
@@ -632,7 +634,6 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineZ);
 
   // Add text labels to the axisLabelGroup
-
   if (largestX > 0)
   drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1,
     new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
@@ -687,6 +688,7 @@ function newPlayerSphere(){
 function drawTextLabel(labelString, textSize, color, position, group) {
   var loader = new THREE.FontLoader();
   loader.setPath('');
+  // If the font hasn't been loaded yet, go ahead and do that here.
   if (!isFontReady){
     console.log("Font not ready, loading now.");
     loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
@@ -716,7 +718,7 @@ function drawTextLabel(labelString, textSize, color, position, group) {
         console.log(e);
       });
   }
-  else {
+  else { // If the font has been loaded, just use it.
     var geometry = new THREE.TextGeometry(labelString, {
       font: loadedFont,
       size: textSize,
@@ -731,11 +733,14 @@ function drawTextLabel(labelString, textSize, color, position, group) {
     var textMesh = new THREE.Mesh(geometry, fontMaterial);
     textMesh.position.set(position.x, position.y, position.z);
     textMesh.name = "label";
+    // Add the text mash to the specified group
     group.add(textMesh);
   }
 }
 
-
+/**
+ * Load the 3D Helvetiker_Regular font from the .json file.
+ */
 function initLabelFont(){
   var loader = new THREE.FontLoader();
   loader.setPath('');

@@ -10,6 +10,8 @@ var handControlR; // Right hand Oculus controller
 var AisPressed;
 var XisPressed;
 
+var movementSpeedCoeff = 0.1;
+
 var rotationSpeed = 0.1;
 var cameraDirection = new THREE.Vector3();
 var theta; // Angle between x and z
@@ -26,6 +28,10 @@ var leftGrip;
 
 //var directionalArrow = new THREE.Object3D();
 
+/**
+ * This gets called when a controller wakes up or is plugged in, providing
+ * a reference to the left and right controller objects.
+ */
 window.addEventListener('vr controller connected', function (event) {
 
 	console.log("Controller woken");
@@ -118,13 +124,6 @@ window.addEventListener('vr controller connected', function (event) {
 });
 
 // ~~~~~~~~~~~~~~~ MOVEMENT CONTROLS ~~~~~~~~~~~~~~~~~~~
-/**
- * This gets called when a controller wakes up or is plugged in, providing
- * a reference to the left and right controller objects.
- */
-
-
-var movementSpeedCoeff = 0.1;
 
 function initializeMovementControls() {
     // Example event listener for button press/touch/near-touch
@@ -149,7 +148,6 @@ function initializeMovementControls() {
 /**
  * This gets called in the main update() loop.
  */
-
  function updatePointsPosition() {
 	 points = collabGroup;
 	 var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0,1,0), Math.PI/16 );
@@ -200,8 +198,6 @@ function updateMovementControls(){
         }
     }
 }
-
-
 
 // ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~
 
@@ -302,103 +298,101 @@ function setListeners() {
         handControlL.addEventListener('grip press ended', function (event) {
             leftGrip = false;
         });
-        }
-        //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
-        if (handControlL && handControlL != null) {
-            handControlL.addEventListener('X press began', function (event) {
-                XisPressed = true;
-            });
-            handControlL.addEventListener('X press ended', function (event) {
-                XisPressed = false;
-            });
-        }
-        //Hold 'B' and 'Y' hide/unhide all
-        if (handControlL && handControlL != null) {
-            handControlL.addEventListener('Y press began', function (event) {
+    }
+    //Press 'A' (Right Controller) and 'X' (Left Controller) to select/deselect all
+    if (handControlL && handControlL != null) {
+        handControlL.addEventListener('X press began', function (event) {
+            XisPressed = true;
+        });
+        handControlL.addEventListener('X press ended', function (event) {
+            XisPressed = false;
+        });
+    }
+    //Hold 'B' and 'Y' hide/unhide all
+    if (handControlL && handControlL != null) {
+        handControlL.addEventListener('Y press began', function (event) {
 
-            });
-            handControlL.addEventListener('Y press ended', function (event) {
+        });
+        handControlL.addEventListener('Y press ended', function (event) {
 
-            });
-        }
-        //'Click right thumbstick' to invert selection.
-        if (handControlR && handControlR != null) {
-            handControlR.addEventListener('thumbstick press began', function (event) {
-                invertSelection();
-            });
-            handControlR.addEventListener('thumbstick press ended', function (event) {
+        });
+    }
+    //'Click right thumbstick' to invert selection.
+    if (handControlR && handControlR != null) {
+        handControlR.addEventListener('thumbstick press began', function (event) {
+            invertSelection();
+        });
+        handControlR.addEventListener('thumbstick press ended', function (event) {
 
-            });
-        }
-        //Touch right thumbstick to show directional arrow
-        if (handControlR && handControlR != null){
-            handControlR.addEventListener('thumbstick touch began', function(event) {
-                //rig.add(directionalArrow);
-            });
-            handControlR.addEventListener('thumbstick touch ended', function(event) {
-                //rig.remove(directionalArrow);
-            });
-        }
-
+        });
+    }
+    //Touch right thumbstick to show directional arrow
+    if (handControlR && handControlR != null){
+        handControlR.addEventListener('thumbstick touch began', function(event) {
+            //rig.add(directionalArrow);
+        });
+        handControlR.addEventListener('thumbstick touch ended', function(event) {
+            //rig.remove(directionalArrow);
+        });
+    }
 }
-
 
 // ~~~~~~~~~~~~~~~ KEYBOARD CONTROLS ~~~~~~~~~~~~~~~~~~~
 
-    function onAKeyPress(event) {
-        var keyCode = event.which;
-        var translationSpeed = 0.1;
+  function onAKeyPress(event) {
+      var keyCode = event.which;
+      var translationSpeed = 0.1;
 
-        var inverseTheta
-        var gamma // Angle between x and y
-        //A == 65 Left
-        if (keyCode == 65) {
-            camera.position.z -= translationSpeed;
-        }
-        //D == 68 Right
-        else if (keyCode == 68) {
-            camera.position.z += translationSpeed;
-        }
-        //W == 87 Forward
-        else if (keyCode == 87) {
-            camera.getWorldDirection(cameraDirection);
-            theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-            camera.position.x += (translationSpeed * Math.sin(theta));
-            camera.position.z += (translationSpeed * Math.cos(theta));
-        }
-        //S == 83 Backward
-        else if (keyCode == 83) {
-            camera.getWorldDirection(cameraDirection);
-            theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-            camera.position.x -= (translationSpeed * Math.sin(theta));
-            camera.position.z -= (translationSpeed * Math.cos(theta));
-        }
-        //space == 32 Up
-        else if (keyCode == 32) {
-            camera.position.y += translationSpeed;
-        }
-        //ctrl == 17  Down
-        else if (keyCode == 17) {
-            camera.position.y -= translationSpeed;
-        }
-        //Q == 81 Look left
-        else if (keyCode == 81) {
-            camera.rotation.y += rotationSpeed;
-        }
-        //E == 69 Look right
-        else if (keyCode == 69) {
-            camera.rotation.y -= rotationSpeed;
-        }
-        //Look up and look down might be unnecasary when this is converted to occulus controller
-        //Doesnt work anyway tho
+      var inverseTheta
+      var gamma // Angle between x and y
+      //A == 65 Left
+      if (keyCode == 65) {
+          camera.position.z -= translationSpeed;
+      }
+      //D == 68 Right
+      else if (keyCode == 68) {
+          camera.position.z += translationSpeed;
+      }
+      //W == 87 Forward
+      else if (keyCode == 87) {
+          camera.getWorldDirection(cameraDirection);
+          theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+          camera.position.x += (translationSpeed * Math.sin(theta));
+          camera.position.z += (translationSpeed * Math.cos(theta));
+      }
+      //S == 83 Backward
+      else if (keyCode == 83) {
+          camera.getWorldDirection(cameraDirection);
+          theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+          camera.position.x -= (translationSpeed * Math.sin(theta));
+          camera.position.z -= (translationSpeed * Math.cos(theta));
+      }
+      //space == 32 Up
+      else if (keyCode == 32) {
+          camera.position.y += translationSpeed;
+      }
+      //ctrl == 17  Down
+      else if (keyCode == 17) {
+          camera.position.y -= translationSpeed;
+      }
+      //Q == 81 Look left
+      else if (keyCode == 81) {
+          camera.rotation.y += rotationSpeed;
+      }
+      //E == 69 Look right
+      else if (keyCode == 69) {
+          camera.rotation.y -= rotationSpeed;
+      }
+      //Look up and look down might be unnecasary when this is converted to occulus controller
+      //Doesnt work anyway tho
 
-        //R == 82 Look Up
-        //else if(keyCode == 82){
-        //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-        //inverseTheta = Math.PI /2 - theta;
-        //gamma = Math.PI - (inverseTheta + Math.PI /2);
-        //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
-        //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
-        //camera.rotation.x += rotationSpeed;
-        // }
-    }
+      //R == 82 Look Up
+      //else if(keyCode == 82){
+      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      //inverseTheta = Math.PI /2 - theta;
+      //gamma = Math.PI - (inverseTheta + Math.PI /2);
+      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
+      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
+      //camera.rotation.x += rotationSpeed;
+      // }
+  }

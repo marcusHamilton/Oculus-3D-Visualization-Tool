@@ -50,7 +50,9 @@ function VRGui() {
   VRGui.add(redraw, 'redrawVR');
 
   //Button to trigger selection stats recalculation and redraw
-  VRGui.add(redraw, 'redrawSelectionStats');
+  var stats = VRGui.add(redraw, 'selectionStats');
+  stats.name("Update Stats");
+
 
   // //Button that pushes the currently drawn axis selection to the database
   var pushDB = VRGui.add(pushToDB, 'pushToDB');
@@ -98,5 +100,6 @@ function BRGui() {
 function scaleMenu() {
   scaleSlider = VRGui.add(scaleInterface, 'x', 0.1, 10);
   scaleSlider.onChange(scaleSystem.scaleAll);
+  scaleSlider.name("Scale");
 }
 

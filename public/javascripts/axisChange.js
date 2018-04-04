@@ -10,12 +10,8 @@ var redraw = {
   },
   redrawVR: function () {
     redrawDataSetVR();
-    // console.log("redrawComplete");
-    // console.log("Startin seleciton stats");
-    
-    // console.log("Finished selection stats.");
   },
-  redrawSelectionStats: function() {
+  selectionStats: function() {
     // drawSelectionStats();
     drawSelectionStatsVerbose();
   }
@@ -38,6 +34,7 @@ var pushToDB = {
     else{console.log("Could not push to database due to blank dropdown")}
   }
 };
+
 var liveUpdate = {
   liveX: function() {
     axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
@@ -69,31 +66,41 @@ var liveUpdate = {
     Dataset is redrawn based on the axis selection from the desired source (VR/BR)
 */
 function redrawDataSetVR() {
+  var ogScale = {
+    x : datasetAndAxisLabelGroup.scale.x,
+    y : datasetAndAxisLabelGroup.scale.y,
+    z : datasetAndAxisLabelGroup.scale.z
+      };
+
 	axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
-    axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
-    axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
-    if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
-		    axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
-			axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
-			axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
-      //Console logs to validate selection from gui vs. what is being saved, both should be the same.
-      console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
-      console.log("Y-Axis: " + axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
-      console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
+  axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+  axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
+  if (axisMenu.xAxis >= 0 && axisMenu.yAxis >= 0 && axisMenu.zAxis >= 0) {
+		axisMenu.xAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedX);
+		axisMenu.yAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedY);
+		axisMenu.zAxis = axisMenu.axesOptions.indexOf(selectedAxes.selectedZ);
+    //Console logs to validate selection from gui vs. what is being saved, both should be the same.
+    // console.log("X-Axis: " + axisMenu.xAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
+    // console.log("Y-Axis: " + axisMenu.yAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
+    // console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
+    assert(axisMenu.xAxis === axisMenu.axesOptions.indexOf(selectedAxes.selectedX));
+    assert(axisMenu.yAxis === axisMenu.axesOptions.indexOf(selectedAxes.selectedY));
+    assert(axisMenu.zAxis === axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
 
-      // console.log("Removing children")
-	 collabGroup.remove(collabGroup.getObjectByName("DatasetAxisGroup"));
+    // console.log("Removing children")
+	 collabGroup.remove(datasetAndAxisLabelGroup);
 
-      /*while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }*/
-      // console.log("Redrawing Data");
-      drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
+    drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
 	  
-      drawAxisLabels();
-      collabGroup.add(datasetAndAxisLabelGroup);
-    } else {
-      console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
+    drawAxisLabels();
+    collabGroup.add(datasetAndAxisLabelGroup);
+    datasetAndAxisLabelGroup.scale.x = ogScale.x;
+    datasetAndAxisLabelGroup.scale.y = ogScale.y;
+    datasetAndAxisLabelGroup.scale.z = ogScale.z;
+
+  }
+  else {
+    console.log("DropDowns cannot be left blank. Please select an option per axis. Thank you.\n" +
         "If any are left blank no changes will occur in the drawn data set.");
     }
 	

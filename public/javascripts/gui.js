@@ -49,6 +49,9 @@ function VRGui() {
   // //Button to redraw using redraw with a vr switch to trigger the axis data to come from the vr GUI
   VRGui.add(redraw, 'redrawVR');
 
+  //Button to trigger selection stats recalculation and redraw
+  VRGui.add(redraw, 'redrawSelectionStats');
+
   // //Button that pushes the currently drawn axis selection to the database
   var pushDB = VRGui.add(pushToDB, 'pushToDB');
   pushDB.name("Push Axis/Selection");

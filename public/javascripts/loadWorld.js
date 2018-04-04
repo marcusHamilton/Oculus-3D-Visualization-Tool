@@ -232,12 +232,14 @@ function Manager() {
 
     for(var i = 0; i<2; i++){
       otherUsers[i] = newPlayerSphere();
-      scene.add(otherUsers[i]);
       collabGroup.add(otherUsers[i]);
     }
     onAxisDatabaseChange(worldID);
     onUserPositionChange(worldID, getUID());
     onSelectionChange(worldID);
+    scene.add(light0);
+    scene.add(VRGui);
+    scene.add(userPresence);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -532,9 +534,7 @@ function drawDataset(xCol, yCol, zCol)
   datasetAndAxisLabelGroup.add(pointsSystem);
 
   light0 = new THREE.HemisphereLight(0xffffff,0xffffff,1);
-  scene.add(light0);
-  scene.add(VRGui);
-  scene.add(userPresence);
+
 
   drawAxisLabels();
 
@@ -561,6 +561,14 @@ function drawDataset(xCol, yCol, zCol)
 //TODO: Rewrite to allow for negative values.
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
+  if(axisLabelGroup != null
+    && axisLabelGroup.children[3].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][0]] + " = " + largestX
+    && axisLabelGroup.children[4].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][1]] + " = " + largestY
+    && axisLabelGroup.children[5].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][2]] + " = " + largestZ
+    ){
+    datasetAndAxisLabelGroup.add(axisLabelGroup);
+    return;
+  }
   axisLabelGroup = new THREE.Group();
   axisLabelGroup.name = "AxisLabelGroup";
 
@@ -663,7 +671,6 @@ function drawAxisLabels() {
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
-
 }
 
 function newPlayerSphere(){
@@ -704,7 +711,7 @@ function drawTextLabel(labelString, textSize, color, position, group) {
           bevelSegments: 5
         });
         var fontMaterial = new THREE.MeshPhongMaterial({color: color});
-        var textMesh = new THREE.Mesh(geometry, fontMaterial);
+        var textMesh = new THREE.Sprite(geometry, fontMaterial);
         textMesh.position.set(position.x, position.y, position.z)
         textMesh.name = "label";
         group.add(textMesh);
@@ -724,10 +731,7 @@ function drawTextLabel(labelString, textSize, color, position, group) {
       size: textSize,
       height: .005,
       curveSegments: 6,
-      bevelEnabled: false,
-      bevelThickness: 10,
-      bevelSize: 8,
-      bevelSegments: 5
+      bevelEnabled: false
     });
     var fontMaterial = new THREE.MeshPhongMaterial({color: color});
     var textMesh = new THREE.Mesh(geometry, fontMaterial);

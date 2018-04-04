@@ -10,7 +10,16 @@ var redraw = {
   },
   redrawVR: function () {
     redrawDataSetVR();
+    // console.log("redrawComplete");
+    // console.log("Startin seleciton stats");
+    
+    // console.log("Finished selection stats.");
+  },
+  redrawSelectionStats: function() {
+    var t1 = performance.now();
     drawSelectionStats();
+    var t2 = performance.now();
+    console.log("Execution of drawSelectionStats took: " + (t2-t1) + " ms" )
   }
 }; //function for Redraw button in browser
 var pushToDB = {
@@ -98,7 +107,7 @@ function redrawDataSetVR() {
     inspectAxesJSON = JSON.stringify(selectedAxesJSON);
     console.log(inspectAxesJSON);
     selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));
-  
+    loadedDataset[0] = [axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis];
     recolorSelected();
 }
 

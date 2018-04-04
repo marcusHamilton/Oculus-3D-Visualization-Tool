@@ -90,7 +90,13 @@ function calculateSelectionStats() {
  * and add them to the scene.
  */
 function drawSelectionStats(){
+    if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
+      && statsLabelGroup.children[2].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][1]]
+      && statsLabelGroup.children[3].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][2]]){
+      return;
+    }
 
+    //measuring execution time for calculate
     calculateSelectionStats();
 
     // Clear any existing labels
@@ -112,7 +118,6 @@ function drawSelectionStats(){
       new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.12,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1,
       new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
-
 
     // Stats row names
     drawTextLabel("Mean: ", 0.1, new THREE.Color(.7,.7,.7),
@@ -243,3 +248,115 @@ function drawSinglePointXYZValues(pointIndex){
 }
 
 
+function drawSelectionStatsVerbose(){
+  if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
+        && statsLabelGroup.children[2].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][1]]
+        && statsLabelGroup.children[3].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][2]]){
+        return;
+      }
+
+      //measuring execution time for calculate
+      calculateSelectionStats();
+      var t1 = performance.now();
+
+      // Clear any existing labels
+      var existingLabels = scene.getObjectByName("statsLabels");
+      if (existingLabels){
+        scene.remove(existingLabels);
+      }
+      var t2 = performance.now();
+      statsLabelGroup = new THREE.Group();
+
+      // Title
+      drawTextLabel("Selection Statistics:", 0.1, new THREE.Color(.9,.9,.9),
+        new THREE.Vector3(0,.02,0), statsLabelGroup);
+
+      // Selected Column Names
+      drawTextLabel(loadedDataset[1][loadedDataset[0][0]], 0.1,
+        new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.12,0), statsLabelGroup);
+      drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1,
+        new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.12,0), statsLabelGroup);
+      drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1,
+        new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
+
+      var t3 = performance.now();
+      // Stats row names
+      drawTextLabel("Mean: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.24,0), statsLabelGroup);
+      drawTextLabel("Median: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.36,0), statsLabelGroup);
+      drawTextLabel("Mode: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.48,0), statsLabelGroup);
+      drawTextLabel("Sum: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.60,0), statsLabelGroup);
+      drawTextLabel("Variance: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.72,0), statsLabelGroup);
+      drawTextLabel("Std. Dev.: ", 0.1, new THREE.Color(.7,.7,.7),
+        new THREE.Vector3(0,-.84,0), statsLabelGroup);
+
+      var t4 = performance.now();
+      // X column stats
+      drawTextLabel(stats.meanX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.24,0), statsLabelGroup);
+      drawTextLabel(stats.medianX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.36,0), statsLabelGroup);
+      drawTextLabel(stats.modeX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.48,0), statsLabelGroup);
+      drawTextLabel(stats.sumX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.60,0), statsLabelGroup);
+      drawTextLabel(stats.varianceX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.72,0), statsLabelGroup);
+      drawTextLabel(stats.standardDevX, 0.1, new THREE.Color(.7,0,0),
+        new THREE.Vector3(.7,-.84,0), statsLabelGroup);
+
+      var t5 = performance.now();
+      // Y column stats
+      drawTextLabel(stats.meanY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.24,0), statsLabelGroup);
+      drawTextLabel(stats.medianY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.36,0), statsLabelGroup);
+      drawTextLabel(stats.modeY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.48,0), statsLabelGroup);
+      drawTextLabel(stats.sumY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.60,0), statsLabelGroup);
+      drawTextLabel(stats.varianceY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.72,0), statsLabelGroup);
+      drawTextLabel(stats.standardDevY, 0.1, new THREE.Color(0,.7,0),
+        new THREE.Vector3(2.3,-.84,0), statsLabelGroup);
+
+      var t6 = performance.now();
+      // Z column stats
+      drawTextLabel(stats.meanZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.24,0), statsLabelGroup);
+      drawTextLabel(stats.medianZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.36,0), statsLabelGroup);
+      drawTextLabel(stats.modeZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.48,0), statsLabelGroup);
+      drawTextLabel(stats.sumZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.60,0), statsLabelGroup);
+      drawTextLabel(stats.varianceZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.72,0), statsLabelGroup);
+      drawTextLabel(stats.standardDevZ, 0.1, new THREE.Color(0,0,.7),
+        new THREE.Vector3(3.9,-.84,0), statsLabelGroup);
+
+      var t7 = performance.now();
+      // Set initial position of the group
+      statsLabelGroup.position.x = -5;
+      statsLabelGroup.position.y = 1;
+      statsLabelGroup.position.z = 1;
+      statsLabelGroup.rotation.y += Math.PI/4;
+      statsLabelGroup.name = "statsLabels";
+
+      scene.add(statsLabelGroup);
+      var t8 = performance.now();
+      console.log("Execution of drawSelectionStats took: " + (t8-t1) + " ms" + '\n' +
+      'Part 1: ' + (t2-t1) + '\n' +
+      'Part 2: ' + (t3-t2) + '\n' +
+      'Part 3: ' + (t4-t3) + '\n' +
+      'Part 4: ' + (t5-t4) + '\n' +
+      'Part 5: ' + (t6-t5) + '\n' +
+      'Part 6: ' + (t7-t6) + '\n' +
+      'Part 7: ' + (t8-t7)
+       );
+  }
+}

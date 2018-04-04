@@ -67,9 +67,6 @@ function update(timestamp) {
   }
   lastRender = timestamp;
 
-  pointsSystem.rotation.y += 0.001;
-  axisLabelGroup.rotation.y += 0.001;
-
   // //Checking for dat.guivr error
   // console.log(timestamp);
   // var testObject = new THREE.Object3D();

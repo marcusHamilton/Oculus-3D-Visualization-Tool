@@ -139,9 +139,10 @@ function drawSelectionStats(){
     drawTextLabel(stats.varianceZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.72,0), statsLabelGroup);
     drawTextLabel(stats.standardDevZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.84,0), statsLabelGroup);
 
-    statsLabelGroup.position.x = -4;
+    statsLabelGroup.position.x = -5;
     statsLabelGroup.position.y = 1;
-    statsLabelGroup.position.z = -1;
+    statsLabelGroup.position.z = 1;
+	statsLabelGroup.rotation.y += Math.PI/4;
     statsLabelGroup.name = "statsLabels";
 
     scene.add(statsLabelGroup);

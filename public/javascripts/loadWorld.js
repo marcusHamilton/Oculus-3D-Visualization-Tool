@@ -44,6 +44,9 @@ var smallestXpos;
 var smallestYpos;
 var smallestZpos;
 
+var isFontReady = false;
+var loadedFont;
+
 //For controls
 
 
@@ -60,8 +63,9 @@ function update(timestamp) {
     timestamp = 15;
   }
   lastRender = timestamp;
-  //pointsSystem.rotation.y += 0.001;
-  //axisLabelGroup.rotation.y += 0.001;
+
+  pointsSystem.rotation.y += 0.001;
+  axisLabelGroup.rotation.y += 0.001;
 
   // //Checking for dat.guivr error
   // console.log(timestamp);
@@ -141,6 +145,10 @@ function Manager() {
   worldID = JSON.parse(retrievedString);
   console.log('worldID is: '+worldID);
   scene = new THREE.Scene();
+
+  initLabelFont();
+  console.log("Loading Helvetiker_Regular");
+
   var worldURL = '/worlds/' + worldID;
 
   /**
@@ -634,32 +642,72 @@ function drawAxisLabels() {
  * @param position {THREE.Vector3} : Initial position.
  * @param group {THREE.Object3D} : The group to add the mesh to.
  */
-function drawTextLabel(labelString, textSize, color, position, group){
+function drawTextLabel(labelString, textSize, color, position, group) {
+  var loader = new THREE.FontLoader();
+  loader.setPath('');
+  if (!isFontReady){
+    console.log("Font not ready, loading now.");
+    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
+        loadedFont = font;
+        var geometry = new THREE.TextGeometry(labelString, {
+          font: font,
+          size: textSize,
+          height: .005,
+          curveSegments: 12,
+          bevelEnabled: false,
+          bevelThickness: 10,
+          bevelSize: 8,
+          bevelSegments: 5
+        });
+        var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+        var textMesh = new THREE.Mesh(geometry, fontMaterial);
+        textMesh.position.set(position.x, position.y, position.z)
+        textMesh.name = "label";
+        group.add(textMesh);
+      },
+      function (e) {
+        console.log("onProgress callback");
+        console.log(e);
+      },
+      function (e) {
+        console.log("onError callback");
+        console.log(e);
+      });
+  }
+  else {
+    var geometry = new THREE.TextGeometry(labelString, {
+      font: loadedFont,
+      size: textSize,
+      height: .005,
+      curveSegments: 6,
+      bevelEnabled: false,
+      bevelThickness: 10,
+      bevelSize: 8,
+      bevelSegments: 5
+    });
+    var fontMaterial = new THREE.MeshPhongMaterial({color: color});
+    var textMesh = new THREE.Mesh(geometry, fontMaterial);
+    textMesh.position.set(position.x, position.y, position.z);
+    textMesh.name = "label";
+    group.add(textMesh);
+  }
+}
+
+
+function initLabelFont(){
   var loader = new THREE.FontLoader();
   loader.setPath('');
   loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
-      var geometry = new THREE.TextGeometry( labelString, {
-        font: font,
-        size: textSize,
-        height: .005,
-        curveSegments: 12,
-        bevelEnabled: false,
-        bevelThickness: 10,
-        bevelSize: 8,
-        bevelSegments: 5
-      } );
-      var fontMaterial = new THREE.MeshPhongMaterial({color: color});
-      var textMesh = new THREE.Mesh(geometry, fontMaterial);
-      textMesh.position.set(position.x, position.y, position.z)
-      textMesh.name = "label";
-      group.add(textMesh);
+      loadedFont = font;
+      isFontReady = true;
+      console.log("Helvetiker_Regular loaded.");
     },
     function(e) {
-      //console.log("onProgress callback");
-      //console.log(e);
+      console.log("onProgress callback");
+      console.log(e);
     },
     function(e) {
-      //console.log("onError callback");
-      //console.log(e);
+      console.log("onError callback");
+      console.log(e);
     });
 }

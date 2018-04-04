@@ -194,6 +194,7 @@ function selectPoint(pointIndex) {
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
       pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
+  drawSinglePointXYZValues(pointIndex);
 }
 
 /**

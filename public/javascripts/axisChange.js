@@ -2,9 +2,11 @@
 var redraw = {
   redraw: function () {
     redrawDataSet(0)
+    drawSelectionStats()
   },
   redrawVR: function () {
     redrawDataSet(1)
+    drawSelectionStats()
   }
 }; //function for Redraw button in browser
 var pushAxesToDB = {
@@ -43,8 +45,7 @@ function redrawDataSet(VR) {
     console.log("Y-Axis: " + axisMenu.yAxis + "|Browser selected: " + folder.__controllers[2].__select.selectedIndex);
     console.log("Z-Axis: " + axisMenu.zAxis + "|Browser selected: " + folder.__controllers[3].__select.selectedIndex);
 
-    // console.log("Removing children")
-    scene.remove(scene.findObjectByName("DatasetAxisGroup"));
+
 
     // console.log("Redrawing Data");
     drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
@@ -60,9 +61,8 @@ function redrawDataSet(VR) {
       console.log("Z-Axis: " + axisMenu.zAxis + "|VR selected: " + axisMenu.axesOptions.indexOf(selectedAxes.selectedZ));
 
       // console.log("Removing children")
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
+      scene.remove(scene.getObjectByName("DatasetAxisGroup"));
+
       // console.log("Redrawing Data");
       drawDataset(axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis);
       drawAxisLabels();
@@ -76,6 +76,8 @@ function redrawDataSet(VR) {
     1: axisMenu.yAxis,
     2: axisMenu.zAxis
   };
+  loadedDataset[0] = [axisMenu.xAxis, axisMenu.yAxis, axisMenu.zAxis];
+
   inspectAxesJSON = JSON.stringify(selectedAxesJSON);
   console.log(inspectAxesJSON);
   selectedAxesJSON = JSON.parse(JSON.stringify(selectedAxesJSON));

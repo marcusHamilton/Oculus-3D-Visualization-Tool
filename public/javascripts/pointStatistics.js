@@ -52,23 +52,17 @@ function statsHistogram(pointValues){
     return jStat.histogram(pointValues);
 }
 
-function calculateSelectionStats(){
-  /*
-    var xValues = getSelectedAxisValues('x');
-    var yValues = getSelectedAxisValues('y');
-    var zValues = getSelectedAxisValues('z');
-  */
-    var xValues = [];
-    var yValues = [];
-    var zValues = [];
+function calculateSelectionStats() {
 
-    for (var v in selectedPoints){
-      xValues.push(loadedDataset[v][loadedDataset[0][0]]);
-      yValues.push(loadedDataset[v][loadedDataset[0][1]]);
-      zValues.push(loadedDataset[v][loadedDataset[0][2]]);
+  var xValues = [];
+  var yValues = [];
+  var zValues = [];
+  if (selectedPoints.length != 0){
+    for (var v = 0; v < selectedPoints.length; v++) {
+      xValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][0]]);
+      yValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][1]]);
+      zValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][2]]);
     }
-
-
 
     stats.meanX = statsMean(xValues);
     stats.meanY = statsMean(yValues);
@@ -76,9 +70,9 @@ function calculateSelectionStats(){
     stats.medianX = statsMedian(xValues);
     stats.medianY = statsMedian(yValues);
     stats.medianZ = statsMedian(zValues);
-    stats.modeX = statsMode(xValues);
-    stats.modeY = statsMode(yValues);
-    stats.modeZ = statsMode(zValues);
+    stats.modeX = statsMode(xValues)[0];
+    stats.modeY = statsMode(yValues)[0];
+    stats.modeZ = statsMode(zValues)[0];
     stats.sumX = statsSum(xValues);
     stats.sumY = statsSum(yValues);
     stats.sumZ = statsSum(zValues);
@@ -88,7 +82,7 @@ function calculateSelectionStats(){
     stats.standardDevX = statsStdev(xValues);
     stats.standardDevY = statsStdev(yValues);
     stats.standardDevZ = statsStdev(zValues);
-
+  }
     console.log("Selection Statistics:");
     console.log(stats);
 
@@ -96,18 +90,25 @@ function calculateSelectionStats(){
 
 function drawSelectionStats(){
 
+    calculateSelectionStats();
+
+    var existingLabels = scene.getObjectByName("statsLabels");
+    if (existingLabels){
+      scene.remove(existingLabels);
+    }
+
     statsLabelGroup = new THREE.Group();
     // Title
     drawTextLabel("Selection Statistics:", 0.1, new THREE.Color(.9,.9,.9), new THREE.Vector3(0,.02,0), statsLabelGroup);
 
     // Selected Column Names
     drawTextLabel(loadedDataset[1][loadedDataset[0][0]], 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.12,0), statsLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.12,0), statsLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.12,0), statsLabelGroup);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.12,0), statsLabelGroup);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
 
 
     // Stats row names
-    drawTextLabel("Mean: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.24,0), statsLabelGroup)
+    drawTextLabel("Mean: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.24,0), statsLabelGroup);
     drawTextLabel("Median: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.36,0), statsLabelGroup);
     drawTextLabel("Mode: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.48,0), statsLabelGroup);
     drawTextLabel("Sum: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.60,0), statsLabelGroup);
@@ -115,7 +116,7 @@ function drawSelectionStats(){
     drawTextLabel("Std. Dev.: ", 0.1, new THREE.Color(.7,.7,.7), new THREE.Vector3(0,-.84,0), statsLabelGroup);
 
     // X column stats
-    drawTextLabel(stats.meanX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.24,0), statsLabelGroup)
+    drawTextLabel(stats.meanX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.24,0), statsLabelGroup);
     drawTextLabel(stats.medianX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.36,0), statsLabelGroup);
     drawTextLabel(stats.modeX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.48,0), statsLabelGroup);
     drawTextLabel(stats.sumX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.60,0), statsLabelGroup);
@@ -123,50 +124,63 @@ function drawSelectionStats(){
     drawTextLabel(stats.standardDevX, 0.1, new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.84,0), statsLabelGroup);
 
     // Y column stats
-    drawTextLabel(stats.meanY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.24,0), statsLabelGroup)
-    drawTextLabel(stats.medianY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.36,0), statsLabelGroup);
-    drawTextLabel(stats.modeY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.48,0), statsLabelGroup);
-    drawTextLabel(stats.sumY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.60,0), statsLabelGroup);
-    drawTextLabel(stats.varianceY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.72,0), statsLabelGroup);
-    drawTextLabel(stats.standardDevY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(1.7,-.84,0), statsLabelGroup);
+    drawTextLabel(stats.meanY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.24,0), statsLabelGroup);
+    drawTextLabel(stats.medianY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.36,0), statsLabelGroup);
+    drawTextLabel(stats.modeY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.48,0), statsLabelGroup);
+    drawTextLabel(stats.sumY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.60,0), statsLabelGroup);
+    drawTextLabel(stats.varianceY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.72,0), statsLabelGroup);
+    drawTextLabel(stats.standardDevY, 0.1, new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.84,0), statsLabelGroup);
 
     // Z column stats
-    drawTextLabel(stats.meanZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.24,0), statsLabelGroup)
-    drawTextLabel(stats.medianZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.36,0), statsLabelGroup);
-    drawTextLabel(stats.modeZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.48,0), statsLabelGroup);
-    drawTextLabel(stats.sumZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.60,0), statsLabelGroup);
-    drawTextLabel(stats.varianceZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.72,0), statsLabelGroup);
-    drawTextLabel(stats.standardDevZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(2.7,-.84,0), statsLabelGroup);
+    drawTextLabel(stats.meanZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.24,0), statsLabelGroup);
+    drawTextLabel(stats.medianZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.36,0), statsLabelGroup);
+    drawTextLabel(stats.modeZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.48,0), statsLabelGroup);
+    drawTextLabel(stats.sumZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.60,0), statsLabelGroup);
+    drawTextLabel(stats.varianceZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.72,0), statsLabelGroup);
+    drawTextLabel(stats.standardDevZ, 0.1, new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.84,0), statsLabelGroup);
 
-
-    statsLabelGroup.position.x = -2;
+    statsLabelGroup.position.x = -4;
     statsLabelGroup.position.y = 1;
     statsLabelGroup.position.z = -1;
+    statsLabelGroup.name = "statsLabels";
 
     scene.add(statsLabelGroup);
 }
 
 function drawSinglePointXYZValues(pointIndex){
-    var pointLabelGroup = new THREE.Group();
+
+    var existingLabels = scene.getObjectByName("singlePointValues");
+    if (existingLabels){
+      scene.remove(existingLabels);
+    }
+
+    var singlePointValueLabels = new THREE.Group();
     var pointValues = new THREE.Vector3(
       loadedDataset[pointIndex][loadedDataset[0][0]],
       loadedDataset[pointIndex][loadedDataset[0][1]],
       loadedDataset[pointIndex][loadedDataset[0][2]]
     );
+    /*
     var pointPosition = new THREE.Vector3(
       pointsGeometry.getAttribute('position').array[(pointIndex * 3)],
       pointsGeometry.getAttribute('position').array[(pointIndex * 3)+1],
       pointsGeometry.getAttribute('position').array[(pointIndex * 3)+2]
     )
 
-    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x, 0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(pointPosition.x,pointPosition.y + .12,pointPosition.z), axisLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y, 0.1, new THREE.Color(0,0.7,0), new THREE.Vector3(pointPosition.x,pointPosition.y,pointPosition.z), axisLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z, 0.1, new THREE.Color(0,0,0.7), new THREE.Vector3(pointPosition.x,pointPosition.y - .12,pointPosition.z), axisLabelGroup);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x, 0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(pointPosition.x,pointPosition.y + .12,pointPosition.z), singlePointValueLabels);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y, 0.1, new THREE.Color(0,0.7,0), new THREE.Vector3(pointPosition.x,pointPosition.y,pointPosition.z), singlePointValueLabels);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z, 0.1, new THREE.Color(0,0,0.7), new THREE.Vector3(pointPosition.x,pointPosition.y - .12,pointPosition.z), singlePointValueLabels);
+    */
+    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x, 0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(0,0,0), singlePointValueLabels);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y, 0.1, new THREE.Color(0,0.7,0), new THREE.Vector3(0,-.12,0), singlePointValueLabels);
+    drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z, 0.1, new THREE.Color(0,0,0.7), new THREE.Vector3(0,-.24,0), singlePointValueLabels);
 
-    //pointLabelGroup.position = position;
+    singlePointValueLabels.position.x = -4;
+    singlePointValueLabels.position.y = -1;
+    singlePointValueLabels.position.z = -1;
+    singlePointValueLabels.name = "singlePointValues";
 
-    //scene.add(pointLabelGroup);
-
+    scene.add(singlePointValueLabels);
 }
 
 

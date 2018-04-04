@@ -133,7 +133,7 @@ function pointSelectionUpdate() {
 
     }
     mousedOverPoint = intersects.index;
-	console.log(pointsGeometry.getAttribute('isSelected').array[mousedOverPoint]);
+	//console.log(pointsGeometry.getAttribute('isSelected').array[mousedOverPoint]);
 
   } else {
 

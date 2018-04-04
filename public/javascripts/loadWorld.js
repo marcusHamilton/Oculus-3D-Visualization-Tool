@@ -632,12 +632,31 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineZ);
 
   // Add text labels to the axisLabelGroup
-  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
-  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + largestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,largestYpos,0), axisLabelGroup);
-  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + largestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,largestZpos), axisLabelGroup);
-  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + smallestX, 0.1, new THREE.Color(1,0,0), new THREE.Vector3(smallestXpos,0,0), axisLabelGroup);
-  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + smallestY, 0.1, new THREE.Color(0,1,0), new THREE.Vector3(0,smallestYpos,0), axisLabelGroup);
-  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + smallestZ, 0.1, new THREE.Color(0,0,1), new THREE.Vector3(0,0,smallestZpos), axisLabelGroup);
+
+  if (largestX > 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1,
+    new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
+
+  if (largestY > 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + largestY, 0.1,
+    new THREE.Color(0,1,0), new THREE.Vector3(0,largestYpos,0), axisLabelGroup);
+
+  if (largestZ > 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + largestZ, 0.1,
+    new THREE.Color(0,0,1), new THREE.Vector3(0,0,largestZpos), axisLabelGroup);
+
+  if (smallestX < 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + smallestX, 0.1,
+    new THREE.Color(1,0,0), new THREE.Vector3(smallestXpos,0,0), axisLabelGroup);
+
+  if (smallestY < 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + smallestY, 0.1,
+    new THREE.Color(0,1,0), new THREE.Vector3(0,smallestYpos,0), axisLabelGroup);
+
+  if (smallestZ < 0)
+  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + smallestZ, 0.1,
+    new THREE.Color(0,0,1), new THREE.Vector3(0,0,smallestZpos), axisLabelGroup);
+
   drawTextLabel("(0,0,0)", 0.1, new THREE.Color(1,1,1), new THREE.Vector3(0,0,0), axisLabelGroup);
 
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);

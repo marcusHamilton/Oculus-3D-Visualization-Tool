@@ -152,6 +152,8 @@ function Manager() {
    */
 
   function loadScene(response){
+    var t1 = performance.now();
+
     var loader = new THREE.ObjectLoader();
     var object = loader.parse(response);
     scene.add(object);
@@ -163,6 +165,8 @@ function Manager() {
     console.log(loadedDataset);
     console.log("Retrieved Scene Object:");
     console.log(object);
+
+    var t2 = performance.now();
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     camera.name = "camera";
@@ -176,11 +180,15 @@ function Manager() {
     //Add the renderer to the html page
     document.body.appendChild(renderer.domElement);
 
+    var t3 = performance.now();
+
     // Handle canvas resizing
     window.addEventListener('resize', onResize, true);
     window.addEventListener('vrdisplaypresentchange', onResize, true);
     setUpControls();
     addEnterVrButtons();
+
+    var t4 = performance.now();
     //Get HMD type
     enterVR.getVRDisplay()
       .then(function(display) {
@@ -195,15 +203,21 @@ function Manager() {
         animationDisplay = window;
       });
 
+    var t5 = performance.now();
+
     //This can be removed after development if desired
     drawFPSstats();
 
     //Initializes the axis selection interfaces
     axisMenu = new SelectedAxes();
     selectedAxes = new SelectedAxesVR();
+
+    var t6 = performance.now();
     
     //Builds the GUIs
     VRGui();
+
+    var t7 = performance.now();
 
     initAxisMenu();
     // BRGui(); May break things dont uncomment
@@ -211,11 +225,17 @@ function Manager() {
     //Uncomment if you need to use mouse as input for GUI in VR
     dat.GUIVR.enableMouse(camera,renderer);
 
+    var t8 = performance.now();
+
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
 
+    var t9 = performance.now();
+
     scaleInterface = new ScaleObject();
     scaleMenu();
+
+    var t10 = performance.now();
     
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
@@ -230,19 +250,45 @@ function Manager() {
     collabGroup.add(datasetAndAxisLabelGroup);
     scene.add(collabGroup);
 
+    var t11 = performance.now();
+
     for(var i = 0; i<2; i++){
       otherUsers[i] = newPlayerSphere();
       collabGroup.add(otherUsers[i]);
     }
+
+    var t12 = performance.now();
     onAxisDatabaseChange(worldID);
+    var t13 = performance.now();
     onUserPositionChange(worldID, getUID());
+    var t14 = performance.now();
     onSelectionChange(worldID);
+    var t15 = performance.now();
     scene.add(light0);
     scene.add(VRGui);
     scene.add(userPresence);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
+    var t16 = performance.now();
     GameLoop();
+    
+    console.log("Execution of loadScene took: " + (t16-t1) + " ms" + '\n' +
+      'Part 1: ' + (t2-t1) + '\n' +
+      'Part 2: ' + (t3-t2) + '\n' +
+      'Part 3: ' + (t4-t3) + '\n' +
+      'Part 4: ' + (t5-t4) + '\n' +
+      'Part 5: ' + (t6-t5) + '\n' +
+      'Part 6: ' + (t7-t6) + '\n' +
+      'Part 7: ' + (t8-t7) + '\n' +
+      'Part 8: ' + (t9-t8) + '\n' +
+      'Part 9: ' + (t10-t9) + '\n' +
+      'Part 10: ' + (t11-t10) + '\n' +
+      'Part 11: ' + (t12-t11) + '\n' +
+      'Part 12: ' + (t13-t12) + '\n' +
+      'Part 13: ' + (t14-t13) + '\n' +
+      'Part 14: ' + (t15-t14) + '\n' +
+      'Part 15: ' + (t16-t15)
+       );
   }
 
   console.log("Getting Scene from Firebase... (May take a few moments for large datasets).");

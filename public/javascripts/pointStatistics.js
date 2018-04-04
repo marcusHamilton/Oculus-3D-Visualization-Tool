@@ -358,5 +358,4 @@ function drawSelectionStatsVerbose(){
       'Part 6: ' + (t7-t6) + '\n' +
       'Part 7: ' + (t8-t7)
        );
-  }
 }

@@ -298,7 +298,7 @@ function onSelectionChange(worldId) {
 function onUserPositionChange(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/');
   userRef.on('value', function (snapshot) {
-    console.log("Pos from the db" + snapshot.val());
+    // console.log("Pos from the db" + snapshot.val());
     dbPositionObj = snapshot.val();
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){

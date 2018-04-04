@@ -34,12 +34,6 @@ window.addEventListener('vr controller connected', function (event) {
 
     handControlL = scene.getObjectByName("Oculus Touch (Left)");
     handControlR = scene.getObjectByName("Oculus Touch (Right)");
-    if (handControlL && handControlL != null) {
-        scene.add(handControlL);
-    }
-    if (handControlR && handControlR!= null) {
-        scene.add(handControlR);
-    }
 
     //Ensure controllers appear at the right height
     //controller.standingMatrix = renderer.vr.getStandingMatrix();
@@ -65,12 +59,11 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.add(handleMesh);
     controller.userData.mesh = controllerMesh;//  So we can change the color later.
     controllerMesh.name = "C_Mesh";
-    controller.add(controllerMesh);
-    if (handControlR && handControlR != null) {
-        aRightMesh = handControlR.getChildByName("C_Mesh");
+	if (handControlL && handControlL != null) {
+        handControlL.add(controllerMesh);
     }
-	 if (handControlL && handControlL != null) {
-        aLeftMesh = handControlL.getChildByName("C_Mesh");
+    if (handControlR && handControlR != null) {
+        handControlR.add(controllerMesh);
     }
     //Add Visual for Direction
     // var
@@ -107,7 +100,11 @@ window.addEventListener('vr controller connected', function (event) {
     setListeners();
 
     //Add selection controls
-    initializeSelectionControls();
+    if (handControlR && handControlR != null) {
+        aRightMesh = handControlR.getChildByName("C_Mesh");
+        initializeSelectionControls();
+    }
+    
     //Add movement controls
     initializeMovementControls();
 

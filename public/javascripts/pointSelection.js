@@ -52,7 +52,6 @@ function initializeSelectionControls() {
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
-    userPresence.add(selectionControllerR);
     selectionControllerR.addEventListener('A touch began', function (event) {
       isRaycasterLineActive = true;
     });

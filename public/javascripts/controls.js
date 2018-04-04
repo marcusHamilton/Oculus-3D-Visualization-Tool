@@ -28,13 +28,16 @@ var leftGrip;
 
 window.addEventListener('vr controller connected', function (event) {
 
-
+	console.log("Controller woken");
     controller = event.detail;
-    // scene.add(controller);
-
-    handControlL = scene.getObjectByName("Oculus Touch (Left)");
-    handControlR = scene.getObjectByName("Oculus Touch (Right)");
-
+    scene.add(controller);
+	
+	if(scene.getObjectByName("Oculus Touch (Left)") && scene.getObjectByName("Oculus Touch (Left)") != null){
+		handControlL = scene.getObjectByName("Oculus Touch (Left)");
+	}
+	if(scene.getObjectByName("Oculus Touch (Right)") && scene.getObjectByName("Oculus Touch (Right)") != null){
+		handControlR = scene.getObjectByName("Oculus Touch (Right)");
+	}
     //Ensure controllers appear at the right height
     //controller.standingMatrix = renderer.vr.getStandingMatrix();
     //controller.head = window.camera;
@@ -149,6 +152,7 @@ function initializeMovementControls() {
 
  function updatePointsPosition() {
 	 points = collabGroup;
+	 var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0,1,0), Math.PI/16 );
 	 if (handControlL && handControlL != null) {
 		 camDir = camera.getWorldDirection()
 		 //xMovement = movementSpeedCoeff * (handControlL.getAxis(1) * camDir.x - handControlL.getAxis(0) * camDir.x);
@@ -159,6 +163,15 @@ function initializeMovementControls() {
 		 zMovement = movementSpeedCoeff * (-handControlL.getAxis(0) * camDir.x + handControlL.getAxis(1) * camDir.z);
 		 points.translateX(xMovement);
 		 points.translateZ(zMovement);
+		 if(leftGrip){
+			 //rotateGroup.rotation.y += 0.018; //rotation doesnt work right
+		}
+	 }
+	 if (handControlR && handControlR != null){
+		 collabGroup.translateY(handControlR.getAxis(1)*movementSpeedCoeff*0.5);
+		 if(rightGrip){
+			 // datasetAndAxisLabelGroup.rotation.y += 0.0174533; //rotation doesn't work
+		 }
 	 }
  }
  

@@ -257,7 +257,7 @@ function deleteWorld(id) {
 function onGeometryDatabaseChange(worldId) {
   var worldRef = firebase.database().ref('worlds/' + worldId + '/geometries');
   worldRef.on('child_changed', function (snapshot) {
-    console.log(snapshot.val());
+    // console.log(snapshot.val());
     // UPDATE THE GEOMETRY IN THE SCENE
   });
 }
@@ -271,7 +271,7 @@ function onAxisDatabaseChange(worldId) {
       selectedAxes.selectedY = axisMenu.axesOptions[loadedDataset[0][1]];
       selectedAxes.selectedZ = axisMenu.axesOptions[loadedDataset[0][2]];
       redraw.redrawVR();
-	  console.log("Axis received");
+	  // console.log("Axis received");
   });
 }
 
@@ -299,7 +299,7 @@ function onSelectionChange(worldId) {
 function onUserPositionChange(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/');
   userRef.on('value', function (snapshot) {
-    console.log("Pos from the db" + snapshot.val());
+    // console.log("Pos from the db" + snapshot.val());
     dbPositionObj = snapshot.val();
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
@@ -339,7 +339,7 @@ function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
   var axesRef = database.ref('worlds/' + worldId + '/object/userData')
   var AxiiSelection = axesRef.child("0");
   AxiiSelection.set(selectedAxesJSON);
-  console.log("Pushed selection " + selectedAxesJSON + " to the database.")
+  // console.log("Pushed selection " + selectedAxesJSON + " to the database.")
 }
 
 //push selected points to db
@@ -363,7 +363,7 @@ function updateUserPositionInDatabase(worldId, UID) {
   positionObj.z = positionObj.z - datPos.z;
 
   var PosJSON = JSON.stringify(positionObj);
-  console.log("Pushing: " + PosJSON);
+  // console.log("Pushing: " + PosJSON);
   PosJSON = JSON.parse(PosJSON);
 
   userRef.set(PosJSON);

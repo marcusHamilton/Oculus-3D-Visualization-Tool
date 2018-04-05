@@ -69,15 +69,15 @@ function update(timestamp) {
     timestamp = 15;
   }
   if(statsLabelGroup != null && VRGui != null){
-	statsLabelGroup.position.x = VRGui.position.x;
-	statsLabelGroup.position.y = VRGui.position.y + 0.36;
-	statsLabelGroup.position.z = VRGui.position.z;
-	statsLabelGroup.rotation.x = VRGui.rotation.x;
-	statsLabelGroup.rotation.y = VRGui.rotation.y;
-	statsLabelGroup.rotation.z = VRGui.rotation.z;
-	statsLabelGroup.scale.x = 0.25;
-	statsLabelGroup.scale.y = 0.25;
-	statsLabelGroup.scale.z = 0.3;
+  statsLabelGroup.position.x = VRGui.position.x;
+  statsLabelGroup.position.y = VRGui.position.y + 0.36;
+  statsLabelGroup.position.z = VRGui.position.z;
+  statsLabelGroup.rotation.x = VRGui.rotation.x;
+  statsLabelGroup.rotation.y = VRGui.rotation.y;
+  statsLabelGroup.rotation.z = VRGui.rotation.z;
+  statsLabelGroup.scale.x = 0.25;
+  statsLabelGroup.scale.y = 0.25;
+  statsLabelGroup.scale.z = 0.3;
   }
   lastRender = timestamp;
 
@@ -283,7 +283,7 @@ function Manager() {
     scene.add(light0);
     scene.add(VRGui);
     scene.add(userPresence);
-	drawSelectionStats();
+  drawSelectionStats();
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     var t16 = performance.now();
@@ -611,7 +611,7 @@ function drawDataset(xCol, yCol, zCol)
       ));
       color.toArray(colors, i);
     }
-	
+  
   //color origin point black for now
   setPointColor(0, new THREE.Color(0,0,0));
   initializeSelectionControls();

@@ -128,60 +128,58 @@ function drawSelectionStats(){
       new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
 
     // Stats row names
-    drawTextLabel("Mean: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.24,0), statsLabelGroup);
-    drawTextLabel("Median: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.36,0), statsLabelGroup);
-    drawTextLabel("Mode: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.48,0), statsLabelGroup);
-    drawTextLabel("Sum: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.60,0), statsLabelGroup);
-    drawTextLabel("Variance: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.72,0), statsLabelGroup);
-    drawTextLabel("Std. Dev.: ", 0.1, new THREE.Color(.7,.7,.7),
-      new THREE.Vector3(0,-.84,0), statsLabelGroup);
+    drawTextLabel("Mean: " + "\n" +
+                  "Median: " + "\n" +
+                  "Mode: " + "\n" +
+                  "Sum: " + "\n" +
+                  "Variance: " + "\n" +
+                  "Std. Dev.: ",
+                  0.1, 
+                  new THREE.Color(.7,.7,.7), 
+                  new THREE.Vector3(0,-.24,0),
+                  statsLabelGroup
+                  );
 
     // X column stats
-    drawTextLabel(stats.meanX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.24,0), statsLabelGroup);
-    drawTextLabel(stats.medianX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.36,0), statsLabelGroup);
-    drawTextLabel(stats.modeX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.48,0), statsLabelGroup);
-    drawTextLabel(stats.sumX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.60,0), statsLabelGroup);
-    drawTextLabel(stats.varianceX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.72,0), statsLabelGroup);
-    drawTextLabel(stats.standardDevX, 0.1, new THREE.Color(.7,0,0),
-      new THREE.Vector3(.7,-.84,0), statsLabelGroup);
+    drawTextLabel(stats.meanX  + "\n" +
+                  stats.medianX + "\n" +
+                  stats.modeX + "\n" +
+                  stats.sumX + "\n" +
+                  stats.varianceX + "\n" +
+                  stats.standardDevX,
+                  0.1,
+                  new THREE.Color(.7,0,0),
+                  new THREE.Vector3(.7,-.24,0),
+                  statsLabelGroup
+                  );
 
     // Y column stats
-    drawTextLabel(stats.meanY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.24,0), statsLabelGroup);
-    drawTextLabel(stats.medianY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.36,0), statsLabelGroup);
-    drawTextLabel(stats.modeY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.48,0), statsLabelGroup);
-    drawTextLabel(stats.sumY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.60,0), statsLabelGroup);
-    drawTextLabel(stats.varianceY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.72,0), statsLabelGroup);
-    drawTextLabel(stats.standardDevY, 0.1, new THREE.Color(0,.7,0),
-      new THREE.Vector3(2.3,-.84,0), statsLabelGroup);
+
+    drawTextLabel(stats.meanY  + "\n" +
+                  stats.medianY + "\n" +
+                  stats.modeY + "\n" +
+                  stats.sumY + "\n" +
+                  stats.varianceY + "\n" +
+                  stats.standardDevY,
+                  0.1,
+                  new THREE.Color(0,.7,0),
+                  new THREE.Vector3(2.0,-.24,0),
+                  statsLabelGroup
+                  );
 
     // Z column stats
-    drawTextLabel(stats.meanZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.24,0), statsLabelGroup);
-    drawTextLabel(stats.medianZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.36,0), statsLabelGroup);
-    drawTextLabel(stats.modeZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.48,0), statsLabelGroup);
-    drawTextLabel(stats.sumZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.60,0), statsLabelGroup);
-    drawTextLabel(stats.varianceZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.72,0), statsLabelGroup);
-    drawTextLabel(stats.standardDevZ, 0.1, new THREE.Color(0,0,.7),
-      new THREE.Vector3(3.9,-.84,0), statsLabelGroup);
+
+       drawTextLabel(stats.meanZ  + "\n" +
+                  stats.medianZ + "\n" +
+                  stats.modeZ + "\n" +
+                  stats.sumZ + "\n" +
+                  stats.varianceZ + "\n" +
+                  stats.standardDev,
+                  0.1,
+                  new THREE.Color(0,0,1),
+                  new THREE.Vector3(3.9,-.24,0),
+                  statsLabelGroup
+                  );
 
     // Set initial position of the group
     statsLabelGroup.position.x = -5;

@@ -31,7 +31,7 @@ function VRGui() {
   var slider = VRGui.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.5);
   slider.step(0.005);
   slider.listen(pointVars.plotPointSizeCoeff);
-  slider.onChange(redraw.redrawVR);
+  // slider.onChange(redraw.redrawVR);
   slider.name("Point Size");
 
   // //Dropdown for choosing X axis

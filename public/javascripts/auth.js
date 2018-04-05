@@ -294,11 +294,9 @@ function onSelectionChange(worldId) {
 
 function onScaleChange(worldId){
     var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
-    scaleRef.on('value',function (dataSnapshot){
-    if(dataSnapshot.val() != null){
-      scaleInterface.x = dataSnapshot.val();
-      scaleSystem.scaleAll();
-    }
+    scaleRef.on('child_changed',function (dataSnapshot){
+    scaleInterface.x = dataSnapshot.val();
+    scaleSystem.scaleAll();
   });
 }
 

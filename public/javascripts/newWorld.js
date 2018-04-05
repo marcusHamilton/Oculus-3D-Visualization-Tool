@@ -3,6 +3,8 @@
  * It will take in a CSV file and in turn create a threejs world that contains the
  * CSV files data points. This will export a JSON file containing the scene.
  */
+var THREE = require('../../public/javascripts/three/three.js');
+var scene;
 
 var parsedData; //Parsed data obtained from the CSV
 var fileName; //Stored to give a meaningful name on the dashboard
@@ -212,11 +214,6 @@ function getResults() {
   //ZAxis = ZAxis[0].id;
   build3DSpace();
 }
-
-/**
- * Below is everything necessary to build a new 3d world
- */
-var scene; //The scene to which all elements are added to
 
 function build3DSpace() {
   //Initialize camera, scene, and renderer

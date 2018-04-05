@@ -27,13 +27,6 @@ function ScaleObject(){
 function VRGui() {
   VRGui = new dat.GUIVR.create("Tools");
 
-  //Point size slider
-  var slider = VRGui.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.5);
-  slider.step(0.005);
-  slider.listen(pointVars.plotPointSizeCoeff);
-  // slider.onChange(redraw.redrawVR);
-  slider.name("Point Size");
-
   // //Dropdown for choosing X axis
   var xDrop = VRGui.add(selectedAxes, 'selectedX', axisMenu.axesOptions);
   xDrop.onChange(liveUpdate.liveX);
@@ -53,11 +46,16 @@ function VRGui() {
   var stats = VRGui.add(redraw, 'selectionStats');
   stats.name("Update Stats");
  
-
-
   // //Button that pushes the currently drawn axis selection to the database
   var pushDB = VRGui.add(pushToDB, 'pushToDB');
   pushDB.name("Push Axis/Selection");
+
+    //Point size slider
+  var slider = VRGui.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.5);
+  slider.step(0.005);
+  slider.listen(pointVars.plotPointSizeCoeff);
+  // slider.onChange(redraw.redrawVR);
+  slider.name("Point Size");
 }
 
 /**

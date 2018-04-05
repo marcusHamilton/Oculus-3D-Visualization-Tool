@@ -61,9 +61,9 @@ function calculateSelectionStats() {
   var zValues = [];
   if (selectedPoints.length != 0){
     for (var v = 0; v < selectedPoints.length; v++) {
-      xValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][0]]);
-      yValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][1]]);
-      zValues.push(loadedDataset[selectedPoints[v]][loadedDataset[0][2]]);
+      xValues.push(loadedDataset[selectedPoints[v]][axisMenu.xAxis]);
+      yValues.push(loadedDataset[selectedPoints[v]][axisMenu.yAxis]);
+      zValues.push(loadedDataset[selectedPoints[v]][axisMenu.zAxis]);
     }
     stats.meanX = statsMean(xValues);
     stats.meanY = statsMean(yValues);
@@ -98,11 +98,11 @@ function calculateSelectionStats() {
  * and add them to the scene.
  */
 function drawSelectionStats(){
-    if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
-      && statsLabelGroup.children[2].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][1]]
-      && statsLabelGroup.children[3].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][2]]){
-      return;
-    }
+    //if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
+    //  && statsLabelGroup.children[2].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][1]]
+     // && statsLabelGroup.children[3].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][2]]){
+    //  return;
+    //}
 
     //measuring execution time for calculate
     calculateSelectionStats();
@@ -120,11 +120,11 @@ function drawSelectionStats(){
       new THREE.Vector3(-.12,.02,0), statsLabelGroup);
 
     // Selected Column Names
-    drawTextLabel(loadedDataset[1][loadedDataset[0][0]], 0.1,
+    drawTextLabel(loadedDataset[1][axisMenu.xAxis], 0.1,
       new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.12,0), statsLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1,
+    drawTextLabel(loadedDataset[1][axisMenu.yAxis], 0.1,
       new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.12,0), statsLabelGroup);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1,
+    drawTextLabel(loadedDataset[1][axisMenu.zAxis], 0.1,
       new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.12,0), statsLabelGroup);
 
     // Stats row names

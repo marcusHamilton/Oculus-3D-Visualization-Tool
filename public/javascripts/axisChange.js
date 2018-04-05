@@ -10,10 +10,11 @@ var redraw = {
   },
   redrawVR: function () {
     redrawDataSetVR();
+	drawSelectionStats();
   },
   selectionStats: function() {
-    // drawSelectionStats();
-    drawSelectionStatsVerbose();
+    drawSelectionStats();
+    //drawSelectionStatsVerbose();
   }
 }; //function for Redraw button in browser
 var pushToDB = {

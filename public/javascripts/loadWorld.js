@@ -36,7 +36,8 @@ var plotCenterVec3; // Centerpoint of visualization in world space
 var axisLabelGroup; // This group contains the text meshes for the axis labels
 var datasetAndAxisLabelGroup; //This group contains the points system and axis labels
 var userPresence; //hold th reference for the users player sphere and camera
-var otherUsers = []; //Hold the references to the other users spheres
+var otherUsers = []; //Hold the references to the other users spheres7
+var slowDownUserPos;
 
 // min and max *world position* values for each vertex in the points system
 var largestXpos;
@@ -102,10 +103,14 @@ function update(timestamp) {
   if(datasetAndAxisLabelGroup != null){
     updatePointsPosition();
   }
-
+  slowDownUserPos ++;
+  if(slowDownUserPos <= 10){
     pointSelectionUpdate();
+    slowDownUserPos = 0;
+  }
 
-    updateUserPositionInDatabase(worldID, getUID());
+
+  updateUserPositionInDatabase(worldID, getUID());
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;

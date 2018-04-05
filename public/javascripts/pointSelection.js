@@ -105,8 +105,6 @@ function pointSelectionUpdate() {
 
     pointSelectionRaycasterR.set(meshPosition, direction);
     intersects = pointSelectionRaycasterR.intersectObject(pointsSystem)
-
-    //console.log(selectionControllerR.getAxis(0));
   }
 
   // If no controllers are present, revert to mouse/camera selection.
@@ -402,12 +400,8 @@ function getSelectedAxisValues(axis) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-///////////////////           POINT HIDING            ///////////////////
-/////////////////////////////////////////////////////////////////////////
 
 
-//if presses hide button away from a point, un-hides the most recently hidden point?
 
 function hidePoint(pointIndex) {
 
@@ -418,7 +412,6 @@ function hidePoint(pointIndex) {
   setPointColor(pointIndex, new THREE.Vector3(0, 0, 0));
 
 
-}
 
 function unhide(pointIndex) {
   hiddenPoints.splice(hiddenPoints.indexOf(pointIndex), 1);
@@ -429,13 +422,11 @@ function unhide(pointIndex) {
     pointsGeometry.getAttribute('position').array[(pointIndex * 3) + 1],
     pointsGeometry.getAttribute('position').array[(pointIndex * 3) + 2])));
 
-}
 
 function unhideRecent() {
   var recentIndex = (hiddenPoints[hiddenPoints.length - 1]);
   unhide(recentIndex);
 
-}
 
 function unhideAll() {
   for (var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++) {

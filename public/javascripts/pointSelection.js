@@ -197,7 +197,7 @@ function selectPoint(pointIndex) {
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
       pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
-  drawSinglePointXYZValues(pointIndex);
+  // drawSinglePointXYZValues(pointIndex);
 }
 
 /**
@@ -232,7 +232,7 @@ function clearSelection() {
  * all unselected pointsare selected
  */
 function invertSelection() {
-  for (var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++) {
+  for (var i = 2; i < pointsGeometry.getAttribute('size').array.length; i++) {
     selectPoint(i);
   }
 }
@@ -241,7 +241,7 @@ function invertSelection() {
  * selects all points in the world
  */
 function selectAll() {
-  for (var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++) {
+  for (var i = 2; i < pointsGeometry.getAttribute('size').array.length; i++) {
     if (!pointsGeometry.getAttribute('isSelected').array[i])
       selectPoint(i);
   }

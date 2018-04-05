@@ -10,6 +10,8 @@ var handControlR; // Right hand Oculus controller
 var AisPressed;
 var XisPressed;
 
+var movementSpeedCoeff = 0.1;
+
 var rotationSpeed = 0.1;
 var cameraDirection = new THREE.Vector3();
 var theta; // Angle between x and z
@@ -26,26 +28,25 @@ var leftGrip;
 
 //var directionalArrow = new THREE.Object3D();
 
+/**
+ * This gets called when a controller wakes up or is plugged in, providing
+ * a reference to the left and right controller objects.
+ */
 window.addEventListener('vr controller connected', function (event) {
 
-
+	console.log("Controller woken");
     controller = event.detail;
     scene.add(controller);
-
-    handControlL = scene.getObjectByName("Oculus Touch (Left)");
-    handControlR = scene.getObjectByName("Oculus Touch (Right)");
-    if (handControlL && handControlL != null) {
-        console.log("Attaching left controller to rig");
-        rig.add(handControlL);
-    }
-    if (handControlR && handControlR != null) {
-        console.log("Attaching right controller to rig");
-        rig.add(handControlR);
-    }
-
+	
+	if(scene.getObjectByName("Oculus Touch (Left)") && scene.getObjectByName("Oculus Touch (Left)") != null){
+		handControlL = scene.getObjectByName("Oculus Touch (Left)");
+	}
+	if(scene.getObjectByName("Oculus Touch (Right)") && scene.getObjectByName("Oculus Touch (Right)") != null){
+		handControlR = scene.getObjectByName("Oculus Touch (Right)");
+	}
     //Ensure controllers appear at the right height
     //controller.standingMatrix = renderer.vr.getStandingMatrix();
-    controller.head = window.camera;
+    //controller.head = window.camera;
 
     //Add a visual for the controllers
     var
@@ -53,11 +54,11 @@ window.addEventListener('vr controller connected', function (event) {
             color: meshColorOff
         }),
         controllerMesh = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.005, 0.05, 0.1, 6),
+            new THREE.ConeGeometry(0.045, 0.15, 25, 1),
             controllerMaterial
         ),
         handleMesh = new THREE.Mesh(
-            new THREE.BoxGeometry(0.03, 0.1, 0.03),
+            new THREE.CylinderGeometry(0.01, 0.01, 0.09,25),
             controllerMaterial
         );
 
@@ -65,14 +66,13 @@ window.addEventListener('vr controller connected', function (event) {
     controllerMesh.rotation.x = -Math.PI / 2;
     handleMesh.position.y = -0.05;
     controllerMesh.add(handleMesh);
-    controller.userData.mesh = controllerMesh; //  So we can change the color later.
+    controller.userData.mesh = controllerMesh;//  So we can change the color later.
     controllerMesh.name = "C_Mesh";
-    controller.add(controllerMesh);
-    if (handControlR && handControlR != null) {
-        aRightMesh = handControlR.getChildByName("C_Mesh");
+	if (handControlL && handControlL != null) {
+        handControlL.add(controllerMesh);
     }
-    if (handControlL && handControlL != null) {
-        aLeftMesh = handControlL.getChildByName("C_Mesh");
+    if (handControlR && handControlR != null) {
+        handControlR.add(controllerMesh);
     }
     //Add Visual for Direction
     // var
@@ -103,13 +103,17 @@ window.addEventListener('vr controller connected', function (event) {
     receiveShadows(controller);
 
     //  Allow this controller to interact with DAT GUI.
-    guiInputHelper = dat.GUIVR.addInputObject(controller);
+    guiInputHelper = dat.GUIVR.addInputObject(handControlR);
     scene.add(guiInputHelper);
 
     setListeners();
 
     //Add selection controls
-    initializeSelectionControls();
+    if (handControlR && handControlR != null) {
+        aRightMesh = handControlR.getChildByName("C_Mesh");
+        initializeSelectionControls();
+    }
+    
     //Add movement controls
     initializeMovementControls();
 
@@ -120,13 +124,6 @@ window.addEventListener('vr controller connected', function (event) {
 });
 
 // ~~~~~~~~~~~~~~~ MOVEMENT CONTROLS ~~~~~~~~~~~~~~~~~~~
-/**
- * This gets called when a controller wakes up or is plugged in, providing
- * a reference to the left and right controller objects.
- */
-
-
-var movementSpeedCoeff = 0.1;
 
 function initializeMovementControls() {
     // Example event listener for button press/touch/near-touch
@@ -151,28 +148,57 @@ function initializeMovementControls() {
 /**
  * This gets called in the main update() loop.
  */
-
-function updateMovementControls() {
+ function updatePointsPosition() {
+	 points = collabGroup;
+	
+	 var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0,1,0), Math.PI/16 );
+	 if (handControlL && handControlL != null) {
+		 camDir = camera.getWorldDirection()
+		 //xMovement = movementSpeedCoeff * (handControlL.getAxis(1) * camDir.x - handControlL.getAxis(0) * camDir.x);
+		 //console.log("camX: " + camDir.x);
+		 //console.log("moveX: " + xMovement);
+		 //zMovement = movementSpeedCoeff * (handControlL.getAxis(1) * camDir.z + handControlL.getAxis(0) * camDir.z);
+		 xMovement = movementSpeedCoeff * (handControlL.getAxis(1) * camDir.x + handControlL.getAxis(0) * camDir.z);
+		 zMovement = movementSpeedCoeff * (-handControlL.getAxis(0) * camDir.x + handControlL.getAxis(1) * camDir.z);
+		 points.translateX(xMovement);
+		 points.translateZ(zMovement);
+		 if(leftGrip){
+			 //datasetAndAxisLabelGroup.rotation.y += 0.018; //rotation doesnt work right
+		}
+	 }
+	 if (handControlR && handControlR != null){
+		 collabGroup.translateY(handControlR.getAxis(1)*movementSpeedCoeff*0.5);
+		 if(rightGrip){
+			 //center.rotation.y += 0.0174533; //rotation doesn't work
+		 }
+	 }
+ }
+ 
+function updateMovementControls(){
     rotAngle = Math.atan2(rig.getWorldDirection.z, rig.getWorldDirection.x);
     //left controller: Horizontal movement + positive vertical movement
     if (handControlL && handControlL != null) {
-        rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
-        rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
-        if (leftGrip) {
-            rig.translateY(movementSpeedCoeff * (0.5));
+		/*dir = camera.getWorldDirection;
+		console.log("x: " + dir.getComponent(0))
+		console.log("y: " + dir.getComponent(1))
+		console.log("z: " + dir.getComponent(2))*/
+		//xMovement = dir
+		//dir
+        //rig.translateX(handControlL.getAxis(0) * movementSpeedCoeff);
+        //rig.translateZ(handControlL.getAxis(1) * movementSpeedCoeff);
+		//rig.setRotationFromQuaternion(camera.getWorldQuaternion());
+        if(leftGrip){
+            //rig.translateY(movementSpeedCoeff*(0.5));
         }
     }
     //right Controller: Rotation + negative vertical movement
     if (handControlR) {
-        rig.rotation.y -= (0.0174533) * (handControlR.getAxis(0));
-        if (rightGrip) {
-            rig.translateY((-1) * movementSpeedCoeff * (0.5));
+        //rig.rotation.y -= (0.0174533)*(handControlR.getAxis(0));
+        if(rightGrip){
+            //rig.translateY((-1)*movementSpeedCoeff*(0.5));
         }
     }
 }
-
-
-
 
 // ~~~~~~~~~~~~~~~ BUTTON PRESS EVENT LISTENERS ~~~~~~~~~~~~~~~~~~~
 
@@ -188,12 +214,10 @@ function setListeners() {
 
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Left controller trigger press detected, Printing Controller Object");
-            guiInputHelper.pressed(true)
         });
         handControlL.addEventListener('primary press ended', function (event) {
 
             event.target.userData.mesh.material.color.setHex(meshColorOff);
-            guiInputHelper.pressed(false)
         });
     }
     // RIGHT CONTROLLER
@@ -219,6 +243,16 @@ function setListeners() {
             handControlL.parent.remove(controller)
         });
     }
+	
+	 //'Click left thumbstick' to enter VR.
+    if (handControlL && handControlL != null) {
+        handControlL.addEventListener('thumbstick press began', function (event) {
+            enterVR.on("enter");
+        });
+        handControlL.addEventListener('thumbstick press ended', function (event) {
+
+        });
+	}
     // RIGHT CONTROLLER
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('disconnected', function (event) {
@@ -247,7 +281,8 @@ function setListeners() {
         handControlR.addEventListener('B press began', function (event) {
             if (intersects) {
                 hidePoint(intersects.index);
-            } else {
+            }
+            else {
                 unhideRecent();
             }
         });
@@ -259,6 +294,12 @@ function setListeners() {
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('grip press began', function (event) {
             rightGrip = true;
+			
+			if(VRGui && statsLabelGroup){
+				VRGui.visible = !VRGui.visible;
+				statsLabelGroup.visible = !statsLabelGroup.visible;
+				
+			}
         });
         handControlR.addEventListener('grip press ended', function (event) {
             rightGrip = false;
@@ -301,74 +342,72 @@ function setListeners() {
         });
     }
     //Touch right thumbstick to show directional arrow
-    if (handControlR && handControlR != null) {
-        handControlR.addEventListener('thumbstick touch began', function (event) {
+    if (handControlR && handControlR != null){
+        handControlR.addEventListener('thumbstick touch began', function(event) {
             //rig.add(directionalArrow);
         });
-        handControlR.addEventListener('thumbstick touch ended', function (event) {
+        handControlR.addEventListener('thumbstick touch ended', function(event) {
             //rig.remove(directionalArrow);
         });
     }
-
 }
-
 
 // ~~~~~~~~~~~~~~~ KEYBOARD CONTROLS ~~~~~~~~~~~~~~~~~~~
 
-function onAKeyPress(event) {
-    var keyCode = event.which;
-    var translationSpeed = 0.1;
+  function onAKeyPress(event) {
+      var keyCode = event.which;
+      var translationSpeed = 0.1;
 
-    var inverseTheta
-    var gamma // Angle between x and y
-    //A == 65 Left
-    if (keyCode == 65) {
-        camera.position.z -= translationSpeed;
-    }
-    //D == 68 Right
-    else if (keyCode == 68) {
-        camera.position.z += translationSpeed;
-    }
-    //W == 87 Forward
-    else if (keyCode == 87) {
-        camera.getWorldDirection(cameraDirection);
-        theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-        camera.position.x += (translationSpeed * Math.sin(theta));
-        camera.position.z += (translationSpeed * Math.cos(theta));
-    }
-    //S == 83 Backward
-    else if (keyCode == 83) {
-        camera.getWorldDirection(cameraDirection);
-        theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-        camera.position.x -= (translationSpeed * Math.sin(theta));
-        camera.position.z -= (translationSpeed * Math.cos(theta));
-    }
-    //space == 32 Up
-    else if (keyCode == 32) {
-        camera.position.y += translationSpeed;
-    }
-    //ctrl == 17  Down
-    else if (keyCode == 17) {
-        camera.position.y -= translationSpeed;
-    }
-    //Q == 81 Look left
-    else if (keyCode == 81) {
-        camera.rotation.y += rotationSpeed;
-    }
-    //E == 69 Look right
-    else if (keyCode == 69) {
-        camera.rotation.y -= rotationSpeed;
-    }
-    //Look up and look down might be unnecasary when this is converted to occulus controller
-    //Doesnt work anyway tho
+      var inverseTheta
+      var gamma // Angle between x and y
+      //A == 65 Left
+      if (keyCode == 65) {
+          camera.position.z -= translationSpeed;
+      }
+      //D == 68 Right
+      else if (keyCode == 68) {
+          camera.position.z += translationSpeed;
+      }
+      //W == 87 Forward
+      else if (keyCode == 87) {
+          camera.getWorldDirection(cameraDirection);
+          theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+          camera.position.x += (translationSpeed * Math.sin(theta));
+          camera.position.z += (translationSpeed * Math.cos(theta));
+      }
+      //S == 83 Backward
+      else if (keyCode == 83) {
+          camera.getWorldDirection(cameraDirection);
+          theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+          camera.position.x -= (translationSpeed * Math.sin(theta));
+          camera.position.z -= (translationSpeed * Math.cos(theta));
+      }
+      //space == 32 Up
+      else if (keyCode == 32) {
+          camera.position.y += translationSpeed;
+      }
+      //ctrl == 17  Down
+      else if (keyCode == 17) {
+          camera.position.y -= translationSpeed;
+      }
+      //Q == 81 Look left
+      else if (keyCode == 81) {
+          camera.rotation.y += rotationSpeed;
+      }
+      //E == 69 Look right
+      else if (keyCode == 69) {
+          camera.rotation.y -= rotationSpeed;
+      }
+      //Look up and look down might be unnecasary when this is converted to occulus controller
+      //Doesnt work anyway tho
 
-    //R == 82 Look Up
-    //else if(keyCode == 82){
-    //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
-    //inverseTheta = Math.PI /2 - theta;
-    //gamma = Math.PI - (inverseTheta + Math.PI /2);
-    //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
-    //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
-    //camera.rotation.x += rotationSpeed;
-    // }
-}
+      //R == 82 Look Up
+      //else if(keyCode == 82){
+      //theta = Math.atan2(cameraDirection.x, cameraDirection.z);
+      //inverseTheta = Math.PI /2 - theta;
+      //gamma = Math.PI - (inverseTheta + Math.PI /2);
+      //camera.rotation.z += (rotationSpeed*Math.sin(gamma));
+      //camera.rotation.x += (rotationSpeed*Math.cos(gamma));
+      //camera.rotation.x += rotationSpeed;
+      // }
+  }

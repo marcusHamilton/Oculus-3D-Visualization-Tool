@@ -282,6 +282,13 @@ function Manager() {
     var t15 = performance.now();
     scene.add(light0);
     scene.add(VRGui);
+	VRGui.position.x = 1.3;
+	VRGui.position.y = -1;
+	VRGui.position.z = -1.5;
+	VRGui.rotation.x = -0.74;
+	VRGui.rotation.y = -0.93;
+	VRGui.rotation.z = -0.62;
+	
     scene.add(userPresence);
   drawSelectionStats();
     //GameLoop must be called last after everything to ensure that

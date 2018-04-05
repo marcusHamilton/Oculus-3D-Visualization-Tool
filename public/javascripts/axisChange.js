@@ -118,7 +118,7 @@ function redrawDataSetVR() {
 }
 
 function redrawDataSet() {
-	axisMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
+	  axisMenu.xAxis = folder.__controllers[1].__select.selectedIndex;
     axisMenu.yAxis = folder.__controllers[2].__select.selectedIndex;
     axisMenu.zAxis = folder.__controllers[3].__select.selectedIndex;
 

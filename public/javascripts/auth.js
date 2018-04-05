@@ -278,17 +278,22 @@ function onAxisDatabaseChange(worldId) {
 //Listener
 function onSelectionChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
+  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   axisRef.on('value', function (dataSnapshot) {
     // console.log(dataSnapshot.val()); //uncomment to see the value from the database
     if(dataSnapshot.val() != null){
       selectedPoints = dataSnapshot.val();
-      redraw.redrawVR();
     }
     else{
       console.log("No selected points saved in DB.")
       selectedPoints = [];
-      redraw.redrawVR();
     }
+  scaleRef.on('value',function (dataSnapshot){
+    if(dataSnapshot.val() != null){
+      scaleInterface.x = dataSnapshot.val();
+      scaleSystem.scaleAll;
+    }
+  })
   });
 }
 //You only need to call this function once and it will listen for position changes.
@@ -346,6 +351,8 @@ function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
 function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
   var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
   selectionRef.set(selectedPointsJSON);
+  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
+  scaleRef.set(scaleInterface.x);
   // console.log("Pushed selection " + selectedPointsJSON + " to the database.");
 }
 /*

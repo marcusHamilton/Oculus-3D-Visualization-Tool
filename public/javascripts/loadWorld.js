@@ -104,7 +104,7 @@ function update(timestamp) {
     updatePointsPosition();
   }
   slowDownUserPos ++;
-  if(slowDownUserPos >= 50){
+  if(slowDownUserPos >= 5){
     updateUserPositionInDatabase(worldID, getUID());
     slowDownUserPos = 0;
   }
@@ -268,7 +268,7 @@ function Manager() {
     scene.add(collabGroup);
     var t11 = performance.now();
 
-    for(var i = 0; i<2; i++){
+    for(var i = 0; i<10; i++){
       otherUsers[i] = newPlayerSphere();
       collabGroup.add(otherUsers[i]);
     }

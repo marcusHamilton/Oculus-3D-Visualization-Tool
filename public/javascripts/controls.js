@@ -243,6 +243,16 @@ function setListeners() {
             handControlL.parent.remove(controller)
         });
     }
+	
+	 //'Click left thumbstick' to enter VR.
+    if (handControlL && handControlL != null) {
+        handControlL.addEventListener('thumbstick press began', function (event) {
+            enterVR.on("enter");
+        });
+        handControlL.addEventListener('thumbstick press ended', function (event) {
+
+        });
+	}
     // RIGHT CONTROLLER
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('disconnected', function (event) {
@@ -284,6 +294,12 @@ function setListeners() {
     if (handControlR && handControlR != null) {
         handControlR.addEventListener('grip press began', function (event) {
             rightGrip = true;
+			
+			if(VRGui && statsLabelGroup){
+				VRGui.visible = !VRGui.visible;
+				statsLabelGroup.visible = !statsLabelGroup.visible;
+				
+			}
         });
         handControlR.addEventListener('grip press ended', function (event) {
             rightGrip = false;

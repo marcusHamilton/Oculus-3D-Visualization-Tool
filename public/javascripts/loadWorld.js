@@ -278,9 +278,11 @@ function Manager() {
     scene.add(light0);
     scene.add(VRGui);
     scene.add(userPresence);
+	drawSelectionStats();
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     var t16 = performance.now();
+
     GameLoop();
     
     console.log("Execution of loadScene took: " + (t16-t1) + " ms" + '\n' +
@@ -604,6 +606,9 @@ function drawDataset(xCol, yCol, zCol)
       ));
       color.toArray(colors, i);
     }
+	
+  //color origin point black for now
+  setPointColor(0, new THREE.Color(0,0,0));
   initializeSelectionControls();
 }
 

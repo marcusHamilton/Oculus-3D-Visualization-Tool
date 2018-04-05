@@ -307,7 +307,7 @@ function onUserPositionChange(worldId, UID) {
           otherUsers[i].position.x = dbPositionObj[array[i]].position.x + datasetAndAxisLabelGroup.getWorldPosition().x;
           otherUsers[i].position.y = dbPositionObj[array[i]].position.y + datasetAndAxisLabelGroup.getWorldPosition().y;
           otherUsers[i].position.z = dbPositionObj[array[i]].position.z + datasetAndAxisLabelGroup.getWorldPosition().z;
-          otherUsers[i].visible = true;
+          otherUsers[i].visible = dbPositionObj[array[i]].activity;
           
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
       }
@@ -367,6 +367,9 @@ function updateUserPositionInDatabase(worldId, UID) {
   PosJSON = JSON.parse(PosJSON);
 
   userRef.set(PosJSON);
+  var disconnectRef =  database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/activity');
+  disconnectRef.set(true);
+  disconnectRef.onDisconnect().set(false);
   // console.log("Pushed position of " + UID + ".Their position is: " + rig.getWorldPosition());
 }
 

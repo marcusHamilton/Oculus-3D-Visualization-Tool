@@ -44,6 +44,7 @@ function initializeSelectionControls() {
     console.log(selectionControllerL);
     pointSelectionRaycasterL = new THREE.Raycaster();
     pointSelectionRaycasterL.params.Points.threshold = selectionThreshold;
+	selectionControllerL.add(pointSelectionRaycasterL);
   }
 
   if (selectionControllerR) {
@@ -51,13 +52,13 @@ function initializeSelectionControls() {
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
     pointSelectionRaycasterR.params.Points.threshold = selectionThreshold;
-    rig.add(selectionControllerR);
     selectionControllerR.addEventListener('A touch began', function (event) {
       isRaycasterLineActive = true;
     });
     selectionControllerR.addEventListener('A touch ended', function (event) {
       isRaycasterLineActive = false;
     });
+	selectionControllerR.add(pointSelectionRaycasterR);
   }
 
   /*
@@ -99,7 +100,7 @@ function pointSelectionUpdate() {
     var direction = new THREE.Vector3(0, 0, 1);
     direction.applyMatrix4(matrix);
     direction.multiplyScalar(-1);
-    direction.transformDirection(rig.matrix);
+    direction.transformDirection(userPresence.matrix);
     //matrix.multiplyVector3( direction );
 
     pointSelectionRaycasterR.set(meshPosition, direction);
@@ -119,24 +120,24 @@ function pointSelectionUpdate() {
     intersects = (intersects.length) > 0 ? intersects[0] : null;
   }
 
+  var originalPointSize = pointVars.plotPointSizeCoeff;
+
   // Reset point size when not moused over
-  setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+  setPointScale(mousedOverPoint, Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * originalPointSize );
   //pointsGeometry.boundingBox = null;
   if (intersects != null) {
     //console.log(intersects.point.x + " " + intersects.point.y + " " + intersects.point.z);
     //console.log(intersects);
     if (pointsGeometry.getAttribute('isHidden').array[intersects.index] !== 1) {
-      setPointScale(intersects.index, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
+      setPointScale(intersects.index, originalPointSize * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ) * 2);
 
     }
     mousedOverPoint = intersects.index;
-
-
-
+	//console.log(pointsGeometry.getAttribute('isSelected').array[mousedOverPoint]);
 
   } else {
 
-    setPointScale(mousedOverPoint, pointVars.plotPointSizeCoeff * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
+    setPointScale(mousedOverPoint, originalPointSize * Math.max(plotInitSizeX, plotInitSizeY, plotInitSizeZ));
   }
 
   // Press 'A' and 'X' is select/deselect all points.
@@ -166,7 +167,9 @@ function pointSelectionUpdate() {
       scene.add(raycasterLine);
     }
   }
-
+  if(selectionThreshold > 0.04) {
+      selectionThreshold = 0.04 + pointVars.plotPointSizeCoeff + 0.001;
+  }
 }
 
 /**
@@ -194,6 +197,7 @@ function selectPoint(pointIndex) {
     setPointScale(pointIndex, pointsGeometry.getAttribute('size').array[pointIndex] =
       pointsGeometry.getAttribute('size').array[pointIndex] * 1.5);
   }
+  // drawSinglePointXYZValues(pointIndex);
 }
 
 /**
@@ -228,7 +232,7 @@ function clearSelection() {
  * all unselected pointsare selected
  */
 function invertSelection() {
-  for (var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++) {
+  for (var i = 2; i < pointsGeometry.getAttribute('size').array.length; i++) {
     selectPoint(i);
   }
 }
@@ -237,7 +241,7 @@ function invertSelection() {
  * selects all points in the world
  */
 function selectAll() {
-  for (var i = 0; i < pointsGeometry.getAttribute('size').array.length; i++) {
+  for (var i = 2; i < pointsGeometry.getAttribute('size').array.length; i++) {
     if (!pointsGeometry.getAttribute('isSelected').array[i])
       selectPoint(i);
   }
@@ -330,8 +334,8 @@ function colorFromXYZcoords(vec3) {
 
   // values between 0 and 1 to specify the darkest/lightest color possible.
   // (So that we don't end up with pure black or pure white points).
-  var colorFloor = 0.1;
-  var colorCeiling = 0.5;
+  var colorFloor = 0.2;
+  var colorCeiling = 0.75;
   // Set point color RGB values to magnitude of XYZ values
   var newColor = new THREE.Color();
 
@@ -471,10 +475,11 @@ function viewHidden() {
  */
 function recolorSelected() {
 
-  for (var i = 0; i < selectedPoints.length; i++) {
-    setPointColor(selectedPoints[i], new THREE.Color(1, 1, 1));
-    if (pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] === false) {
-      pointsGeometry.getAttribute('isSelected').array[i] === true;
+    for(var i = 0; i < selectedPoints.length; i++){
+            setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
+            if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] == false){
+                pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] = true;
+
+        }
     }
   }
-}

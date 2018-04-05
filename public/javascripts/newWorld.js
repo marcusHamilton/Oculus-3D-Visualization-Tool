@@ -70,6 +70,7 @@ function loadCSVLocal() {
     },
     complete: function (results) { //success call back
       parsedData = results.data;
+	  parsedData.splice(parsedData.length-2,2);
       success();
     }
   });

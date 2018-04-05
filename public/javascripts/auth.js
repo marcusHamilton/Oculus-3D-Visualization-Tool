@@ -303,9 +303,9 @@ function onUserPositionChange(worldId, UID) {
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
-          otherUsers[i].translateX(dbPositionObj[array[i]].position.x + datasetAndAxisLabelGroup.getWorldPosition().x);
-          otherUsers[i].translateY(dbPositionObj[array[i]].position.y + datasetAndAxisLabelGroup.getWorldPosition().y);
-          otherUsers[i].translateZ(dbPositionObj[array[i]].position.z + datasetAndAxisLabelGroup.getWorldPosition().z);
+          otherUsers[i].translateX(dbPositionObj[array[i]].position.x + collabGroup.getWorldPosition().x);
+          otherUsers[i].translateY(dbPositionObj[array[i]].position.y + collabGroup.getWorldPosition().y);
+          otherUsers[i].translateZ(dbPositionObj[array[i]].position.z + collabGroup.getWorldPosition().z);
           otherUsers[i].visible = true;
           
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
@@ -355,13 +355,11 @@ When a users position changes within a world and needs to be pushed to the datab
 */
 function updateUserPositionInDatabase(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
-  positionObj = camera.getWorldPosition()
-  var datPos= datasetAndAxisLabelGroup.getWorldPosition();
+  positionObj = camera.getWorldPosition();
+  var datPos= collabGroup.getWorldPosition();
   positionObj.x = positionObj.x - datPos.x;
   positionObj.y = positionObj.y - datPos.y;
   positionObj.z = positionObj.z - datPos.z;
-
-
 
   var PosJSON = JSON.stringify(positionObj);
   console.log("Pushing: " + PosJSON);

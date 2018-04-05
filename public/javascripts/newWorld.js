@@ -256,6 +256,7 @@ function addParsedDataToScene() {
   assert(z_AxisIndex >= 0, "");
 
   // scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+
   scene.userData = [
     [x_AxisIndex, y_AxisIndex, z_AxisIndex]
   ].concat(parsedData);

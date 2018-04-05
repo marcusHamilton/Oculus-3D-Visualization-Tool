@@ -1,7 +1,9 @@
+
 /**
  * Contains all major functions called on the VRWorld.ejs page for loading an
  * existing world from the database and drawing the data visualization.
  */
+
 var scene; //The scene to which all elements are added to
 var camera; //The main perspective camera
 var renderer; //The renderer for the project
@@ -23,12 +25,24 @@ var plotInitSizeX = 10; //Initial X dimension of dataset visualization
 var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
 var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
-var largestX = 0; //Largest X value in the dataset for selected columns
-var largestY = 0; //Largest Y value in the dataset for selected columns
-var largestZ = 0; //Largest Z value in the dataset for selected columns
+var largestX; //Largest X value in the dataset for selected columns
+var largestY; //Largest Y value in the dataset for selected columns
+var largestZ; //Largest Z value in the dataset for selected columns
 var largestEntry = 0; //Largest value in the dataset for selected columns
 var plotCenterVec3; //Centerpoint of visualization in world space
 var datasetAndAxisLabelGroup;
+var rig; //Rig to group camera
+
+var largestXpos;
+var largestYpos;
+var largestZpos;
+var smallestXpos;
+var smallestYpos;
+var smallestZpos;
+
+//For controls
+
+
 
 var light0;
 
@@ -52,16 +66,17 @@ function update(timestamp) {
   //Add all updates below here
 
   //Ensure that we are looking for controller input
-  
+
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
+  //trackballControls.update(); //Comment out trackball controls to properly use keyboard controls
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   THREE.VRController.update();
 
   //Allows point selection to function
-  pointSelectionUpdate();
 
   updateMovementControls();
+
+  pointSelectionUpdate();
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;
@@ -89,11 +104,12 @@ function render(timestamp) {
  * Manages program logic. Update, Render, Repeat
  * DO NOT add anything to this.
  */
-var GameLoop = function(timestamp) {
+function GameLoop(timestamp){
   update(timestamp);
   render(timestamp);
   //Allows this to be called every frame
-  animationDisplay.requestAnimationFrame(GameLoop);
+
+  window.requestAnimationFrame(GameLoop);
 };
 
 /**
@@ -112,7 +128,7 @@ function Manager() {
 
   /**
    * FIREBASE GET
-  */
+   */
 
   function loadScene(response){
     var loader = new THREE.ObjectLoader();
@@ -128,6 +144,7 @@ function Manager() {
     console.log(object);
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.name = "camera";
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.vr.enabled = true;
@@ -163,7 +180,7 @@ function Manager() {
     //Initializes the axis selection interfaces
     axisMenu = new selectedAxes();
     selectedAxes = new selectedAxesVR();
-    
+
     //Builds the GUIs
     VRGui();
     // BRGui(); May break things dont uncomment
@@ -173,15 +190,19 @@ function Manager() {
 
     // axisMenu contains the 3 selected axis columns as properties
     drawDataset(axisMenu.xAxis,axisMenu.yAxis,axisMenu.zAxis);
+
+    scaleInterface = new ScaleObject();
+    scaleMenu();
+    
     //Handle Keyboard Input
     document.addEventListener('keydown', onAKeyPress, false);
-    
+
 
     //Center the non-VR camera on the data and back a bit
+
     camera.position.set(-1,0,0);
     camera.rotation.y = 0 * Math.PI / 180;
-    onAxisDatabaseChange(worldID);
-
+    //   onAxisDatabaseChange(worldID);
     //GameLoop must be called last after everything to ensure that
     //everything is rendered
     GameLoop();
@@ -233,7 +254,7 @@ function onResize(e) {
  * as offers a link to the webvr page to learn more.
  * On clicking enter vr the scene is loaded appropriately for the
  * headset.
-*/
+ */
 function addEnterVrButtons() {
   // Create WebVR UI Enter VR Button
   var options = {
@@ -274,6 +295,11 @@ function setUpControls() {
   vrControls = new THREE.VRControls(camera);
   vrControls.standing = true;
   camera.position.z = vrControls.userHeight;
+  console.log("Initializing rig");
+
+  rig = new THREE.Object3D();
+  rig.add(camera);
+  scene.add(rig);
 
   //Add fps controls as well
   trackballControls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -314,8 +340,8 @@ function setUpControls() {
 
   //  DAT GUI for WebVR settings.
   //  https://github.com/dataarts/dat.guiVR
-  
-  
+
+
 }
 
 
@@ -335,6 +361,7 @@ function setUpControls() {
  *
  * @return 0 on success (Might change this to the mesh object itself).
  */
+
 function drawDataset(xCol, yCol, zCol)
 {
   assert(loadedDataset, 'loadedDataset must be defined for drawDataset()');
@@ -354,13 +381,13 @@ function drawDataset(xCol, yCol, zCol)
   var myVertexShader = document.getElementById( 'vertexshader' ).textContent;
   var myFragmentShader = document.getElementById( 'fragmentshader' ).textContent;
 
-  //var texture = new THREE.TextureLoader().load( "images/cross.png" );
+  var texture = new THREE.TextureLoader().load( "images/shader3.png" );
 
   // Configure point material shader
   var pointsMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      color:   { value: new THREE.Color( 0xffffff ) }//,
-      // texture: { value: texture }
+      color:   { value: new THREE.Color( 1,1,1 ) },
+      texture: { value: texture }
     },
     vertexShader: myVertexShader,
     fragmentShader: myFragmentShader
@@ -375,6 +402,10 @@ function drawDataset(xCol, yCol, zCol)
 
   // Base color object to be edited on each loop iteration below.
   var color = new THREE.Color();
+
+  largestX = Number.MIN_VALUE;
+  largestY = Number.MIN_VALUE;
+  largestZ = Number.MIN_VALUE;
 
   // Find largest XYZ values, and largest overall entry.
   for (var i = 1; i < loadedDataset.length; i++) {
@@ -402,10 +433,7 @@ function drawDataset(xCol, yCol, zCol)
     // Add Vector3 p to the positions array to be added to BufferGeometry.
     p.toArray( positions, i * 3 );
 
-    // Set point color RGB values to magnitude of XYZ values
-    color = colorFromXYZcoords(p);
-    //color.setRGB(loadedDataset[i][xCol]/largestX, loadedDataset[i][yCol]/largestY, loadedDataset[i][zCol]/largestZ);
-    color.toArray( colors, i * 3 );
+
 
     // Set the sizes of all the points to be added to BufferGeometry
     sizes[i] = pointSize;
@@ -436,16 +464,26 @@ function drawDataset(xCol, yCol, zCol)
 
   //Keep the drawn dataset and axis labels in a group.
   datasetAndAxisLabelGroup = new THREE.Group();
+  datasetAndAxisLabelGroup.name ="DatasetAxisGroup";
   datasetAndAxisLabelGroup.add(pointsSystem);
 
   light0 = new THREE.HemisphereLight(0xffffbb,0x080820,1);
   scene.add(light0);
   scene.add(VRGui);
-  if(controller != null && controller){
-  scene.add(handControlR);
-  scene.add(handControlL);
-}
+  scene.add(rig);
   drawAxisLabels();
+
+  for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3){
+      // Set point color RGB values to magnitude of XYZ values
+      color = colorFromXYZcoords(new THREE.Vector3(
+        pointsGeometry.getAttribute('position').array[i],
+        pointsGeometry.getAttribute('position').array[i+1],
+        pointsGeometry.getAttribute('position').array[i+2]
+      ));
+      color.toArray(colors, i);
+    }
+
+  initializeSelectionControls();
   scene.add(datasetAndAxisLabelGroup);
 }
 
@@ -461,16 +499,17 @@ function drawDataset(xCol, yCol, zCol)
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
   var axisLabelGroup = new THREE.Group();
+  axisLabelGroup.name = "AxisLabelGroup";
 
   // Set line colors
   var materialX = new THREE.LineBasicMaterial({
-    color: 0xff0000
+    color: 0x770000
   });
   var materialY = new THREE.LineBasicMaterial({
-    color: 0x00ff00
+    color: 0x007700
   });
   var materialZ = new THREE.LineBasicMaterial({
-    color: 0x0000ff
+    color: 0x000077
   });
 
   // Create line geometries
@@ -478,15 +517,48 @@ function drawAxisLabels() {
   var geometryY = new THREE.Geometry();
   var geometryZ = new THREE.Geometry();
 
+  largestXpos = Number.MIN_VALUE;
+  largestYpos = Number.MIN_VALUE;
+  largestZpos = Number.MIN_VALUE;
+  smallestXpos = Number.MAX_VALUE;
+  smallestYpos = Number.MAX_VALUE;
+  smallestZpos = Number.MAX_VALUE;
+
+  // Find smallest/largest XYZ positions
+  for (var i = 0; i < pointsGeometry.getAttribute('position').array.length; i += 3) {
+    // Find the largest Entry, X, Y, and Z value ceilings in the data.
+    if (pointsGeometry.getAttribute('position').array[i] > largestXpos) {
+      largestXpos = pointsGeometry.getAttribute('position').array[i];
+    }
+    if (pointsGeometry.getAttribute('position').array[i+1] > largestYpos) {
+      largestYpos = pointsGeometry.getAttribute('position').array[i+1];
+    }
+    if (pointsGeometry.getAttribute('position').array[i+2] > largestZpos) {
+      largestZpos = pointsGeometry.getAttribute('position').array[i+2];
+    }
+    // Find the smallest Entry, X, Y, and Z value floors in the data.
+    if (pointsGeometry.getAttribute('position').array[i] < smallestXpos) {
+      smallestXpos = pointsGeometry.getAttribute('position').array[i];
+    }
+    if (pointsGeometry.getAttribute('position').array[i+1] < smallestYpos) {
+      smallestYpos = pointsGeometry.getAttribute('position').array[i+1];
+    }
+    if (pointsGeometry.getAttribute('position').array[i+2] < smallestZpos) {
+      smallestZpos = pointsGeometry.getAttribute('position').array[i+2];
+    }
+  }
+  //console.log("Smallest: " + smallestXpos + ", " + smallestYpos + ", " + smallestZpos);
+  //console.log("Largest: " + largestXpos + ", " + largestYpos + ", " + largestZpos);
+
   // Push line points into geometries, extending 1.5X beyond the largest point
-  geometryX.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryX.vertices.push(new THREE.Vector3(plotInitSizeX * 1.5, 0, 0));
+  geometryX.vertices.push(new THREE.Vector3(smallestXpos, 0, 0));
+  geometryX.vertices.push(new THREE.Vector3(largestXpos, 0, 0));
 
-  geometryY.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryY.vertices.push(new THREE.Vector3(0, plotInitSizeY * 1.5, 0));
+  geometryY.vertices.push(new THREE.Vector3(0, smallestYpos, 0));
+  geometryY.vertices.push(new THREE.Vector3(0, largestYpos, 0));
 
-  geometryZ.vertices.push(new THREE.Vector3(0, 0, 0));
-  geometryZ.vertices.push(new THREE.Vector3(0, 0, plotInitSizeZ * 1.5));
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, smallestZpos));
+  geometryZ.vertices.push(new THREE.Vector3(0, 0, largestZpos));
 
   // Create line objects
   var lineX = new THREE.Line(geometryX, materialX);
@@ -499,6 +571,7 @@ function drawAxisLabels() {
   axisLabelGroup.add(lineZ);
 
   // Axis line ticks - Just draws 10 ticks on each axis
+  /*
   var lineXTicks = new LinkedList();
   for (var xUnits = 1; xUnits <= 10; xUnits++) {
     lineXTicks.add(new THREE.Geometry());
@@ -523,8 +596,10 @@ function drawAxisLabels() {
     lineZTicks.elementAt(zUnits - 1).vertices.push(new THREE.Vector3(plotInitSizeZ * 0.1, 0, plotInitSizeZ / largestZ * zUnits));
     axisLabelGroup.add(new THREE.Line(lineZTicks.elementAt(zUnits - 1), materialZ));
   }
+  */
   axisLabelGroup.position.set(0, plotInitSizeY / -2.0, plotInitSizeZ * -1.5);
   axisLabelGroup.rotation.set(0,-0.785398,0);
   datasetAndAxisLabelGroup.add(axisLabelGroup);
+
   //scene.add(axisLabelGroup);
 }

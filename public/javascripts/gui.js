@@ -52,6 +52,7 @@ function VRGui() {
   //Button to trigger selection stats recalculation and redraw
   var stats = VRGui.add(redraw, 'selectionStats');
   stats.name("Update Stats");
+ 
 
 
   // //Button that pushes the currently drawn axis selection to the database

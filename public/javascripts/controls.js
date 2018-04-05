@@ -103,7 +103,7 @@ window.addEventListener('vr controller connected', function (event) {
     receiveShadows(controller);
 
     //  Allow this controller to interact with DAT GUI.
-    guiInputHelper = dat.GUIVR.addInputObject(controller);
+    guiInputHelper = dat.GUIVR.addInputObject(handControlR);
     scene.add(guiInputHelper);
 
     setListeners();
@@ -150,6 +150,7 @@ function initializeMovementControls() {
  */
  function updatePointsPosition() {
 	 points = collabGroup;
+	
 	 var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0,1,0), Math.PI/16 );
 	 if (handControlL && handControlL != null) {
 		 camDir = camera.getWorldDirection()
@@ -162,13 +163,13 @@ function initializeMovementControls() {
 		 points.translateX(xMovement);
 		 points.translateZ(zMovement);
 		 if(leftGrip){
-			 //rotateGroup.rotation.y += 0.018; //rotation doesnt work right
+			 //datasetAndAxisLabelGroup.rotation.y += 0.018; //rotation doesnt work right
 		}
 	 }
 	 if (handControlR && handControlR != null){
 		 collabGroup.translateY(handControlR.getAxis(1)*movementSpeedCoeff*0.5);
 		 if(rightGrip){
-			 // datasetAndAxisLabelGroup.rotation.y += 0.0174533; //rotation doesn't work
+			 //center.rotation.y += 0.0174533; //rotation doesn't work
 		 }
 	 }
  }
@@ -213,12 +214,10 @@ function setListeners() {
 
             event.target.userData.mesh.material.color.setHex(meshColorOn);
             console.log("Left controller trigger press detected, Printing Controller Object");
-            guiInputHelper.pressed(true)
         });
         handControlL.addEventListener('primary press ended', function (event) {
 
             event.target.userData.mesh.material.color.setHex(meshColorOff);
-            guiInputHelper.pressed(false)
         });
     }
     // RIGHT CONTROLLER

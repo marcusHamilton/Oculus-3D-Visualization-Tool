@@ -4,25 +4,28 @@
  * the library.
  */
 // An object to hold all computed values.
-var stats = { meanX:0.0,
-              meanY:0.0,
-              meanZ:0.0,
-              medianX:0.0,
-              medianY:0.0,
-              medianZ:0.0,
-              modeX:0.0,
-              modeY:0.0,
-              modeZ:0.0,
-              sumX:0.0,
-              sumY:0.0,
-              sumZ:0.0,
-              varianceX:0.0,
-              varianceY:0.0,
-              varianceZ:0.0,
-              standardDevX:0.0,
-              standardDevY:0.0,
-              standardDevZ:0.0
-};
+function Stats(){ 
+              this.meanX=0.0;
+              this.meanY =0.0;
+              this.meanZ=0.0;
+              this.medianX=0.0;
+              this.medianY=0.0;
+              this.medianZ=0.0;
+              this.modeX=0.0;
+              this.modeY=0.0;
+              this.modeZ=0.0;
+              this.sumX=0.0;
+              this.sumY=0.0;
+              this.sumZ=0.0;
+              this.varianceX=0.0;
+              this.varianceY=0.0;
+              this.varianceZ=0.0;
+              this.standardDevX=0.0;
+              this.standardDevY=0.0;
+              this.standardDevZ=0.0;
+}
+
+var stats = new Stats();
 /**
  * Wrappers for jStats library functions
  */
@@ -72,6 +75,7 @@ function calculateSelectionStats() {
     stats.modeY = statsMode(yValues)[0];
     stats.modeZ = statsMode(zValues)[0];
     stats.sumX = statsSum(xValues);
+	console.log(xValues);
     stats.sumY = statsSum(yValues);
     stats.sumZ = statsSum(zValues);
     stats.varianceX = statsVariance(xValues);
@@ -80,6 +84,10 @@ function calculateSelectionStats() {
     stats.standardDevX = statsStdev(xValues);
     stats.standardDevY = statsStdev(yValues);
     stats.standardDevZ = statsStdev(zValues);
+	
+  }
+  else{
+	stats = new Stats();
   }
     console.log("Selection Statistics:");
     console.log(stats);
@@ -227,14 +235,10 @@ function drawSinglePointXYZValues(pointIndex){
     singlePointValueLabels);
     */
 
-    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x,
+    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x + "\n" +
+				  loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y + "\n" +
+				  loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z + "\n",
       0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(0,0,0),
-      singlePointValueLabels);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y,
-      0.1, new THREE.Color(0,0.7,0), new THREE.Vector3(0,-.12,0),
-      singlePointValueLabels);
-    drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z,
-      0.1, new THREE.Color(0,0,0.7), new THREE.Vector3(0,-.24,0),
       singlePointValueLabels);
 
     // Set initial position for the group.
@@ -249,12 +253,12 @@ function drawSinglePointXYZValues(pointIndex){
 
 
 function drawSelectionStatsVerbose(){
-  if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
+  /*if(statsLabelGroup != null && statsLabelGroup.children[1].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][0]]
         && statsLabelGroup.children[2].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][1]]
         && statsLabelGroup.children[3].geometry.parameters.text === axisMenu.axesOptions[loadedDataset[0][2]]){
         return;
       }
-
+*/
       //measuring execution time for calculate
       calculateSelectionStats();
       var t1 = performance.now();

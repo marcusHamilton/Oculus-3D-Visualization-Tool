@@ -51,6 +51,7 @@ var collabGroup;
 var isFontReady = false; // Boolean to make sure the 3D font is loaded before using it.
 var loadedFont; // An object representing the 3D font
 
+
 //For controls
 
 
@@ -65,6 +66,17 @@ function update(timestamp) {
     //Fixes small lag at begining of program where
     //timestamp is null
     timestamp = 15;
+  }
+  if(statsLabelGroup != null && VRGui != null){
+	statsLabelGroup.position.x = VRGui.position.x;
+	statsLabelGroup.position.y = VRGui.position.y + 0.32;
+	statsLabelGroup.position.z = VRGui.position.z;
+	statsLabelGroup.rotation.x = VRGui.rotation.x;
+	statsLabelGroup.rotation.y = VRGui.rotation.y;
+	statsLabelGroup.rotation.z = VRGui.rotation.z;
+	statsLabelGroup.scale.x = 0.25;
+	statsLabelGroup.scale.y = 0.25;
+	statsLabelGroup.scale.z = 0.3;
   }
   lastRender = timestamp;
 
@@ -249,7 +261,6 @@ function Manager() {
     collabGroup = new THREE.Group();
     collabGroup.add(datasetAndAxisLabelGroup);
     scene.add(collabGroup);
-
     var t11 = performance.now();
 
     for(var i = 0; i<2; i++){
@@ -502,7 +513,7 @@ function drawDataset(xCol, yCol, zCol)
 
 
   // Find largest XYZ values, and largest overall entry.
-  for (var i = 2; i < loadedDataset.length; i++) {
+  for (var i = 2; i < loadedDataset.length - 2 ;i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
       largestX = loadedDataset[i][xCol];
@@ -536,7 +547,7 @@ function drawDataset(xCol, yCol, zCol)
   var mz = (largestZ + smallestZ)/2;
   */
 
-  for (var i = 1; i < loadedDataset.length; i++) {
+  for (var i = 2; i < loadedDataset.length; i++) {
     // create a point Vector3 with xyz coordinates equal to the fraction of
     // loadedDataset[i][xCol]/largestX times the initial plot size.
     var pX = ((loadedDataset[i][xCol]/* - mx*/)/dx)*plotInitSizeX;

@@ -282,12 +282,12 @@ function onSelectionChange(worldId) {
     // console.log(dataSnapshot.val()); //uncomment to see the value from the database
     if(dataSnapshot.val() != null){
       selectedPoints = dataSnapshot.val();
-      redraw.redrawVR;
+      redraw.redrawVR();
     }
     else{
       console.log("No selected points saved in DB.")
       selectedPoints = [];
-      redraw.redrawVR;
+      redraw.redrawVR();
     }
   });
 }
@@ -297,7 +297,7 @@ function onScaleChange(worldId){
     scaleRef.on('value',function (dataSnapshot){
     if(dataSnapshot.val() != null){
       scaleInterface.x = dataSnapshot.val();
-      scaleSystem.scaleAll;
+      scaleSystem.scaleAll();
     }
   });
 }

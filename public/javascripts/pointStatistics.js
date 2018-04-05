@@ -125,7 +125,7 @@ function drawSelectionStats(){
     drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1,
       new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.12,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1,
-      new THREE.Color(0,0,.7), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.2,1), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
 
     // Stats row names
     drawTextLabel("Mean: " + "\n" +
@@ -163,7 +163,7 @@ function drawSelectionStats(){
                   stats.standardDevY,
                   0.1,
                   new THREE.Color(0,.7,0),
-                  new THREE.Vector3(2.0,-.24,0),
+                  new THREE.Vector3(2.3,-.24,0),
                   statsLabelGroup
                   );
 
@@ -176,7 +176,7 @@ function drawSelectionStats(){
                   stats.varianceZ + "\n" +
                   stats.standardDev,
                   0.1,
-                  new THREE.Color(0,0,1),
+                  new THREE.Color(0,.2,1),
                   new THREE.Vector3(3.9,-.24,0),
                   statsLabelGroup
                   );

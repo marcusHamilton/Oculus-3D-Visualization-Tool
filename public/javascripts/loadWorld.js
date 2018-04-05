@@ -69,7 +69,7 @@ function update(timestamp) {
   }
   if(statsLabelGroup != null && VRGui != null){
 	statsLabelGroup.position.x = VRGui.position.x;
-	statsLabelGroup.position.y = VRGui.position.y + 0.36;
+	statsLabelGroup.position.y = VRGui.position.y + 0.32;
 	statsLabelGroup.position.z = VRGui.position.z;
 	statsLabelGroup.rotation.x = VRGui.rotation.x;
 	statsLabelGroup.rotation.y = VRGui.rotation.y;

@@ -368,7 +368,7 @@ function updateSelectionInDatabase(worldId, selectedPointsJSON) {
 //push scale to db
 function updateScaleInDatabase(worldId, scaleInterfaceX){
   var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
-  scaleRef.set(scaleInterface.x);
+  scaleRef.set(scaleInterfaceX);
 }
 /*
 When a users position changes within a world and needs to be pushed to the database, call this function

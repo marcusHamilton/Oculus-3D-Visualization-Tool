@@ -37,7 +37,7 @@ var axisLabelGroup; // This group contains the text meshes for the axis labels
 var datasetAndAxisLabelGroup; //This group contains the points system and axis labels
 var userPresence; //hold th reference for the users player sphere and camera
 var otherUsers = []; //Hold the references to the other users spheres7
-var slowDownUserPos;
+var slowDownUserPos = 0;
 
 // min and max *world position* values for each vertex in the points system
 var largestXpos;
@@ -104,7 +104,7 @@ function update(timestamp) {
     updatePointsPosition();
   }
   slowDownUserPos ++;
-  if(slowDownUserPos >= 100){
+  if(slowDownUserPos >= 50){
     updateUserPositionInDatabase(worldID, getUID());
     slowDownUserPos = 0;
   }

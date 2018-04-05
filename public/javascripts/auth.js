@@ -282,12 +282,12 @@ function onSelectionChange(worldId) {
     // console.log(dataSnapshot.val()); //uncomment to see the value from the database
     if(dataSnapshot.val() != null){
       selectedPoints = dataSnapshot.val();
-      redrawVR();
+      redraw.redrawVR;
     }
     else{
       console.log("No selected points saved in DB.")
       selectedPoints = [];
-      redrawVR();
+      redraw.redrawVR;
     }
   });
 }

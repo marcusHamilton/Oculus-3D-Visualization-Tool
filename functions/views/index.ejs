@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google-signin-client_id" content="483800110325-b8qec0kh5fcljpm2ju8bd88gsjn2vb7d.apps.googleusercontent.com">
+  <meta name="google-signin-cookiepolicy" content="single_host_origin">
+  <meta name="google-signin-scope" content="profile email">
+
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <title>3D Visualization Tool</title>
+
+  <!--Check if browser webStorage is supported -->
+  <script>
+    if (typeof(Storage) == "undefined") {
+      alert("This page requires that your browser supports web storage. Please update your browser.");
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div class="site-wrapper">
+    <a href="/"><img id="logo" class="img img-rounded" src="/images/logo.png" alt="3D Data Visualization Logo"></a>
+
+    <div class="site-wrapper-inner">
+
+      <div class="container">
+
+        <div class="masthead clearfix">
+          <div class="container inner">
+            <h3 class="masthead-brand">3D Visualization Tool</h3>
+            <nav>
+              <!-- The Navigation Bar -->
+              <ul class="nav masthead-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><div id="gSignIn"></div></li>
+                <li><div class="userContent"></div></li>
+              </ul>
+            </nav>
+            <!-- End: The Navigation Bar -->
+          </div>
+        </div>
+
+        <div class="inner cover">
+          <h1 class="cover-heading">Welcome</h1>
+          <p class="lead">This tool is used to display data points from a .csv file in a virtual space. To get started please goto your dashboard.</p>
+          <p class="lead">
+            <a href="/dashboard" class="btn btn-lg btn-default">Dashboard</a>
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--Javascript CDN's-->
+  <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--Javascript Local Files-->
+  <script src="/javascripts/auth.js"></script>
+
+  <!-- Google Authentification -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+  	"users": {
+    	"$user_id": {
+			".write": "$user_id === auth.uid",
+    		".read": "$user_id === auth.uid",
+       		"worlds": {
+       		},
+       		"collaborations": {
+       		}
+    	}
+    },
+    "worlds": {
+		"$world_id": {
+	        ".write": "data.child('owner').child('$user_id').val() === auth.id",
+	    	".read": "data.child('collaborators/' +auth.uid).exists() || data.child('owner').child('$user_id').val() === auth.id",
+	      	"owner": {
+	        },
+	        "collaborators": {
+	        },
+			"metadata": {},
+			"object": {}
+		}
+    },
+    "collaborations":{
+    	"$collaboration_id": {
+    		"owner": {
+
+    		},
+    		"world": {
+
+    		},
+    		"collaborators": {
+
+    		}
+    	}
+	}
+  }
+}

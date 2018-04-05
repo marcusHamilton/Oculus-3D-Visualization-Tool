@@ -78,7 +78,7 @@ function loadCSVLocal() {
   function success() {
     //Data is stored in the browser storage and can be retrieved and used on
     //other html pages
-    getOptions();
+    getOptions(1);
 
     //Clean up webpage and notify of success
     var toRemove = document.getElementById('formGroup');
@@ -131,7 +131,7 @@ function loadCSVremote() {
     function success() {
       //Data is stored in the browser storage and can be retrieved and used on
       //other html pages
-      getOptions();
+      getOptions(2);
   
   
       //Clean up webpage and notify of success
@@ -147,7 +147,7 @@ function loadCSVremote() {
       console.log(error);
   
       //display error info on the webpage
-      var message = document.getElementById('successMessage');
+      var message = document.getElementById('successMessageRemote');
       message.innerHTML = '<br><div class="alert alert-danger"><strong>Error!</strong> Wrong URL?</div> ';
     }
   }
@@ -155,10 +155,11 @@ function loadCSVremote() {
 
 /**
  * @pre: csv was successfully parsed
+ *       option is 1 if from local load, and 2 if from remote
  * @post: dropdownOptions contains the same length as data[0].length
  * Responsible for populating and displaying the dropdown menus on the load screen
  */
-function getOptions() {
+function getOptions(option) {
   var dropdownOptions = [];
   for (i = 0; i < parsedData[0].length; i++) {
     dropdownOptions.push({
@@ -167,15 +168,31 @@ function getOptions() {
     });
   }
 
-  $(document).ready(function () {
-    $('.js-responsive-dropdown').select2({
-      placeholder: 'Select axis',
-      data: dropdownOptions,
-      dropdownParent: $('.modal')
+  if(option == 1)
+  {
+    $(document).ready(function () {
+      $('.js-responsive-dropdown').select2({
+        placeholder: 'Select axis',
+        data: dropdownOptions,
+        dropdownParent: $('.modal')
+      });
     });
-  });
+  
+    document.getElementById("dropDownForInit").style = "display:block";
+  }
+  else
+  {
+    $(document).ready(function () {
+      $('.js-responsive-dropdown').select2({
+        placeholder: 'Select axis',
+        data: dropdownOptions,
+        dropdownParent: $('.modal')
+      });
+    });
+  
+    document.getElementById("dropDownForInitRemote").style = "display:block";
+  }
 
-  document.getElementById("dropDownForInit").style = "display:block";
 
 }
 

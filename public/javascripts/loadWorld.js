@@ -104,13 +104,13 @@ function update(timestamp) {
     updatePointsPosition();
   }
   slowDownUserPos ++;
-  if(slowDownUserPos <= 10){
-    pointSelectionUpdate();
+  if(slowDownUserPos >= 100){
+    updateUserPositionInDatabase(worldID, getUID());
     slowDownUserPos = 0;
   }
 
-
-  updateUserPositionInDatabase(worldID, getUID());
+  pointSelectionUpdate();
+  
   // set BufferGeometry object attributes to be updatable.
   // (This must be set every time you want the buffergeometry to change.
   pointsGeometry.getAttribute('customColor').needsUpdate = true;

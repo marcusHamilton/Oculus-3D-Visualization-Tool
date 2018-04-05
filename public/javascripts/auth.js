@@ -413,16 +413,21 @@ function reloadWorlds(){
     for(var collabKey in user.collaborations){
       //Key must evaluate to true in order for user to have access to the world
       if (user.collaborations[collabKey]) {
-        //get the world associated with the collaboration object and load it in for the user
-        return database.ref('collaborations/' +collabKey).once('value').then(function (snapshot){
-          var collaboration = snapshot.val();
-
-          document.getElementById('spinningLoader').style = "display:none";
-          reloadHelper(collaboration.world_id);
-        });
+      	reloadCollaborationHelper(collabKey);
       }
     }
   });
+}
+
+//gets the world_ID for an individual collaboration
+function reloadCollaborationHelper(collabKey){
+	//get the world associated with the collaboration object and load it in for the user
+    return database.ref('collaborations/' +collabKey).once('value').then(function (snapshot){
+		var collaboration = snapshot.val();
+
+		document.getElementById('spinningLoader').style = "display:none";
+		reloadHelper(collaboration.world_id);
+	});
 }
 
 //Helper function to help load in a world for a user

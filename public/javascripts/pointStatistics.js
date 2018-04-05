@@ -117,15 +117,15 @@ function drawSelectionStats(){
 
     // Title
     drawTextLabel("Selection Statistics:", 0.1, new THREE.Color(.9,.9,.9),
-      new THREE.Vector3(-.12,.02,0), statsLabelGroup);
+      new THREE.Vector3(-.12,.04,0), statsLabelGroup);
 
     // Selected Column Names
     drawTextLabel(loadedDataset[1][axisMenu.xAxis], 0.1,
-      new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.12,0), statsLabelGroup);
+      new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.1,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][axisMenu.yAxis], 0.1,
-      new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.1,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][axisMenu.zAxis], 0.1,
-      new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.1,0), statsLabelGroup);
 
     // Stats row names
     drawTextLabel("Mean: " + "\n" +

@@ -287,6 +287,7 @@ function onSelectionChange(worldId) {
     else{
       console.log("No selected points saved in DB.")
       selectedPoints = [];
+      redraw.redrawVR();
     }
   });
 }

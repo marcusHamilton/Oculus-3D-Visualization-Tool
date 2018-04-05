@@ -278,24 +278,34 @@ function onAxisDatabaseChange(worldId) {
 //Listener
 function onSelectionChange(worldId) {
   var axisRef = database.ref('worlds/' + worldId + '/object/selectionArray');
-  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   axisRef.on('value', function (dataSnapshot) {
     // console.log(dataSnapshot.val()); //uncomment to see the value from the database
     if(dataSnapshot.val() != null){
       selectedPoints = dataSnapshot.val();
+      redrawVR();
     }
     else{
       console.log("No selected points saved in DB.")
       selectedPoints = [];
+      redrawVR();
     }
-  scaleRef.on('value',function (dataSnapshot){
+  });
+}
+
+function onScaleChange(worldId){
+    var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
+    scaleRef.on('value',function (dataSnapshot){
     if(dataSnapshot.val() != null){
       scaleInterface.x = dataSnapshot.val();
       scaleSystem.scaleAll;
     }
-  })
   });
 }
+
+
+
+
+
 //You only need to call this function once and it will listen for position changes.
 //+ Whenever another users position in the world changes, the contents of this function
 //+ will be run.
@@ -351,9 +361,14 @@ function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
 function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
   var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
   selectionRef.set(selectedPointsJSON);
+ 
+  // console.log("Pushed selection " + selectedPointsJSON + " to the database.");
+}
+
+//push scale to db
+function updateScaleInDatabase(worldId, scaleInterfaceX){
   var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   scaleRef.set(scaleInterface.x);
-  // console.log("Pushed selection " + selectedPointsJSON + " to the database.");
 }
 /*
 When a users position changes within a world and needs to be pushed to the database, call this function

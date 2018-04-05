@@ -117,15 +117,15 @@ function drawSelectionStats(){
 
     // Title
     drawTextLabel("Selection Statistics:", 0.1, new THREE.Color(.9,.9,.9),
-      new THREE.Vector3(0,.02,0), statsLabelGroup);
+      new THREE.Vector3(-.12,.02,0), statsLabelGroup);
 
     // Selected Column Names
     drawTextLabel(loadedDataset[1][loadedDataset[0][0]], 0.1,
-      new THREE.Color(.7,0,0), new THREE.Vector3(.7,-.12,0), statsLabelGroup);
+      new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.12,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][loadedDataset[0][1]], 0.1,
-      new THREE.Color(0,.7,0), new THREE.Vector3(2.3,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.12,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][loadedDataset[0][2]], 0.1,
-      new THREE.Color(0,.2,1), new THREE.Vector3(3.9,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.12,0), statsLabelGroup);
 
     // Stats row names
     drawTextLabel("Mean: " + "\n" +
@@ -136,7 +136,7 @@ function drawSelectionStats(){
                   "Std. Dev.: ",
                   0.1, 
                   new THREE.Color(.7,.7,.7), 
-                  new THREE.Vector3(0,-.24,0),
+                  new THREE.Vector3(-.12,-.24,0),
                   statsLabelGroup
                   );
 
@@ -149,7 +149,7 @@ function drawSelectionStats(){
                   stats.standardDevX,
                   0.1,
                   new THREE.Color(.7,0,0),
-                  new THREE.Vector3(.7,-.24,0),
+                  new THREE.Vector3(.58,-.24,0),
                   statsLabelGroup
                   );
 
@@ -163,7 +163,7 @@ function drawSelectionStats(){
                   stats.standardDevY,
                   0.1,
                   new THREE.Color(0,.7,0),
-                  new THREE.Vector3(2.3,-.24,0),
+                  new THREE.Vector3(2.18,-.24,0),
                   statsLabelGroup
                   );
 
@@ -177,7 +177,7 @@ function drawSelectionStats(){
                   stats.standardDev,
                   0.1,
                   new THREE.Color(0,.2,1),
-                  new THREE.Vector3(3.9,-.24,0),
+                  new THREE.Vector3(3.77,-.24,0),
                   statsLabelGroup
                   );
 

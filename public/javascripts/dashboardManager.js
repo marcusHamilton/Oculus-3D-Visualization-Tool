@@ -36,6 +36,27 @@ function addUser() {
     }
 }
 
+//Function is waiting for a modal close with class myModal and clears its fields so
+//it may be used again
+$(function () {
+    // when the modal is closed
+    $('#myModal').on('hidden.bs.modal', function () {
+        location.reload(); 
+    });
+});
+
+//Function is waiting for a modal close with class addUser-modal and clears its fields so
+//it may be used again
+$(function () {
+    // when the modal is closed
+    $('#addUser-modal').on('hidden.bs.modal', function () {
+        document.getElementById('noEmailMessage').style = "display:none";
+        document.getElementById('badEmailMessage').style = "display:none";
+        document.getElementById('addEmail').value = "";
+        document.getElementById('worldIDInputBox').value = "";
+    });
+});
+
 //Function is used to display the name of the file uploaded in the box
 //on the modal box that helps the user load in a local file
 $(function () {

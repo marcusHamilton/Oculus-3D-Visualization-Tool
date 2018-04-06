@@ -304,6 +304,18 @@ function onScaleChange(worldId){
       datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
       datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
       datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
+      for(var i = 0; i < otherUsers.length; i++){
+      if(dataSnapshot.val() < 1 ){
+        otherUsers[i].scale.x = dataSnapshot.val() *0.5;
+        otherUsers[i].scale.y = dataSnapshot.val() *0.5;
+        otherUsers[i].scale.z = dataSnapshot.val() *0.5;
+      }
+      if(dataSnapshot.val() >= 1){
+        otherUsers[i].scale.x = 1;
+        otherUsers[i].scale.y = 1;
+        otherUsers[i].scale.z = 1;
+      }
+    }
   }
   });
 }

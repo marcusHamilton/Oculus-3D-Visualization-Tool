@@ -38,8 +38,9 @@ function renderButton() {
     else{
       //relocate them to the home page if they sign out while on the dashboard
       if (document.URL.indexOf("dashboard") !== -1){
-        window.location.href = "/";
         console.log("Redirecting user to the home page from the dashboard because they are not signed-in.");
+        alert("Please sign-in to access the dashboard");
+        window.location.href = "/";
       }
     }
   });
@@ -551,11 +552,6 @@ function createWorldCollab(collaboratorID, worldID){
 
   console.log("Successfully added user: " + collaboratorID + " to the collaborations list for world: " + worldID + ".");
 }
-//******************************************************************************
-//******************************************************************************
-
-
-
 
 function AddWorldByKey(worldRefKey){
       var userWorldObj = {};
@@ -563,3 +559,5 @@ function AddWorldByKey(worldRefKey){
     console.log(worldRefKey);
     firebase.database().ref('/users/' + getUID()).child("worlds").update(userWorldObj);
 }
+//******************************************************************************
+//******************************************************************************

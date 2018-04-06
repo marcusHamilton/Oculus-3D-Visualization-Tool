@@ -47,7 +47,6 @@ function getScene() {
   return scene;
 }
 
-
 /**
  * Function is called when the csv file is loaded in from the localLoad.
  * Here the uploaded file is grabbed from the html page and passed into a local //variable. Papa parse is then used to parse the data into an array.
@@ -215,6 +214,9 @@ function getResults() {
   build3DSpace();
 }
 
+/**
+ * Below is everything necessary to build a new 3d world
+ */
 function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();

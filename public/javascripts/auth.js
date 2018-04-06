@@ -293,6 +293,25 @@ function onSelectionChange(worldId) {
     }
   });
 }
+
+
+//Listener
+function onScaleChange(worldId){
+  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
+  scaleRef.on('value', function (dataSnapshot){
+  console.log(dataSnapshot.val());
+  datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
+  datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
+  datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
+  // scaleInterface.x = dataSnapshot.val();
+  // scaleSystem.scaleAll();
+  });
+}
+
+
+
+
+
 //You only need to call this function once and it will listen for position changes.
 //+ Whenever another users position in the world changes, the contents of this function
 //+ will be run.
@@ -306,10 +325,10 @@ function onUserPositionChange(worldId, UID) {
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
-          otherUsers[i].position.x = dbPositionObj[array[i]].position.x + datasetAndAxisLabelGroup.getWorldPosition().x;
-          otherUsers[i].position.y = dbPositionObj[array[i]].position.y + datasetAndAxisLabelGroup.getWorldPosition().y;
-          otherUsers[i].position.z = dbPositionObj[array[i]].position.z + datasetAndAxisLabelGroup.getWorldPosition().z;
-          otherUsers[i].visible = true;
+          collabGroup.position.x = dbPositionObj[array[i]].position.x + collabGroup.getWorldPosition().x;
+          collabGroup.position.x = dbPositionObj[array[i]].position.y + collabGroup.getWorldPosition().y;
+          collabGroup.position.x = dbPositionObj[array[i]].position.z + collabGroup.getWorldPosition().z;
+          otherUsers[i].visible = dbPositionObj[array[i]].activity;
           
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
       }
@@ -348,7 +367,14 @@ function updateAxisSelectionInDatabase(worldId, selectedAxesJSON) {
 function updateSelectionInDatabase(worldId, selectedPointsJSON) {  
   var selectionRef = database.ref('worlds/' + worldId + '/object/selectionArray');
   selectionRef.set(selectedPointsJSON);
+ 
   // console.log("Pushed selection " + selectedPointsJSON + " to the database.");
+}
+
+//push scale to db
+function updateScaleInDatabase(worldId, scaleInterfaceX){
+  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
+  scaleRef.set(scaleInterfaceX);
 }
 /*
 When a users position changes within a world and needs to be pushed to the database, call this function
@@ -359,7 +385,7 @@ When a users position changes within a world and needs to be pushed to the datab
 function updateUserPositionInDatabase(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
   positionObj = camera.getWorldPosition();
-  var datPos= datasetAndAxisLabelGroup.getWorldPosition();
+  var datPos= collabGroup.getWorldPosition();
   positionObj.x = positionObj.x - datPos.x;
   positionObj.y = positionObj.y - datPos.y;
   positionObj.z = positionObj.z - datPos.z;
@@ -369,6 +395,9 @@ function updateUserPositionInDatabase(worldId, UID) {
   PosJSON = JSON.parse(PosJSON);
 
   userRef.set(PosJSON);
+  var disconnectRef =  database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/activity');
+  disconnectRef.set(true);
+  disconnectRef.onDisconnect().set(false);
   // console.log("Pushed position of " + UID + ".Their position is: " + rig.getWorldPosition());
 }
 

@@ -36,18 +36,8 @@ function initializeSelectionControls() {
   selectionControllerL = scene.getObjectByName("Oculus Touch (Left)");
   selectionControllerR = scene.getObjectByName("Oculus Touch (Right)");
 
-  // We were originally going to allow selection with the left controller,
-  // But I think we'll probably limit it to the right control, and have tools
-  // on this one.
-  if (selectionControllerL) {
-    console.log("Left VR Controller detected for point selection.");
-    console.log(selectionControllerL);
-    pointSelectionRaycasterL = new THREE.Raycaster();
-    pointSelectionRaycasterL.params.Points.threshold = selectionThreshold;
-	selectionControllerL.add(pointSelectionRaycasterL);
-  }
 
-  if (selectionControllerR) {
+  if (selectionControllerR && selectionControllerR != null) {
     console.log("Right VR Controller detected for point selection.");
     console.log(selectionControllerR);
     pointSelectionRaycasterR = new THREE.Raycaster();
@@ -58,7 +48,7 @@ function initializeSelectionControls() {
     selectionControllerR.addEventListener('A touch ended', function (event) {
       isRaycasterLineActive = false;
     });
-	selectionControllerR.add(pointSelectionRaycasterR);
+	//selectionControllerR.add(pointSelectionRaycasterR);
   }
 
   /*
@@ -268,6 +258,12 @@ function onClick(event) {
   if (intersects != null) {
     selectPoint(intersects.index);
     //hidePoint(intersects.index);
+    if (intersects) {
+      console.log("Last Selected Point: \n"
+        + loadedDataset[1][axisMenu.xAxis] + " = " + loadedDataset[intersects.index][axisMenu.xAxis] + "\n"
+        + loadedDataset[1][axisMenu.yAxis] + " = " + loadedDataset[intersects.index][axisMenu.yAxis] + "\n"
+        + loadedDataset[1][axisMenu.zAxis] + " = " + loadedDataset[intersects.index][axisMenu.zAxis]);
+    }
   } else {
     //clearSelection();
     //unhideRecent();

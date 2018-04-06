@@ -117,15 +117,15 @@ function drawSelectionStats(){
 
     // Title
     drawTextLabel("Selection Statistics:", 0.1, new THREE.Color(.9,.9,.9),
-      new THREE.Vector3(-.12,.02,0), statsLabelGroup);
+      new THREE.Vector3(-.12,.04,0), statsLabelGroup);
 
     // Selected Column Names
     drawTextLabel(loadedDataset[1][axisMenu.xAxis], 0.1,
-      new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.12,0), statsLabelGroup);
+      new THREE.Color(.7,0,0), new THREE.Vector3(.58,-.1,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][axisMenu.yAxis], 0.1,
-      new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.7,0), new THREE.Vector3(2.18,-.1,0), statsLabelGroup);
     drawTextLabel(loadedDataset[1][axisMenu.zAxis], 0.1,
-      new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.12,0), statsLabelGroup);
+      new THREE.Color(0,.2,1), new THREE.Vector3(3.77,-.1,0), statsLabelGroup);
 
     // Stats row names
     drawTextLabel("Mean: " + "\n" +
@@ -174,7 +174,7 @@ function drawSelectionStats(){
                   stats.modeZ + "\n" +
                   stats.sumZ + "\n" +
                   stats.varianceZ + "\n" +
-                  stats.standardDev,
+                  stats.standardDevZ,
                   0.1,
                   new THREE.Color(0,.2,1),
                   new THREE.Vector3(3.77,-.24,0),
@@ -208,9 +208,9 @@ function drawSinglePointXYZValues(pointIndex){
 
     // Get the actual parsed Data for the point at pointIndex
     var pointValues = new THREE.Vector3(
-      loadedDataset[pointIndex][loadedDataset[0][0]],
-      loadedDataset[pointIndex][loadedDataset[0][1]],
-      loadedDataset[pointIndex][loadedDataset[0][2]]
+      loadedDataset[pointIndex][axisMenu.xAxis],
+      loadedDataset[pointIndex][axisMenu.yAxis],
+      loadedDataset[pointIndex][axisMenu.zAxis]
     );
 
     /*
@@ -233,9 +233,9 @@ function drawSinglePointXYZValues(pointIndex){
     singlePointValueLabels);
     */
 
-    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x + "\n" +
-				  loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y + "\n" +
-				  loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z + "\n",
+    drawTextLabel(loadedDataset[1][axisMenu.xAxis] + " = " + pointValues.x + "\n" +
+				  loadedDataset[1][axisMenu.yAxis] + " = " + pointValues.y + "\n" +
+				  loadedDataset[1][axisMenu.zAxis] + " = " + pointValues.z + "\n",
       0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(0,0,0),
       singlePointValueLabels);
 

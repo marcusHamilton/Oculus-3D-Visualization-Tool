@@ -5,7 +5,6 @@
  * Much of this is based on work in Dorian Theissen's shadow manifold
  * visualization.
  **/
-
 var selectedPoints = []; //array containing the indices of every currently
 //selected point.
 var hiddenPoints = [];
@@ -150,8 +149,6 @@ function pointSelectionUpdate() {
     }
   }
 
-
-
   scene.remove(raycasterLine);
   if (pointSelectionRaycasterR && selectionControllerR && pointSelectionRaycasterR.ray.origin) {
     var lineLength;
@@ -276,7 +273,6 @@ function onClick(event) {
     console.log(getSelectedPointPositions());
   }
   //console.log(hiddenPoints);
-
 }
 
 /**
@@ -353,7 +349,6 @@ function colorFromXYZcoords(vec3) {
  *
  * @return {Vector3[]} array of Vector3 objects containing positions
  */
-
 function getSelectedPointPositions() {
 
   var selectedPointPositions = [];
@@ -399,12 +394,7 @@ function getSelectedAxisValues(axis) {
   return vals;
 }
 
-
-
-
-
 function hidePoint(pointIndex) {
-
   pointsGeometry.getAttribute('isHidden').array[pointIndex] = true;
   hiddenPoints.push(pointIndex);
   //do the thing that hides it
@@ -465,7 +455,6 @@ function viewHidden() {
  * Helper to make sure on axis change, selected points also persist
  */
 function recolorSelected() {
-
     for(var i = 0; i < selectedPoints.length; i++){
             setPointColor(selectedPoints[i], new THREE.Color(1,1,1));
             if(pointsGeometry.getAttribute('isSelected').array[selectedPoints[i]] == false){

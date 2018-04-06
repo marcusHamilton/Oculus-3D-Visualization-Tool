@@ -300,11 +300,11 @@ function onScaleChange(worldId){
   var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   scaleRef.on('value', function (dataSnapshot){
   console.log(dataSnapshot.val());
-  datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
-  datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
-  datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
-  // scaleInterface.x = dataSnapshot.val();
-  // scaleSystem.scaleAll();
+  if(dataSnapshot && dataSnapshot != null){
+      datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
+      datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
+      datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
+  }
   });
 }
 
@@ -325,9 +325,9 @@ function onUserPositionChange(worldId, UID) {
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
-          collabGroup.position.x = dbPositionObj[array[i]].position.x + collabGroup.getWorldPosition().x;
-          collabGroup.position.x = dbPositionObj[array[i]].position.y + collabGroup.getWorldPosition().y;
-          collabGroup.position.x = dbPositionObj[array[i]].position.z + collabGroup.getWorldPosition().z;
+          otherUsers[i].position.x = dbPositionObj[array[i]].position.x + datasetAndAxisLabelGroup.getWorldPosition().x;
+          otherUsers[i].position.x = dbPositionObj[array[i]].position.y + datasetAndAxisLabelGroup.getWorldPosition().y;
+          otherUsers[i].position.x = dbPositionObj[array[i]].position.z + datasetAndAxisLabelGroup.getWorldPosition().z;
           otherUsers[i].visible = dbPositionObj[array[i]].activity;
           
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);
@@ -385,7 +385,7 @@ When a users position changes within a world and needs to be pushed to the datab
 function updateUserPositionInDatabase(worldId, UID) {
   var userRef = database.ref('worlds/' + worldId + '/object/usersData/' + getUID() + '/position');
   positionObj = camera.getWorldPosition();
-  var datPos= collabGroup.getWorldPosition();
+  var datPos= datasetAndAxisLabelGroup.getWorldPosition();
   positionObj.x = positionObj.x - datPos.x;
   positionObj.y = positionObj.y - datPos.y;
   positionObj.z = positionObj.z - datPos.z;

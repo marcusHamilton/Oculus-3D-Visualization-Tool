@@ -378,7 +378,6 @@ function addEnterVrButtons() {
       camera.quaternion.set(0, 0, 0, 1);
     })
     .on("error", function(error) {
-      document.getElementById("learn-more").style.display = "inline";
       console.error(error)
     })
     .on("hide", function() {

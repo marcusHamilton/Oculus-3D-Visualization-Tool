@@ -22,7 +22,7 @@ var pointsSystem; //THREE.js Points system for shader based visualization
 var pointsGeometry; //THREE.js BufferGeometry contains vertices for datapoints
 var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
-var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
+var plotInitSizeY = 10; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
 var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX; //Largest X value in the dataset for selected columns

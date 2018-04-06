@@ -258,6 +258,12 @@ function onClick(event) {
   if (intersects != null) {
     selectPoint(intersects.index);
     //hidePoint(intersects.index);
+    if (intersects) {
+      console.log("Last Selected Point: \n"
+        + loadedDataset[1][axisMenu.xAxis] + " = " + loadedDataset[intersects.index][axisMenu.xAxis] + "\n"
+        + loadedDataset[1][axisMenu.yAxis] + " = " + loadedDataset[intersects.index][axisMenu.yAxis] + "\n"
+        + loadedDataset[1][axisMenu.zAxis] + " = " + loadedDataset[intersects.index][axisMenu.zAxis]);
+    }
   } else {
     //clearSelection();
     //unhideRecent();

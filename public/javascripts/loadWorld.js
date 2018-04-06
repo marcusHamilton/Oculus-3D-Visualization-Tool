@@ -81,6 +81,7 @@ function update(timestamp) {
   }
   lastRender = timestamp;
 
+
   // //Checking for dat.guivr error
   // console.log(timestamp);
   // var testObject = new THREE.Object3D();

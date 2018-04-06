@@ -265,9 +265,13 @@ function setListeners() {
         handControlR.addEventListener('A press began', function (event) {
             AisPressed = true;
             //console.log("A Pressed");
-            if (intersects) {
-                selectPoint(intersects.index);
-            }
+          if (intersects) {
+            selectPoint(intersects.index);
+            console.log("Last Selected Point: \n"
+              + loadedDataset[1][axisMenu.xAxis] + " = " + loadedDataset[intersects.index][axisMenu.xAxis] + "\n"
+              + loadedDataset[1][axisMenu.yAxis] + " = " + loadedDataset[intersects.index][axisMenu.yAxis] + "\n"
+              + loadedDataset[1][axisMenu.zAxis] + " = " + loadedDataset[intersects.index][axisMenu.zAxis]);
+          }
             if (selectedPoints.length > 0) {
                 console.log(getSelectedPointPositions());
             }

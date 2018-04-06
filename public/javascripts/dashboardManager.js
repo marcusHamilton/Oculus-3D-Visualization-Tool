@@ -36,6 +36,8 @@ function addUser() {
     }
 }
 
+//Function is waiting for a modal close with class myModal and clears its fields so
+//it may be used again
 $(function () {
     // when the modal is closed
     $('#myModal').on('hidden.bs.modal', function () {
@@ -43,6 +45,8 @@ $(function () {
     });
 });
 
+//Function is waiting for a modal close with class addUser-modal and clears its fields so
+//it may be used again
 $(function () {
     // when the modal is closed
     $('#addUser-modal').on('hidden.bs.modal', function () {

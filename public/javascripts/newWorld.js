@@ -4,9 +4,7 @@
  * CSV files data points. This will export a JSON file containing the scene.
  */
 var THREE = require('../../public/javascripts/three/three.js');
-
-var scene; //The scene to which all elements are added to
-
+var scene;
 
 var parsedData; //Parsed data obtained from the CSV
 var fileName; //Stored to give a meaningful name on the dashboard
@@ -70,6 +68,7 @@ function loadCSVLocal() {
     },
     complete: function (results) { //success call back
       parsedData = results.data;
+	  parsedData.splice(parsedData.length-2,2);
       success();
     }
   });
@@ -216,12 +215,6 @@ function getResults() {
   build3DSpace();
 }
 
-/**
- * Below is everything necessary to build a new 3d world
- */
-
-
-
 function build3DSpace() {
   //Initialize camera, scene, and renderer
   scene = new THREE.Scene();
@@ -256,12 +249,12 @@ function addParsedDataToScene() {
   assert(z_AxisIndex >= 0, "");
 
   // scene.userData = Array.concat([[x_AxisIndex,y_AxisIndex,z_AxisIndex]], parsedData);
+
   scene.userData = [
     [x_AxisIndex, y_AxisIndex, z_AxisIndex]
   ].concat(parsedData);
 
   scene.name = fileName;
-
 }
 
 /**

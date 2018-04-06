@@ -104,7 +104,7 @@ function update(timestamp) {
     updatePointsPosition();
   }
   slowDownUserPos ++;
-  if(slowDownUserPos >= 10){
+  if(slowDownUserPos >= 1){
     updateUserPositionInDatabase(worldID, getUID());
     slowDownUserPos = 0;
   }

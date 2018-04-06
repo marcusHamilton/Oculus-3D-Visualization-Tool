@@ -13,6 +13,13 @@ var scaleSystem = {
     datasetAndAxisLabelGroup.scale.x = scaleInterface.x;
     datasetAndAxisLabelGroup.scale.y = scaleInterface.y;
     datasetAndAxisLabelGroup.scale.z = scaleInterface.z;
+    for(var i = 0; i <= otherUsers.length; i++){
+      if(scaleInterface.x < 1 ){
+        otherUsers[i].scale.x = scaleInterface.x * 0.5;
+        otherUsers[i].scale.y = scaleInterface.x *0.5;
+        otherUsers[i].scale.z = scaleInterface.x *0.5;
+      }
+    }
   }
 };
 

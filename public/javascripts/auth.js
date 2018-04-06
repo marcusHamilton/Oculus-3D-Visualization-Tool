@@ -323,9 +323,9 @@ function onUserPositionChange(worldId, UID) {
     var array = Object.keys(dbPositionObj);
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
-          otherUsers[i].position.x = dbPositionObj[array[i]].position.x + collabGroup.getWorldPosition().x;
-          otherUsers[i].position.y = dbPositionObj[array[i]].position.y + collabGroup.getWorldPosition().y;
-          otherUsers[i].position.z = dbPositionObj[array[i]].position.z + collabGroup.getWorldPosition().z;
+          collabGroup.position.x = dbPositionObj[array[i]].position.x + collabGroup.getWorldPosition().x;
+          collabGroup.position.x = dbPositionObj[array[i]].position.y + collabGroup.getWorldPosition().y;
+          collabGroup.position.x = dbPositionObj[array[i]].position.z + collabGroup.getWorldPosition().z;
           otherUsers[i].visible = dbPositionObj[array[i]].activity;
           
         //console.log("User: " + array[i] + "'s x position is: " + dbPositionObj[array[i]].position.x);

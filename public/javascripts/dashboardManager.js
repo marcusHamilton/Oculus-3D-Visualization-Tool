@@ -36,6 +36,13 @@ function addUser() {
     }
 }
 
+$(function () {
+    // when the modal is closed
+    $('#myModal').on('hidden.bs.modal', function () {
+        location.reload(); 
+    });
+});
+
 //Function is used to display the name of the file uploaded in the box
 //on the modal box that helps the user load in a local file
 $(function () {

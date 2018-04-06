@@ -208,9 +208,9 @@ function drawSinglePointXYZValues(pointIndex){
 
     // Get the actual parsed Data for the point at pointIndex
     var pointValues = new THREE.Vector3(
-      loadedDataset[pointIndex][loadedDataset[0][0]],
-      loadedDataset[pointIndex][loadedDataset[0][1]],
-      loadedDataset[pointIndex][loadedDataset[0][2]]
+      loadedDataset[pointIndex][axisMenu.xAxis],
+      loadedDataset[pointIndex][axisMenu.yAxis],
+      loadedDataset[pointIndex][axisMenu.zAxis]
     );
 
     /*
@@ -233,9 +233,9 @@ function drawSinglePointXYZValues(pointIndex){
     singlePointValueLabels);
     */
 
-    drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + pointValues.x + "\n" +
-				  loadedDataset[1][loadedDataset[0][1]] + " = " + pointValues.y + "\n" +
-				  loadedDataset[1][loadedDataset[0][2]] + " = " + pointValues.z + "\n",
+    drawTextLabel(loadedDataset[1][axisMenu.xAxis] + " = " + pointValues.x + "\n" +
+				  loadedDataset[1][axisMenu.yAxis] + " = " + pointValues.y + "\n" +
+				  loadedDataset[1][axisMenu.zAxis] + " = " + pointValues.z + "\n",
       0.1, new THREE.Color(0.7,0,0), new THREE.Vector3(0,0,0),
       singlePointValueLabels);
 

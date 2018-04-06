@@ -43,6 +43,16 @@ $(function () {
     });
 });
 
+$(function () {
+    // when the modal is closed
+    $('#addUser-modal').on('hidden.bs.modal', function () {
+        document.getElementById('noEmailMessage').style = "display:none";
+        document.getElementById('badEmailMessage').style = "display:none";
+        document.getElementById('addEmail').value = "";
+        document.getElementById('worldIDInputBox').value = "";
+    });
+});
+
 //Function is used to display the name of the file uploaded in the box
 //on the modal box that helps the user load in a local file
 $(function () {

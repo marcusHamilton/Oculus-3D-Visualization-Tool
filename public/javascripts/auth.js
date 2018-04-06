@@ -300,11 +300,11 @@ function onScaleChange(worldId){
   var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   scaleRef.on('value', function (dataSnapshot){
   console.log(dataSnapshot.val());
-  datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
-  datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
-  datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
-  // scaleInterface.x = dataSnapshot.val();
-  // scaleSystem.scaleAll();
+  if(dataSnapshot && dataSnapshot != null){
+      datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
+      datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
+      datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
+  }
   });
 }
 

@@ -535,7 +535,7 @@ function drawDataset(xCol, yCol, zCol)
 
 
   // Find largest XYZ values, and largest overall entry.
-  for (var i = 2; i < loadedDataset.length - 2 ;i++) {
+  for (var i = 2; i < loadedDataset.length ;i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
       largestX = loadedDataset[i][xCol];

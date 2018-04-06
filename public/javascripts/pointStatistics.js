@@ -174,7 +174,7 @@ function drawSelectionStats(){
                   stats.modeZ + "\n" +
                   stats.sumZ + "\n" +
                   stats.varianceZ + "\n" +
-                  stats.standardDev,
+                  stats.standardDevZ,
                   0.1,
                   new THREE.Color(0,.2,1),
                   new THREE.Vector3(3.77,-.24,0),

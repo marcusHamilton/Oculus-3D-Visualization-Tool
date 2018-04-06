@@ -38,8 +38,9 @@ function renderButton() {
     else{
       //relocate them to the home page if they sign out while on the dashboard
       if (document.URL.indexOf("dashboard") !== -1){
-        window.location.href = "/";
         console.log("Redirecting user to the home page from the dashboard because they are not signed-in.");
+        alert("Please sign-in in order to access the dashboard.");
+        window.location.href = "/";
       }
     }
   });

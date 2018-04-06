@@ -27,28 +27,36 @@ function ScaleObject(){
 function VRGui() {
   VRGui = new dat.GUIVR.create("Tools");
 
-  //Point size slider
-  var slider = VRGui.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.5);
-  slider.step(0.005);
-  slider.listen(pointVars.plotPointSizeCoeff);
-  slider.onChange(redraw.redrawVR);
-  slider.name("Point Size");
-
   // //Dropdown for choosing X axis
   var xDrop = VRGui.add(selectedAxes, 'selectedX', axisMenu.axesOptions);
+  xDrop.onChange(liveUpdate.liveX);
 
   // //Dropdown for choosing Y axis
   var yDrop = VRGui.add(selectedAxes, 'selectedY', axisMenu.axesOptions);
+  yDrop.onChange(liveUpdate.liveY);
 
   // //Dropdown for choosing Z axis
   var zDrop = VRGui.add(selectedAxes, 'selectedZ', axisMenu.axesOptions);
+  zDrop.onChange(liveUpdate.liveZ);
 
   // //Button to redraw using redraw with a vr switch to trigger the axis data to come from the vr GUI
   VRGui.add(redraw, 'redrawVR');
 
+  //Button to trigger selection stats recalculation and redraw
+  var stats = VRGui.add(redraw, 'selectionStats');
+  stats.name("Update Stats");
+ 
   // //Button that pushes the currently drawn axis selection to the database
-  var pushDB = VRGui.add(pushAxesToDB, 'pushAxesToDB');
-  pushDB.name("Push Axis Selection");
+  var pushDB = VRGui.add(pushToDB, 'pushToDB');
+  pushDB.name("Push Axis/Selection");
+
+    //Point size slider
+  var slider = VRGui.add(pointVars, 'plotPointSizeCoeff', 0.000, 0.5);
+  slider.step(0.005);
+  slider.onChange(redraw.redrawVR);
+  slider.listen(pointVars.plotPointSizeCoeff);
+  // slider.onChange(redraw.redrawVR);
+  slider.name("Point Size");
 }
 
 /**
@@ -76,7 +84,7 @@ function BRGui() {
       //Dropdown for choosing Z axis
       var zSelect = folder.add(axisMenu, 'zAxis', axisMenu.axesOptions);
 
-      folder.add(redraw, 'redraw');
+      folder.add(redraw, 'redrawVR');
       folder.add(pushAxesToDB, 'pushAxesToDB');
 
       //Initializes with the selection from the loaded dataset
@@ -92,5 +100,6 @@ function BRGui() {
 function scaleMenu() {
   scaleSlider = VRGui.add(scaleInterface, 'x', 0.1, 10);
   scaleSlider.onChange(scaleSystem.scaleAll);
+  scaleSlider.name("Scale");
 }
 

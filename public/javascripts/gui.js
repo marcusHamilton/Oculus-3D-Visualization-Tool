@@ -14,7 +14,7 @@ var scaleSystem = {
     datasetAndAxisLabelGroup.scale.y = scaleInterface.y;
     datasetAndAxisLabelGroup.scale.z = scaleInterface.z;
   }
-}
+};
 
 
 function ScaleObject(){

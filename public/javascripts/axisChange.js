@@ -10,7 +10,7 @@ var redraw = {
   },
   redrawVR: function () {
     redrawDataSetVR();
-	drawSelectionStats();
+	  drawSelectionStats();
   },
   selectionStats: function() {
     drawSelectionStats();
@@ -31,6 +31,11 @@ var pushToDB = {
       console.log(inspectSelectedPointsJSON);
       var selectedPointsJSON = JSON.parse(inspectSelectedPointsJSON);
       updateSelectionInDatabase(worldID,selectedPointsJSON);
+
+      var inspectScaleJSON = JSON.stringify(scaleInterface.x);
+      console.log(inspectScaleJSON);
+      var scaleJSON = JSON.parse(inspectScaleJSON);
+      updateScaleInDatabase(worldID,scaleJSON)
     }
     else{console.log("Could not push to database due to blank dropdown")}
   }

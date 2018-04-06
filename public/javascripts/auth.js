@@ -292,11 +292,14 @@ function onSelectionChange(worldId) {
   });
 }
 
+
+//Listener
 function onScaleChange(worldId){
-    var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
-    scaleRef.on('child_changed',function (dataSnapshot){
-    scaleInterface.x = dataSnapshot.val();
-    scaleSystem.scaleAll();
+  var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
+  scaleRef.on('value', function (dataSnapshot){
+  console.log(dataSnapshot.val());
+  scaleInterface.x = dataSnapshot.val();
+  scaleSystem.scaleAll();
   });
 }
 

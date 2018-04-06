@@ -88,6 +88,13 @@ function update(timestamp) {
   // console.log(testInputHelper);
   // scene.add(testInputHelper);
 
+  // //Checking for dat.guivr error
+  // console.log(timestamp);
+  // var testObject = new THREE.Object3D();
+  // var testInputHelper = dat.GUIVR.addInputObject(testObject);
+  // console.log(testInputHelper);
+  // scene.add(testInputHelper);
+
   //Add all updates below here
 
   //Ensure that we are looking for controller input
@@ -380,7 +387,6 @@ function addEnterVrButtons() {
       camera.quaternion.set(0, 0, 0, 1);
     })
     .on("error", function(error) {
-      document.getElementById("learn-more").style.display = "inline";
       console.error(error)
     })
     .on("hide", function() {

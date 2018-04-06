@@ -12,12 +12,20 @@
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
 
+  <script src="/javascripts/platform.js"></script>
+
   <title>3D Visualization Tool</title>
 
-  <!--Check if browser webStorage is supported -->
+  <!--Check for browser compatibility -->
   <script>
     if (typeof(Storage) == "undefined") {
       alert("This page requires that your browser supports web storage. Please update your browser.");
+    }
+    if (platform.name != "Firefox") {
+      alert("This site is specifically designed for Firefox and you may encounter errors while using " + platform.name + ".");
+    }
+    if (platform.name == "Firefox" && platform.version < 55) {
+      alert("Web VR is not supported in your version of Firefox. Please update.");
     }
   </script>
 

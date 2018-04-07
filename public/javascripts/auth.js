@@ -460,6 +460,7 @@ function reloadWorlds(){
       	reloadCollaborationHelper(collabKey);
       }
     }
+    document.getElementById('spinningLoader').style = "display:none";
   });
 }
 

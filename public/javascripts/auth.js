@@ -299,22 +299,21 @@ function onSelectionChange(worldId) {
 function onScaleChange(worldId){
   var scaleRef = database.ref('worlds/' + worldId + '/object/scale');
   scaleRef.on('value', function (dataSnapshot){
-  console.log(dataSnapshot.val());
-  if(dataSnapshot && dataSnapshot != null){
+  if(dataSnapshot.val() && dataSnapshot.val() != null){
       datasetAndAxisLabelGroup.scale.x = dataSnapshot.val();
       datasetAndAxisLabelGroup.scale.y = dataSnapshot.val();
       datasetAndAxisLabelGroup.scale.z = dataSnapshot.val();
       for(var i = 0; i < otherUsers.length; i++){
-      if(dataSnapshot.val() < 1 ){
-        otherUsers[i].scale.x = dataSnapshot.val() *0.5;
-        otherUsers[i].scale.y = dataSnapshot.val() *0.5;
-        otherUsers[i].scale.z = dataSnapshot.val() *0.5;
-      }
-      if(dataSnapshot.val() >= 1){
-        otherUsers[i].scale.x = 1;
-        otherUsers[i].scale.y = 1;
-        otherUsers[i].scale.z = 1;
-      }
+        if(dataSnapshot.val() < 1 ){
+          otherUsers[i].scale.x = dataSnapshot.val() *0.5;
+          otherUsers[i].scale.y = dataSnapshot.val() *0.5;
+          otherUsers[i].scale.z = dataSnapshot.val() *0.5;
+        }
+        if(dataSnapshot.val() >= 1){
+          otherUsers[i].scale.x = 1;
+          otherUsers[i].scale.y = 1;
+          otherUsers[i].scale.z = 1;
+        }
     }
   }
   });
@@ -334,7 +333,9 @@ function onUserPositionChange(worldId, UID) {
   userRef.on('value', function (snapshot) {
     // console.log("Pos from the db" + snapshot.val());
     dbPositionObj = snapshot.val();
-    var array = Object.keys(dbPositionObj);
+    if(dbPositionObj != null){
+      var array = Object.keys(dbPositionObj);
+    }
     for(var i = 0 ; i < array.length; i++){
       if(array[i] != getUID()){
           otherUsers[i].position.x = dbPositionObj[array[i]].position.x + datasetAndAxisLabelGroup.getWorldPosition().x;

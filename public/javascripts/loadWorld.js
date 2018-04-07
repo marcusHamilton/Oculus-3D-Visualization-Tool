@@ -289,6 +289,7 @@ function Manager() {
     onSelectionChange(worldID);
     var t15 = performance.now();
     onScaleChange(worldID);
+    
     scene.add(light0);
     scene.add(VRGui);
 	VRGui.position.x = 1.3;

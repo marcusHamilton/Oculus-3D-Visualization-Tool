@@ -53,15 +53,15 @@ var webdriver = require('selenium-webdriver');
  /**
   * web driver for test case
   */
- before(() =>{
-   driver = new webdriver.Builder()
- .forBrowser('firefox')
- .build();
+  before(function(){
+      driver = new webdriver.Builder()
+          .forBrowser('firefox')
+          .build();
 
  driver.get("https://3dvisualizationtool.ml");
 
- driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
- var handle = driver.getWindowHandle();
+ // driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
+ // var handle = driver.getWindowHandle();
  //var iterator = handle.iterator();
  // var WindowHandlerID = iterator.next();
  //  driver.switchTo().window(handle);
@@ -186,8 +186,8 @@ it("click logo should work", () =>{
              .build();
          driver.get("https://3dvisualizationtool.ml/dashboard");
 
-         driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
-         var handle = driver.getWindowHandle();
+         // driver.findElement(By.xpath('//*[@id="not_signed_invfiw1xbqii2l"]')).click();
+         // var handle = driver.getWindowHandle();
          //var iterator = handle.iterator();
          // var WindowHandlerID = iterator.next();
          //  driver.switchTo().window(handle);

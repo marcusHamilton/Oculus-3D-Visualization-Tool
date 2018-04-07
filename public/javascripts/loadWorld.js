@@ -22,7 +22,7 @@ var pointsSystem; //THREE.js Points system for shader based visualization
 var pointsGeometry; //THREE.js BufferGeometry contains vertices for datapoints
 var loadedDataset; //Parsed dataset array
 var plotInitSizeX = 10; //Initial X dimension of dataset visualization
-var plotInitSizeY = 5; //Initial Y dimension of dataset visualization
+var plotInitSizeY = 10; //Initial Y dimension of dataset visualization
 var plotInitSizeZ = 10; //Initial Z dimension of dataset visualization
 var pointVars={plotPointSizeCoeff:0.005}; //Default datapoint size
 var largestX; //Largest X value in the dataset for selected columns
@@ -81,6 +81,14 @@ function update(timestamp) {
   }
   lastRender = timestamp;
 
+
+  // //Checking for dat.guivr error
+  // console.log(timestamp);
+  // var testObject = new THREE.Object3D();
+  // var testInputHelper = dat.GUIVR.addInputObject(testObject);
+  // console.log(testInputHelper);
+  // scene.add(testInputHelper);
+
   // //Checking for dat.guivr error
   // console.log(timestamp);
   // var testObject = new THREE.Object3D();
@@ -104,7 +112,7 @@ function update(timestamp) {
     updatePointsPosition();
   }
   slowDownUserPos ++;
-  if(slowDownUserPos >= 5){
+  if(slowDownUserPos >= 10){
     updateUserPositionInDatabase(worldID, getUID());
     slowDownUserPos = 0;
   }
@@ -280,8 +288,17 @@ function Manager() {
     var t14 = performance.now();
     onSelectionChange(worldID);
     var t15 = performance.now();
+    onScaleChange(worldID);
+    
     scene.add(light0);
     scene.add(VRGui);
+	VRGui.position.x = 1.3;
+	VRGui.position.y = -1;
+	VRGui.position.z = -1.5;
+	VRGui.rotation.x = -0.74;
+	VRGui.rotation.y = -0.93;
+	VRGui.rotation.z = -0.62;
+	
     scene.add(userPresence);
   drawSelectionStats();
     //GameLoop must be called last after everything to ensure that
@@ -372,7 +389,6 @@ function addEnterVrButtons() {
       camera.quaternion.set(0, 0, 0, 1);
     })
     .on("error", function(error) {
-      document.getElementById("learn-more").style.display = "inline";
       console.error(error)
     })
     .on("hide", function() {
@@ -520,7 +536,7 @@ function drawDataset(xCol, yCol, zCol)
 
 
   // Find largest XYZ values, and largest overall entry.
-  for (var i = 2; i < loadedDataset.length - 2 ;i++) {
+  for (var i = 2; i < loadedDataset.length ;i++) {
     // Find the largest Entry, X, Y, and Z value ceilings in the data.
     if (loadedDataset[i][xCol] > largestX) {
       largestX = loadedDataset[i][xCol];
@@ -629,9 +645,9 @@ function drawDataset(xCol, yCol, zCol)
 function drawAxisLabels() {
   assert(scene, "Scene must be initialized for drawAxisLabels()");
   if(axisLabelGroup != null
-    && axisLabelGroup.children[3].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][0]] + " = " + largestX
-    && axisLabelGroup.children[4].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][1]] + " = " + largestY
-    && axisLabelGroup.children[5].geometry.parameters.text == axisMenu.axesOptions[loadedDataset[0][2]] + " = " + largestZ
+    && axisLabelGroup.children[3].geometry.parameters.text == axisMenu.axesOptions[axisMenu.xAxis] + " = " + largestX
+    && axisLabelGroup.children[4].geometry.parameters.text == axisMenu.axesOptions[axisMenu.yAxis] + " = " + largestY
+    && axisLabelGroup.children[5].geometry.parameters.text == axisMenu.axesOptions[axisMenu.zAxis] + " = " + largestZ
     ){
     datasetAndAxisLabelGroup.add(axisLabelGroup);
     return;
@@ -710,27 +726,27 @@ function drawAxisLabels() {
 
   // Add text labels to the axisLabelGroup
   if (largestX > 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + largestX, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.xAxis] + " = " + largestX, 0.1,
     new THREE.Color(1,0,0), new THREE.Vector3(largestXpos,0,0), axisLabelGroup);
 
   if (largestY > 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + largestY, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.yAxis] + " = " + largestY, 0.1,
     new THREE.Color(0,1,0), new THREE.Vector3(0,largestYpos,0), axisLabelGroup);
 
   if (largestZ > 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + largestZ, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.zAxis] + " = " + largestZ, 0.1,
     new THREE.Color(0,0,1), new THREE.Vector3(0,0,largestZpos), axisLabelGroup);
 
   if (smallestX < 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][0]] + " = " + smallestX, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.xAxis] + " = " + smallestX, 0.1,
     new THREE.Color(1,0,0), new THREE.Vector3(smallestXpos,0,0), axisLabelGroup);
 
   if (smallestY < 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][1]] + " = " + smallestY, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.yAxis] + " = " + smallestY, 0.1,
     new THREE.Color(0,1,0), new THREE.Vector3(0,smallestYpos,0), axisLabelGroup);
 
   if (smallestZ < 0)
-  drawTextLabel(loadedDataset[1][loadedDataset[0][2]] + " = " + smallestZ, 0.1,
+  drawTextLabel(loadedDataset[1][axisMenu.zAxis] + " = " + smallestZ, 0.1,
     new THREE.Color(0,0,1), new THREE.Vector3(0,0,smallestZpos), axisLabelGroup);
 
   drawTextLabel("(0,0,0)", 0.1, new THREE.Color(1,1,1), new THREE.Vector3(0,0,0), axisLabelGroup);

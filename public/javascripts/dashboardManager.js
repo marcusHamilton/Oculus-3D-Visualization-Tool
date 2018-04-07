@@ -41,8 +41,7 @@ function addUser() {
 $(function () {
     // when the modal is closed
     $('#myModal').on('hidden.bs.modal', function () {
-
-        //location.reload();
+        location.reload(); 
     });
 });
 
